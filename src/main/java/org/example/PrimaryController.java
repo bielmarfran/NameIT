@@ -361,7 +361,7 @@ public class PrimaryController {
 		 Parent parent;
 		try {
 			parent = loader.load();
-			Scene scene = new Scene(parent, 300, 200);
+			Scene scene = new Scene(parent);
 	        Stage stage = new Stage();	      
 	        stage.setScene(scene);
 	        stage.showAndWait();

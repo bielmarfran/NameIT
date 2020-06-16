@@ -7,8 +7,8 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.SecondaryController">
    <children>
-      <ListView layoutX="14.0" layoutY="122.0" prefHeight="360.0" prefWidth="253.0" />
-      <ListView layoutX="373.0" layoutY="122.0" prefHeight="360.0" prefWidth="253.0" />
+      <ListView fx:id="listViewExceptions" layoutX="14.0" layoutY="122.0" prefHeight="360.0" prefWidth="253.0" />
+      <ListView fx:id="listViewExceptionsRenamed" layoutX="373.0" layoutY="122.0" prefHeight="360.0" prefWidth="253.0" />
       <Button fx:id="buttonAdd" layoutX="278.0" layoutY="91.0" mnemonicParsing="false" onAction="#buttonAdd" prefHeight="51.0" prefWidth="85.0" text="Add" />
       <TextField fx:id="textFieldException" layoutX="14.0" layoutY="91.0" prefHeight="25.0" prefWidth="253.0" />
       <TextField fx:id="textFieldExceptionRenamed" layoutX="373.0" layoutY="91.0" prefHeight="25.0" prefWidth="253.0" />

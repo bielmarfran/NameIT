@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -35,15 +36,18 @@ public class SecondaryController {
 	
 	
 	public void initialize() {
+		read(); 
 		
+	
 	}
 	
 	public void buttonAdd(javafx.event.ActionEvent actionEvent) {
 		if(!textFieldException.getText().isEmpty() && !textFieldExceptionRenamed.getText().isEmpty()) {						
 			System.out.println(textFieldException.getText());
+			exceptions.add(textFieldException.getText());
 			exceptionsRenamed.add(textFieldExceptionRenamed.getText());
 			try {
-				save("test.txt");
+				save();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -52,28 +56,91 @@ public class SecondaryController {
 		}else {
 			System.out.println("Error");
 		}
-		
+		textFieldException.setText("");
+		textFieldExceptionRenamed.setText("");
 	}
 	
 	
 	public void buttonRemove(javafx.event.ActionEvent actionEvent) {
-
+		System.out.println("--Remove--");
+		final int select =listViewExceptions.getSelectionModel().getSelectedIndex();		
+		System.out.println(select);
+	
+		if(select != -1) {
+			exceptions.remove(select);
+			exceptionsRenamed.remove(select);
+			listViewExceptions.getItems().remove(select);
+			listViewExceptionsRenamed.getItems().remove(select);
+			
+		}
+		try {
+			save();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		populateLists();
 	}
 	
 	public void populateLists() {
+		listViewExceptions.getItems().clear();
+		listViewExceptionsRenamed.getItems().clear();
+		for(int x=0;x<exceptions.size();x++) {
+			listViewExceptions.getItems().add(exceptions.get(x));
+		}
+		for(int x=0;x<exceptionsRenamed.size();x++) {
+			listViewExceptionsRenamed.getItems().add(exceptionsRenamed.get(x));
+		}
 		
 	}
-	public void save(String fileName) throws FileNotFoundException {
-		System.out.println(System.getProperty("user.dir")); 
-		File Fileright = new File(System.getProperty("user.dir")+"\\logs\\"+fileName);
+	public void read() {
+		exceptions.clear();
+		exceptionsRenamed.clear();
+		Scanner s;
+		try {
+			s = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptions.txt"));
+			//ArrayList<String> list = new ArrayList<String>();
+			while (s.hasNext()){
+				exceptions.add(s.next());
+			}
+			s.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Scanner z;
+		try {
+			z = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptionsRenamed.txt"));
+			//ArrayList<String> list = new ArrayList<String>();
+			while (z.hasNext()){
+				exceptionsRenamed.add(z.next());
+			}
+			z.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		populateLists();
+	
+	}
+	public void save() throws FileNotFoundException {
+		//Create a file with the saved values of exceptions.
+		File Fileright = new File(System.getProperty("user.dir")+"\\logs\\"+"exceptions.txt");
 		PrintWriter  output = new PrintWriter(Fileright);
-
-	    output.println( "The world is so full"  );  
-	    output.println( "Of a number of things,"  );  
-	    output.println( "I'm sure we should all" );  
-	    output.println( "Be as happy as kings."  );  
-
-	    output.close();
+		for(int x=0;x<exceptions.size();x++) {
+			output.println(exceptions.get(x));  				    
+		}
+		output.close();
+		
+		//Create a file with the saved values of exceptionsRenamed.
+		File Fileleft = new File(System.getProperty("user.dir")+"\\logs\\"+"exceptionsRenamed.txt");
+		PrintWriter  output2 = new PrintWriter(Fileleft);
+		for(int x=0;x<exceptionsRenamed.size();x++) {
+			output2.println(exceptionsRenamed.get(x));  				    
+		}
+		output2.close();
+		populateLists();
+	    
     }
 	
 	
