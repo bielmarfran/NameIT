@@ -20,7 +20,13 @@
             <artifactId>javafx-fxml</artifactId>
             <version>11.0.2</version>
         </dependency>
-    </dependencies>
+        <dependency>
+        	<groupId>org.json</groupId>
+        	<artifactId>json</artifactId>
+        	<version>20200518</version>
+        	<type>jar</type>
+        </dependency>
+    </dependencies>   
     <build>
         <plugins>
             <plugin>
