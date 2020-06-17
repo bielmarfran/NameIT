@@ -157,6 +157,7 @@ public class PrimaryController {
 	}
 	//End
 
+	
 	//UI Trigger
 	public void handleDragOverListView(DragEvent dragEvent) {
 		if(dragEvent.getDragboard().hasFiles()){
