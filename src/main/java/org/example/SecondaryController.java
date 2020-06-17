@@ -23,7 +23,7 @@ public class SecondaryController {
     //    App.setRoot("primary");
     //}
 	private static ArrayList<String> exceptions = new ArrayList<String>();
-	private static ArrayList<String>exceptionsRenamed = new ArrayList<String>();
+	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 
 	@FXML
 	private ListView<String> listViewExceptions;
@@ -83,44 +83,57 @@ public class SecondaryController {
 	}
 	
 	public void populateLists() {
+		System.out.println(exceptions.size());
 		listViewExceptions.getItems().clear();
 		listViewExceptionsRenamed.getItems().clear();
 		for(int x=0;x<exceptions.size();x++) {
 			listViewExceptions.getItems().add(exceptions.get(x));
+			System.out.println(exceptions.get(x));
 		}
 		for(int x=0;x<exceptionsRenamed.size();x++) {
 			listViewExceptionsRenamed.getItems().add(exceptionsRenamed.get(x));
 		}
+		System.out.println("---"+listViewExceptionsRenamed.getItems().size());
 		
 	}
+	@SuppressWarnings("resource")
 	public void read() {
 		exceptions.clear();
 		exceptionsRenamed.clear();
+	
 		Scanner s;
 		try {
 			s = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptions.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (s.hasNext()){
-				exceptions.add(s.next());
-			}
+				exceptions.add(s.nextLine());
+			}			
 			s.close();
+			
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
+			
 		}
 		Scanner z;
+				
 		try {
 			z = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptionsRenamed.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (z.hasNext()){
-				exceptionsRenamed.add(z.next());
+				exceptionsRenamed.add(z.nextLine());
 			}
 			z.close();
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		
 		}
 		populateLists();
+	
 	
 	}
 	public void save() throws FileNotFoundException {

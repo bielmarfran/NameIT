@@ -13,8 +13,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
@@ -65,6 +68,10 @@ public class PrimaryController {
 	private ListView<CheckBox> listViewError;
 	@FXML
 	private ListView<String> listViewErrorText;
+	@FXML
+	private Label labelDropFiles;
+	@FXML
+	private Label labelDropFilesPlus;
 
 
 	//@FXML
@@ -113,8 +120,14 @@ public class PrimaryController {
 	private static boolean checkboxSeason_value;
 	//Store the value of checkboxFolder
 	private static boolean checkboxFolder_value;
+	//
 	private static final String DEFAULT_CONTROL_INNER_BACKGROUND = "derive(-fx-base,80%)";
+	//
 	private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
+	//
+	private static ArrayList<String> exceptions = new ArrayList<String>();
+	//
+	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 
 	//End Logic Variable
 
@@ -134,6 +147,7 @@ public class PrimaryController {
 		//DoWork task = new DoWork();
 		//new Thread(task).start();
 		fillFilterExtention();
+	
 		paintCircle();
 	}
 	//End
@@ -173,49 +187,60 @@ public class PrimaryController {
 		checkboxSeason_value = checkboxSeason.isSelected();
 		checkboxFolder_value = checkboxFolder.isSelected();
 		listViewFilesRenamed.getItems().clear();
+		System.out.println("--Inside alert if--");
+		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
+			System.out.println("--Inside alert if--");
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Empy Path");
+			alert.setContentText("The path to save your file is empy.");
 
-		backgroundTaks = new Service<Void>() {
-			@Override
-			protected Task<Void> createTask() {
-				// TODO Auto-generated method stub
-				return new Task<Void>() {
-					@Override
-					protected Void call() throws Exception{
+			alert.showAndWait();
+		}else {
+			backgroundTaks = new Service<Void>() {
+				@Override
+				protected Task<Void> createTask() {
+					// TODO Auto-generated method stub
+					return new Task<Void>() {
+						@Override
+						protected Void call() throws Exception{
 
-						//clearList();
-						if(episodeList.size()<1) {
-							updateProgress(0.00, 100.00);
-							cancel();
+							//clearList();
+							if(episodeList.size()<1) {
+								updateProgress(0.00, 100.00);
+								cancel();
 
-						}else {
-							for(int x=0;x<episodeList.size();x++){		
-								//System.out.println(episode_list.size());
-								controlArrayListEpisode=x;
-								ep = episodeList.get(x);
-								controlBreakFile=0;
-								controlBreakFileSlug=0;
-								controlBreakFileSlug2=0;
-								if(ep.getError()==null) {
-									breakFileName(episodeList.get(x).getOriginalName());
-								}else {
-									episodeList.remove(x);
+							}else {
+								for(int x=0;x<episodeList.size();x++){		
+									//System.out.println(episode_list.size());
+									controlArrayListEpisode=x;
+									ep = episodeList.get(x);
+									controlBreakFile=0;
+									controlBreakFileSlug=0;
+									controlBreakFileSlug2=0;
+									if(ep.getError()==null) {
+										breakFileName(episodeList.get(x).getOriginalName());
+									}else {
+										episodeList.remove(x);
+
+									}
+
+									System.out.println("-----------------------------");
+									double max =episodeList.size();
+									updateProgress(x+1, max);
 
 								}
 
-								System.out.println("-----------------------------");
-								double max =episodeList.size();
-								updateProgress(x+1, max);
-
 							}
 
+							return null;
 						}
-
-						return null;
-					}
-				};
-			}
-		};
-
+					};
+				}
+			};
+		
+		}
+	
 		backgroundTaks.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
@@ -287,6 +312,12 @@ public class PrimaryController {
 							listViewErrorText.getItems().add("Error 07 - Absolute Episode value not found.");
 
 						}
+						if(n.equals("08")){
+							System.out.println("Error 08");
+							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
+							listViewErrorText.getItems().add("Error 08 - ");
+
+						}
 
 					}
 				}
@@ -319,12 +350,13 @@ public class PrimaryController {
 	}
 	//
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
+		
 		episodeList.clear();
 		episodeListError.clear();
 		listViewFiles.getItems().clear();
 		listViewFilesRenamed.getItems().clear();
 		listViewErrorText.getItems().clear();
-
+		labelDrop();
 
 
 	}
@@ -356,13 +388,14 @@ public class PrimaryController {
 
 	}
 	//End UI Trigger
-	public void button(javafx.event.ActionEvent actionEvent) {
+	public void buttonExceptions(javafx.event.ActionEvent actionEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("secondary.fxml"));
 		 Parent parent;
 		try {
 			parent = loader.load();
 			Scene scene = new Scene(parent);
-	        Stage stage = new Stage();	      
+	        Stage stage = new Stage();	
+	        stage.setTitle("Exceptions List");
 	        stage.setScene(scene);
 	        stage.showAndWait();
 	       
@@ -381,13 +414,13 @@ public class PrimaryController {
 	//
 	public void clearList() {
 		System.out.println("--Clear List--");
+		labelDrop();
 		if(listViewFiles.getItems().size()==0) {
 
 			listViewErrorText.getItems().clear();
 		}
 		if(episodeList.size()==0 && episodeListError.size()==0) {
 			listViewFiles.getItems().clear();
-
 			listViewErrorText.getItems().clear();
 
 		}
@@ -398,6 +431,7 @@ public class PrimaryController {
 
 	//
 	public void paintListView(){
+
 		//LabelDropFiles.setVisible(false);
 		listViewFiles.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 			@Override
@@ -434,6 +468,7 @@ public class PrimaryController {
 				};
 			}
 		});
+		labelDrop();
 	}
 	//
 	public void paintCircle() {
@@ -454,6 +489,17 @@ public class PrimaryController {
 
 
 
+	}
+	//
+	public void labelDrop() {
+		if(listViewFiles.getItems().size()<=0) {
+			labelDropFiles.setVisible(true);
+			labelDropFilesPlus.setVisible(true);
+		}else {
+			labelDropFiles.setVisible(false);
+			labelDropFilesPlus.setVisible(false);
+			
+		}
 	}
 	//End Support UI
 
@@ -867,80 +913,91 @@ public class PrimaryController {
 					System.out.println(name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+".pdf");
 					String absolutePath;
 					if(checkboxFolder_value){
-						absolutePath = textFieldFolder_value;
+						if(textFieldFolder_value==null) {
+						
+							absolutePath = textFieldFolder_value;
+						}else {
+							absolutePath = textFieldFolder_value;
+						}
+						
 					}else{
 						absolutePath = ep.getOriginalPath();
 					}
 
-
-					if(checkboxSeries_value  && !checkboxSeason_value ){
-						System.out.println("Create Series");
-						File file = new File(absolutePath+"\\"+name);
-						boolean bool = file.mkdirs();
-						if(bool){
-							System.out.println("Directory created successfully");
-						}else{
-							System.out.println("Sorry couldnt create specified directory");
-						}
-						absolutePath = absolutePath+"\\"+name;
-						String newPath = absolutePath+"\\"+newName;
-
-						Boolean x =f.renameTo(new File(newPath));
-						if(x){
-							System.out.println("Rename was ok");
-						}else{
-							System.out.println("Sorry couldnt create specified directory");
-						}
-
-					}else{
-						if(!checkboxSeries_value && checkboxSeason_value){
-							System.out.println("Create Season");
-							File file = new File(absolutePath+"\\"+"Season "+album.getInt("airedSeason"));
+					if(absolutePath==null) {
+						System.out.println("Error aldlasaasasa");	
+						ep.setError("08");
+					}else {
+						if(checkboxSeries_value  && !checkboxSeason_value ){
+							System.out.println("Create Series");
+							File file = new File(absolutePath+"\\"+name);
 							boolean bool = file.mkdirs();
 							if(bool){
 								System.out.println("Directory created successfully");
 							}else{
 								System.out.println("Sorry couldnt create specified directory");
 							}
-							absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
+							absolutePath = absolutePath+"\\"+name;
+							String newPath = absolutePath+"\\"+newName;
+
+							Boolean x =f.renameTo(new File(newPath));
+							if(x){
+								System.out.println("Rename was ok");
+							}else{
+								System.out.println("Sorry couldnt create specified directory");
+							}
+
+						}else{
+							if(!checkboxSeries_value && checkboxSeason_value){
+								System.out.println("Create Season");
+								File file = new File(absolutePath+"\\"+"Season "+album.getInt("airedSeason"));
+								boolean bool = file.mkdirs();
+								if(bool){
+									System.out.println("Directory created successfully");
+								}else{
+									System.out.println("Sorry couldnt create specified directory");
+								}
+								absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
+								String newPath = absolutePath+"\\"+newName;
+								Boolean x =f.renameTo(new File(newPath));
+
+							}
+						}
+						if(checkboxSeries_value && checkboxSeason_value){
+							System.out.println("Create Season and Series");
+							File file = new File(absolutePath+"\\"+name+"\\"+"Season "+album.getInt("airedSeason"));
+							boolean bool = file.mkdirs();
+							if(bool){
+								System.out.println("Directory created successfully");
+							}else{
+								System.out.println("Sorry couldnt create specified directory");
+							}
+							absolutePath = absolutePath+"\\"+name+"\\"+"Season "+album.getInt("airedSeason");
+							String newPath = absolutePath+"\\"+newName;
+							System.out.println(newPath);	
+
+							Boolean x =f.renameTo(new File(newPath));
+							if(x){
+								System.out.println("Rename was ok");
+								ep.setError("");
+							}else{
+								System.out.println("Sorry couldnt create specified directory");
+							}
+						}else{
+							File file = new File(absolutePath);
+							boolean bool = file.mkdirs();
+							if(bool){
+								System.out.println("Directory created successfully");
+							}else{
+								System.out.println("Sorry couldnt create specified directory");
+							}
+							//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
 							String newPath = absolutePath+"\\"+newName;
 							Boolean x =f.renameTo(new File(newPath));
 
 						}
 					}
-					if(checkboxSeries_value && checkboxSeason_value){
-						System.out.println("Create Season and Series");
-						File file = new File(absolutePath+"\\"+name+"\\"+"Season "+album.getInt("airedSeason"));
-						boolean bool = file.mkdirs();
-						if(bool){
-							System.out.println("Directory created successfully");
-						}else{
-							System.out.println("Sorry couldnt create specified directory");
-						}
-						absolutePath = absolutePath+"\\"+name+"\\"+"Season "+album.getInt("airedSeason");
-						String newPath = absolutePath+"\\"+newName;
-						System.out.println(newPath);	
-
-						Boolean x =f.renameTo(new File(newPath));
-						if(x){
-							System.out.println("Rename was ok");
-							ep.setError("");
-						}else{
-							System.out.println("Sorry couldnt create specified directory");
-						}
-					}else{
-						File file = new File(absolutePath);
-						boolean bool = file.mkdirs();
-						if(bool){
-							System.out.println("Directory created successfully");
-						}else{
-							System.out.println("Sorry couldnt create specified directory");
-						}
-						//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
-						String newPath = absolutePath+"\\"+newName;
-						Boolean x =f.renameTo(new File(newPath));
-
-					}
+				
 
 				}
 
@@ -969,7 +1026,8 @@ public class PrimaryController {
 	}
 	//Remove unwanted special character and names that only disturb the logic to find the episode
 	public String formatName(String name){
-
+		exceptions =DataStored.readExceptions();
+		exceptionsRenamed =DataStored.readExceptionsRenamed();
 		name = name.toLowerCase();
 		name = name.replace(".pdf","");
 		name = name.replace(".mkv","");
@@ -981,7 +1039,11 @@ public class PrimaryController {
 		name = name.replace("2160p","");
 		name = name.replace("1080p","");
 		name = name.replace("720p","");
-
+		for(int y=0;y<exceptions.size();y++){
+			String ex =String.valueOf(exceptions.get(y));
+			String exr =String.valueOf(exceptionsRenamed.get(y));
+			name = name.replace(ex ,exr);
+		}	
 		for(int x=0;x<10;x++){
 			name = name.replace("s"+x," s"+x);
 			name = name.replace("season"+x," s"+x);
@@ -993,10 +1055,11 @@ public class PrimaryController {
 		for(int z=0;z<name.length();z++){
 			if(name.startsWith(" ")){
 				name = name.substring(1);
-
-
 			}
 		}
+		
+		
+		
 		return name;
 
 	}

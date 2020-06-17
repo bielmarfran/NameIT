@@ -1,7 +1,10 @@
 package org.example;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.prefs.Preferences;
 
 public class DataStored {
@@ -27,12 +30,47 @@ public class DataStored {
         return prefs.get(key, "default");
     }
     
-    public static void savePreferenceList(String[] list) {
-    	//SharedPreferences prefs2 = Preferences.userNodeForPackage(DataStored.class);
-    	 //prefs2.put
-      
-          //prefs2.putByteArray(key, value);
-    	
+    public static ArrayList<String> readExceptions() {
+    	ArrayList<String> exceptions = new ArrayList<String>();
+    	Scanner s;
+		try {
+			s = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptions.txt"));
+			//ArrayList<String> list = new ArrayList<String>();
+			while (s.hasNext()){
+				exceptions.add(s.nextLine());
+			}			
+			s.close();
+			return exceptions;
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+		
+			e.printStackTrace();
+			return null;
+			
+		}
+
     }
+    public static ArrayList<String> readExceptionsRenamed() {
+    	ArrayList<String>exceptionsRenamed = new ArrayList<String>();
+    	Scanner z;
+		
+		try {
+			z = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptionsRenamed.txt"));
+			//ArrayList<String> list = new ArrayList<String>();
+			while (z.hasNext()){
+				exceptionsRenamed.add(z.nextLine());
+			}
+			z.close();
+			return exceptionsRenamed;
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		
+		}
+    }
+    
     
 }
