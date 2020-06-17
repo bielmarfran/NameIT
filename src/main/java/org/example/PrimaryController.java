@@ -23,6 +23,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Paint;
@@ -35,8 +36,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,6 +73,9 @@ public class PrimaryController {
 	private Label labelDropFiles;
 	@FXML
 	private Label labelDropFilesPlus;
+	@FXML
+	private Label labelStatusApi;
+	
 
 
 	//@FXML
@@ -128,8 +132,10 @@ public class PrimaryController {
 	private static ArrayList<String> exceptions = new ArrayList<String>();
 	//
 	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
-
-	//End Logic Variable
+	//
+	private static Integer enter=0;
+	//
+	
 
 	//Get - Set
 	public static Integer getControl_circle() {
@@ -141,13 +147,12 @@ public class PrimaryController {
 	//End Get - Set
 
 
+
 	//Operations on the initialization of the UI.
 	public void initialize() {
 		JsonOperations.checkConnection();
-		//DoWork task = new DoWork();
-		//new Thread(task).start();
 		fillFilterExtention();
-	
+		tooltips();
 		paintCircle();
 	}
 	//End
@@ -183,12 +188,16 @@ public class PrimaryController {
 	//
 	//Star the logic to the renaming the files
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
+		//Geting the value of the checkboxes
 		checkboxSeries_value = checkboxSeries.isSelected();
 		checkboxSeason_value = checkboxSeason.isSelected();
 		checkboxFolder_value = checkboxFolder.isSelected();
+		//End Geting the value of the checkboxes
 		listViewFilesRenamed.getItems().clear();
-		System.out.println("--Inside alert if--");
+		enter=0;
+		
 		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
+			enter=1;
 			System.out.println("--Inside alert if--");
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning Dialog");
@@ -197,19 +206,38 @@ public class PrimaryController {
 
 			alert.showAndWait();
 		}else {
-			backgroundTaks = new Service<Void>() {
-				@Override
-				protected Task<Void> createTask() {
-					// TODO Auto-generated method stub
-					return new Task<Void>() {
-						@Override
-						protected Void call() throws Exception{
+			if(controlCircle==2) {
+				enter=1;
+				System.out.println("--Inside alert if 2--");
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Warning Dialog");
+				alert.setHeaderText("Disconected from Api");
+				alert.setContentText("1 - Check you internet connection.\n"+
+						"2 - Restar the program. \n"+
+						"3 - The Api maybe be down. \n");
 
-							//clearList();
-							if(episodeList.size()<1) {
-								updateProgress(0.00, 100.00);
+				alert.showAndWait();
+
+			}
+		}
+		System.out.println("-- before-backgroundTaks--");
+		backgroundTaks = new Service<Void>() {					
+			@Override
+			protected Task<Void> createTask() {
+				// TODO Auto-generated method stub
+				return new Task<Void>() {
+					@Override
+					protected Void call() throws Exception{
+						System.out.println("-- inside-backgroundTaks--");
+
+						if(episodeList.size()<1) {
+							updateProgress(0.00, 100.00);
+							cancel();
+
+						}else {
+							System.out.println(enter);
+							if(enter==1) {
 								cancel();
-
 							}else {
 								for(int x=0;x<episodeList.size();x++){		
 									//System.out.println(episode_list.size());
@@ -224,7 +252,6 @@ public class PrimaryController {
 										episodeList.remove(x);
 
 									}
-
 									System.out.println("-----------------------------");
 									double max =episodeList.size();
 									updateProgress(x+1, max);
@@ -232,19 +259,19 @@ public class PrimaryController {
 								}
 
 							}
+						
+						}											
+						return null;
+					}
+				};
+			}
+		};
 
-							return null;
-						}
-					};
-				}
-			};
-		
-		}
-	
+
 		backgroundTaks.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
-				System.out.println("---Done---");
+				System.out.println("backgroundTaks.setOnSucceeded");
 
 				int x=0;
 				int size=episodeList.size();
@@ -271,19 +298,19 @@ public class PrimaryController {
 							System.out.println("Error 01");
 							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
 
-							listViewErrorText.getItems().add("Error 01 - Empty Name");
+							listViewErrorText.getItems().add("Error 01 - Empty Name.");
 
 						}
 						if(n.equals("02")){
 							System.out.println("Error 02");
 							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
-							listViewErrorText.getItems().add("Error 02 - N");
+							listViewErrorText.getItems().add("Error 02 - It was not possible to determine the series.");
 
 						}
 						if(n.equals("03")){
 							System.out.println("Error 03");
 							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
-							listViewErrorText.getItems().add("Error 03 - Api off");
+							listViewErrorText.getItems().add("Error 03 - Failed to connect to the Api.");
 
 						}
 						if(n.equals("04")){
@@ -315,7 +342,7 @@ public class PrimaryController {
 						if(n.equals("08")){
 							System.out.println("Error 08");
 							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
-							listViewErrorText.getItems().add("Error 08 - ");
+							listViewErrorText.getItems().add("Error 08 - Path Value is Empy. ");
 
 						}
 
@@ -330,7 +357,7 @@ public class PrimaryController {
 		backgroundTaks.setOnFailed(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
-				System.out.println("fails");	
+				System.out.println("backgroundTaks.setOnFailed");	
 				clearList();
 
 			}
@@ -338,6 +365,7 @@ public class PrimaryController {
 		backgroundTaks.setOnCancelled(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
+				System.out.println("backgroundTaks.setOnCancelled");
 				clearList();
 
 			}
@@ -346,11 +374,11 @@ public class PrimaryController {
 		backgroundTaks.restart();
 		progressIndicator.progressProperty().bind(backgroundTaks.progressProperty());
 
-
+		
 	}
 	//
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
-		
+		enter=0;
 		episodeList.clear();
 		episodeListError.clear();
 		listViewFiles.getItems().clear();
@@ -415,6 +443,7 @@ public class PrimaryController {
 	public void clearList() {
 		System.out.println("--Clear List--");
 		labelDrop();
+		enter=0;
 		if(listViewFiles.getItems().size()==0) {
 
 			listViewErrorText.getItems().clear();
@@ -428,7 +457,6 @@ public class PrimaryController {
 		//listViewError.getItems().clear();
 		//listViewErrorText.getItems().clear();
 	}
-
 	//
 	public void paintListView(){
 
@@ -500,6 +528,16 @@ public class PrimaryController {
 			labelDropFilesPlus.setVisible(false);
 			
 		}
+	}
+	//
+	public void tooltips() {
+		final Tooltip tooltip = new Tooltip();
+		tooltip.setText(
+		    "--Show the Api Status--\n" +
+		    "\nGreen = Connected"  +
+		    "\nRed = Disconnected"  
+		);
+		labelStatusApi.setTooltip(tooltip);
 	}
 	//End Support UI
 

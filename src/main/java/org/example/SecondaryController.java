@@ -109,16 +109,16 @@ public class SecondaryController {
 				exceptions.add(s.nextLine());
 			}			
 			s.close();
-			
-			
+
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			
+
 			e.printStackTrace();
-			
+
 		}
 		Scanner z;
-				
+
 		try {
 			z = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptionsRenamed.txt"));
 			//ArrayList<String> list = new ArrayList<String>();

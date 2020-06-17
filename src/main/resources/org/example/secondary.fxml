@@ -27,9 +27,14 @@
          </font>
       </Label>
       <Separator layoutX="-2.0" layoutY="60.0" prefHeight="3.0" prefWidth="640.0" />
-      <Label layoutX="8.0" layoutY="7.0" text="Exceptions List">
+      <Label layoutX="8.0" layoutY="4.0" text="Exceptions List">
          <font>
             <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="8.0" layoutY="31.0" lineSpacing="1.0" prefHeight="27.0" prefWidth="518.0" text="Change a part of the file name for the program logic, to help match with the Api">
+         <font>
+            <Font size="14.0" />
          </font>
       </Label>
    </children>
