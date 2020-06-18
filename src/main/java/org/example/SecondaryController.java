@@ -6,14 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.text.Text;
 
 public class SecondaryController {
@@ -37,7 +42,9 @@ public class SecondaryController {
 	
 	public void initialize() {
 		read(); 
-		
+		final Tooltip tooltip = new Tooltip();
+		tooltip.setText("The character '-' alone represent's a empty value");
+		listViewExceptionsRenamed.setTooltip(tooltip);
 	
 	}
 	
@@ -52,12 +59,42 @@ public class SecondaryController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			textFieldException.setText("");
+			textFieldExceptionRenamed.setText("");
 		
 		}else {
-			System.out.println("Error");
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Empty Value");
+			int  empty=0;
+			if(textFieldException.getText().isEmpty()) {
+				alert.setContentText("The Before Value is Empty\n"+
+						"Plase insert a value");
+			}else {
+				alert.setContentText("The After Value is Empty");
+				empty=2;
+			}
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				// ... user chose OK
+				if(empty==2) {
+					exceptions.add(textFieldException.getText());
+					exceptionsRenamed.add("-");	
+					try {
+						save();
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					textFieldException.setText("");
+					textFieldExceptionRenamed.setText("");
+				}								
+				
+			} else {
+			    // ... user chose CANCEL or closed the dialog
+			}
 		}
-		textFieldException.setText("");
-		textFieldExceptionRenamed.setText("");
+		
 	}
 	
 	

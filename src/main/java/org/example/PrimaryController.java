@@ -1079,8 +1079,15 @@ public class PrimaryController {
 		name = name.replace("1080p","");
 		name = name.replace("720p","");
 		for(int y=0;y<exceptions.size();y++){
+		
 			String ex =String.valueOf(exceptions.get(y));
 			String exr =String.valueOf(exceptionsRenamed.get(y));
+			if(ex.equals("-")) {
+				ex = " ";
+			}
+			if(exr.equals("-")) {
+				exr = " ";
+			}
 			name = name.replace(ex ,exr);
 		}	
 		for(int x=0;x<10;x++){
