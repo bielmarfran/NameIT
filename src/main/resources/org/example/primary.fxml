@@ -67,7 +67,7 @@
       </AnchorPane>
    </center>
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
+      <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -85,10 +85,11 @@
                   <CheckMenuItem mnemonicParsing="false" text="Unspecified Action" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="EN - English">
+            <Menu fx:id="menuLanguage" mnemonicParsing="false" text="EN - English">
               <items>
-                <MenuItem mnemonicParsing="false" text="PT-BR - Português Brasileiro" />
-                  <MenuItem mnemonicParsing="false" text="DE - Deutsche" />
+                  <MenuItem fx:id="menuItemEnglish" mnemonicParsing="false" text="EN-English"  onAction="#menuItemEN"/>
+                <MenuItem fx:id="menuItemPortuguesBrazilian" mnemonicParsing="false" onAction="#menuItemPtBr" text="PT-BR - Português Brasileiro" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuItemDE" text="DE - Deutsche"  />
               </items>
             </Menu>
         </menus>

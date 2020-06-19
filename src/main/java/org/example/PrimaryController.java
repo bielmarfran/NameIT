@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import java.io.File;
 import javafx.util.Callback;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -20,6 +21,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
@@ -75,6 +78,12 @@ public class PrimaryController {
 	private Label labelDropFilesPlus;
 	@FXML
 	private Label labelStatusApi;
+	@FXML
+	private MenuBar menuBar;
+	@FXML
+	private Menu menuLanguage;
+	
+	
 	
 
 
@@ -135,6 +144,7 @@ public class PrimaryController {
 	//
 	private static Integer enter=0;
 	//
+
 	
 
 	//Get - Set
@@ -154,6 +164,8 @@ public class PrimaryController {
 		fillFilterExtention();
 		tooltips();
 		paintCircle();
+		renameMenuLanguage();
+		
 	}
 	//End
 
@@ -187,6 +199,21 @@ public class PrimaryController {
 
 	}
 	//
+	public void menuItemPtBr(javafx.event.ActionEvent actionEvent) {
+		DataStored.propertiesSetLanguage("pt-br");
+		renameMenuLanguage();
+		
+	}
+	public void menuItemDE(javafx.event.ActionEvent actionEvent) {
+		DataStored.propertiesSetLanguage("de");
+		renameMenuLanguage();
+		
+	}
+	public void menuItemEN(javafx.event.ActionEvent actionEvent) {
+		DataStored.propertiesSetLanguage("en");
+		renameMenuLanguage();
+		
+	}
 	//Star the logic to the renaming the files
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
 		//Geting the value of the checkboxes
@@ -539,6 +566,25 @@ public class PrimaryController {
 		    "\nRed = Disconnected"  
 		);
 		labelStatusApi.setTooltip(tooltip);
+	}
+	//
+	public void renameMenuLanguage() {
+		String language = DataStored.propertiesGetLanguage();		
+		switch (language) {
+		case "en": 
+			language ="EN - English";				
+			break;
+		case "pt-br": 
+			language ="PT-BR - Português Brasileiro";				
+			break;
+		case "de": 
+			language ="DE - Deutsche";				
+			break;
+		default:
+			break;
+		}
+		menuLanguage.setText(language);
+
 	}
 	//End Support UI
 

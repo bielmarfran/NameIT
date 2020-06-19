@@ -2,12 +2,17 @@ package org.example;
 
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.prefs.Preferences;
 
 public class DataStored {
+	static Properties config;
     private static String key="";
     private static ArrayList<String> listt = new ArrayList<String>();
     
@@ -69,6 +74,52 @@ public class DataStored {
 			e.printStackTrace();
 			return null;
 		
+		}
+    }
+
+    public static String propertiesGetLanguage() {
+    	config = new Properties();
+    	FileInputStream fis;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.dir")+"\\src\\main\\resources\\config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	System.out.println(config.getProperty("Language"));
+
+    	return config.getProperty("Language");
+    }
+    public static void propertiesSetLanguage(String newLanguage) {
+    	System.out.println("Dentro propertiesSetLanguage");
+    	config = new Properties();
+    	FileInputStream fis;
+    	FileOutputStream fisout;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.dir")+"\\src\\main\\resources\\config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	//System.out.println(config.getProperty("Language"));
+    	//config.remove("Language");
+    	config.setProperty("Language", newLanguage);
+    	try {
+			config.store(new FileOutputStream(System.getProperty("user.dir")+"\\src\\main\\resources\\config.properties"), null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
     }
     

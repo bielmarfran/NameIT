@@ -59,8 +59,9 @@ public class JsonOperations {
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(uri))				
 				.header("Content-Type", "application/json")
+				.header("Accept-Language", "de")
 				.header("Authorization", "Bearer "+keynow)
-				.header("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTE3MTUxMzYsImlkIjoiTmFtZUl0Iiwib3JpZ19pYXQiOjE1OTExMTAzMzYsInVzZXJpZCI6MjI4NzgyNSwidXNlcm5hbWUiOiJiaWVsbWFyZnJhbiJ9.shQQCbngFMZjdDYj8G3cx9bzWBNY8fVxjcikwfuuyuvxb6baBVsSTLpg-4TET4-wQpYguT98Jp-GvbpT8HmNPkreht2Mhv-M4xS-xxSejHuAydUjumSR62AAkniaJKY07n1lrxnuAQeld_vmDLmC4nRmrJtCpMq9nGI4aSoJqBtC-jEnSyAmrRxnyqIhTkKjSDaJkQqN7Dr1KwzX2F8jXWPWH5_7VVlzTMHz-hhrQd5RTnfCgpiRtn9B812JcrsaUOAkv7J2TeVGfVlaSF7WBEE2tT7vgIak9uix7fwOlcNbAI2f6HjD3Demrhr74nAxQ45BFiC6hIzP8tZuNm-XyQ")
+			
 				.build();
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
@@ -99,6 +100,7 @@ public class JsonOperations {
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(uri))			
 				.header("Content-Type", "application/json")
+				.header("Accept-Language", "de")
 				.header("Authorization", "Bearer "+keynow)
 				.build();
 
@@ -120,6 +122,7 @@ public class JsonOperations {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header("Content-Type", "application/json")
+                .header("Accept-Language", "de")
                 .header("Authorization", "Bearer "+keynow)
                 .build();
 
@@ -142,6 +145,7 @@ public class JsonOperations {
 	        HttpRequest request = HttpRequest.newBuilder()
 	                .uri(URI.create(uri))
 	                .header("Content-Type", "application/json")
+	                .header("Accept-Language", "de")
 	                .header("Authorization", "Bearer "+keynow)
 	                .build();
 
