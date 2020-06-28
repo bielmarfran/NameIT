@@ -204,6 +204,11 @@ public class PrimaryController {
 		renameMenuLanguage();
 		
 	}
+	public void menuItemPt(javafx.event.ActionEvent actionEvent) {
+		DataStored.propertiesSetLanguage("pt");
+		renameMenuLanguage();
+		
+	}
 	public void menuItemDE(javafx.event.ActionEvent actionEvent) {
 		DataStored.propertiesSetLanguage("de");
 		renameMenuLanguage();
