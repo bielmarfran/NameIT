@@ -3,11 +3,18 @@ NameIT is is released under the GNU GENERAL PUBLIC LICENSE, v3.0 (see license te
 The list of libraries used by NameIT:                    
  
                        -- Start libraries --
-JSON In Java
+JSON In Java (package org.json)
 Description: JSON is a light-weight, language independent, data interchange format.
 Website: https://github.com/douglascrockford/JSON-java
-License: MIT
-License website: http://json.org/license.html          
+License: The JSON License (MIT)
+License website: http://json.org/license.html  
+                    --------------------
+OpenJFX (org.openjfx)    
+Description: OpenJFX is an open source, next generation client application platform for desktop, mobile and embedded systems built on Java.
+Website: https://github.com/openjdk/jfx
+License: GPLv2+CE
+License website: https://github.com/openjdk/jfx/blob/master/LICENSE
+
                     
                      -- End libraries --
                      
