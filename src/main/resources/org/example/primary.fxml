@@ -87,9 +87,11 @@
           </Menu>
             <Menu fx:id="menuLanguage" mnemonicParsing="false" text="EN - English">
               <items>
-                  <MenuItem fx:id="menuItemEnglish" mnemonicParsing="false" text="EN-English"  onAction="#menuItemEN"/>
-                <MenuItem fx:id="menuItemPortuguesBrazilian" mnemonicParsing="false" onAction="#menuItemPtBr" text="PT-BR - Português Brasileiro" />
-                  <MenuItem mnemonicParsing="false" onAction="#menuItemDE" text="DE - Deutsche"  />
+                  <MenuItem fx:id="menuItemEnglish" mnemonicParsing="false" onAction="#menuItemEN" text="EN-English" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuItemDE" text="DE - Deutsche" />
+                  <MenuItem fx:id="menuItemPt" mnemonicParsing="false" onAction="#menuItemPt" text="PT - Português de Portugal" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuItemES" text="ES - Español" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuItemFR" text="FR - Français" />
               </items>
             </Menu>
         </menus>

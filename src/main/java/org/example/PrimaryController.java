@@ -23,6 +23,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
@@ -82,6 +83,7 @@ public class PrimaryController {
 	private MenuBar menuBar;
 	@FXML
 	private Menu menuLanguage;
+
 	
 	
 	
@@ -199,11 +201,14 @@ public class PrimaryController {
 
 	}
 	//
-	public void menuItemPtBr(javafx.event.ActionEvent actionEvent) {
+	/*
+	* public void menuItemPtBr(javafx.event.ActionEvent actionEvent) {
+	
 		DataStored.propertiesSetLanguage("pt-br");
 		renameMenuLanguage();
 		
 	}
+	 */
 	public void menuItemPt(javafx.event.ActionEvent actionEvent) {
 		DataStored.propertiesSetLanguage("pt");
 		renameMenuLanguage();
@@ -219,6 +224,17 @@ public class PrimaryController {
 		renameMenuLanguage();
 		
 	}
+	public void menuItemES(javafx.event.ActionEvent actionEvent) {
+		DataStored.propertiesSetLanguage("es");
+		renameMenuLanguage();
+		
+	}
+	public void menuItemFR(javafx.event.ActionEvent actionEvent) {
+		DataStored.propertiesSetLanguage("fr");
+		renameMenuLanguage();
+		
+	}
+
 	//Star the logic to the renaming the files
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
 		//Geting the value of the checkboxes
@@ -571,6 +587,8 @@ public class PrimaryController {
 		    "\nRed = Disconnected"  
 		);
 		labelStatusApi.setTooltip(tooltip);
+		
+	
 	}
 	//
 	public void renameMenuLanguage() {
@@ -579,11 +597,20 @@ public class PrimaryController {
 		case "en": 
 			language ="EN - English";				
 			break;
-		case "pt-br": 
-			language ="PT-BR - Português Brasileiro";				
-			break;
+		//case "pt-br": 
+			//language ="PT-BR - Português Brasileiro";				
+			//break;
 		case "de": 
-			language ="DE - Deutsche";				
+			language ="DE - Deutsche";
+			break;
+		case "pt": 
+			language ="PT - Português de Portugal";
+			break;
+		case "es": 
+			language ="ES - Español";
+			break;
+		case "fr": 
+			language ="FR - Français";		
 			break;
 		default:
 			break;
