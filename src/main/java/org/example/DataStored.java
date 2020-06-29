@@ -16,6 +16,77 @@ public class DataStored {
     private static String key="";
     private static ArrayList<String> listt = new ArrayList<String>();
     
+    
+    
+    
+    //
+    public static void createFiles() {
+    	
+    	//Create the NameIT folder
+    	File f0 = new File(System.getProperty("user.home")+"\\Documents\\NameIT");
+    	boolean bool = f0.mkdirs();
+		if(bool){
+			System.out.println("Directory created successfully");
+		}else{
+			//System.out.println("Sorry couldnt create specified directory");
+		}
+		//Create exceptions.txt
+    	File f = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt");
+    	try {
+			if(f.createNewFile()) {
+				
+			}else {
+				
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();			
+		}
+    	
+    	//Create exceptionsRenamed.txt
+    	File f2 = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptionsRenamed.txt");
+    	try {
+			if(f2.createNewFile()) {
+				
+			}else {
+				
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();			
+		}
+    	
+    	
+    	
+    	//Create config.properties and put en as default
+    	config = new Properties();
+    	FileInputStream fis;
+    	FileOutputStream fisout;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	//System.out.println(config.getProperty("Language"));
+    	//config.remove("Language");
+    	config.setProperty("Language", "en");
+    	try {
+			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
+    //
     public static void savePreferencekey(String keyValue) {
         Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
 
@@ -28,18 +99,17 @@ public class DataStored {
         }
 
     }
-
     //A method to use to get the store key in the moment.
     public static String readPreferencekey() {
         Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
         return prefs.get(key, "default");
     }
-    
+    //
     public static ArrayList<String> readExceptions() {
     	ArrayList<String> exceptions = new ArrayList<String>();
     	Scanner s;
 		try {
-			s = new Scanner(new File(System.getProperty("user.home")+"\\NameIT\\"+"exceptions.txt"));
+			s = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (s.hasNext()){
 				exceptions.add(s.nextLine());
@@ -56,12 +126,13 @@ public class DataStored {
 		}
 
     }
+    //
     public static ArrayList<String> readExceptionsRenamed() {
     	ArrayList<String>exceptionsRenamed = new ArrayList<String>();
     	Scanner z;
 		
 		try {
-			z = new Scanner(new File(System.getProperty("user.home")+"\\NameIT\\"+"exceptionsRenamed.txt"));
+			z = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptionsRenamed.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (z.hasNext()){
 				exceptionsRenamed.add(z.nextLine());
@@ -76,12 +147,12 @@ public class DataStored {
 		
 		}
     }
-
+    //
     public static String propertiesGetLanguage() {
     	config = new Properties();
     	FileInputStream fis;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -94,13 +165,14 @@ public class DataStored {
 
     	return config.getProperty("Language");
     }
+    //
     public static void propertiesSetLanguage(String newLanguage) {
     	System.out.println("Dentro propertiesSetLanguage");
     	config = new Properties();
     	FileInputStream fis;
     	FileOutputStream fisout;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -113,7 +185,7 @@ public class DataStored {
     	//config.remove("Language");
     	config.setProperty("Language", newLanguage);
     	try {
-			config.store(new FileOutputStream(System.getProperty("user.home")+"\\NameIT\\"+"config.properties"), null);
+			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -162,11 +162,13 @@ public class PrimaryController {
 
 	//Operations on the initialization of the UI.
 	public void initialize() {
-		JsonOperations.checkConnection();
+		
+		JsonOperations.checkConnection();		
 		fillFilterExtention();
 		tooltips();
 		paintCircle();
 		renameMenuLanguage();
+		
 		
 	}
 	//End
