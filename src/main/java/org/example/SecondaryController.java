@@ -140,7 +140,7 @@ public class SecondaryController {
 	
 		Scanner s;
 		try {
-			s = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptions.txt"));
+			s = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (s.hasNext()){
 				exceptions.add(s.nextLine());
@@ -157,7 +157,7 @@ public class SecondaryController {
 		Scanner z;
 
 		try {
-			z = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptionsRenamed.txt"));
+			z = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptionsRenamed.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (z.hasNext()){
 				exceptionsRenamed.add(z.nextLine());
@@ -175,7 +175,7 @@ public class SecondaryController {
 	}
 	public void save() throws FileNotFoundException {
 		//Create a file with the saved values of exceptions.
-		File Fileright = new File(System.getProperty("user.dir")+"\\logs\\"+"exceptions.txt");
+		File Fileright = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt");
 		PrintWriter  output = new PrintWriter(Fileright);
 		for(int x=0;x<exceptions.size();x++) {
 			output.println(exceptions.get(x));  				    
@@ -183,7 +183,7 @@ public class SecondaryController {
 		output.close();
 		
 		//Create a file with the saved values of exceptionsRenamed.
-		File Fileleft = new File(System.getProperty("user.dir")+"\\logs\\"+"exceptionsRenamed.txt");
+		File Fileleft = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptionsRenamed.txt");
 		PrintWriter  output2 = new PrintWriter(Fileleft);
 		for(int x=0;x<exceptionsRenamed.size();x++) {
 			output2.println(exceptionsRenamed.get(x));  				    

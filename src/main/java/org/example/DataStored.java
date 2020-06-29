@@ -61,7 +61,7 @@ public class DataStored {
     	//Create config.properties and put en as default
     	config = new Properties();
     	FileInputStream fis;
-    	FileOutputStream fisout;
+    	
     	try {
 			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
@@ -72,9 +72,13 @@ public class DataStored {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	//System.out.println(config.getProperty("Language"));
-    	//config.remove("Language");
-    	config.setProperty("Language", "en");
+    	if(config.getProperty("Language") ==null){
+    		config.setProperty("Language", "en");
+    		System.out.println("---Valor EN---");
+    	}else {
+    		
+    	}
+    	
     	try {
 			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
 		} catch (FileNotFoundException e) {
@@ -110,7 +114,7 @@ public class DataStored {
     	Scanner s;
 		try {
 			s = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt"));
-			//ArrayList<String> list = new ArrayList<String>();
+			
 			while (s.hasNext()){
 				exceptions.add(s.nextLine());
 			}			
