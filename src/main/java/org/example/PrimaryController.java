@@ -642,7 +642,7 @@ public class PrimaryController {
 			//System.out.println(name);
 			namesBlocks = name.split(" ");
 			for(int x=0;x<namesBlocks.length;x++){
-
+				System.out.println("----"+namesBlocks.length);
 				if(x<=0 && controlBreakFile==0){
 					//Send one block of the name at a time
 					JsonOperations.getSearchSeries(namesBlocks[x]);
@@ -652,6 +652,8 @@ public class PrimaryController {
 						//System.out.println(names_blocks[x]);
 						controlNameBlock =x;
 						JsonOperations.getSearchSeries(namesBlocks[x]);
+					}else {
+						System.out.println("ERROR");
 					}
 				}
 			}
@@ -1024,6 +1026,7 @@ public class PrimaryController {
 					String newName = name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+ep.getOriginalName().substring(ep.getOriginalName().lastIndexOf("."));
 					//Removing Characters that Windows dont let name files have
 					newName = formatName_Windows(newName);
+					name = formatName_Windows(name);
 					//Set the final name
 					ep.setName(newName);
 
@@ -1155,6 +1158,7 @@ public class PrimaryController {
 		name = name.replace("."," ");
 		name = name.replace("["," ");
 		name = name.replace("]"," ");
+		name = name.replace(":"," ");
 		name = name.replace("2160p","");
 		name = name.replace("1080p","");
 		name = name.replace("720p","");
