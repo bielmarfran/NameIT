@@ -39,7 +39,7 @@ public class DataStored {
     	ArrayList<String> exceptions = new ArrayList<String>();
     	Scanner s;
 		try {
-			s = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptions.txt"));
+			s = new Scanner(new File(System.getProperty("user.home")+"\\NameIT\\"+"exceptions.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (s.hasNext()){
 				exceptions.add(s.nextLine());
@@ -61,7 +61,7 @@ public class DataStored {
     	Scanner z;
 		
 		try {
-			z = new Scanner(new File(System.getProperty("user.dir")+"\\logs\\"+"exceptionsRenamed.txt"));
+			z = new Scanner(new File(System.getProperty("user.home")+"\\NameIT\\"+"exceptionsRenamed.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (z.hasNext()){
 				exceptionsRenamed.add(z.nextLine());
@@ -81,7 +81,7 @@ public class DataStored {
     	config = new Properties();
     	FileInputStream fis;
     	try {
-			fis = new FileInputStream(System.getProperty("user.dir")+"\\src\\main\\resources\\config.properties");
+			fis = new FileInputStream(System.getProperty("user.home")+"\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -100,7 +100,7 @@ public class DataStored {
     	FileInputStream fis;
     	FileOutputStream fisout;
     	try {
-			fis = new FileInputStream(System.getProperty("user.dir")+"\\src\\main\\resources\\config.properties");
+			fis = new FileInputStream(System.getProperty("user.home")+"\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -113,7 +113,7 @@ public class DataStored {
     	//config.remove("Language");
     	config.setProperty("Language", newLanguage);
     	try {
-			config.store(new FileOutputStream(System.getProperty("user.dir")+"\\src\\main\\resources\\config.properties"), null);
+			config.store(new FileOutputStream(System.getProperty("user.home")+"\\NameIT\\"+"config.properties"), null);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
