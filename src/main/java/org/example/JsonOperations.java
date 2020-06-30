@@ -50,7 +50,7 @@ public class JsonOperations {
 		.join();
 
 	}
-
+	//
 	public static void getSearchSeries(String name){
 		String keynow = DataStored.readPreferencekey();
 		String uri ="https://api.thetvdb.com/search/series?name="+name;
@@ -71,28 +71,28 @@ public class JsonOperations {
 
 	}
 
-	
-	 public static void getSearchSeriesSlug(String name){
-	        String keynow = DataStored.readPreferencekey();
-	    	String language = DataStored.propertiesGetLanguage();
-	        String uri ="https://api.thetvdb.com/search/series?slug="+name;
-	        HttpClient client = HttpClient.newHttpClient();
-	        HttpRequest request = HttpRequest.newBuilder()
-	                .uri(URI.create(uri))
-	                .header("Content-Type", "application/json")
-	                .header("Accept-Language", language)
-	                .header("Authorization", "Bearer "+keynow)
-	                //.header("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTE3MTUxMzYsImlkIjoiTmFtZUl0Iiwib3JpZ19pYXQiOjE1OTExMTAzMzYsInVzZXJpZCI6MjI4NzgyNSwidXNlcm5hbWUiOiJiaWVsbWFyZnJhbiJ9.shQQCbngFMZjdDYj8G3cx9bzWBNY8fVxjcikwfuuyuvxb6baBVsSTLpg-4TET4-wQpYguT98Jp-GvbpT8HmNPkreht2Mhv-M4xS-xxSejHuAydUjumSR62AAkniaJKY07n1lrxnuAQeld_vmDLmC4nRmrJtCpMq9nGI4aSoJqBtC-jEnSyAmrRxnyqIhTkKjSDaJkQqN7Dr1KwzX2F8jXWPWH5_7VVlzTMHz-hhrQd5RTnfCgpiRtn9B812JcrsaUOAkv7J2TeVGfVlaSF7WBEE2tT7vgIak9uix7fwOlcNbAI2f6HjD3Demrhr74nAxQ45BFiC6hIzP8tZuNm-XyQ")
-	                .build();
+	//
+	public static void getSearchSeriesSlug(String name){
+		String keynow = DataStored.readPreferencekey();
+		String language = DataStored.propertiesGetLanguage();
+		String uri ="https://api.thetvdb.com/search/series?slug="+name;
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(uri))
+				.header("Content-Type", "application/json")
+				.header("Accept-Language", language)
+				.header("Authorization", "Bearer "+keynow)
+				//.header("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTE3MTUxMzYsImlkIjoiTmFtZUl0Iiwib3JpZ19pYXQiOjE1OTExMTAzMzYsInVzZXJpZCI6MjI4NzgyNSwidXNlcm5hbWUiOiJiaWVsbWFyZnJhbiJ9.shQQCbngFMZjdDYj8G3cx9bzWBNY8fVxjcikwfuuyuvxb6baBVsSTLpg-4TET4-wQpYguT98Jp-GvbpT8HmNPkreht2Mhv-M4xS-xxSejHuAydUjumSR62AAkniaJKY07n1lrxnuAQeld_vmDLmC4nRmrJtCpMq9nGI4aSoJqBtC-jEnSyAmrRxnyqIhTkKjSDaJkQqN7Dr1KwzX2F8jXWPWH5_7VVlzTMHz-hhrQd5RTnfCgpiRtn9B812JcrsaUOAkv7J2TeVGfVlaSF7WBEE2tT7vgIak9uix7fwOlcNbAI2f6HjD3Demrhr74nAxQ45BFiC6hIzP8tZuNm-XyQ")
+				.build();
 
-	        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-	                .thenApply(HttpResponse::body)
-	                .thenApply(PrimaryController::responseSeriesIdSlug)
-	                .join();
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+		.thenApply(HttpResponse::body)
+		.thenApply(PrimaryController::responseSeriesIdSlug)
+		.join();
 
-	    }
-	
-	
+	}
+
+
 	//Send a Get request for informations about the series, using the series id.
 	public static void jsonGetSeriesName(Integer id){
 		String keynow = DataStored.readPreferencekey();
@@ -120,48 +120,48 @@ public class JsonOperations {
 		//System.out.println("3--"+episode);
 		String keynow = DataStored.readPreferencekey();
 		String language = DataStored.propertiesGetLanguage();
-      
-        String uri ="https://api.thetvdb.com/series/"+id+"/episodes/query?"+"airedSeason="+season+"&airedEpisode="+episode;
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(uri))
-                .header("Content-Type", "application/json")
-                .header("Accept-Language", language)
-                .header("Authorization", "Bearer "+keynow)
-                .build();
+
+		String uri ="https://api.thetvdb.com/series/"+id+"/episodes/query?"+"airedSeason="+season+"&airedEpisode="+episode;
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(uri))
+				.header("Content-Type", "application/json")
+				.header("Accept-Language", language)
+				.header("Authorization", "Bearer "+keynow)
+				.build();
 
 
-        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(HttpResponse::body)
-                .thenApply(PrimaryController::renameFileCreateDirectory)
-                .join();
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+		.thenApply(HttpResponse::body)
+		.thenApply(PrimaryController::renameFileCreateDirectory)
+		.join();
 
 
-    }
+	}
 
 
-	  public static void jsonGetInfoApiAbsolute(Integer id,String absolute_episode) {
-		  	//System.out.println(id);
-		  	//System.out.println(absolute_episode);
-		  	String keynow = DataStored.readPreferencekey();
-		  	String language = DataStored.propertiesGetLanguage();
-	        String uri ="https://api.thetvdb.com/series/"+id+"/episodes/query?absoluteNumber="+absolute_episode;
-	        HttpClient client = HttpClient.newHttpClient();
-	        HttpRequest request = HttpRequest.newBuilder()
-	                .uri(URI.create(uri))
-	                .header("Content-Type", "application/json")
-	                .header("Accept-Language", language)
-	                .header("Authorization", "Bearer "+keynow)
-	                .build();
+	public static void jsonGetInfoApiAbsolute(Integer id,String absolute_episode) {
+		//System.out.println(id);
+		//System.out.println(absolute_episode);
+		String keynow = DataStored.readPreferencekey();
+		String language = DataStored.propertiesGetLanguage();
+		String uri ="https://api.thetvdb.com/series/"+id+"/episodes/query?absoluteNumber="+absolute_episode;
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(uri))
+				.header("Content-Type", "application/json")
+				.header("Accept-Language", language)
+				.header("Authorization", "Bearer "+keynow)
+				.build();
 
 
 
-	        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-	                .thenApply(HttpResponse::body)
-	                .thenApply(PrimaryController::renameFileCreateDirectory)
-	                .join();
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+		.thenApply(HttpResponse::body)
+		.thenApply(PrimaryController::renameFileCreateDirectory)
+		.join();
 
-	        absolute_episode="0";
-	    }
+		absolute_episode="0";
+	}
 
 }

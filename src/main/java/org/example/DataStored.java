@@ -14,7 +14,7 @@ import java.util.prefs.Preferences;
 public class DataStored {
 	static Properties config;
 	private static String key="";
-	private static ArrayList<String> listt = new ArrayList<String>();
+	//private static ArrayList<String> listt = new ArrayList<String>();
 
 
 
@@ -174,7 +174,7 @@ public class DataStored {
     	System.out.println("Dentro propertiesSetLanguage");
     	config = new Properties();
     	FileInputStream fis;
-    	FileOutputStream fisout;
+    	//FileOutputStream fisout;
     	try {
 			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);

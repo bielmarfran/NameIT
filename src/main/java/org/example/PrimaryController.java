@@ -1082,6 +1082,11 @@ public class PrimaryController {
 								absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
 								String newPath = absolutePath+"\\"+newName;
 								Boolean x =f.renameTo(new File(newPath));
+								if(x){
+									//System.out.println("Directory created successfully");
+								}else{
+									//System.out.println("Sorry couldnt create specified directory");
+								}
 
 							}
 						}
@@ -1116,6 +1121,11 @@ public class PrimaryController {
 							//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
 							String newPath = absolutePath+"\\"+newName;
 							Boolean x =f.renameTo(new File(newPath));
+							if(x){
+								//System.out.println("Directory created successfully");
+							}else{
+								//System.out.println("Sorry couldnt create specified directory");
+							}
 
 						}
 					}
