@@ -66,7 +66,7 @@ public class JsonOperations {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(PrimaryController::responseSeriesId)
+		.thenApply(OperationTvdb::responseSeriesId)
 		.join();
 
 	}
@@ -87,7 +87,7 @@ public class JsonOperations {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(PrimaryController::responseSeriesIdSlug)
+		.thenApply(OperationTvdb::responseSeriesIdSlug)
 		.join();
 
 	}
@@ -109,7 +109,7 @@ public class JsonOperations {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(PrimaryController::jsonResponseSeriesName)
+		.thenApply(OperationTvdb::jsonResponseSeriesName)
 		.join();
 
 	}
@@ -133,7 +133,7 @@ public class JsonOperations {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(PrimaryController::renameFileCreateDirectory)
+		.thenApply(OperationTvdb::renameFileCreateDirectory)
 		.join();
 
 
@@ -158,9 +158,8 @@ public class JsonOperations {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(PrimaryController::renameFileCreateDirectory)
+		.thenApply(OperationTvdb::renameFileCreateDirectory)
 		.join();
-
 		absolute_episode="0";
 	}
 

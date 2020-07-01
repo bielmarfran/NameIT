@@ -9,59 +9,74 @@ import javafx.concurrent.Service;
 public class OperationTvdb {
 
 	//Logic Variable
-		//Control the color of the Circle that represent the connection to the Api
-		private static Integer controlCircle=0;
-		//Extension allowed in the program
-		public static ArrayList<String> extension = new ArrayList<>();
-		//File name garbage that makes it difficult to identify the episode
-		public static ArrayList<String> filterList = new ArrayList<>();
-		//Array where all Episodes object are stored.
-		private ArrayList<Episode> episodeList = new  ArrayList<>();
-		//
-		private ArrayList<Episode> episodeListError = new  ArrayList<>();
-		//Control variable to always access the right Episode
-		private static Integer controlArrayListEpisode=0;
-		//Variable where the File name is store in char block's to send one at the time to the Api.
-		private static String[] namesBlocks;
-		//Temporary store for namesBlocks in the Slug logic part.
-		private static String[] namesBlocksSlug;
-		//Control the times that block's of files name are sent to the Api.
-		private static Integer controlBreakFile=0;
-		//Control the times that block's of files name are sent to the Api in the Slug method.
-		private static Integer controlBreakFileSlug=0;
-		private static Integer controlBreakFileSlug2=0;
-		//Control how many times the will call the slug getJson.
-		private static Integer countSlug=0;
-		//Control the times the name block position
-		private static Integer controlNameBlock=0;
-		//Local Episode Variable used during the logic in the class
-		private static Episode ep = new Episode();
-		//Call for the Service Class, that good part of the program logic will run on.
-		//private Service<Void> backgroundTaks;
-		//Store the value of textFieldFolder
-		private static String textFieldFolder_value;
-		//Store the value of checkboxSeries
-		private static boolean checkboxSeries_value;
-		//Store the value of checkboxSeason
-		private static boolean checkboxSeason_value;
-		//Store the value of checkboxFolder
-		private static boolean checkboxFolder_value;
-		//
-		//private static final String DEFAULT_CONTROL_INNER_BACKGROUND = "derive(-fx-base,80%)";
-		//
-		//private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
-		//
-		private static ArrayList<String> exceptions = new ArrayList<String>();
-		//
-		private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
-		//
-		//private static Integer enter=0;
-		//
-	
+	//Control the color of the Circle that represent the connection to the Api
+	private static Integer controlCircle=0;
+	//Extension allowed in the program
+	public static ArrayList<String> extension = new ArrayList<>();
+	//File name garbage that makes it difficult to identify the episode
+	public static ArrayList<String> filterList = new ArrayList<>();
+	//Array where all Episodes object are stored.
+	//private ArrayList<Episode> episodeList = new  ArrayList<>();
 	//
+	//private ArrayList<Episode> episodeListError = new  ArrayList<>();
+	//Control variable to always access the right Episode
+	private static Integer controlArrayListEpisode=0;
+	//Variable where the File name is store in char block's to send one at the time to the Api.
+	private static String[] namesBlocks;
+	//Temporary store for namesBlocks in the Slug logic part.
+	private static String[] namesBlocksSlug;
+	//Control the times that block's of files name are sent to the Api.
+	private static Integer controlBreakFile=0;
+	//Control the times that block's of files name are sent to the Api in the Slug method.
+	private static Integer controlBreakFileSlug=0;
+	private static Integer controlBreakFileSlug2=0;
+	//Control how many times the will call the slug getJson.
+	private static Integer countSlug=0;
+	//Control the times the name block position
+	private static Integer controlNameBlock=0;
+	//Local Episode Variable used during the logic in the class
+	private static Episode ep = new Episode();
+	//Call for the Service Class, that good part of the program logic will run on.
+	//private Service<Void> backgroundTaks;
+	//Store the value of textFieldFolder
+	private static String textFieldFolder_value;
+	//Store the value of checkboxSeries
+	private static boolean checkboxSeries_value;
+	//Store the value of checkboxSeason
+	private static boolean checkboxSeason_value;
+	//Store the value of checkboxFolder
+	private static boolean checkboxFolder_value;
+	//
+	//private static final String DEFAULT_CONTROL_INNER_BACKGROUND = "derive(-fx-base,80%)";
+	//
+	//private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
+	//
+	private static ArrayList<String> exceptions = new ArrayList<String>();
+	//
+	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
+	//
+	//private static Integer enter=0;
+	//
+
+	//Get info from PrimaryController to use in the logic;
+	public void setInfo(Integer x,Episode episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
+		System.out.println("--Inside setInfo--");
+		controlArrayListEpisode=x;
+		ep = episode;
+		controlBreakFile=0;
+		controlBreakFileSlug=0;
+		controlBreakFileSlug2=0;
+		checkboxSeries_value = checkboxSeries;
+		checkboxSeason_value = checkboxSeason;
+		checkboxFolder_value = checkboxFolder;
+		
+		
+	}
+	//
+	
 	public void breakFileName(String name){
 		//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
-		System.out.println(name);
+		System.out.println("--Inside Break File Name--");
 		if(!name.isEmpty()){
 			name = formatName(name);
 			//System.out.println(name);
@@ -93,6 +108,7 @@ public class OperationTvdb {
 		}
 
 	}
+	
 	public static String responseSeriesId(String responseBody){		
 		if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 			System.out.println("Resource not found");
@@ -229,21 +245,6 @@ public class OperationTvdb {
 		return null;
 	}
 
-	//Get the response from checkConnection(), and check if the current key is still working, if not send start login().
-	public static Integer status(Integer responseBody){
-		System.out.println(responseBody);
-		//System.out.println(key);
-		if(responseBody==401){
-			JsonOperations.login();
-		}else{
-			DataStored.readPreferencekey();
-			controlCircle = 1;
-
-
-		}
-		return null;
-	}
-	//End Connecting API
 
 	//Get the namesBlocks and check the block after the parts used for id recognition
 	public static void getSeason() {
@@ -434,6 +435,7 @@ public class OperationTvdb {
 				}else {
 					String name = ep.getName();
 					System.out.println("Name Start Renaming ---"+name);
+					
 					//Sorting in the json data
 					JSONObject album = new JSONObject(responseBody);
 					JSONArray albums =  album.getJSONArray("data");
@@ -460,12 +462,11 @@ public class OperationTvdb {
 					String absolutePath;
 					if(checkboxFolder_value){
 						if(textFieldFolder_value==null) {
-						
 							absolutePath = textFieldFolder_value;
 						}else {
 							absolutePath = textFieldFolder_value;
 						}
-						
+
 					}else{
 						absolutePath = ep.getOriginalPath();
 					}
@@ -553,7 +554,7 @@ public class OperationTvdb {
 
 						}
 					}
-				
+
 
 				}
 
@@ -597,7 +598,7 @@ public class OperationTvdb {
 		name = name.replace("1080p","");
 		name = name.replace("720p","");
 		for(int y=0;y<exceptions.size();y++){
-		
+
 			String ex =String.valueOf(exceptions.get(y));
 			String exr =String.valueOf(exceptionsRenamed.get(y));
 			if(ex.equals("-")) {
@@ -621,9 +622,9 @@ public class OperationTvdb {
 				name = name.substring(1);
 			}
 		}
-		
-		
-		
+
+
+
 		return name;
 
 	}
@@ -672,7 +673,9 @@ public class OperationTvdb {
 		return true;
 	}
 
-	private String getExtension(String fileName){
+	/*
+	 * private String getExtension(String fileName){
+	 
 		String extension = "";
 
 		int i = fileName.lastIndexOf('.');
@@ -681,4 +684,5 @@ public class OperationTvdb {
 
 		return extension;
 	}
+	*/
 }
