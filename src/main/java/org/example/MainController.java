@@ -46,7 +46,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PrimaryController {
+public class MainController {
 	@FXML
 	private ProgressIndicator progressIndicator;
 	@FXML
@@ -154,7 +154,7 @@ public class PrimaryController {
 		return controlCircle;
 	}
 	public static void setControl_circle(Integer control_circle) {
-		PrimaryController.controlCircle = control_circle;
+		MainController.controlCircle = control_circle;
 	}
 	//End Get - Set
 
@@ -473,7 +473,7 @@ public class PrimaryController {
 	}
 	//End UI Trigger
 	public void buttonExceptions(javafx.event.ActionEvent actionEvent) {
-		 FXMLLoader loader = new FXMLLoader(getClass().getResource("secondary.fxml"));
+		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Exception.fxml"));
 		 Parent parent;
 		try {
 			parent = loader.load();

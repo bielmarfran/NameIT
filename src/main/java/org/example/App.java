@@ -18,9 +18,9 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
     	DataStored.createFiles();
-        scene = new Scene(loadFXML("primary"));
+        scene = new Scene(loadFXML("Main"));
         stage.setScene(scene);
-        stage.setTitle("RenameIT");
+        stage.setTitle("NameIT");
         stage.show();
     }
 

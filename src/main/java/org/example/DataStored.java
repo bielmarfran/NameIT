@@ -95,7 +95,7 @@ public class DataStored {
 		Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
 
 		if(keyValue==String.valueOf(401)){
-			PrimaryController.setControl_circle(2);
+			MainController.setControl_circle(2);
 		}else{
 			key="";
 			keyValue = keyValue.substring(10,keyValue.length()-2);

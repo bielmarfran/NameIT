@@ -21,7 +21,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.text.Text;
 
-public class SecondaryController {
+public class ExceptionController {
 
     //@FXML
     //private void switchToPrimary() throws IOException {

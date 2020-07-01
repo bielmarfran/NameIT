@@ -21,7 +21,7 @@ public class JsonOperations {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::statusCode)
-		.thenApply(PrimaryController::status)
+		.thenApply(MainController::status)
 		.join();
 
 
