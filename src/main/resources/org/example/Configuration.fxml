@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -18,5 +20,8 @@
             <Font size="14.0" />
          </font>
       </Label>
+      <ComboBox layoutX="14.0" layoutY="120.0" prefWidth="150.0" />
+      <Label layoutX="39.0" layoutY="89.0" text="Label" />
+      <TextArea layoutX="221.0" layoutY="71.0" prefHeight="124.0" prefWidth="377.0" />
    </children>
 </AnchorPane>

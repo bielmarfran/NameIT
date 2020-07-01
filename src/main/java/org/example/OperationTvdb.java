@@ -69,7 +69,7 @@ public class OperationTvdb {
 		checkboxSeries_value = checkboxSeries;
 		checkboxSeason_value = checkboxSeason;
 		checkboxFolder_value = checkboxFolder;
-		
+		fillFilter();
 		
 	}
 	//
@@ -586,6 +586,16 @@ public class OperationTvdb {
 		exceptions =DataStored.readExceptions();
 		exceptionsRenamed =DataStored.readExceptionsRenamed();
 		name = name.toLowerCase();
+		//Remove characters in between [], the are always junk information or complementary.
+		if(name.contains("[")) {
+			if(name.contains("]")) {
+				int start = name.indexOf("[");
+				int end= name.indexOf("]")+1;
+				name = name.replace(name.substring(start,end), " ");
+				System.out.println(name);
+			}
+		}
+		//End
 		name = name.replace(".pdf","");
 		name = name.replace(".mkv","");
 		name = name.replace("-"," ");
@@ -629,26 +639,8 @@ public class OperationTvdb {
 
 	}
 
-	public void fillFilterExtention() {
-		//Files Types Supported
-		//Video Format
-		extension.add("mkv");
-		extension.add("pdf");
-		extension.add("avi");
-		extension.add("flv");
-		extension.add("mov");
-		extension.add("mp4");
-		extension.add("webm");
-		//Subtitle Format
-		extension.add("srt");
-		extension.add("smi");
-		extension.add("ssa");
-		extension.add("ass");
-		extension.add("vtt");
-		extension.add("ttml");
-		extension.add("sbv");
-		extension.add("dfxp");
-		//End Files Types Suported
+	public void fillFilter() {
+		
 		//Names that only disturb the logic to find the episode
 		filterList.add("horriblesubs");
 		filterList.add("subproject");

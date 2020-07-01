@@ -645,68 +645,7 @@ public class MainController {
 	//End Connecting API
 
 	//Remove character that Windows don't let files name have.
-	public static String formatName_Windows(String newName){
-
-		newName = newName.replace("<","");
-		newName = newName.replace(">","");
-		newName = newName.replace("*","");
-		newName = newName.replace("?","");
-		newName = newName.replace("/","");
-		newName = newName.replace("|","");
-		newName = newName.replace("\"","");
-		newName = newName.replace(String.valueOf('"'),"");
-		newName = newName.replace(":","");
-
-		return newName;
-
-	}
-	//Remove unwanted special character and names that only disturb the logic to find the episode
-	public String formatName(String name){
-		exceptions =DataStored.readExceptions();
-		exceptionsRenamed =DataStored.readExceptionsRenamed();
-		name = name.toLowerCase();
-		name = name.replace(".pdf","");
-		name = name.replace(".mkv","");
-		name = name.replace("-"," ");
-		name = name.replace("_"," ");
-		name = name.replace("."," ");
-		name = name.replace("["," ");
-		name = name.replace("]"," ");
-		name = name.replace(":"," ");
-		name = name.replace("2160p","");
-		name = name.replace("1080p","");
-		name = name.replace("720p","");
-		for(int y=0;y<exceptions.size();y++){
-		
-			String ex =String.valueOf(exceptions.get(y));
-			String exr =String.valueOf(exceptionsRenamed.get(y));
-			if(ex.equals("-")) {
-				ex = " ";
-			}
-			if(exr.equals("-")) {
-				exr = " ";
-			}
-			name = name.replace(ex ,exr);
-		}	
-		for(int x=0;x<10;x++){
-			name = name.replace("s"+x," s"+x);
-			name = name.replace("season"+x," s"+x);
-		}
-		for(int y=0;y<filterList.size();y++){
-			String v1 =String.valueOf(filterList.get(y));
-			name = name.replace(v1 ,"");
-		}
-		for(int z=0;z<name.length();z++){
-			if(name.startsWith(" ")){
-				name = name.substring(1);
-			}
-		}
-		
-		
-		
-		return name;
-
-	}
+	
 
 	public void fillFilterExtention() {
 		//Files Types Supported
@@ -728,15 +667,7 @@ public class MainController {
 		extension.add("sbv");
 		extension.add("dfxp");
 		//End Files Types Suported
-		//Names that only disturb the logic to find the episode
-		filterList.add("horriblesubs");
-		filterList.add("subproject");
-		filterList.add("webrip");
-		filterList.add("x264");
-		filterList.add("acc");
-		filterList.add("hdtv");
-		filterList.add("animetc");
-		//End Names that only disturb the logic to find the episode
+	
 
 	}
 	//Simple Method to check is a given character is numeric
