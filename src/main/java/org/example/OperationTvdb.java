@@ -57,8 +57,10 @@ public class OperationTvdb {
 	//
 	//private static Integer enter=0;
 	//
-
+	
+	
 	//Get info from PrimaryController to use in the logic;
+
 	public void setInfo(Integer x,Episode episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
 		System.out.println("--Inside setInfo--");
 		controlArrayListEpisode=x;
@@ -665,6 +667,7 @@ public class OperationTvdb {
 		return true;
 	}
 
+	
 	/*
 	 * private String getExtension(String fileName){
 	 

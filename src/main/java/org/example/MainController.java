@@ -140,9 +140,9 @@ public class MainController {
 	//
 	private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
 	//
-	private static ArrayList<String> exceptions = new ArrayList<String>();
+	//private static ArrayList<String> exceptions = new ArrayList<String>();
 	//
-	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
+	//private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 	//
 	private static Integer enter=0;
 	//
@@ -236,6 +236,26 @@ public class MainController {
 		renameMenuLanguage();
 		
 	}
+	public void menuItemConfiguration(javafx.event.ActionEvent actionEvent) {
+		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
+		 Parent parent;
+		try {
+			parent = loader.load();
+			Scene scene = new Scene(parent);
+	        Stage stage = new Stage();	
+	        stage.setTitle("Configuration");
+	        stage.setScene(scene);
+	        stage.showAndWait();
+	       
+      
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		  
+	}
+
 
 	//Star the logic to the renaming the files
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {

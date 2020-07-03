@@ -3,25 +3,31 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ExceptionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ConfiguraionController">
    <children>
       <Separator layoutX="-2.0" layoutY="60.0" prefHeight="3.0" prefWidth="640.0" />
-      <Label layoutX="8.0" layoutY="4.0" text="Exceptions List">
+      <Label layoutX="256.0" layoutY="21.0" text="Configuration">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="8.0" layoutY="31.0" lineSpacing="1.0" prefHeight="27.0" prefWidth="518.0" text="Change a part of the file name for the program logic, to help match with the Api">
+      <ComboBox fx:id="ComboBoxDataBase" layoutX="26.0" layoutY="103.0" prefWidth="150.0" promptText="TVDB" />
+      <Label layoutX="70.0" layoutY="73.0" text="Data Base">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Label layoutX="290.0" layoutY="95.0" text="Information About the DataBase" />
+      <Label layoutX="15.0" layoutY="163.0" text="Language for the Data Base">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <ComboBox layoutX="14.0" layoutY="120.0" prefWidth="150.0" />
-      <Label layoutX="39.0" layoutY="89.0" text="Label" />
-      <TextArea layoutX="221.0" layoutY="71.0" prefHeight="124.0" prefWidth="377.0" />
+      <ComboBox fx:id="ComboBoxLanguageDataBase" layoutX="26.0" layoutY="202.0" prefWidth="150.0" promptText="--Deafult--" />
+      <Label layoutX="227.0" layoutY="194.0" lineSpacing="1.0" text="If the Database dont have the information on the select langague, it will return in English" textAlignment="CENTER" />
+      <Separator layoutY="152.0" prefHeight="3.0" prefWidth="640.0" />
+      <Separator layoutX="-2.0" layoutY="270.0" prefHeight="3.0" prefWidth="640.0" />
    </children>
 </AnchorPane>

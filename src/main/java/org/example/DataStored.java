@@ -74,7 +74,7 @@ public class DataStored {
 		}
 		if(config.getProperty("Language") ==null){
 			config.setProperty("Language", "en");
-			System.out.println("---Valor EN---");
+
 		}else {
 
 		}
@@ -157,6 +157,7 @@ public class DataStored {
     	FileInputStream fis;
     	try {
 			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			//System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
