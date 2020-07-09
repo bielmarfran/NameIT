@@ -1,6 +1,6 @@
-NameIT is is released under the GNU GENERAL PUBLIC LICENSE, v3.0 (see license text after libraries section)                    
+NameIT - Simple Renamer is is released under the GNU GENERAL PUBLIC LICENSE, v3.0 (see license text after libraries section)                    
                     
-The list of libraries used by NameIT:                    
+The list of libraries used by NameIT - Simple Renamer:                    
  
                        -- Start libraries --
 JSON In Java (package org.json)
