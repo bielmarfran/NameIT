@@ -6,11 +6,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class JsonOperations {
+public class JsonOperationsTvdb {
 	
 	//Try to connect to the Api with the stored Api key.
 	public static void checkConnection(){
-		String keynow = DataStored.readPreferencekey();
+		String keynow = DataStored.readPreferencekeyTvdb();
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
@@ -46,13 +46,13 @@ public class JsonOperations {
 
 		client2.sendAsync(request2, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenAccept(DataStored::savePreferencekey)
+		.thenAccept(DataStored::savePreferencekeyTvdb)
 		.join();
 
 	}
 	//
 	public static void getSearchSeries(String name){
-		String keynow = DataStored.readPreferencekey();
+		String keynow = DataStored.readPreferencekeyTvdb();
 		String uri ="https://api.thetvdb.com/search/series?name="+name;
 		String language = DataStored.propertiesGetLanguage();
 		HttpClient client = HttpClient.newHttpClient();
@@ -73,7 +73,7 @@ public class JsonOperations {
 
 	//
 	public static void getSearchSeriesSlug(String name){
-		String keynow = DataStored.readPreferencekey();
+		String keynow = DataStored.readPreferencekeyTvdb();
 		String language = DataStored.propertiesGetLanguage();
 		String uri ="https://api.thetvdb.com/search/series?slug="+name;
 		HttpClient client = HttpClient.newHttpClient();
@@ -95,7 +95,7 @@ public class JsonOperations {
 
 	//Send a Get request for informations about the series, using the series id.
 	public static void jsonGetSeriesName(Integer id){
-		String keynow = DataStored.readPreferencekey();
+		String keynow = DataStored.readPreferencekeyTvdb();
 		String language = DataStored.propertiesGetLanguage();	
 		//System.out.println("get_series_name");
 		String uri ="https://api.thetvdb.com/series/"+id;
@@ -118,7 +118,7 @@ public class JsonOperations {
 		//System.out.println("1--"+id);
 		//System.out.println("2--"+season);
 		//System.out.println("3--"+episode);
-		String keynow = DataStored.readPreferencekey();
+		String keynow = DataStored.readPreferencekeyTvdb();
 		String language = DataStored.propertiesGetLanguage();
 
 		String uri ="https://api.thetvdb.com/series/"+id+"/episodes/query?"+"airedSeason="+season+"&airedEpisode="+episode;
@@ -143,7 +143,7 @@ public class JsonOperations {
 	public static void jsonGetInfoApiAbsolute(Integer id,String absolute_episode) {
 		//System.out.println(id);
 		//System.out.println(absolute_episode);
-		String keynow = DataStored.readPreferencekey();
+		String keynow = DataStored.readPreferencekeyTvdb();
 		String language = DataStored.propertiesGetLanguage();
 		String uri ="https://api.thetvdb.com/series/"+id+"/episodes/query?absoluteNumber="+absolute_episode;
 		HttpClient client = HttpClient.newHttpClient();

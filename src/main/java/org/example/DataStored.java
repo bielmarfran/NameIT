@@ -13,7 +13,8 @@ import java.util.prefs.Preferences;
 
 public class DataStored {
 	static Properties config;
-	private static String key="";
+	private static String keyTvdb="";
+	private static String keyTmdb="";
 	//private static ArrayList<String> listt = new ArrayList<String>();
 
 
@@ -91,22 +92,22 @@ public class DataStored {
 
 	}
 	//Save the Api Key Used for TVDB
-	public static void savePreferencekey(String keyValue) {
+	public static void savePreferencekeyTvdb(String keyValue) {
 		Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
 
 		if(keyValue==String.valueOf(401)){
 			MainController.setControl_circle(2);
 		}else{
-			key="";
+			keyTvdb="";
 			keyValue = keyValue.substring(10,keyValue.length()-2);
-			prefs.put(key,keyValue);
+			prefs.put(keyTvdb,keyValue);
 		}
 
     }
     //Reed the stored TVDB key.
-    public static String readPreferencekey() {
+    public static String readPreferencekeyTvdb() {
         Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
-        return prefs.get(key, "default");
+        return prefs.get(keyTvdb, "default");
     }
     //Get the readExceptions.txt content
     public static ArrayList<String> readExceptions() {
@@ -200,5 +201,24 @@ public class DataStored {
 		}
     }
     
+    //
     
+  //Save the Api Key Used for TMDB
+  	public static void savePreferencekeyTmdb(String keyValue) {
+  		Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
+
+  		if(keyValue==String.valueOf(401)){
+  			MainController.setControl_circle(2);
+  		}else{
+  			keyTmdb="";
+  			keyValue = keyValue.substring(10,keyValue.length()-2);
+  			prefs.put(keyTmdb,keyValue);
+  		}
+
+      }
+      //Reed the stored TMDB key.
+      public static String readPreferencekeyTmdb() {
+          Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
+          return prefs.get(keyTmdb, "default");
+      }
 }

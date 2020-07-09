@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
@@ -47,7 +48,7 @@
             <CheckBox fx:id="checkboxFolder" layoutX="530.0" layoutY="50.0" mnemonicParsing="false" onAction="#checkBoxFolder" text="Select Directory (Default Same Location)" />
             <ListView fx:id="listViewFilesRenamed" layoutX="530.0" layoutY="131.0" prefHeight="368.0" prefWidth="354.0" AnchorPane.rightAnchor="16.0" />
             <ListView fx:id="listViewErrorText" layoutX="16.0" layoutY="538.0" prefHeight="170.0" prefWidth="868.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" />
-            <Button layoutX="280.0" layoutY="50.0" mnemonicParsing="false" onAction="#buttonExceptions" prefHeight="52.0" prefWidth="94.0" text="Exceptions List" />
+            <Button layoutX="338.0" layoutY="50.0" mnemonicParsing="false" onAction="#buttonExceptions" prefHeight="52.0" prefWidth="94.0" text="Exceptions List" />
             <Separator layoutX="1.0" layoutY="508.0" prefHeight="4.0" prefWidth="900.0" />
             <Label layoutX="18.0" layoutY="510.0" text="Error List">
                <font>
@@ -63,6 +64,7 @@
             <Separator layoutX="1.0" layoutY="115.0" prefHeight="4.0" prefWidth="900.0" />
             <Separator layoutY="35.0" prefHeight="4.0" prefWidth="900.0" />
             <Separator layoutX="447.0" layoutY="36.0" orientation="VERTICAL" prefHeight="81.0" prefWidth="9.0" />
+            <ComboBox layoutX="372.0" layoutY="105.0" prefWidth="150.0" />
          </children>
       </AnchorPane>
    </center>

@@ -38,7 +38,10 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -163,13 +166,13 @@ public class MainController {
 	//Operations on the initialization of the UI.
 	public void initialize() {
 		
-		JsonOperations.checkConnection();		
+		JsonOperationsTvdb.checkConnection();		
 		fillFilterExtention();
 		tooltips();
 		paintCircle();
 		renameMenuLanguage();
-		
-		
+		//isDate(null);
+		JsonOperationsTmdb.getSearchSeries(null);
 	}
 	//End
 
@@ -653,9 +656,9 @@ public class MainController {
 		System.out.println(responseBody);
 		//System.out.println(key);
 		if(responseBody==401){
-			JsonOperations.login();
+			JsonOperationsTvdb.login();
 		}else{
-			DataStored.readPreferencekey();
+			DataStored.readPreferencekeyTvdb();
 			controlCircle = 1;
 
 
@@ -711,6 +714,39 @@ public class MainController {
 			return fileName.substring(i + 1).toLowerCase();
 
 		return extension;
+	}
+	public static void isDate(String newName) {
+		String date ="";
+		for(int x=0;x<newName.length();x++) {
+			if(isNumeric(newName.substring(x,x+1))) {
+				date= date+newName.charAt(x);
+			}
+		}
+		System.out.println(date);
+		if(date.length()==4) {
+			String min = "1800";
+			String max = "2500";
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+			Date dmin = null;
+			Date dmax = null;
+			Date dcheck = null;
+			try {
+				dcheck =sdf.parse(date);
+				dmin = sdf.parse(min);
+				dmax= sdf.parse(max);
+				if(dcheck.after(dmin) && dcheck.before(dmax) ) {
+	
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
+			
+		
+		
+		
 	}
 }
 

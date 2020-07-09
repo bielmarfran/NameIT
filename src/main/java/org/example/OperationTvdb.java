@@ -1,7 +1,11 @@
 package org.example;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import javafx.concurrent.Service;
@@ -72,6 +76,7 @@ public class OperationTvdb {
 		checkboxSeason_value = checkboxSeason;
 		checkboxFolder_value = checkboxFolder;
 		fillFilter();
+	
 		
 	}
 	//
@@ -87,13 +92,13 @@ public class OperationTvdb {
 				System.out.println("----"+namesBlocks.length);
 				if(x<=0 && controlBreakFile==0){
 					//Send one block of the name at a time
-					JsonOperations.getSearchSeries(namesBlocks[x]);
+					JsonOperationsTvdb.getSearchSeries(namesBlocks[x]);
 				}else{
 					if(controlBreakFile==0){
 						namesBlocks[x] = namesBlocks[x-1]+"%20"+namesBlocks[x];
 						//System.out.println(names_blocks[x]);
 						controlNameBlock =x;
-						JsonOperations.getSearchSeries(namesBlocks[x]);
+						JsonOperationsTvdb.getSearchSeries(namesBlocks[x]);
 					}else {
 						System.out.println("ERROR");
 					}
@@ -119,7 +124,7 @@ public class OperationTvdb {
 		}else{
 			if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
 				ep.setError("03");
-				JsonOperations.checkConnection();
+				JsonOperationsTvdb.checkConnection();
 			}else {
 				//System.out.println(responseBody);
 				responseBody = responseBody.substring((responseBody.indexOf(":")+1));
@@ -155,20 +160,20 @@ public class OperationTvdb {
 			//countSlug++;
 			if(x<=0){
 				System.out.println("Entrada 1");
-				JsonOperations.getSearchSeriesSlug(namesBlocks[x]);
+				JsonOperationsTvdb.getSearchSeriesSlug(namesBlocks[x]);
 
 			}else{
 				if(controlBreakFileSlug==1){
 					int y=x-2;
 					controlNameBlock =y;
 					System.out.println("Entrada 2");
-					JsonOperations.getSearchSeriesSlug(namesBlocks[y]);
+					JsonOperationsTvdb.getSearchSeriesSlug(namesBlocks[y]);
 				}else{
 					if(controlBreakFile==0){
 						namesBlocks[x] = namesBlocks[x-1]+"-"+namesBlocks[x];
 						controlNameBlock =x;
 						System.out.println("Entrada 3");
-						JsonOperations.getSearchSeriesSlug(namesBlocks[x]);
+						JsonOperationsTvdb.getSearchSeriesSlug(namesBlocks[x]);
 					}
 				}
 			}
@@ -192,7 +197,7 @@ public class OperationTvdb {
 		}else{
 			if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
 				ep.setError("03");
-				JsonOperations.checkConnection();
+				JsonOperationsTvdb.checkConnection();
 			}else {
 				responseBody = responseBody.substring((responseBody.indexOf(":")+1));
 				responseBody = responseBody.substring(0,(responseBody.lastIndexOf("}")));
@@ -205,7 +210,7 @@ public class OperationTvdb {
 
 					JSONObject album = albums.getJSONObject(0);
 					ep.setId(album.getInt("id"));
-					JsonOperations.jsonGetSeriesName(album.getInt("id"));
+					JsonOperationsTvdb.jsonGetSeriesName(album.getInt("id"));
 					ep.setError("");
 					getSeason();
 					controlBreakFileSlug=0;
@@ -227,7 +232,7 @@ public class OperationTvdb {
 		}else{
 			if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
 				ep.setError("Api key not longer valid/ Api down");
-				JsonOperations.checkConnection();
+				JsonOperationsTvdb.checkConnection();
 			}else {
 				responseBody = responseBody.substring((responseBody.indexOf(":")+1));
 				responseBody = responseBody.substring(0,(responseBody.lastIndexOf("}")));
@@ -335,17 +340,17 @@ public class OperationTvdb {
 				if(test.length()==1 &&isNumeric(test)){
 					absolute_episode = absolute_episode + test;
 					ep.setAbsolute_episode(absolute_episode);
-					JsonOperations.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
+					JsonOperationsTvdb.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
 					ep.setError("");	
 				}else{
 					ep.setAbsolute_episode(absolute_episode);
-					JsonOperations.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
+					JsonOperationsTvdb.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
 					ep.setError("");	
 				}
 			}else{
 				if(!absolute_episode.isEmpty()){
 					ep.setAbsolute_episode(absolute_episode);
-					JsonOperations.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
+					JsonOperationsTvdb.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
 					ep.setError("");	
 				}else {
 					System.out.println("No Absolute Episode Found");
@@ -357,7 +362,7 @@ public class OperationTvdb {
 			if(test.length()==1 &&isNumeric(test)){
 				absolute_episode = test;
 				ep.setAbsolute_episode(absolute_episode);
-				JsonOperations.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
+				JsonOperationsTvdb.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
 				ep.setError("");	
 			}else{
 				System.out.println("No Absolute Episode Found");
@@ -395,11 +400,11 @@ public class OperationTvdb {
 							if(test.length()==1 && isNumeric(test)){
 								episode = episode + test;
 								ep.setEpisode(episode);						
-								JsonOperations.jsonGetInfoApi(ep.getId(),ep.getSeason(),episode);
+								JsonOperationsTvdb.jsonGetInfoApi(ep.getId(),ep.getSeason(),episode);
 								ep.setError("");	
 							}else{
 								ep.setEpisode(episode);
-								JsonOperations.jsonGetInfoApi(ep.getId(),ep.getSeason(),episode);
+								JsonOperationsTvdb.jsonGetInfoApi(ep.getId(),ep.getSeason(),episode);
 								ep.setError("");	
 							}
 
@@ -433,7 +438,7 @@ public class OperationTvdb {
 			}else{
 				if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
 					ep.setError("03");
-					JsonOperations.checkConnection();
+					JsonOperationsTvdb.checkConnection();
 				}else {
 					String name = ep.getName();
 					System.out.println("Name Start Renaming ---"+name);
@@ -670,7 +675,7 @@ public class OperationTvdb {
 	
 	/*
 	 * private String getExtension(String fileName){
-	 
+
 		String extension = "";
 
 		int i = fileName.lastIndexOf('.');
