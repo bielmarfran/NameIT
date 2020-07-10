@@ -201,24 +201,72 @@ public class DataStored {
 		}
     }
     
-    //
+    //Get the Mode Properties from config.properties.
+    public static String propertiesGetMode() {
+    	config = new Properties();
+    	FileInputStream fis;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			//System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	System.out.println(config.getProperty("Mode"));
+
+    	return config.getProperty("Mode");
+    }
+    //Save the Mode Properties from config.properties.
+    public static void propertiesSetMode(String newMode) {
+    	System.out.println("Dentro propertiesSetMode");
+    	config = new Properties();
+    	FileInputStream fis;
+    	//FileOutputStream fisout;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	//System.out.println(config.getProperty("Language"));
+    	//config.remove("Language");
+    	config.setProperty("Mode", newMode);
+    	try {
+			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
     
-  //Save the Api Key Used for TMDB
-  	public static void savePreferencekeyTmdb(String keyValue) {
-  		Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
+    //Save the Api Key Used for TMDB
+    
+    	public static void savePreferencekeyTmdb(String keyValue) {
+    	Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
 
-  		if(keyValue==String.valueOf(401)){
-  			MainController.setControl_circle(2);
-  		}else{
-  			keyTmdb="";
-  			keyValue = keyValue.substring(10,keyValue.length()-2);
-  			prefs.put(keyTmdb,keyValue);
-  		}
+    	if(keyValue==String.valueOf(401)){
+    		MainController.setControl_circle(2);
+    	}else{
+    		keyTmdb="";
+    		keyValue = keyValue.substring(10,keyValue.length()-2);
+    		prefs.put(keyTmdb,keyValue);
+    	}
 
-      }
-      //Reed the stored TMDB key.
-      public static String readPreferencekeyTmdb() {
-          Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
-          return prefs.get(keyTmdb, "default");
-      }
+    }
+    //Reed the stored TMDB key.
+    public static String readPreferencekeyTmdb() {
+    	Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
+    	return prefs.get(keyTmdb, "default");
+    }
 }

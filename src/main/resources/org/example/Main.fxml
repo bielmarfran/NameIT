@@ -36,8 +36,8 @@
             <Circle fx:id="statusApi" fill="DODGERBLUE" layoutX="42.0" layoutY="76.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.leftAnchor="29.0" />
             <Pane layoutX="393.0" layoutY="238.0" prefHeight="89.0" prefWidth="118.0" style="-fx-background-color: #BEBEBE;">
                <children>
-                  <CheckBox fx:id="checkboxSeries" layoutX="11.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="Season" />
-                   <CheckBox fx:id="checkboxSeason" layoutX="10.0" layoutY="28.0" mnemonicParsing="false" selected="true" text="Series" />
+                  <CheckBox fx:id="checkboxSeries" layoutX="13.0" layoutY="27.0" mnemonicParsing="false" selected="true" text="Series" />
+                   <CheckBox fx:id="checkboxSeason" layoutX="11.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="Season" />
                   <Label layoutX="8.0" text="Folder">
                      <font>
                         <Font size="16.0" />
@@ -64,7 +64,7 @@
             <Separator layoutX="1.0" layoutY="115.0" prefHeight="4.0" prefWidth="900.0" />
             <Separator layoutY="35.0" prefHeight="4.0" prefWidth="900.0" />
             <Separator layoutX="447.0" layoutY="36.0" orientation="VERTICAL" prefHeight="81.0" prefWidth="9.0" />
-            <ComboBox layoutX="372.0" layoutY="105.0" prefWidth="150.0" />
+            <ComboBox fx:id="ComboBoxMode" layoutX="372.0" layoutY="105.0" prefWidth="150.0" />
          </children>
       </AnchorPane>
    </center>

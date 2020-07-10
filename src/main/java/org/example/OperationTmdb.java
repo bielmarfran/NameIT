@@ -30,7 +30,7 @@ public class OperationTmdb {
 		//Control the times the name block position
 		private static Integer controlNameBlock=0;
 		//Local Episode Variable used during the logic in the class
-		private static Episode ep = new Episode();
+		private static Item ep = new Item();
 		//Call for the Service Class, that good part of the program logic will run on.
 		//private Service<Void> backgroundTaks;
 		//Store the value of textFieldFolder

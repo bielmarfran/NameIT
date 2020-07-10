@@ -39,7 +39,7 @@ public class OperationTvdb {
 	//Control the times the name block position
 	private static Integer controlNameBlock=0;
 	//Local Episode Variable used during the logic in the class
-	private static Episode ep = new Episode();
+	private static Item ep = new Item();
 	//Call for the Service Class, that good part of the program logic will run on.
 	//private Service<Void> backgroundTaks;
 	//Store the value of textFieldFolder
@@ -65,7 +65,7 @@ public class OperationTvdb {
 	
 	//Get info from PrimaryController to use in the logic;
 
-	public void setInfo(Integer x,Episode episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
+	public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
 		System.out.println("--Inside setInfo--");
 		controlArrayListEpisode=x;
 		ep = episode;

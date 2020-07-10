@@ -3,7 +3,7 @@ package org.example;
 import java.io.File;
 import java.util.ArrayList;
 
-public class Episode {
+public class Item {
 	
 	//Id of the Series in the API
 	private int id;
@@ -32,12 +32,12 @@ public class Episode {
 	
 	
 	
-	public Episode() {
+	public Item() {
 
 		
 		// TODO Auto-generated constructor stub
 	}
-	public Episode(String orignalName,String originalPatch,File originalFile) {
+	public Item(String orignalName,String originalPatch,File originalFile) {
 		this.orignalName =orignalName;
 		this.originalPath =originalPatch;
 		this.originalFile =originalFile;
@@ -45,7 +45,7 @@ public class Episode {
 		
 		// TODO Auto-generated constructor stub
 	}
-	public Episode(String orignalName,String Name,int id,String originalPatch,File originalFile) {
+	public Item(String orignalName,String Name,int id,String originalPatch,File originalFile) {
 		this.orignalName =orignalName;
 		this.originalPath =originalPatch;
 		this.originalFile =originalFile;
@@ -55,7 +55,7 @@ public class Episode {
 		
 		// TODO Auto-generated constructor stub
 	}
-	public Episode(String name, String orignalName, int id, String season, String episode, String absolute_episode,String original_name, String key, String error) {
+	public Item(String name, String orignalName, int id, String season, String episode, String absolute_episode,String original_name, String key, String error) {
 		super();
 		this.name = name;
 		this.orignalName = orignalName;

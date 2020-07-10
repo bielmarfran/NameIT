@@ -6,10 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import java.io.File;
 import javafx.util.Callback;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -18,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -86,6 +89,8 @@ public class MainController {
 	private MenuBar menuBar;
 	@FXML
 	private Menu menuLanguage;
+	@FXML
+	private ComboBox<String> ComboBoxMode;
 
 	
 	
@@ -108,9 +113,9 @@ public class MainController {
 	//File name garbage that makes it difficult to identify the episode
 	public static ArrayList<String> filterList = new ArrayList<>();
 	//Array where all Episodes object are stored.
-	private ArrayList<Episode> episodeList = new  ArrayList<>();
+	private ArrayList<Item> renamingList = new  ArrayList<>();
 	//
-	private ArrayList<Episode> episodeListError = new  ArrayList<>();
+	private ArrayList<Item> renamingListError = new  ArrayList<>();
 	//Control variable to always access the right Episode
 	private static Integer controlArrayListEpisode=0;
 	//Variable where the File name is store in char block's to send one at the time to the Api.
@@ -127,7 +132,7 @@ public class MainController {
 	//Control the times the name block position
 	private static Integer controlNameBlock=0;
 	//Local Episode Variable used during the logic in the class
-	private static Episode ep = new Episode();
+	private static Item ep = new Item();
 	//Call for the Service Class, that good part of the program logic will run on.
 	private Service<Void> backgroundTaks;
 	//Store the value of textFieldFolder
@@ -172,10 +177,13 @@ public class MainController {
 		paintCircle();
 		renameMenuLanguage();
 		//isDate(null);
-		JsonOperationsTmdb.getSearchSeries(null);
+		//JsonOperationsTmdb.getSearchSeries(null);
+		setMode();
+		 
+		
 	}
 	//End
-
+	
 	
 	//UI Trigger
 	public void handleDragOverListView(DragEvent dragEvent) {
@@ -192,7 +200,7 @@ public class MainController {
 			for(int i=0;i <files.size();i++){
 				if(extension.contains(getExtension(files.get(i).getName()))){
 					listViewFiles.getItems().add(files.get(i).getName());
-					episodeList.add((new Episode(files.get(i).getName(),files.get(i).getParent(),files.get(i))));
+					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i))));
 					paintListView();
 				}
 
@@ -305,7 +313,7 @@ public class MainController {
 					protected Void call() throws Exception{
 						System.out.println("-- inside-backgroundTaks--");
 
-						if(episodeList.size()<1) {
+						if(renamingList.size()<1) {
 							updateProgress(0.00, 100.00);
 							cancel();
 
@@ -314,23 +322,23 @@ public class MainController {
 							if(enter==1) {
 								cancel();
 							}else {
-								for(int x=0;x<episodeList.size();x++){		
+								for(int x=0;x<renamingList.size();x++){		
 									OperationTvdb tvdb = new OperationTvdb();
 									controlArrayListEpisode=x;
-									ep = episodeList.get(x);
+									ep = renamingList.get(x);
 									controlBreakFile=0;
 									controlBreakFileSlug=0;
 									controlBreakFileSlug2=0;
 									tvdb.setInfo(x,ep,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
 									if(ep.getError()==null) {										
-										tvdb.breakFileName(episodeList.get(x).getOriginalName());
+										tvdb.breakFileName(renamingList.get(x).getOriginalName());
 										//breakFileName(episodeList.get(x).getOriginalName());
 									}else {
-										episodeList.remove(x);
+										renamingList.remove(x);
 
 									}
 									System.out.println("-----------------------------");
-									double max =episodeList.size();
+									double max =renamingList.size();
 									updateProgress(x+1, max);
 
 								}
@@ -353,18 +361,18 @@ public class MainController {
 				System.out.println("backgroundTaks.setOnSucceeded");
 
 				int x=0;
-				int size=episodeList.size();
+				int size=renamingList.size();
 				//System.out.println(size+"     dsdsdsd");
 				for(x=0;x<size;x++){
-					String n =episodeList.get(x).getError();
+					String n =renamingList.get(x).getError();
 					System.out.println("O Valor do Erro e :  "+n);
 					if(n.isEmpty()) {
 						System.out.println("---Inside n.isEmpty()---");
-						listViewFilesRenamed.getItems().add(episodeList.get(x).getName());
+						listViewFilesRenamed.getItems().add(renamingList.get(x).getName());
 						int count=0;
 						do {	
 							listViewFiles.getItems().get(count);
-							if(listViewFiles.getItems().get(count).equals(episodeList.get(x).getOriginalName())) {
+							if(listViewFiles.getItems().get(count).equals(renamingList.get(x).getOriginalName())) {
 								listViewFiles.getItems().remove(count);
 								count=-1;
 							}else {
@@ -375,52 +383,51 @@ public class MainController {
 					}else {		
 						if(n.equals("01")){
 							System.out.println("Error 01");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
-
+							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
 							listViewErrorText.getItems().add("Error 01 - Empty Name.");
 
 						}
 						if(n.equals("02")){
 							System.out.println("Error 02");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
+							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
 							listViewErrorText.getItems().add("Error 02 - It was not possible to determine the series.");
 
 						}
 						if(n.equals("03")){
 							System.out.println("Error 03");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
+							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
 							listViewErrorText.getItems().add("Error 03 - Failed to connect to the Api.");
 
 						}
 						if(n.equals("04")){
 
 							System.out.println("Error 04");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
+							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
 							listViewErrorText.getItems().add("Error 04 - Season value not found.");
 
 						}
 						if(n.equals("05")){
 
 							System.out.println("Error 05");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));	
+							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));	
 							listViewErrorText.getItems().add("Error 05 - Episode value not found.");
 
 						}
 						if(n.equals("06")){
 							System.out.println("Error 06");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
+							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
 							listViewErrorText.getItems().add("Error 06 - Negative response from the Api for season and episode parameters.");
 
 						}
 						if(n.equals("07")){
 							System.out.println("Error 07");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
+							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
 							listViewErrorText.getItems().add("Error 07 - Absolute Episode value not found.");
 
 						}
 						if(n.equals("08")){
 							System.out.println("Error 08");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+episodeList.get(x).getOriginalFile().getName()));
+							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
 							listViewErrorText.getItems().add("Error 08 - Path Value is Empy. ");
 
 						}
@@ -429,7 +436,7 @@ public class MainController {
 				}
 				paintListView();
 				clearList();
-				episodeList.clear();
+				renamingList.clear();
 			}
 		});
 
@@ -458,8 +465,8 @@ public class MainController {
 	//
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
 		enter=0;
-		episodeList.clear();
-		episodeListError.clear();
+		renamingList.clear();
+		renamingListError.clear();
 		listViewFiles.getItems().clear();
 		listViewFilesRenamed.getItems().clear();
 		listViewErrorText.getItems().clear();
@@ -527,7 +534,7 @@ public class MainController {
 
 			listViewErrorText.getItems().clear();
 		}
-		if(episodeList.size()==0 && episodeListError.size()==0) {
+		if(renamingList.size()==0 && renamingListError.size()==0) {
 			listViewFiles.getItems().clear();
 			listViewErrorText.getItems().clear();
 
@@ -553,10 +560,10 @@ public class MainController {
 							setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
 						} else {
 							setText(item);
-							if (!item.isEmpty() && episodeList.size()>=1) {
+							if (!item.isEmpty() && renamingList.size()>=1) {
 								int color_control=0;
-								for(int x=0;x<episodeList.size();x++){
-									if(item.equals(episodeList.get(x).getOriginalName())){
+								for(int x=0;x<renamingList.size();x++){
+									if(item.equals(renamingList.get(x).getOriginalName())){
 										color_control++;
 										setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
 									}
@@ -647,6 +654,39 @@ public class MainController {
 		}
 		menuLanguage.setText(language);
 
+	}
+	//
+	public void setMode() {
+		String mode = DataStored.propertiesGetMode();
+		ComboBoxMode.setValue(mode);
+		checkBoxMode(mode);
+		ObservableList<String> list = FXCollections.observableArrayList();
+		list.addAll("Series","Film");	
+		ComboBoxMode.setItems(list);
+		EventHandler<ActionEvent> event = 
+	             new EventHandler<ActionEvent>() { 
+	       public void handle(ActionEvent e) 
+	       { 
+	    	   DataStored.propertiesSetMode(ComboBoxMode.getValue());
+	    	   checkBoxMode(ComboBoxMode.getValue());
+	       } 
+	   }; 
+	   ComboBoxMode.setOnAction(event);
+		
+	}
+	//
+	public void checkBoxMode(String mode) {
+		if(mode.equals("Series")) {
+			checkboxSeries.setDisable(false);
+			checkboxSeries.setText("Series");
+			checkboxSeason.setDisable(false);
+			
+		}else{
+			checkboxSeries.setDisable(false);
+			checkboxSeries.setText("Film");
+			checkboxSeason.setDisable(true);
+			
+		}
 	}
 	//End Support UI
 
