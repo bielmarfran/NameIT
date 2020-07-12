@@ -79,6 +79,12 @@ public class DataStored {
 		}else {
 
 		}
+		if(config.getProperty("Mode") ==null){
+			config.setProperty("Mode", "Series");
+
+		}else {
+
+		}
 
 		try {
 			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);

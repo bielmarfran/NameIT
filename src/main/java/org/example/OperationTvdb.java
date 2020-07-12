@@ -39,7 +39,7 @@ public class OperationTvdb {
 	//Control the times the name block position
 	private static Integer controlNameBlock=0;
 	//Local Episode Variable used during the logic in the class
-	private static Item ep = new Item();
+	private static Item item = new Item();
 	//Call for the Service Class, that good part of the program logic will run on.
 	//private Service<Void> backgroundTaks;
 	//Store the value of textFieldFolder
@@ -68,7 +68,7 @@ public class OperationTvdb {
 	public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
 		System.out.println("--Inside setInfo--");
 		controlArrayListEpisode=x;
-		ep = episode;
+		item = episode;
 		controlBreakFile=0;
 		controlBreakFileSlug=0;
 		controlBreakFileSlug2=0;
@@ -111,7 +111,7 @@ public class OperationTvdb {
 
 		}else {
 			System.out.println("Empty Name");
-			ep.setError("01");
+			item.setError("01");
 		}
 
 	}
@@ -119,11 +119,11 @@ public class OperationTvdb {
 	public static String responseSeriesId(String responseBody){		
 		if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 			System.out.println("Resource not found");
-			ep.setError("02");
+			item.setError("02");
 
 		}else{
 			if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
-				ep.setError("03");
+				item.setError("03");
 				JsonOperationsTvdb.checkConnection();
 			}else {
 				//System.out.println(responseBody);
@@ -131,10 +131,10 @@ public class OperationTvdb {
 				responseBody = responseBody.substring(0,(responseBody.lastIndexOf("}")));
 				JSONArray albums =  new JSONArray(responseBody);
 				if(albums.length()==1){
-					ep.setError("");
+					item.setError("");
 					JSONObject album = albums.getJSONObject(0);
-					ep.setId(album.getInt("id"));
-					ep.setName(album.getString("seriesName"));
+					item.setId(album.getInt("id"));
+					item.setName(album.getString("seriesName"));
 					//JsonOperations.jsonGetSeriesName(album.getInt("id"));
 					getSeason();
 					controlBreakFile =1;
@@ -143,7 +143,7 @@ public class OperationTvdb {
 				}
 				if(albums.length()<=5){
 					//System.out.println("teste-------"+responseBody);
-					ep.setOptionsList(responseBody);
+					item.setOptionsList(responseBody);
 
 				}
 			}
@@ -179,14 +179,14 @@ public class OperationTvdb {
 			}
 		}
 		if(controlBreakFileSlug<0){
-			ep.setError("02");
+			item.setError("02");
 		}
 	}
 
 	public static String responseSeriesIdSlug(String responseBody){
 		if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 
-			ep.setError("02");
+			item.setError("02");
 			controlBreakFileSlug--;
 			if(controlBreakFileSlug2>0){
 				controlBreakFileSlug=1;
@@ -196,7 +196,7 @@ public class OperationTvdb {
 
 		}else{
 			if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
-				ep.setError("03");
+				item.setError("03");
 				JsonOperationsTvdb.checkConnection();
 			}else {
 				responseBody = responseBody.substring((responseBody.indexOf(":")+1));
@@ -209,9 +209,9 @@ public class OperationTvdb {
 				if(controlBreakFileSlug2==-1){
 
 					JSONObject album = albums.getJSONObject(0);
-					ep.setId(album.getInt("id"));
+					item.setId(album.getInt("id"));
 					JsonOperationsTvdb.jsonGetSeriesName(album.getInt("id"));
-					ep.setError("");
+					item.setError("");
 					getSeason();
 					controlBreakFileSlug=0;
 					controlBreakFile =1;
@@ -227,22 +227,22 @@ public class OperationTvdb {
 
 		if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 			System.out.println("Resource not found");
-			ep.setError("Resource not found");
+			item.setError("Resource not found");
 
 		}else{
 			if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
-				ep.setError("Api key not longer valid/ Api down");
+				item.setError("Api key not longer valid/ Api down");
 				JsonOperationsTvdb.checkConnection();
 			}else {
 				responseBody = responseBody.substring((responseBody.indexOf(":")+1));
 				responseBody = responseBody.substring(0,(responseBody.lastIndexOf("}")));
 				JSONObject album = new JSONObject(responseBody);
 				if (album.has("seriesName") && !album.isNull("seriesName")) {
-					ep.setName(album.getString("seriesName"));
-					ep.setError("");
+					item.setName(album.getString("seriesName"));
+					item.setError("");
 				}else{
 					System.out.println("Error geting the Series Name from the Api");
-					ep.setError("Error geting the Series Name from the Api");
+					item.setError("Error geting the Series Name from the Api");
 				}
 
 			}
@@ -282,29 +282,29 @@ public class OperationTvdb {
 							test = test.substring(s_index+1);
 						}
 						if(!isNumeric(test.substring(s_index, s_index + 1))){
-							ep.setSeason(season);
+							item.setSeason(season);
 							getEpisode(test,namesBlocks, controlNameBlock);
-							ep.setError("");	
+							item.setError("");	
 						}
 						if(test.length()==1 && isNumeric(test)){
-							ep.setError("05");	
+							item.setError("05");	
 							season = season+test;
 							control_season++;
 						}else {
 							if(test.length()==1 && !isNumeric(test)){
-								ep.setError("04");	
+								item.setError("04");	
 							}
 
 						}
 					}else {
-						ep.setError("04");	
+						item.setError("04");	
 						System.out.println("Error");
 
 					}
 				}
 			}else{
 				System.out.println("File name Empty after part used for id reconition");
-				ep.setError("04");				
+				item.setError("04");				
 			}
 		}
 
@@ -339,34 +339,34 @@ public class OperationTvdb {
 				}
 				if(test.length()==1 &&isNumeric(test)){
 					absolute_episode = absolute_episode + test;
-					ep.setAbsolute_episode(absolute_episode);
-					JsonOperationsTvdb.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
-					ep.setError("");	
+					item.setAbsolute_episode(absolute_episode);
+					JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
+					item.setError("");	
 				}else{
-					ep.setAbsolute_episode(absolute_episode);
-					JsonOperationsTvdb.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
-					ep.setError("");	
+					item.setAbsolute_episode(absolute_episode);
+					JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
+					item.setError("");	
 				}
 			}else{
 				if(!absolute_episode.isEmpty()){
-					ep.setAbsolute_episode(absolute_episode);
-					JsonOperationsTvdb.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
-					ep.setError("");	
+					item.setAbsolute_episode(absolute_episode);
+					JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
+					item.setError("");	
 				}else {
 					System.out.println("No Absolute Episode Found");
-					ep.setError("07");	
+					item.setError("07");	
 				}
 
 			}
 		}else{
 			if(test.length()==1 &&isNumeric(test)){
 				absolute_episode = test;
-				ep.setAbsolute_episode(absolute_episode);
-				JsonOperationsTvdb.jsonGetInfoApiAbsolute(ep.getId(),absolute_episode);
-				ep.setError("");	
+				item.setAbsolute_episode(absolute_episode);
+				JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
+				item.setError("");	
 			}else{
 				System.out.println("No Absolute Episode Found");
-				ep.setError("07");	
+				item.setError("07");	
 			}
 
 		}
@@ -399,22 +399,22 @@ public class OperationTvdb {
 							}
 							if(test.length()==1 && isNumeric(test)){
 								episode = episode + test;
-								ep.setEpisode(episode);						
-								JsonOperationsTvdb.jsonGetInfoApi(ep.getId(),ep.getSeason(),episode);
-								ep.setError("");	
+								item.setEpisode(episode);						
+								JsonOperationsTvdb.jsonGetInfoApi(item.getId(),item.getSeason(),episode);
+								item.setError("");	
 							}else{
-								ep.setEpisode(episode);
-								JsonOperationsTvdb.jsonGetInfoApi(ep.getId(),ep.getSeason(),episode);
-								ep.setError("");	
+								item.setEpisode(episode);
+								JsonOperationsTvdb.jsonGetInfoApi(item.getId(),item.getSeason(),episode);
+								item.setError("");	
 							}
 
 						}else {
-							ep.setError("05");
+							item.setError("05");
 						}
 					}
 				}
 			}else{
-				ep.setError("05");
+				item.setError("05");
 				System.out.println("No e found");
 
 			}
@@ -427,20 +427,20 @@ public class OperationTvdb {
 	public static String renameFileCreateDirectory(String responseBody){
 		if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 			System.out.println("Resource not found rename_file_create_folder_series_season");
-			ep.setError("06");	
+			item.setError("06");	
 
 		}else{
 			if(responseBody.contains("{\"Error\":\"")){
-				ep.setError("06");
+				item.setError("06");
 
 				System.out.println(responseBody);
 
 			}else{
 				if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
-					ep.setError("03");
+					item.setError("03");
 					JsonOperationsTvdb.checkConnection();
 				}else {
-					String name = ep.getName();
+					String name = item.getName();
 					System.out.println("Name Start Renaming ---"+name);
 					
 					//Sorting in the json data
@@ -454,16 +454,16 @@ public class OperationTvdb {
 					//End in sorting in the json data
 					System.out.println(name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+".pdf");
 					//Renaming the file to new name
-					File f = ep.getOriginalFile();
+					File f = item.getOriginalFile();
 					System.out.println(f.getAbsolutePath());
-					String newName = name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+ep.getOriginalName().substring(ep.getOriginalName().lastIndexOf("."));
+					String newName = name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+item.getOriginalName().substring(item.getOriginalName().lastIndexOf("."));
 					//Removing Characters that Windows dont let name files have
 					newName = formatName_Windows(newName);
 					name = formatName_Windows(name);
 					//Set the final name
-					ep.setName(newName);
+					item.setName(newName);
 
-					System.out.println("Name Middle Renaming ---"+ep.getName());
+					System.out.println("Name Middle Renaming ---"+item.getName());
 					//End Removing Characters that Windows don't let name files have
 					System.out.println(name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+".pdf");
 					String absolutePath;
@@ -475,12 +475,12 @@ public class OperationTvdb {
 						}
 
 					}else{
-						absolutePath = ep.getOriginalPath();
+						absolutePath = item.getOriginalPath();
 					}
 
 					if(absolutePath==null) {
 						System.out.println("Error aldlasaasasa");	
-						ep.setError("08");
+						item.setError("08");
 					}else {
 						if(checkboxSeries_value  && !checkboxSeason_value ){
 							System.out.println("Create Series");
@@ -538,7 +538,7 @@ public class OperationTvdb {
 							Boolean x =f.renameTo(new File(newPath));
 							if(x){
 								System.out.println("Rename was ok");
-								ep.setError("");
+								item.setError("");
 							}else{
 								System.out.println("Sorry couldnt create specified directory");
 							}

@@ -54,11 +54,19 @@ public class JsonOperationsTmdb {
 	}
 	 */
 	//
-	public static void getSearchSeries(String name){
+	public static void getSearchFilm(String name, int year){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
-		String uri ="https://api.themoviedb.org/3/tv/37854?api_key=ee7c5286c8b982e91fafcbbcce8ceb30&language=en-US";
+		String uri = "";
+		if(year==0) {
+			uri ="https://api.themoviedb.org/3/search/movie?api_key=ee7c5286c8b982e91fafcbbcce8ceb30&language=en-US&query="+name+
+					"&page=1&include_adult=false";
+		}else {
+			uri ="https://api.themoviedb.org/3/search/movie?api_key=ee7c5286c8b982e91fafcbbcce8ceb30&language=en-US&query="+name+
+					"&page=1&include_adult=false&year="+year;
+		}
 	
+		System.out.println(uri);
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(uri))				
@@ -70,7 +78,7 @@ public class JsonOperationsTmdb {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdb::test)
+		.thenApply(OperationTmdb::responseFilmId)
 		.join();
 
 	}

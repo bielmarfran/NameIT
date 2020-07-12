@@ -28,10 +28,12 @@ public class Item {
 	//Store the file episode
 	private File originalFile;
 	//
+	private int year;
 	
 	
 	
 	
+
 	public Item() {
 
 		
@@ -55,7 +57,7 @@ public class Item {
 		
 		// TODO Auto-generated constructor stub
 	}
-	public Item(String name, String orignalName, int id, String season, String episode, String absolute_episode,String original_name, String key, String error) {
+	public Item(String name, String orignalName, int id, String season, String episode, String absolute_episode,String original_name, String key, String error, int year) {
 		super();
 		this.name = name;
 		this.orignalName = orignalName;
@@ -66,6 +68,7 @@ public class Item {
 		this.originalPath = original_name;
 		this.key = key;
 		this.error = error;
+		this.year = year;
 	}
 	
 	public String getName() {
@@ -141,6 +144,11 @@ public class Item {
 	public void setOriginalFile(File originalFile) {
 		this.originalFile = originalFile;
 	}
-	
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
 	
 }

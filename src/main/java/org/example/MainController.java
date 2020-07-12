@@ -132,7 +132,7 @@ public class MainController {
 	//Control the times the name block position
 	private static Integer controlNameBlock=0;
 	//Local Episode Variable used during the logic in the class
-	private static Item ep = new Item();
+	private static Item item = new Item();
 	//Call for the Service Class, that good part of the program logic will run on.
 	private Service<Void> backgroundTaks;
 	//Store the value of textFieldFolder
@@ -322,26 +322,55 @@ public class MainController {
 							if(enter==1) {
 								cancel();
 							}else {
-								for(int x=0;x<renamingList.size();x++){		
-									OperationTvdb tvdb = new OperationTvdb();
-									controlArrayListEpisode=x;
-									ep = renamingList.get(x);
-									controlBreakFile=0;
-									controlBreakFileSlug=0;
-									controlBreakFileSlug2=0;
-									tvdb.setInfo(x,ep,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
-									if(ep.getError()==null) {										
-										tvdb.breakFileName(renamingList.get(x).getOriginalName());
-										//breakFileName(episodeList.get(x).getOriginalName());
-									}else {
-										renamingList.remove(x);
+								String mode = DataStored.propertiesGetMode(); 
+								if(mode.equals("Series")) {
+									for(int x=0;x<renamingList.size();x++){		
+										OperationTvdb tvdb = new OperationTvdb();
+										controlArrayListEpisode=x;
+										item = renamingList.get(x);
+										controlBreakFile=0;
+										controlBreakFileSlug=0;
+										controlBreakFileSlug2=0;
+										tvdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+										if(item.getError()==null) {										
+											tvdb.breakFileName(renamingList.get(x).getOriginalName());
+											//breakFileName(episodeList.get(x).getOriginalName());
+										}else {
+											renamingList.remove(x);
+
+										}
+										System.out.println("-----------------------------");
+										double max =renamingList.size();
+										updateProgress(x+1, max);
 
 									}
-									System.out.println("-----------------------------");
-									double max =renamingList.size();
-									updateProgress(x+1, max);
+								}else {
+									for(int x=0;x<renamingList.size();x++){
+										OperationTmdb tmdb = new OperationTmdb();
+										controlArrayListEpisode=x;
+										item = renamingList.get(x);
+										controlBreakFile=0;
+										controlBreakFileSlug=0;
+										controlBreakFileSlug2=0;
+										tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+										if(item.getError()==null) {										
+											tmdb.breakFileName(renamingList.get(x).getOriginalName());
+											//breakFileName(episodeList.get(x).getOriginalName());
+										}else {
+											renamingList.remove(x);
 
+										}
+										System.out.println("-----------------------------");
+									
+										double max =renamingList.size();
+										updateProgress(x+1, max);
+										
+										
+									}
+									
+									
 								}
+								
 
 							}
 						
@@ -362,6 +391,7 @@ public class MainController {
 
 				int x=0;
 				int size=renamingList.size();
+				System.out.println(item.getOptionsList());
 				//System.out.println(size+"     dsdsdsd");
 				for(x=0;x<size;x++){
 					String n =renamingList.get(x).getError();
@@ -745,7 +775,7 @@ public class MainController {
 		}
 		return true;
 	}
-
+	//
 	private String getExtension(String fileName){
 		String extension = "";
 
@@ -755,39 +785,7 @@ public class MainController {
 
 		return extension;
 	}
-	public static void isDate(String newName) {
-		String date ="";
-		for(int x=0;x<newName.length();x++) {
-			if(isNumeric(newName.substring(x,x+1))) {
-				date= date+newName.charAt(x);
-			}
-		}
-		System.out.println(date);
-		if(date.length()==4) {
-			String min = "1800";
-			String max = "2500";
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-			Date dmin = null;
-			Date dmax = null;
-			Date dcheck = null;
-			try {
-				dcheck =sdf.parse(date);
-				dmin = sdf.parse(min);
-				dmax= sdf.parse(max);
-				if(dcheck.after(dmin) && dcheck.before(dmax) ) {
 	
-				}
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		}
-			
-		
-		
-		
-	}
 }
 
 
