@@ -86,13 +86,13 @@ public class OperationTmdb {
 					System.out.println("----"+namesBlocks.length);
 					if(x<=0 && controlBreakFile==0){
 						//Send one block of the name at a time
-						JsonOperationsTmdb.getSearchFilm(namesBlocks[x],item.getYear());
+						JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
 					}else{
 						if(controlBreakFile==0){
 							namesBlocks[x] = namesBlocks[x-1]+"%20"+namesBlocks[x];
 							//System.out.println(names_blocks[x]);
 							controlNameBlock =x;
-							JsonOperationsTmdb.getSearchFilm(namesBlocks[x],item.getYear());
+							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
 						}else {
 							System.out.println("ERROR");
 						}
@@ -110,7 +110,7 @@ public class OperationTmdb {
 
 		}
 		
-		public static String responseFilmId(String responseBody){	
+		public static String responseMovieId(String responseBody){	
 			System.out.println(responseBody);
 			if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 				System.out.println("Resource not found");
@@ -124,7 +124,7 @@ public class OperationTmdb {
 
 					responseBody = responseBody.substring((responseBody.indexOf("[")));
 					responseBody = responseBody.substring(0,(responseBody.lastIndexOf("]")+1));
-					System.out.println(responseBody);
+
 					JSONArray albums =  new JSONArray(responseBody);
 					if(albums.length()==1){					
 						item.setError("");
@@ -140,7 +140,7 @@ public class OperationTmdb {
 
 					}
 					if(albums.length()<=5){
-						//System.out.println("teste-------"+responseBody);
+						item.setError("10");
 						item.setOptionsList(responseBody);
 						
 
@@ -308,7 +308,7 @@ public class OperationTmdb {
 			}
 
 
-			isDate(name);
+			name = isDate(name);
 			return name;
 
 		}
@@ -362,6 +362,7 @@ public class OperationTmdb {
 						System.out.println(dcheck);
 						newName = newName.replace(date, "");
 						item.setYear(Integer.valueOf(date));
+						System.out.println(newName);
 						return newName;
 					}
 				} catch (ParseException e) {

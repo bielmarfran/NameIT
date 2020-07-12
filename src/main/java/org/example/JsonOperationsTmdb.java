@@ -54,19 +54,20 @@ public class JsonOperationsTmdb {
 	}
 	 */
 	//
-	public static void getSearchFilm(String name, int year){
+	public static void getSearchMovie(String name, int year){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
+		language = languageTmdb(language);
 		String uri = "";
 		if(year==0) {
-			uri ="https://api.themoviedb.org/3/search/movie?api_key=ee7c5286c8b982e91fafcbbcce8ceb30&language=en-US&query="+name+
+			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+name+
 					"&page=1&include_adult=false";
 		}else {
-			uri ="https://api.themoviedb.org/3/search/movie?api_key=ee7c5286c8b982e91fafcbbcce8ceb30&language=en-US&query="+name+
+			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+name+
 					"&page=1&include_adult=false&year="+year;
 		}
 	
-		System.out.println(uri);
+
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(uri))				
@@ -78,80 +79,43 @@ public class JsonOperationsTmdb {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdb::responseFilmId)
+		.thenApply(OperationTmdb::responseMovieId)
 		.join();
 
+	}
+	
+	public static String languageTmdb(String l) {
+		switch (l) {
+		case "en": 
+			l ="en-US";				
+			break;
+		//case "pt-br": 
+			//language ="PT-BR - Português Brasileiro";				
+			//break;
+		case "de": 
+			l ="de";
+			break;
+		case "pt": 
+			l ="pt-PT";
+			break;
+		case "es": 
+			l ="es-ES";
+			break;
+		case "fr": 
+			l="fr-FR";		
+			break;
+		default:
+			break;
+		}
+		
+		
+		
+		return l;
+		
 	}
 
 
 	//Send a Get request for informations about the series, using the series id.
-	public static void jsonGetSeriesName(Integer id){
-		String keynow = DataStored.readPreferencekeyTvdb();
-		String language = DataStored.propertiesGetLanguage();	
-		//System.out.println("get_series_name");
-		String uri ="https://api.thetvdb.com/series/"+id;
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))			
-				.header("Content-Type", "application/json")
-				.header("Accept-Language", language)
-				.header("Authorization", "Bearer "+keynow)
-				.build();
 
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenApply(OperationTvdb::jsonResponseSeriesName)
-		.join();
-
-	}
-
-	public static void jsonGetInfoApi(Integer id,String season,String episode){
-		//System.out.println("1--"+id);
-		//System.out.println("2--"+season);
-		//System.out.println("3--"+episode);
-		String keynow = DataStored.readPreferencekeyTvdb();
-		String language = DataStored.propertiesGetLanguage();
-
-		String uri ="https://api.thetvdb.com/series/"+id+"/episodes/query?"+"airedSeason="+season+"&airedEpisode="+episode;
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))
-				.header("Content-Type", "application/json")
-				.header("Accept-Language", language)
-				.header("Authorization", "Bearer "+keynow)
-				.build();
-
-
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenApply(OperationTvdb::renameFileCreateDirectory)
-		.join();
-
-
-	}
-
-
-	public static void jsonGetInfoApiAbsolute(Integer id,String absolute_episode) {
-		//System.out.println(id);
-		//System.out.println(absolute_episode);
-		String keynow = DataStored.readPreferencekeyTvdb();
-		String language = DataStored.propertiesGetLanguage();
-		String uri ="https://api.thetvdb.com/series/"+id+"/episodes/query?absoluteNumber="+absolute_episode;
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))
-				.header("Content-Type", "application/json")
-				.header("Accept-Language", language)
-				.header("Authorization", "Bearer "+keynow)
-				.build();
-
-
-
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenApply(OperationTvdb::renameFileCreateDirectory)
-		.join();
-		absolute_episode="0";
-	}
 
 }

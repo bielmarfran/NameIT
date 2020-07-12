@@ -461,6 +461,15 @@ public class MainController {
 							listViewErrorText.getItems().add("Error 08 - Path Value is Empy. ");
 
 						}
+						if(n.equals("10")){
+							System.out.println("Error 10");
+							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
+							listViewErrorText.getItems().add("Error 10 - It was not possible to determine the movie.");
+							//Show the options of 
+							listViewErrorText.getItems().add(renamingList.get(x).getOptionsList());
+							
+
+						}
 
 					}
 				}
@@ -691,7 +700,7 @@ public class MainController {
 		ComboBoxMode.setValue(mode);
 		checkBoxMode(mode);
 		ObservableList<String> list = FXCollections.observableArrayList();
-		list.addAll("Series","Film");	
+		list.addAll("Series","Movies");	
 		ComboBoxMode.setItems(list);
 		EventHandler<ActionEvent> event = 
 	             new EventHandler<ActionEvent>() { 
@@ -713,7 +722,7 @@ public class MainController {
 			
 		}else{
 			checkboxSeries.setDisable(false);
-			checkboxSeries.setText("Film");
+			checkboxSeries.setText("Movies");
 			checkboxSeason.setDisable(true);
 			
 		}
