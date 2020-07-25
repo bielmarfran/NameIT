@@ -52,6 +52,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class MainController {
 	@FXML
 	private ProgressIndicator progressIndicator;
@@ -79,6 +80,8 @@ public class MainController {
 	private ListView<CheckBox> listViewError;
 	@FXML
 	private ListView<String> listViewErrorText;
+	@FXML
+	private ListView<CheckBox> listViewErrorTextSelect;
 	@FXML
 	private Label labelDropFiles;
 	@FXML
@@ -153,7 +156,8 @@ public class MainController {
 	//private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 	//
 	private static Integer enter=0;
-	//
+
+	
 
 	
 
@@ -179,7 +183,9 @@ public class MainController {
 		//isDate(null);
 		//JsonOperationsTmdb.getSearchSeries(null);
 		setMode();
-		 
+	
+		
+		
 		
 	}
 	//End
@@ -335,9 +341,8 @@ public class MainController {
 										if(item.getError()==null) {										
 											tvdb.breakFileName(renamingList.get(x).getOriginalName());
 											//breakFileName(episodeList.get(x).getOriginalName());
-										}else {
+										}else {									
 											renamingList.remove(x);
-
 										}
 										System.out.println("-----------------------------");
 										double max =renamingList.size();
@@ -357,6 +362,7 @@ public class MainController {
 											tmdb.breakFileName(renamingList.get(x).getOriginalName());
 											//breakFileName(episodeList.get(x).getOriginalName());
 										}else {
+										
 											renamingList.remove(x);
 
 										}
@@ -411,19 +417,23 @@ public class MainController {
 
 						}while(count!=-1);
 					}else {		
+						renamingListError.add(renamingList.get(x));
+
 						if(n.equals("01")){
-							System.out.println("Error 01");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
+
+							System.out.println("Error 01");					
+							listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());				
 							listViewErrorText.getItems().add("Error 01 - Empty Name.");
 
 						}
 						if(n.equals("02")){
 							System.out.println("Error 02");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
+							listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
 							listViewErrorText.getItems().add("Error 02 - It was not possible to determine the series.");
-
 						}
+
 						if(n.equals("03")){
+
 							System.out.println("Error 03");
 							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
 							listViewErrorText.getItems().add("Error 03 - Failed to connect to the Api.");
@@ -461,12 +471,21 @@ public class MainController {
 							listViewErrorText.getItems().add("Error 08 - Path Value is Empy. ");
 
 						}
+						 
 						if(n.equals("10")){
-							System.out.println("Error 10");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
+							
+							System.out.println("Error 10");					
+					
+							listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
 							listViewErrorText.getItems().add("Error 10 - It was not possible to determine the movie.");
+							
 							//Show the options of 
-							listViewErrorText.getItems().add(renamingList.get(x).getOptionsList());
+							if(!renamingList.get(x).getOptionsList().isEmpty()) {
+								listViewErrorText.getItems().add("If you find the movie in the list, do a double click on it");								
+								showOptions(renamingList.get(x).getOptionsList());
+							}
+						
+					
 							
 
 						}
@@ -560,11 +579,26 @@ public class MainController {
 		 
 		  
 	}
-
+	//
+	public void listViewErrorTextAction(javafx.scene.input.MouseEvent mouseEvent) {
+	
+		if(mouseEvent.getClickCount() == 2) {
+			for(int x=0;x<renamingListError.size();x++) {
+				
+			}
+			
+			paintListViewError(listViewErrorText.getSelectionModel().getSelectedItem());
+		
+		}
+		
+		
+	}
+	//
+	
 
 	//Support UI
 
-	//
+	// Clear the Lists
 	public void clearList() {
 		System.out.println("--Clear List--");
 		labelDrop();
@@ -582,7 +616,7 @@ public class MainController {
 		//listViewError.getItems().clear();
 		//listViewErrorText.getItems().clear();
 	}
-	//
+	//Paint the element of the cells red if the renaming process fails
 	public void paintListView(){
 
 		//LabelDropFiles.setVisible(false);
@@ -615,6 +649,36 @@ public class MainController {
 								System.out.println("Verde 2");
 								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
 							}
+						}
+
+					}
+				};
+			}
+		});
+		labelDrop();
+	}
+	//Paint the element of listViewErrorText and change the color of the selected name
+	public void paintListViewError(String select){
+
+		//LabelDropFiles.setVisible(false);
+		listViewErrorText.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+			@Override
+			public ListCell<String> call(ListView<String> param) {
+				return new ListCell<String>() {
+					@Override
+					protected void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+
+						if (item == null || empty) {
+							setText(null);
+							setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+						} else {
+							setText(item);
+							if(item ==select) {
+								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
+							}
+							
+							
 						}
 
 					}
@@ -726,6 +790,21 @@ public class MainController {
 			checkboxSeason.setDisable(true);
 			
 		}
+	}
+	//
+	public void showOptions(String Options) {
+		JSONArray options =  new JSONArray(Options);
+
+		for(int x =0;x<options.length();x++) {
+			JSONObject op = options.getJSONObject(x);
+			String value ="Title - "+op.getString("title") + " | Year - "+op.getString("release_date")+ " | ID - "+op.getInt("id");
+			listViewErrorText.getItems().add(value);
+			
+			//listViewErrorTextSelect.getItems().add(cx);
+	
+		}
+		
+		
 	}
 	//End Support UI
 

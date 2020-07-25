@@ -226,6 +226,79 @@ public class OperationTmdb {
 			return null;
 		}
 
+		//Last method that takes the response from jsonGetInfoApi, and rename the files.
+		public static String renameFileCreateDirectory(String teste){
+
+			String name = item.getName();
+			String newName =  item.getName()+" ("+item.getYear()+")";
+			//Removing Characters that Windows dont let name files have
+			File f = item.getOriginalFile();
+			String exetention = getExtension(f.getName());
+			newName = newName+"."+exetention;
+			newName = formatName_Windows(newName);
+			name = formatName_Windows(name);
+			//Set the final name
+			item.setName(newName);
+
+			System.out.println("Name Middle Renaming ---"+item.getName());
+			//End Removing Characters that Windows don't let name files have
+
+			String absolutePath;
+			if(checkboxFolder_value){
+				if(textFieldFolder_value==null) {
+					absolutePath = textFieldFolder_value;
+				}else {
+					absolutePath = textFieldFolder_value;
+				}
+
+			}else{
+				absolutePath = item.getOriginalPath();
+			}
+
+			if(absolutePath==null) {
+				System.out.println("Error aldlasaasasa");	
+				item.setError("08");
+			}else {
+				if(checkboxSeries_value){
+					System.out.println("Create Film");
+					File file = new File(absolutePath+"\\"+name);
+					boolean bool = file.mkdirs();
+					if(bool){
+						System.out.println("Directory created successfully");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+					absolutePath = absolutePath+"\\"+name;
+					String newPath = absolutePath+"\\"+newName;
+
+					Boolean x =f.renameTo(new File(newPath));
+					if(x){
+						System.out.println("Rename was ok");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+
+				}else{
+					File file = new File(absolutePath);
+					boolean bool = file.mkdirs();
+					if(bool){
+						System.out.println("Directory created successfully");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+					//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
+					String newPath = absolutePath+"\\"+newName;
+					Boolean x =f.renameTo(new File(newPath));
+					if(x){
+						//System.out.println("Directory created successfully");
+					}else{
+						//System.out.println("Sorry couldnt create specified directory");
+					}
+				}
+
+			}
+			return null;
+		}
 
 
 
