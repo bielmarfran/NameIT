@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
@@ -47,7 +48,6 @@
             </Pane>
             <CheckBox fx:id="checkboxFolder" layoutX="530.0" layoutY="50.0" mnemonicParsing="false" onAction="#checkBoxFolder" text="Select Directory (Default Same Location)" />
             <ListView fx:id="listViewFilesRenamed" layoutX="530.0" layoutY="131.0" prefHeight="368.0" prefWidth="354.0" AnchorPane.rightAnchor="16.0" />
-            <ListView fx:id="listViewErrorText" layoutX="19.0" layoutY="538.0" onMouseClicked="#listViewErrorTextAction" prefHeight="170.0" prefWidth="865.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="16.0" />
             <Button layoutX="338.0" layoutY="50.0" mnemonicParsing="false" onAction="#buttonExceptions" prefHeight="52.0" prefWidth="94.0" text="Exceptions List" />
             <Separator layoutX="1.0" layoutY="508.0" prefHeight="4.0" prefWidth="900.0" />
             <Label layoutX="18.0" layoutY="510.0" text="Error List">
@@ -65,6 +65,13 @@
             <Separator layoutY="35.0" prefHeight="4.0" prefWidth="900.0" />
             <Separator layoutX="447.0" layoutY="36.0" orientation="VERTICAL" prefHeight="81.0" prefWidth="9.0" />
             <ComboBox fx:id="ComboBoxMode" layoutX="372.0" layoutY="105.0" prefWidth="150.0" />
+            <ListView fx:id="listViewErrorText" layoutX="26.0" layoutY="535.0" onMouseClicked="#listViewErrorTextAction" prefHeight="170.0" prefWidth="865.0" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="9.0" />
+            <Label fx:id="LabelErrorListFile" layoutX="93.0" layoutY="511.0" text="File">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Pagination fx:id="paginationErrorList" layoutX="19.0" layoutY="537.0" prefHeight="167.0" prefWidth="866.0" />
          </children>
       </AnchorPane>
    </center>

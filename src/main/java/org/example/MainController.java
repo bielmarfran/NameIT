@@ -27,12 +27,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -51,6 +53,8 @@ import java.util.ResourceBundle;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
 
 
 public class MainController {
@@ -94,6 +98,11 @@ public class MainController {
 	private Menu menuLanguage;
 	@FXML
 	private ComboBox<String> ComboBoxMode;
+	@FXML
+	private Label LabelErrorListFile;
+	@FXML
+	private Pagination paginationErrorList;
+	
 
 	
 	
@@ -183,7 +192,7 @@ public class MainController {
 		//isDate(null);
 		//JsonOperationsTmdb.getSearchSeries(null);
 		setMode();
-	
+		paginationErrorList.setVisible(false);
 		
 		
 		
@@ -418,7 +427,7 @@ public class MainController {
 						}while(count!=-1);
 					}else {		
 						renamingListError.add(renamingList.get(x));
-
+						//listViewErrorText.setVisible(false);
 						if(n.equals("01")){
 
 							System.out.println("Error 01");					
@@ -475,12 +484,14 @@ public class MainController {
 						if(n.equals("10")){
 							
 							System.out.println("Error 10");					
-					
+							//renamingList.get(x).setOptionsList("Error 10 - It was not possible to determine the movie.");
 							listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
 							listViewErrorText.getItems().add("Error 10 - It was not possible to determine the movie.");
 							
 							//Show the options of 
 							if(!renamingList.get(x).getOptionsList().isEmpty()) {
+							
+								//renamingList.get(x).setOptionsList(renamingList.get(x).getOptionsList()+"\nIf you find the movie in the list, do a double click on it");
 								listViewErrorText.getItems().add("If you find the movie in the list, do a double click on it");								
 								showOptions(renamingList.get(x).getOptionsList());
 							}
@@ -492,6 +503,34 @@ public class MainController {
 
 					}
 				}
+				paginationErrorList.setVisible(true);
+				paginationErrorList.setPageCount(renamingListError.size());				
+				paginationErrorList.setPageFactory((pageIndex) -> {
+						ListView<String> Text = new ListView<String>();
+						
+							
+						
+			
+						Text.getItems().add(renamingListError.get(pageIndex).getOriginalName());	
+						Text.getItems().add(renamingListError.get(pageIndex).getOriginalPath());
+						Text.getItems().add(""+pageIndex);
+				
+						EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
+							@Override 
+							public void handle(javafx.scene.input.MouseEvent e) { 
+								if(e.getClickCount() == 2) {
+									for(int x=0;x<renamingListError.size();x++) {
+									}
+									System.out.println("teste");
+								}
+							} 
+						};  
+						Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
+			            Label label2 = new Label("Main content of the page ...");
+
+			            return new VBox(label2,Text);
+			        });
+				listViewErrorText.getItems().remove(0);
 				paintListView();
 				clearList();
 				renamingList.clear();
@@ -542,6 +581,7 @@ public class MainController {
 			textfieldPath.setText(selectedDirectory.getAbsolutePath());
 			textFieldFolder_value = selectedDirectory.getAbsolutePath();
 		}
+		
 
 	}
 	//identifies when there a drop event and Send to  handleDropListView.
