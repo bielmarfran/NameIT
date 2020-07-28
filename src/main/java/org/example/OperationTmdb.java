@@ -94,6 +94,7 @@ public class OperationTmdb {
 							controlNameBlock =x;
 							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
 						}else {
+							x=namesBlocks.length;
 							System.out.println("ERROR");
 						}
 					}
@@ -130,20 +131,24 @@ public class OperationTmdb {
 						item.setError("");
 						JSONObject album = albums.getJSONObject(0);
 						item.setId(album.getInt("id"));
-						item.setName(album.getString("title"));			
-						if(item.getYear()==0) {
-							String year = album.getString("release_date").substring(0,4);
-							item.setYear(Integer.valueOf(year));
-						}
+						item.setName(album.getString("title"));							
+						String year = album.getString("release_date").substring(0,4);						
+						item.setYear(Integer.valueOf(year));
+						
 						controlBreakFile =1;
 						renameFileCreateDirectory();
 
 					}
-					if(albums.length()<=5){
+					if(albums.length()<=10 && albums.length()>1 ){
 						item.setError("10");
 						item.setOptionsList(responseBody);
 						
 
+					}else {
+						if(albums.length()>10) {
+							item.setError("09");
+							
+						}
 					}
 				}
 			}
@@ -154,7 +159,7 @@ public class OperationTmdb {
 
 		//Last method that takes the response from jsonGetInfoApi, and rename the files.
 		public static String renameFileCreateDirectory(){
-
+			System.out.println("Test Error -- "+item.getError());
 			String name = item.getName();
 			String newName =  item.getName()+" ("+item.getYear()+")";
 			//Removing Characters that Windows dont let name files have
@@ -186,6 +191,7 @@ public class OperationTmdb {
 				item.setError("08");
 			}else {
 				if(checkboxSeries_value){
+					item.setError("");
 					System.out.println("Create Film");
 					File file = new File(absolutePath+"\\"+name);
 					boolean bool = file.mkdirs();
@@ -205,6 +211,7 @@ public class OperationTmdb {
 					}
 
 				}else{
+					item.setError("");
 					File file = new File(absolutePath);
 					boolean bool = file.mkdirs();
 					if(bool){
@@ -227,10 +234,21 @@ public class OperationTmdb {
 		}
 
 		//Last method that takes the response from jsonGetInfoApi, and rename the files.
-		public static String renameFileCreateDirectory(String teste){
+		public String renameFileCreateDirectory(Item item){
+			
+			String value = item.getAlternetiveInfo();
+			value = value.replace("Title - ", "");
+			String name = value.substring(0,value.indexOf("|")-1);
+			value = value.replace(name, "");
+			value = value.replace("| Year - ", "");
+			String year = value.substring(1,value.indexOf("-"));
+			System.out.println("year"+year);
+			System.out.println("name"+name);
+			String newName =  name+" ("+year+")";
+			
 
-			String name = item.getName();
-			String newName =  item.getName()+" ("+item.getYear()+")";
+			
+	
 			//Removing Characters that Windows dont let name files have
 			File f = item.getOriginalFile();
 			String exetention = getExtension(f.getName());
@@ -256,11 +274,12 @@ public class OperationTmdb {
 			}
 
 			if(absolutePath==null) {
-				System.out.println("Error aldlasaasasa");	
+				System.out.println("Error no Path");	
 				item.setError("08");
 			}else {
 				if(checkboxSeries_value){
 					System.out.println("Create Film");
+					item.setError("");
 					File file = new File(absolutePath+"\\"+name);
 					boolean bool = file.mkdirs();
 					if(bool){
@@ -270,7 +289,7 @@ public class OperationTmdb {
 					}
 					absolutePath = absolutePath+"\\"+name;
 					String newPath = absolutePath+"\\"+newName;
-
+					System.out.println("test path" + newPath );
 					Boolean x =f.renameTo(new File(newPath));
 					if(x){
 						System.out.println("Rename was ok");
@@ -279,6 +298,7 @@ public class OperationTmdb {
 					}
 
 				}else{
+					item.setError("");
 					File file = new File(absolutePath);
 					boolean bool = file.mkdirs();
 					if(bool){
@@ -297,6 +317,7 @@ public class OperationTmdb {
 				}
 
 			}
+			
 			return null;
 		}
 

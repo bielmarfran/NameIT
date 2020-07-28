@@ -27,9 +27,10 @@ public class Item {
 	private String optionsList;
 	//Store the file episode
 	private File originalFile;
-	//
+	//Store the year value
 	private int year;
-	
+	//Store the alternative info of the episode
+	private String alternetiveInfo;
 	
 	
 	
@@ -149,6 +150,13 @@ public class Item {
 	}
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	public String getAlternetiveInfo() {
+		return alternetiveInfo;
+	}
+	public void setAlternetiveInfo(String alternetiveInfo) {
+		this.alternetiveInfo = alternetiveInfo;
 	}
 	
 }

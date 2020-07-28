@@ -192,7 +192,9 @@ public class MainController {
 		//isDate(null);
 		//JsonOperationsTmdb.getSearchSeries(null);
 		setMode();
-		paginationErrorList.setVisible(false);
+		paginationErrorList.setVisible(true);
+		paginationErrorList.setPageCount(1);
+		listViewErrorText.setVisible(false);
 		
 		
 		
@@ -328,7 +330,7 @@ public class MainController {
 					protected Void call() throws Exception{
 						System.out.println("-- inside-backgroundTaks--");
 
-						if(renamingList.size()<1) {
+						if(renamingList.size()<1 && renamingListError.size()<1) {
 							updateProgress(0.00, 100.00);
 							cancel();
 
@@ -340,6 +342,7 @@ public class MainController {
 								String mode = DataStored.propertiesGetMode(); 
 								if(mode.equals("Series")) {
 									for(int x=0;x<renamingList.size();x++){		
+										System.out.println("TVDB");
 										OperationTvdb tvdb = new OperationTvdb();
 										controlArrayListEpisode=x;
 										item = renamingList.get(x);
@@ -356,10 +359,19 @@ public class MainController {
 										System.out.println("-----------------------------");
 										double max =renamingList.size();
 										updateProgress(x+1, max);
-
 									}
 								}else {
+									for(int y=0;y<renamingListError.size();y++){
+										if(renamingListError.get(y).getOptionsList()==null) {
+											
+										}else {
+											System.out.println("Alternative Way 1");
+											OperationTmdb tmdb = new OperationTmdb();
+											tmdb.renameFileCreateDirectory(renamingListError.get(y));
+										}
+									}
 									for(int x=0;x<renamingList.size();x++){
+										System.out.println("TMDB");
 										OperationTmdb tmdb = new OperationTmdb();
 										controlArrayListEpisode=x;
 										item = renamingList.get(x);
@@ -371,7 +383,7 @@ public class MainController {
 											tmdb.breakFileName(renamingList.get(x).getOriginalName());
 											//breakFileName(episodeList.get(x).getOriginalName());
 										}else {
-										
+											System.out.println("Dentro de remove 11212");
 											renamingList.remove(x);
 
 										}
@@ -403,14 +415,14 @@ public class MainController {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				System.out.println("backgroundTaks.setOnSucceeded");
-
+				updateUIError(renamingListError);
 				int x=0;
 				int size=renamingList.size();
-				System.out.println(item.getOptionsList());
-				//System.out.println(size+"     dsdsdsd");
+			
+	
 				for(x=0;x<size;x++){
 					String n =renamingList.get(x).getError();
-					System.out.println("O Valor do Erro e :  "+n);
+					
 					if(n.isEmpty()) {
 						System.out.println("---Inside n.isEmpty()---");
 						listViewFilesRenamed.getItems().add(renamingList.get(x).getName());
@@ -426,111 +438,16 @@ public class MainController {
 
 						}while(count!=-1);
 					}else {		
+						//Add the item with a positive Error Value to the renamingListError.
 						renamingListError.add(renamingList.get(x));
-						//listViewErrorText.setVisible(false);
-						if(n.equals("01")){
-
-							System.out.println("Error 01");					
-							listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());				
-							listViewErrorText.getItems().add("Error 01 - Empty Name.");
-
-						}
-						if(n.equals("02")){
-							System.out.println("Error 02");
-							listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
-							listViewErrorText.getItems().add("Error 02 - It was not possible to determine the series.");
-						}
-
-						if(n.equals("03")){
-
-							System.out.println("Error 03");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-							listViewErrorText.getItems().add("Error 03 - Failed to connect to the Api.");
-
-						}
-						if(n.equals("04")){
-
-							System.out.println("Error 04");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-							listViewErrorText.getItems().add("Error 04 - Season value not found.");
-
-						}
-						if(n.equals("05")){
-
-							System.out.println("Error 05");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));	
-							listViewErrorText.getItems().add("Error 05 - Episode value not found.");
-
-						}
-						if(n.equals("06")){
-							System.out.println("Error 06");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-							listViewErrorText.getItems().add("Error 06 - Negative response from the Api for season and episode parameters.");
-
-						}
-						if(n.equals("07")){
-							System.out.println("Error 07");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-							listViewErrorText.getItems().add("Error 07 - Absolute Episode value not found.");
-
-						}
-						if(n.equals("08")){
-							System.out.println("Error 08");
-							listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-							listViewErrorText.getItems().add("Error 08 - Path Value is Empy. ");
-
-						}
-						 
-						if(n.equals("10")){
-							
-							System.out.println("Error 10");					
-							//renamingList.get(x).setOptionsList("Error 10 - It was not possible to determine the movie.");
-							listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
-							listViewErrorText.getItems().add("Error 10 - It was not possible to determine the movie.");
-							
-							//Show the options of 
-							if(!renamingList.get(x).getOptionsList().isEmpty()) {
-							
-								//renamingList.get(x).setOptionsList(renamingList.get(x).getOptionsList()+"\nIf you find the movie in the list, do a double click on it");
-								listViewErrorText.getItems().add("If you find the movie in the list, do a double click on it");								
-								showOptions(renamingList.get(x).getOptionsList());
-							}
-						
-					
-							
-
-						}
+						//Display the error in the UI,passing the Error value as n, and the position as x.
+						//errorDisplay(n,x);
 
 					}
 				}
-				paginationErrorList.setVisible(true);
-				paginationErrorList.setPageCount(renamingListError.size());				
-				paginationErrorList.setPageFactory((pageIndex) -> {
-						ListView<String> Text = new ListView<String>();
-						
-							
-						
-			
-						Text.getItems().add(renamingListError.get(pageIndex).getOriginalName());	
-						Text.getItems().add(renamingListError.get(pageIndex).getOriginalPath());
-						Text.getItems().add(""+pageIndex);
-				
-						EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
-							@Override 
-							public void handle(javafx.scene.input.MouseEvent e) { 
-								if(e.getClickCount() == 2) {
-									for(int x=0;x<renamingListError.size();x++) {
-									}
-									System.out.println("teste");
-								}
-							} 
-						};  
-						Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
-			            Label label2 = new Label("Main content of the page ...");
-
-			            return new VBox(label2,Text);
-			        });
-				listViewErrorText.getItems().remove(0);
+				//Call the pagination routine to show the results in a pagination type.
+				paginationError();
+				//listViewErrorText.getItems().remove(0);
 				paintListView();
 				clearList();
 				renamingList.clear();
@@ -561,6 +478,7 @@ public class MainController {
 	}
 	//
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
+		System.out.println("Clear Button");
 		enter=0;
 		renamingList.clear();
 		renamingListError.clear();
@@ -568,7 +486,9 @@ public class MainController {
 		listViewFilesRenamed.getItems().clear();
 		listViewErrorText.getItems().clear();
 		labelDrop();
-
+	
+		paginationErrorList.setVisible(false);
+			
 
 	}
 	//
@@ -627,7 +547,7 @@ public class MainController {
 				
 			}
 			
-			paintListViewError(listViewErrorText.getSelectionModel().getSelectedItem());
+			//paintListViewError(listViewErrorText.getSelectionModel().getSelectedItem());
 		
 		}
 		
@@ -650,6 +570,8 @@ public class MainController {
 		if(renamingList.size()==0 && renamingListError.size()==0) {
 			listViewFiles.getItems().clear();
 			listViewErrorText.getItems().clear();
+			paginationErrorList.setVisible(false);
+			
 
 		}
 
@@ -698,10 +620,10 @@ public class MainController {
 		labelDrop();
 	}
 	//Paint the element of listViewErrorText and change the color of the selected name
-	public void paintListViewError(String select){
+	public void paintListViewError(String select, ListView<String> list){
 
 		//LabelDropFiles.setVisible(false);
-		listViewErrorText.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+		list.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 			@Override
 			public ListCell<String> call(ListView<String> param) {
 				return new ListCell<String>() {
@@ -727,7 +649,7 @@ public class MainController {
 		});
 		labelDrop();
 	}
-	//
+	//Pain the UI Circle Element according to the API status
 	public void paintCircle() {
 
 		if(controlCircle==1) {
@@ -747,7 +669,7 @@ public class MainController {
 
 
 	}
-	//
+	//Control the UI Element of "+" to show when drooping files is enable.
 	public void labelDrop() {
 		if(listViewFiles.getItems().size()<=0) {
 			labelDropFiles.setVisible(true);
@@ -832,19 +754,164 @@ public class MainController {
 		}
 	}
 	//
-	public void showOptions(String Options) {
-		JSONArray options =  new JSONArray(Options);
-
-		for(int x =0;x<options.length();x++) {
-			JSONObject op = options.getJSONObject(x);
-			String value ="Title - "+op.getString("title") + " | Year - "+op.getString("release_date")+ " | ID - "+op.getInt("id");
-			listViewErrorText.getItems().add(value);
-			
-			//listViewErrorTextSelect.getItems().add(cx);
+	public void updateUIError(ArrayList<Item> list) {
+		int x=0;
+		int size=list.size();
 	
+
+		for(x=0;x<size;x++){
+			String n =list.get(x).getError();
+			
+			if(n.isEmpty()) {
+				System.out.println("---Inside n.isEmpty()---");
+				listViewFilesRenamed.getItems().add(list.get(x).getName());
+				int count=0;
+				do {	
+					listViewFiles.getItems().get(count);
+					if(listViewFiles.getItems().get(count).equals(list.get(x).getOriginalName())) {
+						listViewFiles.getItems().remove(count);
+						count=-1;
+					}else {
+						count++;
+					}
+
+				}while(count!=-1);
+			}else {		
+				//Add the item with a positive Error Value to the renamingListError.
+				renamingListError.add(list.get(x));
+				//Display the error in the UI,passing the Error value as n, and the position as x.
+				//errorDisplay(n,x);
+
+			}
+		}
+	}
+	//
+	public void errorDisplay(String Error,Integer x,String name,ListView<String> listUI) {
+		
+		if(Error.equals("01")){
+			System.out.println("Error 01");					
+			listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());				
+			listViewErrorText.getItems().add("Error 01 - Empty Name.");
+			
+		}
+		if(Error.equals("02")){
+			System.out.println("Error 02");
+			listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
+			listViewErrorText.getItems().add("Error 02 - It was not possible to determine the series.");
+		}
+
+		if(Error.equals("03")){
+
+			System.out.println("Error 03");
+			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
+			listViewErrorText.getItems().add("Error 03 - Failed to connect to the Api.");
+
+		}
+		if(Error.equals("04")){
+
+			System.out.println("Error 04");
+			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
+			listViewErrorText.getItems().add("Error 04 - Season value not found.");
+
+		}
+		if(Error.equals("05")){
+
+			System.out.println("Error 05");
+			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));	
+			listViewErrorText.getItems().add("Error 05 - Episode value not found.");
+
+		}
+		if(Error.equals("06")){
+			System.out.println("Error 06");
+			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
+			listViewErrorText.getItems().add("Error 06 - Negative response from the Api for season and episode parameters.");
+
+		}
+		if(Error.equals("07")){
+			System.out.println("Error 07");
+			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
+			listViewErrorText.getItems().add("Error 07 - Absolute Episode value not found.");
+
+		}
+		if(Error.equals("08")){
+			System.out.println("Error 08");
+			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
+			listViewErrorText.getItems().add("Error 08 - Path Value is Empy. ");
+
+		}
+		if(Error.equals("09")){
+			System.out.println("Error 09");
+			listUI.getItems().add(name);
+			listUI.getItems().add("Error 09 - Path Value is Empy. ");
+
+		}
+		 
+		if(Error.equals("10")){
+			
+			System.out.println("Error 10");					
+
+			listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
+			listViewErrorText.getItems().add("Error 10 - It was not possible to determine the movie.");
+			
+			//Show the options of 
+			if(!renamingList.get(x).getOptionsList().isEmpty()) {			
+				listViewErrorText.getItems().add("If you find the movie in the list, do a double click on it");										
+			}
+		
+	
+			
+
 		}
 		
+	}
+	//
+	public void paginationError() {
+		paginationErrorList.setVisible(true);
+		if(renamingListError.size()==0) {
+			paginationErrorList.setVisible(false);	
+		}else {
+			paginationErrorList.setPageCount(renamingListError.size());	
+		}
+
+		System.out.println("renamingListError.size() -- "+renamingListError.size());
+		paginationErrorList.setPageFactory((pageIndex) -> {		
+				ListView<String> Text = new ListView<String>();		
+				if(!(renamingListError.size()==0)) {
+					if(!(renamingListError.get(pageIndex).getOptionsList()==null)) {
+						JSONArray options =  new JSONArray(renamingListError.get(pageIndex).getOptionsList());
+						Text.getItems().add(renamingListError.get(pageIndex).getOriginalName());
+						for(int x =0;x<options.length();x++) {
+							JSONObject op = options.getJSONObject(x);
+							String value ="Title - "+op.getString("title") + " | Year - "+op.getString("release_date")+ " | ID - "+op.getInt("id");
+							Text.getItems().add(value);
+														
+						}
+					}									
+				}
+				errorDisplay(renamingListError.get(pageIndex).getError(),pageIndex,renamingListError.get(pageIndex).getOriginalName(),Text);
+				//renamingListError.get(pageIndex).setOptionsList(null);
+					
+				//Text.getItems().add(renamingListError.get(pageIndex).getOriginalPath());
+				//Text.getItems().add(""+pageIndex);
+			
+				EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
+					@Override 
+					public void handle(javafx.scene.input.MouseEvent e) { 
+						if(e.getClickCount() == 2) {
+							for(int x=0;x<renamingListError.size();x++) {
+							}
+							renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());;
+							paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
+							
+						}
+					} 
+				}; 
 		
+				Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
+	            Label label2 = new Label("Main content of the page ...");
+
+	            return new VBox(label2,Text);
+	        });
 	}
 	//End Support UI
 
