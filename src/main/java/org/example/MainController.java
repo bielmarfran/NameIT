@@ -105,17 +105,7 @@ public class MainController {
 	
 
 	
-	
-	
 
-
-	//@FXML
-	//private void switchToSecondary() throws IOException {
-	//	App.setRoot("secondary");
-	//}
-	
-
-	//private TextArea textAreaError;
 
 	//Logic Variable
 	//Control the color of the Circle that represent the connection to the Api
@@ -126,7 +116,7 @@ public class MainController {
 	public static ArrayList<String> filterList = new ArrayList<>();
 	//Array where all Episodes object are stored.
 	private ArrayList<Item> renamingList = new  ArrayList<>();
-	//
+	//Array where all Episodes that during the run get an Error Mensagem are store waiting for handling.
 	private ArrayList<Item> renamingListError = new  ArrayList<>();
 	//Control variable to always access the right Episode
 	private static Integer controlArrayListEpisode=0;
@@ -155,14 +145,10 @@ public class MainController {
 	private static boolean checkboxSeason_value;
 	//Store the value of checkboxFolder
 	private static boolean checkboxFolder_value;
-	//
+	//Static Value for normal ListView Background Color
 	private static final String DEFAULT_CONTROL_INNER_BACKGROUND = "derive(-fx-base,80%)";
-	//
+	//Static Value for Red ListView Background Color
 	private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
-	//
-	//private static ArrayList<String> exceptions = new ArrayList<String>();
-	//
-	//private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 	//
 	private static Integer enter=0;
 
@@ -321,6 +307,7 @@ public class MainController {
 			}
 		}
 		System.out.println("-- before-backgroundTaks--");
+		renamingListError.clear();
 		backgroundTaks = new Service<Void>() {					
 			@Override
 			protected Task<Void> createTask() {
@@ -330,13 +317,16 @@ public class MainController {
 					protected Void call() throws Exception{
 						System.out.println("-- inside-backgroundTaks--");
 
-						if(renamingList.size()<1 && renamingListError.size()<1) {
+						if((renamingList.size()<1 && renamingListError.size()<1) || listViewFiles.getItems().size()<1) {
+							clearList();
+							paginationErrorList.setVisible(false);
 							updateProgress(0.00, 100.00);
 							cancel();
 
 						}else {
 							System.out.println(enter);
 							if(enter==1) {
+								updateProgress(0.00, 100.00);
 								cancel();
 							}else {
 								String mode = DataStored.propertiesGetMode(); 
@@ -353,7 +343,7 @@ public class MainController {
 										if(item.getError()==null) {										
 											tvdb.breakFileName(renamingList.get(x).getOriginalName());
 											//breakFileName(episodeList.get(x).getOriginalName());
-										}else {									
+										}else {												
 											renamingList.remove(x);
 										}
 										System.out.println("-----------------------------");
@@ -361,46 +351,47 @@ public class MainController {
 										updateProgress(x+1, max);
 									}
 								}else {
-									for(int y=0;y<renamingListError.size();y++){
-										if(renamingListError.get(y).getOptionsList()==null) {
-											
-										}else {
-											System.out.println("Alternative Way 1");
-											OperationTmdb tmdb = new OperationTmdb();
-											tmdb.renameFileCreateDirectory(renamingListError.get(y));
-										}
+									System.out.println("renamingList.size() -- "+renamingList.size());
+									if(renamingList.size()<1) {
+										updateProgress(0.00, 100.00);
+										cancel();
 									}
 									for(int x=0;x<renamingList.size();x++){
 										System.out.println("TMDB");
 										OperationTmdb tmdb = new OperationTmdb();
-										controlArrayListEpisode=x;
-										item = renamingList.get(x);
-										controlBreakFile=0;
-										controlBreakFileSlug=0;
-										controlBreakFileSlug2=0;
-										tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
-										if(item.getError()==null) {										
-											tmdb.breakFileName(renamingList.get(x).getOriginalName());
-											//breakFileName(episodeList.get(x).getOriginalName());
+										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
+											tmdb.renameFileCreateDirectory(renamingList.get(x));
 										}else {
-											System.out.println("Dentro de remove 11212");
-											renamingList.remove(x);
+											controlArrayListEpisode=x;
+											item = renamingList.get(x);
+											controlBreakFile=0;
+											controlBreakFileSlug=0;
+											controlBreakFileSlug2=0;
+											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+											if(item.getError()==null) {										
+												tmdb.breakFileName(renamingList.get(x).getOriginalName());
+												//breakFileName(episodeList.get(x).getOriginalName());
+											}else {
+												System.out.println("Dentro de remove 11212");
+												renamingList.remove(x);
+											}
 
 										}
+
 										System.out.println("-----------------------------");
-									
+
 										double max =renamingList.size();
 										updateProgress(x+1, max);
-										
-										
+
+
 									}
-									
-									
+
+
 								}
-								
+
 
 							}
-						
+
 						}											
 						return null;
 					}
@@ -415,7 +406,7 @@ public class MainController {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				System.out.println("backgroundTaks.setOnSucceeded");
-				updateUIError(renamingListError);
+				//updateUIError(renamingListError);
 				int x=0;
 				int size=renamingList.size();
 			
@@ -445,12 +436,18 @@ public class MainController {
 
 					}
 				}
+				for(x=0;x<renamingListError.size();x++){
+					if(!(renamingListError.get(x).getAlternetiveInfo()==null)) {
+						renamingListError.remove(x);
+					}	
+				}
+				
 				//Call the pagination routine to show the results in a pagination type.
-				paginationError();
-				//listViewErrorText.getItems().remove(0);
+						
 				paintListView();
 				clearList();
 				renamingList.clear();
+				paginationError();
 			}
 		});
 
@@ -467,6 +464,8 @@ public class MainController {
 			public void handle(WorkerStateEvent event) {
 				System.out.println("backgroundTaks.setOnCancelled");
 				clearList();
+				clearALL();
+				
 
 			}
 		});
@@ -479,15 +478,7 @@ public class MainController {
 	//
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
 		System.out.println("Clear Button");
-		enter=0;
-		renamingList.clear();
-		renamingListError.clear();
-		listViewFiles.getItems().clear();
-		listViewFilesRenamed.getItems().clear();
-		listViewErrorText.getItems().clear();
-		labelDrop();
-	
-		paginationErrorList.setVisible(false);
+		clearALL();
 			
 
 	}
@@ -541,20 +532,20 @@ public class MainController {
 	}
 	//
 	public void listViewErrorTextAction(javafx.scene.input.MouseEvent mouseEvent) {
-	
+
 		if(mouseEvent.getClickCount() == 2) {
 			for(int x=0;x<renamingListError.size();x++) {
-				
+
 			}
-			
+
 			//paintListViewError(listViewErrorText.getSelectionModel().getSelectedItem());
-		
+
 		}
-		
-		
+
+
 	}
 	//
-	
+
 
 	//Support UI
 
@@ -571,52 +562,65 @@ public class MainController {
 			listViewFiles.getItems().clear();
 			listViewErrorText.getItems().clear();
 			paginationErrorList.setVisible(false);
-			
+
 
 		}
 
 		//listViewError.getItems().clear();
 		//listViewErrorText.getItems().clear();
 	}
+	//Clear Button Rotine
+	public void clearALL() {
+		enter=0;
+		renamingList.clear();
+		renamingListError.clear();
+		listViewFiles.getItems().clear();
+		listViewFilesRenamed.getItems().clear();
+		listViewErrorText.getItems().clear();
+		labelDrop();
+		paginationErrorList.setVisible(false);
+	}
 	//Paint the element of the cells red if the renaming process fails
 	public void paintListView(){
+		System.out.println(listViewFiles.getItems().size());
+		if(listViewFiles.getItems().size()>=1) {
+			listViewFiles.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+				@Override
+				public ListCell<String> call(ListView<String> param) {
+					return new ListCell<String>() {
+						@Override
+						protected void updateItem(String item, boolean empty) {
+							super.updateItem(item, empty);
 
-		//LabelDropFiles.setVisible(false);
-		listViewFiles.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-			@Override
-			public ListCell<String> call(ListView<String> param) {
-				return new ListCell<String>() {
-					@Override
-					protected void updateItem(String item, boolean empty) {
-						super.updateItem(item, empty);
-
-						if (item == null || empty) {
-							setText(null);
-							setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
-						} else {
-							setText(item);
-							if (!item.isEmpty() && renamingList.size()>=1) {
-								int color_control=0;
-								for(int x=0;x<renamingList.size();x++){
-									if(item.equals(renamingList.get(x).getOriginalName())){
-										color_control++;
-										setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+							if (item == null || empty) {
+								setText(null);
+								setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+							} else {
+								setText(item);
+								if (!item.isEmpty() && renamingList.size()>=1) {
+									int color_control=0;
+									for(int x=0;x<renamingList.size();x++){
+										if(item.equals(renamingList.get(x).getOriginalName())){
+											color_control++;
+											setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+										}
 									}
-								}
-								if(color_control==0){
-									System.out.println("Verde 1");
+									if(color_control==0){
+										System.out.println("Verde 1");
+										setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
+									}
+								} else {
+									System.out.println("Verde 2");
 									setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
 								}
-							} else {
-								System.out.println("Verde 2");
-								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
 							}
-						}
 
-					}
-				};
-			}
-		});
+						}
+					};
+				}
+			});
+		}
+
 		labelDrop();
 	}
 	//Paint the element of listViewErrorText and change the color of the selected name
@@ -639,8 +643,8 @@ public class MainController {
 							if(item ==select) {
 								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
 							}
-							
-							
+
+
 						}
 
 					}
@@ -677,20 +681,20 @@ public class MainController {
 		}else {
 			labelDropFiles.setVisible(false);
 			labelDropFilesPlus.setVisible(false);
-			
+
 		}
 	}
 	//
 	public void tooltips() {
 		final Tooltip tooltip = new Tooltip();
 		tooltip.setText(
-		    "--Show the Api Status--\n" +
-		    "\nGreen = Connected"  +
-		    "\nRed = Disconnected"  
-		);
+				"--Show the Api Status--\n" +
+						"\nGreen = Connected"  +
+						"\nRed = Disconnected"  
+				);
 		labelStatusApi.setTooltip(tooltip);
-		
-	
+
+
 	}
 	//
 	public void renameMenuLanguage() {
@@ -699,7 +703,7 @@ public class MainController {
 		case "en": 
 			language ="EN - English";				
 			break;
-		//case "pt-br": 
+			//case "pt-br": 
 			//language ="PT-BR - Português Brasileiro";				
 			//break;
 		case "de": 
@@ -729,15 +733,15 @@ public class MainController {
 		list.addAll("Series","Movies");	
 		ComboBoxMode.setItems(list);
 		EventHandler<ActionEvent> event = 
-	             new EventHandler<ActionEvent>() { 
-	       public void handle(ActionEvent e) 
-	       { 
-	    	   DataStored.propertiesSetMode(ComboBoxMode.getValue());
-	    	   checkBoxMode(ComboBoxMode.getValue());
-	       } 
-	   }; 
-	   ComboBoxMode.setOnAction(event);
-		
+				new EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent e) 
+			{ 
+				DataStored.propertiesSetMode(ComboBoxMode.getValue());
+				checkBoxMode(ComboBoxMode.getValue());
+			} 
+		}; 
+		ComboBoxMode.setOnAction(event);
+
 	}
 	//
 	public void checkBoxMode(String mode) {
@@ -745,54 +749,22 @@ public class MainController {
 			checkboxSeries.setDisable(false);
 			checkboxSeries.setText("Series");
 			checkboxSeason.setDisable(false);
-			
+
 		}else{
 			checkboxSeries.setDisable(false);
 			checkboxSeries.setText("Movies");
 			checkboxSeason.setDisable(true);
-			
-		}
-	}
-	//
-	public void updateUIError(ArrayList<Item> list) {
-		int x=0;
-		int size=list.size();
-	
 
-		for(x=0;x<size;x++){
-			String n =list.get(x).getError();
-			
-			if(n.isEmpty()) {
-				System.out.println("---Inside n.isEmpty()---");
-				listViewFilesRenamed.getItems().add(list.get(x).getName());
-				int count=0;
-				do {	
-					listViewFiles.getItems().get(count);
-					if(listViewFiles.getItems().get(count).equals(list.get(x).getOriginalName())) {
-						listViewFiles.getItems().remove(count);
-						count=-1;
-					}else {
-						count++;
-					}
-
-				}while(count!=-1);
-			}else {		
-				//Add the item with a positive Error Value to the renamingListError.
-				renamingListError.add(list.get(x));
-				//Display the error in the UI,passing the Error value as n, and the position as x.
-				//errorDisplay(n,x);
-
-			}
 		}
 	}
 	//
 	public void errorDisplay(String Error,Integer x,String name,ListView<String> listUI) {
-		
+
 		if(Error.equals("01")){
 			System.out.println("Error 01");					
 			listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());				
 			listViewErrorText.getItems().add("Error 01 - Empty Name.");
-			
+
 		}
 		if(Error.equals("02")){
 			System.out.println("Error 02");
@@ -845,24 +817,24 @@ public class MainController {
 			listUI.getItems().add("Error 09 - Path Value is Empy. ");
 
 		}
-		 
+
 		if(Error.equals("10")){
-			
+
 			System.out.println("Error 10");					
 
-			listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
-			listViewErrorText.getItems().add("Error 10 - It was not possible to determine the movie.");
-			
+			//listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
+			//listViewErrorText.getItems().add("Error 10 - It was not possible to determine the movie.");
+
 			//Show the options of 
-			if(!renamingList.get(x).getOptionsList().isEmpty()) {			
-				listViewErrorText.getItems().add("If you find the movie in the list, do a double click on it");										
-			}
-		
-	
-			
+			//if(!renamingList.get(x).getOptionsList().isEmpty()) {			
+			//listViewErrorText.getItems().add("If you find the movie in the list, do a double click on it");										
+			//}
+
+
+
 
 		}
-		
+
 	}
 	//
 	public void paginationError() {
@@ -875,48 +847,54 @@ public class MainController {
 
 		System.out.println("renamingListError.size() -- "+renamingListError.size());
 		paginationErrorList.setPageFactory((pageIndex) -> {		
-				ListView<String> Text = new ListView<String>();		
-				if(!(renamingListError.size()==0)) {
+			ListView<String> Text = new ListView<String>();		
+			if(!(renamingListError.size()==0)) {		
 					if(!(renamingListError.get(pageIndex).getOptionsList()==null)) {
 						JSONArray options =  new JSONArray(renamingListError.get(pageIndex).getOptionsList());
 						Text.getItems().add(renamingListError.get(pageIndex).getOriginalName());
+						Text.getItems().add("OP");
 						for(int x =0;x<options.length();x++) {
+							
 							JSONObject op = options.getJSONObject(x);
 							String value ="Title - "+op.getString("title") + " | Year - "+op.getString("release_date")+ " | ID - "+op.getInt("id");
 							Text.getItems().add(value);
-														
 						}
-					}									
-				}
-				errorDisplay(renamingListError.get(pageIndex).getError(),pageIndex,renamingListError.get(pageIndex).getOriginalName(),Text);
-				//renamingListError.get(pageIndex).setOptionsList(null);
-					
-				//Text.getItems().add(renamingListError.get(pageIndex).getOriginalPath());
-				//Text.getItems().add(""+pageIndex);
-			
-				EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
-					@Override 
-					public void handle(javafx.scene.input.MouseEvent e) { 
-						if(e.getClickCount() == 2) {
-							for(int x=0;x<renamingListError.size();x++) {
-							}
-							renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());;
-							paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
-							
-						}
-					} 
-				}; 
-		
-				Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
-	            Label label2 = new Label("Main content of the page ...");
+					}else {
+						errorDisplay(renamingListError.get(pageIndex).getError(),pageIndex,renamingListError.get(pageIndex).getOriginalName(),Text);
 
-	            return new VBox(label2,Text);
-	        });
+					}
+				
+
+			}
+
+		
+			EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
+				@Override 
+				public void handle(javafx.scene.input.MouseEvent e) { 
+					if(e.getClickCount() == 2) {
+						for(int x=0;x<renamingListError.size();x++) {
+						}
+						renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
+						renamingList.add(renamingListError.get(pageIndex));
+						paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
+
+					}
+				} 
+			}; 
+			if(Text.getItems().get(1).equals("OP")) {
+				Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
+			}
+			
+			Label label2 = new Label("Main content of the page ...");
+			clearList();
+			return new VBox(label2,Text);
+		});
 	}
 	//End Support UI
 
 
 	//Get the response from checkConnection(), and check if the current key is still working, if not send start login().
+	//
 	public static Integer status(Integer responseBody){
 		System.out.println(responseBody);
 		//System.out.println(key);

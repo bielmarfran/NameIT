@@ -66,11 +66,6 @@
             <Separator layoutX="447.0" layoutY="36.0" orientation="VERTICAL" prefHeight="81.0" prefWidth="9.0" />
             <ComboBox fx:id="ComboBoxMode" layoutX="372.0" layoutY="105.0" prefWidth="150.0" />
             <ListView fx:id="listViewErrorText" layoutX="26.0" layoutY="535.0" onMouseClicked="#listViewErrorTextAction" prefHeight="170.0" prefWidth="865.0" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="9.0" />
-            <Label fx:id="LabelErrorListFile" layoutX="93.0" layoutY="511.0" text="File">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
             <Pagination fx:id="paginationErrorList" layoutX="19.0" layoutY="537.0" prefHeight="167.0" prefWidth="866.0" />
          </children>
       </AnchorPane>
