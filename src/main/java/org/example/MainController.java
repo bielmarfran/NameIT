@@ -102,7 +102,8 @@ public class MainController {
 	private Label LabelErrorListFile;
 	@FXML
 	private Pagination paginationErrorList;
-	
+	@FXML
+	private Label LabelExceptionList;
 
 	
 
@@ -169,19 +170,17 @@ public class MainController {
 
 	//Operations on the initialization of the UI.
 	public void initialize() {
-		
-		JsonOperationsTvdb.checkConnection();		
+		setMode();		
 		fillFilterExtention();
 		tooltips();
-		paintCircle();
-		renameMenuLanguage();
+		
+		//renameMenuLanguage();
 		//isDate(null);
-		//JsonOperationsTmdb.getSearchSeries(null);
-		setMode();
+		//JsonOperationsTmdb.getSearchSeries(null);	
 		paginationErrorList.setVisible(true);
 		paginationErrorList.setPageCount(1);
 		listViewErrorText.setVisible(false);
-		
+		paintCircle();
 		
 		
 	}
@@ -250,7 +249,8 @@ public class MainController {
 		renameMenuLanguage();
 		
 	}
-	public void menuItemConfiguration(javafx.event.ActionEvent actionEvent) {
+	//
+	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
 		 Parent parent;
 		try {
@@ -274,11 +274,11 @@ public class MainController {
 	//Star the logic to the renaming the files
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
 		
-		//Geting the value of the checkboxes
+		//Getting the value of the check boxes
 		checkboxSeries_value = checkboxSeries.isSelected();
 		checkboxSeason_value = checkboxSeason.isSelected();
 		checkboxFolder_value = checkboxFolder.isSelected();
-		//End Geting the value of the checkboxes
+		//End Getting the value of the check boxes
 		listViewFilesRenamed.getItems().clear();
 		enter=0;
 		
@@ -379,38 +379,31 @@ public class MainController {
 										}
 
 										System.out.println("-----------------------------");
-
 										double max =renamingList.size();
 										updateProgress(x+1, max);
-
-
 									}
-
-
 								}
-
-
 							}
-
 						}											
 						return null;
-					}
-
-				
+					}	
 				};
 			}
 		};
-
 
 		backgroundTaks.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				System.out.println("backgroundTaks.setOnSucceeded");
-				//updateUIError(renamingListError);
+			
 				int x=0;
 				int size=renamingList.size();
 			
-	
+				for(int y=0;y<renamingListError.size();y++){
+					if(!(renamingListError.get(y).getAlternetiveInfo()==null)) {
+						renamingListError.remove(y);
+					}	
+				}
 				for(x=0;x<size;x++){
 					String n =renamingList.get(x).getError();
 					
@@ -436,11 +429,7 @@ public class MainController {
 
 					}
 				}
-				for(x=0;x<renamingListError.size();x++){
-					if(!(renamingListError.get(x).getAlternetiveInfo()==null)) {
-						renamingListError.remove(x);
-					}	
-				}
+		
 				
 				//Call the pagination routine to show the results in a pagination type.
 						
@@ -511,7 +500,10 @@ public class MainController {
 
 	}
 	//End UI Trigger
-	public void buttonExceptions(javafx.event.ActionEvent actionEvent) {
+
+	
+	//
+	public void buttonExceptions(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Exception.fxml"));
 		 Parent parent;
 		try {
@@ -522,7 +514,27 @@ public class MainController {
 	        stage.setScene(scene);
 	        stage.showAndWait();
 	       
-       
+      
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		  
+	}
+	//
+	public void showAbout(javafx.scene.input.MouseEvent mouseEvent) {
+		 FXMLLoader loader = new FXMLLoader(getClass().getResource("About.fxml"));
+		 Parent parent;
+		try {
+			parent = loader.load();
+			Scene scene = new Scene(parent);
+	        Stage stage = new Stage();	
+	        stage.setTitle("About");
+	        stage.setScene(scene);
+	        stage.showAndWait();
+	       
+     
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -569,7 +581,7 @@ public class MainController {
 		//listViewError.getItems().clear();
 		//listViewErrorText.getItems().clear();
 	}
-	//Clear Button Rotine
+	//Clear Button Action
 	public void clearALL() {
 		enter=0;
 		renamingList.clear();
@@ -684,7 +696,7 @@ public class MainController {
 
 		}
 	}
-	//
+	//Implement the UI Circle Element with instruction on the its color. 
 	public void tooltips() {
 		final Tooltip tooltip = new Tooltip();
 		tooltip.setText(
@@ -724,7 +736,7 @@ public class MainController {
 		menuLanguage.setText(language);
 
 	}
-	//
+	//Check the stored mode value in the properties, and deal with UI element to change change the mode
 	public void setMode() {
 		String mode = DataStored.propertiesGetMode();
 		ComboBoxMode.setValue(mode);
@@ -743,14 +755,16 @@ public class MainController {
 		ComboBoxMode.setOnAction(event);
 
 	}
-	//
+	//Change the Check boxes UI elements according to the mode.
 	public void checkBoxMode(String mode) {
 		if(mode.equals("Series")) {
+			JsonOperationsTvdb.checkConnection();	
 			checkboxSeries.setDisable(false);
 			checkboxSeries.setText("Series");
 			checkboxSeason.setDisable(false);
 
 		}else{
+			JsonOperationsTmdb.checkConnection();
 			checkboxSeries.setDisable(false);
 			checkboxSeries.setText("Movies");
 			checkboxSeason.setDisable(true);
@@ -762,77 +776,66 @@ public class MainController {
 
 		if(Error.equals("01")){
 			System.out.println("Error 01");					
-			listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());				
-			listViewErrorText.getItems().add("Error 01 - Empty Name.");
+			listUI.getItems().add(String.valueOf("File -- "+name));			
+			listUI.getItems().add("Error 01 - Empty Name.");
 
 		}
 		if(Error.equals("02")){
 			System.out.println("Error 02");
-			listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
-			listViewErrorText.getItems().add("Error 02 - It was not possible to determine the series.");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 02 - It was not possible to determine the series.");
 		}
 
 		if(Error.equals("03")){
 
 			System.out.println("Error 03");
-			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-			listViewErrorText.getItems().add("Error 03 - Failed to connect to the Api.");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 03 - Failed to connect to the Api.");
 
 		}
 		if(Error.equals("04")){
 
 			System.out.println("Error 04");
-			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-			listViewErrorText.getItems().add("Error 04 - Season value not found.");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 04 - Season value not found.");
 
 		}
 		if(Error.equals("05")){
 
 			System.out.println("Error 05");
-			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));	
-			listViewErrorText.getItems().add("Error 05 - Episode value not found.");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 05 - Episode value not found.");
 
 		}
 		if(Error.equals("06")){
 			System.out.println("Error 06");
-			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-			listViewErrorText.getItems().add("Error 06 - Negative response from the Api for season and episode parameters.");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 06 - Negative response from the Api for season and episode parameters.");
 
 		}
 		if(Error.equals("07")){
 			System.out.println("Error 07");
-			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-			listViewErrorText.getItems().add("Error 07 - Absolute Episode value not found.");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 07 - It was not possible to determine Season/Episode.");
 
 		}
 		if(Error.equals("08")){
 			System.out.println("Error 08");
-			listViewErrorText.getItems().add(String.valueOf("File -- "+renamingList.get(x).getOriginalFile().getName()));
-			listViewErrorText.getItems().add("Error 08 - Path Value is Empy. ");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 08 - Path Value is Empy. ");
 
 		}
 		if(Error.equals("09")){
 			System.out.println("Error 09");
 			listUI.getItems().add(name);
-			listUI.getItems().add("Error 09 - Path Value is Empy. ");
+			listUI.getItems().add("Error 09 - To many options ");
 
 		}
 
 		if(Error.equals("10")){
 
 			System.out.println("Error 10");					
-
-			//listViewErrorText.getItems().add("File -- "+renamingList.get(x).getOriginalFile().getName());
-			//listViewErrorText.getItems().add("Error 10 - It was not possible to determine the movie.");
-
-			//Show the options of 
-			//if(!renamingList.get(x).getOptionsList().isEmpty()) {			
-			//listViewErrorText.getItems().add("If you find the movie in the list, do a double click on it");										
-			//}
-
-
-
-
+			listUI.getItems().add(String.valueOf("File -- "+name));
 		}
 
 	}
@@ -849,10 +852,10 @@ public class MainController {
 		paginationErrorList.setPageFactory((pageIndex) -> {		
 			ListView<String> Text = new ListView<String>();		
 			if(!(renamingListError.size()==0)) {		
-					if(!(renamingListError.get(pageIndex).getOptionsList()==null)) {
+					if(!(renamingListError.get(pageIndex).getOptionsList()==null) && checkErrorEpisodeSeason(renamingListError.get(pageIndex).getError())) {
 						JSONArray options =  new JSONArray(renamingListError.get(pageIndex).getOptionsList());
 						Text.getItems().add(renamingListError.get(pageIndex).getOriginalName());
-						Text.getItems().add("OP");
+						Text.getItems().add("Double click if you find the correct information");
 						for(int x =0;x<options.length();x++) {
 							
 							JSONObject op = options.getJSONObject(x);
@@ -881,7 +884,7 @@ public class MainController {
 					}
 				} 
 			}; 
-			if(Text.getItems().get(1).equals("OP")) {
+			if(Text.getItems().get(1).equals("Double click if you find the correct information")) {
 				Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
 			}
 			
@@ -890,14 +893,21 @@ public class MainController {
 			return new VBox(label2,Text);
 		});
 	}
+	//Check if the Error value is related to S
+	public boolean checkErrorEpisodeSeason(String error) {
+		if(error.equals("04")|| error.equals("05")|| error.equals("06")|| error.equals("07")) {
+			return false;
+		}
+		return true;
+	}
 	//End Support UI
 
 
 	//Get the response from checkConnection(), and check if the current key is still working, if not send start login().
 	//
-	public static Integer status(Integer responseBody){
+	public static Integer statusTVDB(Integer responseBody){
 		System.out.println(responseBody);
-		//System.out.println(key);
+
 		if(responseBody==401){
 			JsonOperationsTvdb.login();
 		}else{
@@ -907,6 +917,25 @@ public class MainController {
 
 		}
 		return null;
+	}
+	//
+	public static Integer statusTMDB(Integer responseBody){
+		System.out.println(responseBody);
+
+		if(responseBody==200){
+			controlCircle = 1;
+		}else{
+			MainController.statusAlert("TMDB");
+
+		}
+		return null;
+	}
+	//
+	public static void statusAlert(String api) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Warning Dialog");
+		alert.setHeaderText("No response from the "+api+" API");
+		alert.setContentText("Check your internet conection");
 	}
 	//End Connecting API
 

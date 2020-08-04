@@ -10,50 +10,28 @@ public class JsonOperationsTmdb {
 	
 	//Try to connect to the Api with the stored Api key.
 	public static void checkConnection(){
-		String keynow = DataStored.readPreferencekeyTvdb();
+		System.out.println("checkConnectionTMDB");
+		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String language = DataStored.propertiesGetLanguage();
+		language = languageTmdb(language);
+		String uri = "";
+		uri ="https://api.themoviedb.org/3/movie/76341?api_key="+keynow;
+			
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("https://api.thetvdb.com/refresh_token"))
+				.uri(URI.create(uri))				
 				.header("Content-Type", "application/json")
-				.header("Authorization", "Bearer "+keynow)
 				.build();
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::statusCode)
-		.thenApply(MainController::status)
-		.join();
-
-
-	}
-	//Connect to the api with the login information and get a new Api key.
-	/*
-	 * public static void login(){
-	
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("apikey", "f06c943dae6d7ad8c76f7a5b4b25a328");
-		jsonObject.put("username", "bielmarfran");
-		jsonObject.put("userkey", "5ED2BB28F079B9.71921060");
-		String payload = jsonObject.toString();
-		System.out.println(payload);
-
-		//Method2 java.net.http.HyypClient
-		HttpClient client2 = HttpClient.newHttpClient();
-		HttpRequest request2 = HttpRequest.newBuilder()
-				.uri(URI.create("https://api.thetvdb.com/login"))
-				.POST(HttpRequest.BodyPublishers.ofString(payload))
-				.header("Content-Type", "application/json")
-				.build();
-
-		client2.sendAsync(request2, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenAccept(DataStored::savePreferencekey)
+		.thenApply(MainController::statusTMDB)
 		.join();
 
 	}
-	 */
-	//
+
+	//Send info to TMDB API to get a Response
 	public static void getSearchMovie(String name, int year){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();

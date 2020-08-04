@@ -74,6 +74,7 @@ public class OperationTmdb {
 		
 			
 		}
+		//
 		public void breakFileName(String name){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 			System.out.println("--Inside Break File Name--");
@@ -110,7 +111,7 @@ public class OperationTmdb {
 			}
 
 		}
-		
+		//
 		public static String responseMovieId(String responseBody){	
 			System.out.println(responseBody);
 			if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
@@ -323,15 +324,6 @@ public class OperationTmdb {
 
 
 
-
-		
-		public static String test(String responseBody){
-			System.out.println(responseBody);
-			return null;
-			
-		}
-		
-		
 		
 		//Remove character that Windows don't let files name have.
 		public static String formatName_Windows(String newName){

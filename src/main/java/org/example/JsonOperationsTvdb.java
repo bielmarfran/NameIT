@@ -10,8 +10,8 @@ public class JsonOperationsTvdb {
 	
 	//Try to connect to the Api with the stored Api key.
 	public static void checkConnection(){
+		System.out.println("checkConnectionTVDB");
 		String keynow = DataStored.readPreferencekeyTvdb();
-
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create("https://api.thetvdb.com/refresh_token"))
@@ -21,7 +21,7 @@ public class JsonOperationsTvdb {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::statusCode)
-		.thenApply(MainController::status)
+		.thenApply(MainController::statusTVDB)
 		.join();
 
 

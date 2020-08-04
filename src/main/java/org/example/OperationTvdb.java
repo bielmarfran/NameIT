@@ -64,7 +64,6 @@ public class OperationTvdb {
 	
 	
 	//Get info from PrimaryController to use in the logic;
-
 	public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
 		System.out.println("--Inside setInfo--");
 		controlArrayListEpisode=x;
@@ -79,8 +78,7 @@ public class OperationTvdb {
 	
 		
 	}
-	//
-	
+	//	
 	public void breakFileName(String name){
 		//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 		System.out.println("--Inside Break File Name--");
@@ -115,7 +113,7 @@ public class OperationTvdb {
 		}
 
 	}
-	
+	//
 	public static String responseSeriesId(String responseBody){		
 		if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 			System.out.println("Resource not found");
@@ -299,16 +297,18 @@ public class OperationTvdb {
 					}else {
 						item.setError("04");	
 						System.out.println("Error");
+						
 
 					}
 				}
 			}else{
 				System.out.println("File name Empty after part used for id reconition");
-				item.setError("04");				
+				item.setError("04");	
+				x=10;
 			}
 		}
 
-		if(control_season==0){
+		if(control_season==0 && !(item.getError().equals("04"))){
 			check_absolute(test);
 		}
 	}
@@ -479,7 +479,7 @@ public class OperationTvdb {
 					}
 
 					if(absolutePath==null) {
-						System.out.println("Error aldlasaasasa");	
+						System.out.println("The path where the file will be saved is empth");	
 						item.setError("08");
 					}else {
 						if(checkboxSeries_value  && !checkboxSeason_value ){

@@ -102,6 +102,7 @@ public class DataStored {
 		Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
 
 		if(keyValue==String.valueOf(401)){
+			MainController.statusAlert("TVDB");
 			MainController.setControl_circle(2);
 		}else{
 			keyTvdb="";
