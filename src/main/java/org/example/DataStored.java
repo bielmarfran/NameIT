@@ -85,6 +85,18 @@ public class DataStored {
 		}else {
 
 		}
+		if(config.getProperty("Movie") ==null){
+			config.setProperty("Movie", "Name (Year)");
+
+		}else {
+
+		}
+		if(config.getProperty("Series") ==null){
+			config.setProperty("Series", "Name.SeasonEpisode");
+
+		}else {
+
+		}
 
 		try {
 			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
@@ -178,7 +190,7 @@ public class DataStored {
 
     	return config.getProperty("Language");
     }
-    //Save the Language Properties from config.properties.
+    //Save the Language Properties to config.properties.
     public static void propertiesSetLanguage(String newLanguage) {
     	System.out.println("Dentro propertiesSetLanguage");
     	config = new Properties();
@@ -207,7 +219,7 @@ public class DataStored {
 			e.printStackTrace();
 		}
     }
-    
+  
     //Get the Mode Properties from config.properties.
     public static String propertiesGetMode() {
     	config = new Properties();
@@ -227,7 +239,7 @@ public class DataStored {
 
     	return config.getProperty("Mode");
     }
-    //Save the Mode Properties from config.properties.
+    //Save the Mode Properties to config.properties.
     public static void propertiesSetMode(String newMode) {
     	System.out.println("Dentro propertiesSetMode");
     	config = new Properties();
@@ -257,9 +269,108 @@ public class DataStored {
 		}
     }
     
-    //Save the Api Key Used for TMDB
+    //-----------
+    //Get the Movie Name Scheme Properties from config.properties.
+    public static String propertiesGetMovieScheme() {
+    	config = new Properties();
+    	FileInputStream fis;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			//System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	System.out.println(config.getProperty("Movie"));
+
+    	return config.getProperty("Movie");
+    	
+    }
+    //Save theMovie Name Scheme Properties to config.properties.
+    public static void propertiesMovieScheme(String newMovie) {
+    	System.out.println("Dentro propertiesSetMode");
+    	config = new Properties();
+    	FileInputStream fis;
+    	//FileOutputStream fisout;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	//System.out.println(config.getProperty("Language"));
+    	//config.remove("Language");
+    	config.setProperty("Movie", newMovie);
+    	try {
+			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+    }
+    //Get the Series Name Scheme Properties from config.properties.
+    public static String propertiesGetSeriesScheme() {
+    	config = new Properties();
+    	FileInputStream fis;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			//System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	System.out.println(config.getProperty("Series"));
+
+    	return config.getProperty("Series");
+    	
+    }
+    //Save theMovie Name Scheme Properties to config.properties.
+    public static void propertiesSeriesScheme(String newSeries) {
+    	System.out.println("Dentro propertiesSetMode");
+    	config = new Properties();
+    	FileInputStream fis;
+    	//FileOutputStream fisout;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	//System.out.println(config.getProperty("Language"));
+    	//config.remove("Language");
+    	config.setProperty("Series", newSeries);
+    	try {
+			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
     
-    	public static void savePreferencekeyTmdb(String keyValue) {
+    //Save the Api Key Used for TMDB
+    public static void savePreferencekeyTmdb(String keyValue) {
     	Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
 
     	if(keyValue==String.valueOf(401)){

@@ -40,6 +40,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.net.URL;
@@ -223,7 +224,7 @@ public class MainController {
 		renameMenuLanguage();
 		
 	}
-	 */
+	
 	public void menuItemPt(javafx.event.ActionEvent actionEvent) {
 		DataStored.propertiesSetLanguage("pt");
 		renameMenuLanguage();
@@ -249,6 +250,7 @@ public class MainController {
 		renameMenuLanguage();
 		
 	}
+	 */
 	//
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
@@ -259,7 +261,18 @@ public class MainController {
 	        Stage stage = new Stage();	
 	        stage.setTitle("Configuration");
 	        stage.setScene(scene);
+	        //stage.setOnHidden(e -> ConfiguraionController.shutdown());
+	        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+	    		@Override
+	    		public void handle(WindowEvent WINDOW_CLOSE_REQUEST) {
+	    			//stage.hide();
+	    			ConfiguraionController.shutdown();
+	    		}
+	    	});
+	      
 	        stage.showAndWait();
+	        
 	       
       
 		} catch (IOException e) {

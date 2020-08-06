@@ -19,11 +19,7 @@ public class OperationTvdb {
 	public static ArrayList<String> extension = new ArrayList<>();
 	//File name garbage that makes it difficult to identify the episode
 	public static ArrayList<String> filterList = new ArrayList<>();
-	//Array where all Episodes object are stored.
-	//private ArrayList<Episode> episodeList = new  ArrayList<>();
 	//
-	//private ArrayList<Episode> episodeListError = new  ArrayList<>();
-	//Control variable to always access the right Episode
 	private static Integer controlArrayListEpisode=0;
 	//Variable where the File name is store in char block's to send one at the time to the Api.
 	private static String[] namesBlocks;
@@ -40,8 +36,6 @@ public class OperationTvdb {
 	private static Integer controlNameBlock=0;
 	//Local Episode Variable used during the logic in the class
 	private static Item item = new Item();
-	//Call for the Service Class, that good part of the program logic will run on.
-	//private Service<Void> backgroundTaks;
 	//Store the value of textFieldFolder
 	private static String textFieldFolder_value;
 	//Store the value of checkboxSeries
@@ -51,16 +45,11 @@ public class OperationTvdb {
 	//Store the value of checkboxFolder
 	private static boolean checkboxFolder_value;
 	//
-	//private static final String DEFAULT_CONTROL_INNER_BACKGROUND = "derive(-fx-base,80%)";
-	//
-	//private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
-	//
 	private static ArrayList<String> exceptions = new ArrayList<String>();
 	//
 	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 	//
-	//private static Integer enter=0;
-	//
+
 	
 	
 	//Get info from PrimaryController to use in the logic;
@@ -134,6 +123,7 @@ public class OperationTvdb {
 					item.setId(album.getInt("id"));
 					item.setName(album.getString("seriesName"));
 					//JsonOperations.jsonGetSeriesName(album.getInt("id"));
+					System.out.println("Valor de ResposndBody -- "+responseBody );
 					getSeason();
 					controlBreakFile =1;
 

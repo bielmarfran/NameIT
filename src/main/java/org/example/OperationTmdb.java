@@ -17,11 +17,7 @@ public class OperationTmdb {
 		public static ArrayList<String> extension = new ArrayList<>();
 		//File name garbage that makes it difficult to identify the episode
 		public static ArrayList<String> filterList = new ArrayList<>();
-		//Array where all Episodes object are stored.
-		//private ArrayList<Episode> episodeList = new  ArrayList<>();
 		//
-		//private ArrayList<Episode> episodeListError = new  ArrayList<>();
-		//Control variable to always access the right Episode
 		private static Integer controlArrayListEpisode=0;
 		//Variable where the File name is store in char block's to send one at the time to the Api.
 		private static String[] namesBlocks;
@@ -49,15 +45,9 @@ public class OperationTmdb {
 		//Store the value of checkboxFolder
 		private static boolean checkboxFolder_value;
 		//
-		//private static final String DEFAULT_CONTROL_INNER_BACKGROUND = "derive(-fx-base,80%)";
-		//
-		//private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
-		//
 		private static ArrayList<String> exceptions = new ArrayList<String>();
 		//
 		private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
-		//
-		//private static Integer enter=0;
 		//
 		
 		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
