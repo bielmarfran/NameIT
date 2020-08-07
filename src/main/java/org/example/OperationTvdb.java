@@ -122,6 +122,9 @@ public class OperationTvdb {
 					JSONObject album = albums.getJSONObject(0);
 					item.setId(album.getInt("id"));
 					item.setName(album.getString("seriesName"));
+					int year = Integer.valueOf(album.getString("firstAired").substring(0,4));
+					item.setYear(year);
+			
 					//JsonOperations.jsonGetSeriesName(album.getInt("id"));
 					System.out.println("Valor de ResposndBody -- "+responseBody );
 					getSeason();
@@ -198,7 +201,10 @@ public class OperationTvdb {
 
 					JSONObject album = albums.getJSONObject(0);
 					item.setId(album.getInt("id"));
-					JsonOperationsTvdb.jsonGetSeriesName(album.getInt("id"));
+					int year = Integer.valueOf(album.getString("firstAired").substring(0,4));
+					item.setYear(year);
+
+					JsonOperationsTvdb.jsonGetSeriesName(album.getInt("id"));				
 					item.setError("");
 					getSeason();
 					controlBreakFileSlug=0;
@@ -440,13 +446,15 @@ public class OperationTvdb {
 					album.getInt("airedSeason");
 					album.getInt("airedEpisodeNumber");
 					album.getString("episodeName");
-					System.out.println("Test Value of Season ---"+album.getInt("airedSeason"));
+					
 					//End in sorting in the json data
-					System.out.println(name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+".pdf");
+					
 					//Renaming the file to new name
 					File f = item.getOriginalFile();
-					System.out.println(f.getAbsolutePath());
-					String newName = name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+item.getOriginalName().substring(item.getOriginalName().lastIndexOf("."));
+					//System.out.println(f.getAbsolutePath());
+					//String newName = name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+item.getOriginalName().substring(item.getOriginalName().lastIndexOf("."));
+					String newName = nameScheme(album.getInt("airedSeason"),album.getInt("airedEpisodeNumber"),album.getString("episodeName"),item.getOriginalName().substring(item.getOriginalName().lastIndexOf(".")),album.getInt("absoluteNumber"));
+					//System.out.println(nameScheme(album.getInt("airedSeason"),album.getInt("airedEpisodeNumber"),album.getString("episodeName"),item.getOriginalName().substring(item.getOriginalName().lastIndexOf("."))));
 					//Removing Characters that Windows dont let name files have
 					newName = formatName_Windows(newName);
 					name = formatName_Windows(name);
@@ -455,7 +463,7 @@ public class OperationTvdb {
 
 					System.out.println("Name Middle Renaming ---"+item.getName());
 					//End Removing Characters that Windows don't let name files have
-					System.out.println(name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+".pdf");
+					
 					String absolutePath;
 					if(checkboxFolder_value){
 						if(textFieldFolder_value==null) {
@@ -561,7 +569,67 @@ public class OperationTvdb {
 		return null;
 	}
 
+	//
+	public static String nameScheme(Integer season, Integer episode, String episodeName, String ext,Integer absolute) {
+		String scheme = DataStored.propertiesGetSeriesScheme();
+		scheme = scheme.replace("Name", item.getName());
+		//Year Rotine
+		if(isDate(item.getName())==null) {
+			scheme = scheme.replace("Year", String.valueOf(item.getYear()));
+		}else {
+			if(isDate(item.getName()).equals(String.valueOf(item.getYear()))) {
+				scheme = scheme.replace("Year", "");
+			}else {
+				scheme = scheme.replace("Year", String.valueOf(item.getYear()));
+			}
+		}
+		
+	
+		scheme  = scheme .replace("Season", season.toString());
+		scheme  = scheme .replace("Episode", episode.toString());
+		scheme  = scheme .replace("EPN", episodeName);
+		scheme  = scheme .replace("Absolute", absolute.toString());
+		scheme =scheme+ext;
+					
+		return scheme;
+	}
+	//
+	public static String isDate(String newName) {
+		String date ="";
+		for(int x=0;x<newName.length();x++) {
+			if(isNumeric(newName.substring(x,x+1))) {
+				date= date+newName.charAt(x);
+			}
+		}
+		System.out.println(date);
+		if(date.length()==4) {
+			String min = "1800";
+			//Date max = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+			Date dmin = null;
+			Date dmax =  new Date();
+			Date dcheck = null;
+			try {
+				dcheck =sdf.parse(date);
+				dmin = sdf.parse(min);
+				//dmax= sdf.format(max);					
+				if(dcheck.after(dmin) && dcheck.before(dmax) ) {
+					System.out.println(dcheck);
+					newName = newName.replace(date, "");
+					//item.setYear(Integer.valueOf(date));
+					newName = String.valueOf(Integer.valueOf(date));
+					return newName;
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
+		}
+		return null;
+
+	}
+	
 	//Remove character that Windows don't let files name have.
 	public static String formatName_Windows(String newName){
 

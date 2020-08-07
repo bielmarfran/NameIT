@@ -152,7 +152,9 @@ public class OperationTmdb {
 		public static String renameFileCreateDirectory(){
 			System.out.println("Test Error -- "+item.getError());
 			String name = item.getName();
-			String newName =  item.getName()+" ("+item.getYear()+")";
+			
+			//String newName =  item.getName()+" ("+item.getYear()+")";
+			String newName = nameScheme();
 			//Removing Characters that Windows dont let name files have
 			File f = item.getOriginalFile();
 			String exetention = getExtension(f.getName());
@@ -235,7 +237,8 @@ public class OperationTmdb {
 			String year = value.substring(1,value.indexOf("-"));
 			System.out.println("year"+year);
 			System.out.println("name"+name);
-			String newName =  name+" ("+year+")";
+			//String newName =  name+" ("+year+")";
+			String newName = nameScheme(name,year);
 			
 
 			
@@ -314,7 +317,22 @@ public class OperationTmdb {
 
 
 
-		
+		//
+		public static String nameScheme() {
+			String scheme = DataStored.propertiesGetMovieScheme();
+			scheme = scheme.replace("Name", item.getName());
+			scheme = scheme.replace("Year", String.valueOf(item.getYear()));
+						
+			return scheme;
+		}
+		//
+		public  String nameScheme(String name,String year) {
+			String scheme = DataStored.propertiesGetMovieScheme();
+			scheme = scheme.replace("Name", name);
+			scheme = scheme.replace("Year", year);
+						
+			return scheme;
+		}
 		//Remove character that Windows don't let files name have.
 		public static String formatName_Windows(String newName){
 

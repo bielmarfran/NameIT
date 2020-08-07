@@ -869,12 +869,21 @@ public class MainController {
 						JSONArray options =  new JSONArray(renamingListError.get(pageIndex).getOptionsList());
 						Text.getItems().add(renamingListError.get(pageIndex).getOriginalName());
 						Text.getItems().add("Double click if you find the correct information");
-						for(int x =0;x<options.length();x++) {
-							
-							JSONObject op = options.getJSONObject(x);
-							String value ="Title - "+op.getString("title") + " | Year - "+op.getString("release_date")+ " | ID - "+op.getInt("id");
-							Text.getItems().add(value);
+						String mode = DataStored.propertiesGetMode(); 
+						if(mode.equals("Movies")) {
+							for(int x =0;x<options.length();x++) {							
+								JSONObject op = options.getJSONObject(x);
+								String value ="Title - "+op.getString("title") + " | Year - "+op.getString("release_date")+ " | ID - "+op.getInt("id");
+								Text.getItems().add(value);
+							}	
+						}else {
+							for(int x =0;x<options.length();x++) {							
+								JSONObject op = options.getJSONObject(x);
+								String value ="Title - "+op.getString("seriesName") + " | Year - "+op.getString("firstAired")+ " | ID - "+op.getInt("id");
+								Text.getItems().add(value);
+							}	
 						}
+						
 					}else {
 						errorDisplay(renamingListError.get(pageIndex).getError(),pageIndex,renamingListError.get(pageIndex).getOriginalName(),Text);
 
@@ -882,8 +891,6 @@ public class MainController {
 				
 
 			}
-
-		
 			EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
 				@Override 
 				public void handle(javafx.scene.input.MouseEvent e) { 
@@ -896,10 +903,15 @@ public class MainController {
 
 					}
 				} 
-			}; 
-			if(Text.getItems().get(1).equals("Double click if you find the correct information")) {
-				Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
+			};
+		
+			
+			if(Text.getItems().size()>1) {
+				if(Text.getItems().get(1).equals("Double click if you find the correct information")) {
+					Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
+				}
 			}
+			
 			
 			Label label2 = new Label("Main content of the page ...");
 			clearList();

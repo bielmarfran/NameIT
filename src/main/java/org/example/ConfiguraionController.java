@@ -155,11 +155,15 @@ public class ConfiguraionController {
 		String year = "2014";
 		String season = "01";
 		String episode = "01";
+		String episodeName = "Pilot";
+		String absolute = "01";
 		String value = TextFieldSeries.getText();
 		value = value.replace("Name", name);
 		value = value.replace("Year", year);
 		value = value.replace("Season", season);
 		value = value.replace("Episode", episode);
+		value = value.replace("EPN", episodeName);
+		value = value.replace("Absolute", absolute);
 		LabelSeriesExemple.setText(value);
 
 	}

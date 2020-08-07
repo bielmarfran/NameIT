@@ -92,7 +92,7 @@ public class DataStored {
 
 		}
 		if(config.getProperty("Series") ==null){
-			config.setProperty("Series", "Name.SeasonEpisode");
+			config.setProperty("Series", "Name.SSeasonEEpisode - EpisodeName");
 
 		}else {
 

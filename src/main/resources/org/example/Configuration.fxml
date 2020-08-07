@@ -24,26 +24,26 @@
       <ComboBox fx:id="ComboBoxLanguageDataBase" layoutX="38.0" layoutY="113.0" prefWidth="150.0" promptText="--Deafult--" />
       <Label layoutX="282.0" layoutY="79.0" lineSpacing="1.0" text="If the Database dont have the information on the &#10;select langague, it will return in English" textAlignment="CENTER" />
       <Separator layoutY="152.0" prefHeight="3.0" prefWidth="640.0" />
-      <Separator layoutX="-2.0" layoutY="270.0" prefHeight="3.0" prefWidth="640.0" />
+      <Separator layoutX="-2.0" layoutY="283.0" prefHeight="3.0" prefWidth="640.0" />
       <Label layoutX="27.0" layoutY="167.0" text="Naming Scheme for Movies">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="27.0" layoutY="281.0" text="Naming Scheme for Series">
+      <Label layoutX="27.0" layoutY="301.0" text="Naming Scheme for Series">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Separator layoutX="-2.0" layoutY="397.0" prefHeight="3.0" prefWidth="640.0" />
-      <TextField fx:id="TextFieldSeries" layoutX="27.0" layoutY="306.0" prefHeight="25.0" prefWidth="287.0" />
-      <Separator layoutX="376.0" layoutY="152.0" orientation="VERTICAL" prefHeight="246.0" prefWidth="6.0" />
-      <Label layoutX="414.0" layoutY="159.0" text="Help">
+      <Separator layoutX="-14.0" layoutY="452.0" prefHeight="3.0" prefWidth="640.0" />
+      <TextField fx:id="TextFieldSeries" layoutX="19.0" layoutY="338.0" prefHeight="25.0" prefWidth="287.0" />
+      <Separator layoutX="376.0" layoutY="152.0" orientation="VERTICAL" prefHeight="300.0" prefWidth="0.0" />
+      <Label layoutX="386.0" layoutY="157.0" text="Help">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="414.0" layoutY="283.0" text="Help">
+      <Label layoutX="386.0" layoutY="291.0" text="Help">
          <font>
             <Font size="14.0" />
          </font>
@@ -51,24 +51,27 @@
       <Label layoutX="415.0" layoutY="189.0" text="Name - Movie Name" />
       <Label layoutX="415.0" layoutY="217.0" text="Year - Year Movie has Released" />
       <TextField fx:id="TextFieldMovie" layoutX="27.0" layoutY="194.0" prefHeight="25.0" prefWidth="287.0" />
-      <Label layoutX="415.0" layoutY="310.0" text="Name - Serie Name" />
-      <Label layoutX="415.0" layoutY="331.0" text="Year - Year Movie has Released" />
-      <Label layoutX="415.0" layoutY="375.0" text="Episode - Episode Value" />
-      <Label layoutX="415.0" layoutY="352.0" text="Season - Season Value" />
-      <Label layoutX="24.0" layoutY="408.0" text="* Reserved Windows caracters *, &lt;, &gt;, ?, :, /, \, |, &quot;" />
+      <Label layoutX="423.0" layoutY="308.0" text="Name - Series Name" />
+      <Label layoutX="423.0" layoutY="333.0" text="Year - Year Series has Released" />
+      <Label layoutX="423.0" layoutY="377.0" text="Episode - Episode Number" />
+      <Label layoutX="423.0" layoutY="354.0" text="Season - Season Number" />
+      <Label layoutX="24.0" layoutY="463.0" text="* Reserved Windows caracters *, &lt;, &gt;, ?, :, /, \, |, &quot;" />
       <Label layoutX="28.0" layoutY="224.0" text="Exemple">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="28.0" layoutY="342.0" text="Exemple">
+      <Label layoutX="28.0" layoutY="367.0" text="Exemple">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       <Label fx:id="LabelMovieExemple" layoutX="28.0" layoutY="247.0" text="Exemple Movie" />
-      <Label fx:id="LabelSeriesExemple" layoutX="27.0" layoutY="375.0" text="Exemple Series" />
+      <Label fx:id="LabelSeriesExemple" layoutX="29.0" layoutY="391.0" text="Exemple Series" />
       <Button fx:id="ButtonSaveMovies" layoutX="320.0" layoutY="194.0" mnemonicParsing="false" onAction="#buttonSaveMoviesAction" text="Save" />
-      <Button fx:id="ButtonSaveSeries" layoutX="320.0" layoutY="306.0" mnemonicParsing="false" onAction="#buttonSaveSeriesAction" text="Save" />
+      <Button fx:id="ButtonSaveSeries" layoutX="320.0" layoutY="338.0" mnemonicParsing="false" onAction="#buttonSaveSeriesAction" text="Save" />
+      <Label layoutX="423.0" layoutY="400.0" prefHeight="17.0" prefWidth="202.0" text="Absolute - Absolute Episode Number" />
+      <Label layoutX="19.0" layoutY="426.0" text="* Some Series, such as the Exemple the Year is part of the Name" />
+      <Label layoutX="423.0" layoutY="426.0" prefHeight="17.0" prefWidth="181.0" text="EPN - Episode Name" />
    </children>
 </AnchorPane>
