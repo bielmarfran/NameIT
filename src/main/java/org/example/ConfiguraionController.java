@@ -152,7 +152,7 @@ public class ConfiguraionController {
 	public void showExempleSeriesScheme() {
 
 		String name = "The Flash (2014)";
-		String year = "2014";
+		String year = "";
 		String season = "01";
 		String episode = "01";
 		String episodeName = "Pilot";

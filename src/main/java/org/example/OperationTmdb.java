@@ -227,8 +227,11 @@ public class OperationTmdb {
 		}
 
 		//Last method that takes the response from jsonGetInfoApi, and rename the files.
-		public String renameFileCreateDirectory(Item item){
+		public String renameFileCreateDirectory(Item item,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder){
 			
+			checkboxSeries_value = checkboxSeries;
+			checkboxSeason_value = checkboxSeason;
+			checkboxFolder_value = checkboxFolder;
 			String value = item.getAlternetiveInfo();
 			value = value.replace("Title - ", "");
 			String name = value.substring(0,value.indexOf("|")-1);

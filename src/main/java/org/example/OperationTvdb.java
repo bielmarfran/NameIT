@@ -67,6 +67,78 @@ public class OperationTvdb {
 	
 		
 	}
+	//
+	public void setInfoAlternative(Item item2,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {
+		System.out.println("--Inside setInfoAlternative--");
+		item=item2;
+		checkboxSeries_value = checkboxSeries;
+		checkboxSeason_value = checkboxSeason;
+		checkboxFolder_value = checkboxFolder;
+		//Get the Alternative Value is this String and start Querying it to get data
+		String value = item.getAlternetiveInfo();
+		//Getting The Name of the Series
+		value = value.replace("Title - ", "");
+		String name = value.substring(0,value.indexOf("|")-1);
+		item.setName(name);
+		value = value.replace(name, "");
+		//End Getting Name
+		
+		//Getting the Year
+		value = value.replace("| Year - ", "");
+		String year = value.substring(1,value.indexOf("-"));
+		item.setYear(Integer.valueOf(year));
+		value = value.replace(year , "");
+		//End Getting the Year
+		
+		//Getting the ID
+		value = value.substring(6);
+		value = value.replace("| ID - ", "");
+		System.out.println("Test of Value"+value);		
+		int id = Integer.valueOf(value.substring(1));
+		item.setId(Integer.valueOf(id));
+		System.out.println("| ID - "+item.getId());
+		//End Getting the ID
+		
+		//Check if the Series Has its year in the Name, and remove to only 
+		//leave the Season and Episode Values to the next Part
+		
+		String yearTest = isDate(item.getOriginalName());
+		String nameValue="";
+		System.out.println("teste rTes "+yearTest);	
+		if(yearTest!=null) {
+			System.out.println("Inside IF 1");
+			System.out.println("teste year "+year);
+			System.out.println("teste rTes "+yearTest);	
+			if(year.equals(yearTest)) {
+				System.out.println("Inside IF 2");
+				String namedfdf =  item.getOriginalName();
+				System.out.println("-1-"+namedfdf.lastIndexOf(yearTest));
+				System.out.println("-2-"+item.getOriginalName().substring(namedfdf.indexOf(yearTest)+4));
+				nameValue = item.getOriginalName().substring(namedfdf.indexOf(yearTest)+4);
+			}
+
+		}
+		getSeasonAlternative(nameValue,item);
+		/*
+		 * else {
+
+			String tempName = item.getOriginalName();
+			int count =0;
+			for(int x=0;x<item.getOriginalName().length();x++) {
+				if(isNumeric(String.valueOf(tempName.charAt(x)))) {
+					if(isNumeric(String.valueOf(tempName.charAt(x+1)))) {
+						if(isNumeric(String.valueOf(tempName.charAt(x+2)))) {
+							System.out.println("Test Value of TempName-"+tempName.substring(x));
+
+						}
+					}
+				}
+
+			}
+		}
+		 */
+
+	}
 	//	
 	public void breakFileName(String name){
 		//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
@@ -259,9 +331,6 @@ public class OperationTvdb {
 		for(int x=0;x<size;x++){
 			test= test + namesBlocks[x+controlNameBlock];
 		}
-		if(test.isEmpty()) {
-
-		}
 		System.out.println("Valor test inside season"+test);
 		for(int x=0;x<10;x++){
 			if(!test.isEmpty()) {
@@ -308,7 +377,65 @@ public class OperationTvdb {
 			check_absolute(test);
 		}
 	}
+	//A second getSeason when the information came from Alternative
+	public static void getSeasonAlternative(String value,Item item) {
+		System.out.println("-Inside Season2-");
+		String test ="";
+		if(value.equals("")) {
+			test=item.getOriginalName();
+		}else {
+			test = value;
+		}
+	
+		String season="";
+		int control_season=0;
 
+		System.out.println("Valor test inside season"+test);
+		for(int x=0;x<10;x++){
+			if(!test.isEmpty()) {
+				if(test.contains("s"+x)){
+					int s_index = test.indexOf("s"+x);
+					if(test.length()>1){
+						test = test.substring(s_index+1);
+						s_index=0;
+						while(isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
+							control_season++;
+							season = season+test.substring(s_index,s_index+1);
+							test = test.substring(s_index+1);
+						}
+						if(!isNumeric(test.substring(s_index, s_index + 1))){
+							item.setSeason(season);
+							getEpisode(test,namesBlocks, controlNameBlock);
+							item.setError("");	
+						}
+						if(test.length()==1 && isNumeric(test)){
+							item.setError("05");	
+							season = season+test;
+							control_season++;
+						}else {
+							if(test.length()==1 && !isNumeric(test)){
+								item.setError("04");	
+							}
+
+						}
+					}else {
+						item.setError("04");	
+						System.out.println("Error");
+						
+
+					}
+				}
+			}else{
+				System.out.println("File name Empty after part used for id reconition");
+				item.setError("04");	
+				x=10;
+			}
+		}
+
+		if(control_season==0 && !(item.getError().equals("04"))){
+			check_absolute(test);
+		}
+	}
 	//Sometimes the series is not divided in Seasons, only absolute episode numbers this methods are for that.
 	public static void check_absolute(String test){
 		System.out.println("--Inside Absolute--");
@@ -417,7 +544,6 @@ public class OperationTvdb {
 		}
 
 	}
-
 
 	//Last method that takes the response from jsonGetInfoApi, and rename the files.
 	public static String renameFileCreateDirectory(String responseBody){
@@ -597,7 +723,7 @@ public class OperationTvdb {
 	public static String isDate(String newName) {
 		String date ="";
 		for(int x=0;x<newName.length();x++) {
-			if(isNumeric(newName.substring(x,x+1))) {
+			if(isNumeric(newName.substring(x,x+1)) && date.length()<4) {
 				date= date+newName.charAt(x);
 			}
 		}

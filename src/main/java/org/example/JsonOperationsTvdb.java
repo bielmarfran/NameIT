@@ -53,6 +53,7 @@ public class JsonOperationsTvdb {
 	//
 	public static void getSearchSeries(String name){
 		String keynow = DataStored.readPreferencekeyTvdb();
+		
 		String uri ="https://api.thetvdb.com/search/series?name="+name;
 		String language = DataStored.propertiesGetLanguage();
 		HttpClient client = HttpClient.newHttpClient();
@@ -141,8 +142,8 @@ public class JsonOperationsTvdb {
 
 
 	public static void jsonGetInfoApiAbsolute(Integer id,String absolute_episode) {
-		//System.out.println(id);
-		//System.out.println(absolute_episode);
+		System.out.println("-1-"+id);
+		System.out.println("-2-"+absolute_episode);
 		String keynow = DataStored.readPreferencekeyTvdb();
 		String language = DataStored.propertiesGetLanguage();
 		String uri ="https://api.thetvdb.com/series/"+id+"/episodes/query?absoluteNumber="+absolute_episode;

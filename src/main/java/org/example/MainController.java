@@ -302,7 +302,6 @@ public class MainController {
 			alert.setTitle("Warning Dialog");
 			alert.setHeaderText("Empy Path");
 			alert.setContentText("The path to save your file is empy.");
-
 			alert.showAndWait();
 		}else {
 			if(controlCircle==2) {
@@ -344,24 +343,35 @@ public class MainController {
 							}else {
 								String mode = DataStored.propertiesGetMode(); 
 								if(mode.equals("Series")) {
+									System.out.println("renamingList.size() -- "+renamingList.size());
+									if(renamingList.size()<1) {
+										updateProgress(0.00, 100.00);
+										cancel();
+									}								
 									for(int x=0;x<renamingList.size();x++){		
 										System.out.println("TVDB");
 										OperationTvdb tvdb = new OperationTvdb();
-										controlArrayListEpisode=x;
-										item = renamingList.get(x);
-										controlBreakFile=0;
-										controlBreakFileSlug=0;
-										controlBreakFileSlug2=0;
-										tvdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
-										if(item.getError()==null) {										
-											tvdb.breakFileName(renamingList.get(x).getOriginalName());
-											//breakFileName(episodeList.get(x).getOriginalName());
-										}else {												
-											renamingList.remove(x);
-										}
-										System.out.println("-----------------------------");
-										double max =renamingList.size();
-										updateProgress(x+1, max);
+										
+										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
+											System.out.println("Inside Alternetive TVDB");
+											tvdb.setInfoAlternative(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+										}else {
+											controlArrayListEpisode=x;
+											item = renamingList.get(x);
+											controlBreakFile=0;
+											controlBreakFileSlug=0;
+											controlBreakFileSlug2=0;
+											tvdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+											if(item.getError()==null) {										
+												tvdb.breakFileName(renamingList.get(x).getOriginalName());
+												//breakFileName(episodeList.get(x).getOriginalName());
+											}else {												
+												renamingList.remove(x);
+											}
+											System.out.println("-----------------------------");
+											double max =renamingList.size();
+											updateProgress(x+1, max);
+										}									
 									}
 								}else {
 									System.out.println("renamingList.size() -- "+renamingList.size());
@@ -373,7 +383,7 @@ public class MainController {
 										System.out.println("TMDB");
 										OperationTmdb tmdb = new OperationTmdb();
 										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
-											tmdb.renameFileCreateDirectory(renamingList.get(x));
+											tmdb.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
 										}else {
 											controlArrayListEpisode=x;
 											item = renamingList.get(x);
@@ -597,6 +607,7 @@ public class MainController {
 	//Clear Button Action
 	public void clearALL() {
 		enter=0;
+
 		renamingList.clear();
 		renamingListError.clear();
 		listViewFiles.getItems().clear();
@@ -604,6 +615,7 @@ public class MainController {
 		listViewErrorText.getItems().clear();
 		labelDrop();
 		paginationErrorList.setVisible(false);
+
 	}
 	//Paint the element of the cells red if the renaming process fails
 	public void paintListView(){
@@ -897,10 +909,32 @@ public class MainController {
 					if(e.getClickCount() == 2) {
 						for(int x=0;x<renamingListError.size();x++) {
 						}
-						renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
-						renamingList.add(renamingListError.get(pageIndex));
-						paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
+						if(Text.getSelectionModel().getSelectedIndex()<2) {
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("Warning Dialog");
+							alert.setHeaderText("Wrong Item");
+							alert.setContentText("Select a item with Information.");
+							alert.showAndWait();
+						}else {
+							if(renamingList.size()>0) {
+								for(int x=0;x<renamingList.size();x++) {
+									if(renamingList.get(x).getOriginalName()==renamingListError.get(pageIndex).getOriginalName()) {
+										renamingList.get(x).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
+										paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
+									}else {
+									
+								
+									}
+								}
+							}else {
+								renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
+								renamingList.add(renamingListError.get(pageIndex));
+								paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
+							}
+							
+						}
 
+									
 					}
 				} 
 			};

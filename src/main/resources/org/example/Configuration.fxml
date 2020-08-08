@@ -30,48 +30,48 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="27.0" layoutY="301.0" text="Naming Scheme for Series">
+      <Label layoutX="28.0" layoutY="298.0" text="Naming Scheme for Series">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       <Separator layoutX="-14.0" layoutY="452.0" prefHeight="3.0" prefWidth="640.0" />
-      <TextField fx:id="TextFieldSeries" layoutX="19.0" layoutY="338.0" prefHeight="25.0" prefWidth="287.0" />
+      <TextField fx:id="TextFieldSeries" layoutX="27.0" layoutY="326.0" prefHeight="25.0" prefWidth="287.0" />
       <Separator layoutX="376.0" layoutY="152.0" orientation="VERTICAL" prefHeight="300.0" prefWidth="0.0" />
-      <Label layoutX="386.0" layoutY="157.0" text="Help">
+      <Label layoutX="386.0" layoutY="157.0" prefHeight="20.0" prefWidth="171.0" text="Reserved Scheme Words">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="386.0" layoutY="291.0" text="Help">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="415.0" layoutY="189.0" text="Name - Movie Name" />
-      <Label layoutX="415.0" layoutY="217.0" text="Year - Year Movie has Released" />
+      <Label layoutX="386.0" layoutY="186.0" text="Name - Movie Name" />
+      <Label layoutX="388.0" layoutY="216.0" text="Year - Year Movie has Released" />
       <TextField fx:id="TextFieldMovie" layoutX="27.0" layoutY="194.0" prefHeight="25.0" prefWidth="287.0" />
-      <Label layoutX="423.0" layoutY="308.0" text="Name - Series Name" />
-      <Label layoutX="423.0" layoutY="333.0" text="Year - Year Series has Released" />
-      <Label layoutX="423.0" layoutY="377.0" text="Episode - Episode Number" />
-      <Label layoutX="423.0" layoutY="354.0" text="Season - Season Number" />
+      <Label layoutX="387.0" layoutY="310.0" text="Name - Series Name" />
+      <Label layoutX="387.0" layoutY="332.0" text="Year - Year Series has Released" />
+      <Label layoutX="387.0" layoutY="377.0" text="Episode - Episode Number" />
+      <Label layoutX="387.0" layoutY="353.0" text="Season - Season Number" />
       <Label layoutX="24.0" layoutY="463.0" text="* Reserved Windows caracters *, &lt;, &gt;, ?, :, /, \, |, &quot;" />
       <Label layoutX="28.0" layoutY="224.0" text="Exemple">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="28.0" layoutY="367.0" text="Exemple">
+      <Label layoutX="28.0" layoutY="353.0" text="Exemple">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       <Label fx:id="LabelMovieExemple" layoutX="28.0" layoutY="247.0" text="Exemple Movie" />
-      <Label fx:id="LabelSeriesExemple" layoutX="29.0" layoutY="391.0" text="Exemple Series" />
+      <Label fx:id="LabelSeriesExemple" layoutX="29.0" layoutY="377.0" text="Exemple Series" />
       <Button fx:id="ButtonSaveMovies" layoutX="320.0" layoutY="194.0" mnemonicParsing="false" onAction="#buttonSaveMoviesAction" text="Save" />
-      <Button fx:id="ButtonSaveSeries" layoutX="320.0" layoutY="338.0" mnemonicParsing="false" onAction="#buttonSaveSeriesAction" text="Save" />
-      <Label layoutX="423.0" layoutY="400.0" prefHeight="17.0" prefWidth="202.0" text="Absolute - Absolute Episode Number" />
-      <Label layoutX="19.0" layoutY="426.0" text="* Some Series, such as the Exemple the Year is part of the Name" />
-      <Label layoutX="423.0" layoutY="426.0" prefHeight="17.0" prefWidth="181.0" text="EPN - Episode Name" />
+      <Button fx:id="ButtonSaveSeries" layoutX="320.0" layoutY="326.0" mnemonicParsing="false" onAction="#buttonSaveSeriesAction" text="Save" />
+      <Label layoutX="387.0" layoutY="401.0" prefHeight="17.0" prefWidth="202.0" text="Absolute - Absolute Episode Number" />
+      <Label layoutX="19.0" layoutY="409.0" prefHeight="34.0" prefWidth="338.0" text="* Some Series, such as the Exemple the Year is part of the Name&#10;In this case the Year Special Scheme will be ignored." />
+      <Label layoutX="387.0" layoutY="424.0" prefHeight="17.0" prefWidth="181.0" text="EPN - Episode Name" />
+      <Label layoutX="386.0" layoutY="288.0" prefHeight="20.0" prefWidth="171.0" text="Reserved Scheme Words">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
