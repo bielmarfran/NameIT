@@ -48,8 +48,8 @@ public class OperationTmdb {
 		private static ArrayList<String> exceptions = new ArrayList<String>();
 		//
 		private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
+	
 		//
-		
 		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
 			System.out.println("--Inside setInfo--");
 			controlArrayListEpisode=x;
@@ -145,8 +145,6 @@ public class OperationTmdb {
 			}
 			return null;
 		}
-
-
 
 		//Last method that takes the response from jsonGetInfoApi, and rename the files.
 		public static String renameFileCreateDirectory(){
@@ -317,9 +315,6 @@ public class OperationTmdb {
 			
 			return null;
 		}
-
-
-
 		//
 		public static String nameScheme() {
 			String scheme = DataStored.propertiesGetMovieScheme();
@@ -435,7 +430,7 @@ public class OperationTmdb {
 			}
 			return true;
 		}
-
+		//
 		public static String isDate(String newName) {
 			String date ="";
 			for(int x=0;x<newName.length();x++) {

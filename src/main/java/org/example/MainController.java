@@ -217,40 +217,7 @@ public class MainController {
 
 	}
 	//
-	/*
-	* public void menuItemPtBr(javafx.event.ActionEvent actionEvent) {
-	
-		DataStored.propertiesSetLanguage("pt-br");
-		renameMenuLanguage();
-		
-	}
-	
-	public void menuItemPt(javafx.event.ActionEvent actionEvent) {
-		DataStored.propertiesSetLanguage("pt");
-		renameMenuLanguage();
-		
-	}
-	public void menuItemDE(javafx.event.ActionEvent actionEvent) {
-		DataStored.propertiesSetLanguage("de");
-		renameMenuLanguage();
-		
-	}
-	public void menuItemEN(javafx.event.ActionEvent actionEvent) {
-		DataStored.propertiesSetLanguage("en");
-		renameMenuLanguage();
-		
-	}
-	public void menuItemES(javafx.event.ActionEvent actionEvent) {
-		DataStored.propertiesSetLanguage("es");
-		renameMenuLanguage();
-		
-	}
-	public void menuItemFR(javafx.event.ActionEvent actionEvent) {
-		DataStored.propertiesSetLanguage("fr");
-		renameMenuLanguage();
-		
-	}
-	 */
+
 	//
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
@@ -354,7 +321,8 @@ public class MainController {
 										
 										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
 											System.out.println("Inside Alternetive TVDB");
-											tvdb.setInfoAlternative(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+											item = renamingList.get(x);
+											tvdb.setInfoAlternative(item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
 										}else {
 											controlArrayListEpisode=x;
 											item = renamingList.get(x);
@@ -395,7 +363,7 @@ public class MainController {
 												tmdb.breakFileName(renamingList.get(x).getOriginalName());
 												//breakFileName(episodeList.get(x).getOriginalName());
 											}else {
-												System.out.println("Dentro de remove 11212");
+												System.out.println("II");
 												renamingList.remove(x);
 											}
 
@@ -429,8 +397,15 @@ public class MainController {
 				}
 				for(x=0;x<size;x++){
 					String n =renamingList.get(x).getError();
-					
+					System.out.println("Teste Error - "+item.getOriginalName());
+					System.out.println("Teste Error - "+item.getError());
+					//
+					System.out.println("Teste Error - "+renamingList.get(x).getOriginalName());
+					System.out.println("Teste Error - "+renamingList.get(x).getError());
+					System.out.println("Teste Error - "+renamingList.get(x).getName());
+					System.out.println("Teste Error - "+renamingList.get(x).getYear());
 					if(n.isEmpty()) {
+					
 						System.out.println("---Inside n.isEmpty()---");
 						listViewFilesRenamed.getItems().add(renamingList.get(x).getName());
 						int count=0;
@@ -447,8 +422,7 @@ public class MainController {
 					}else {		
 						//Add the item with a positive Error Value to the renamingListError.
 						renamingListError.add(renamingList.get(x));
-						//Display the error in the UI,passing the Error value as n, and the position as x.
-						//errorDisplay(n,x);
+
 
 					}
 				}
@@ -910,21 +884,29 @@ public class MainController {
 						for(int x=0;x<renamingListError.size();x++) {
 						}
 						if(Text.getSelectionModel().getSelectedIndex()<2) {
+							//Show A Alert PopUp if the user double click a Item in the ListView thats don't have Alternative Info.
 							Alert alert = new Alert(AlertType.WARNING);
 							alert.setTitle("Warning Dialog");
 							alert.setHeaderText("Wrong Item");
 							alert.setContentText("Select a item with Information.");
 							alert.showAndWait();
+							//End PopUp
 						}else {
+							//Rotine to make sure that the User can change 
 							if(renamingList.size()>0) {
+								int count=0;
 								for(int x=0;x<renamingList.size();x++) {
 									if(renamingList.get(x).getOriginalName()==renamingListError.get(pageIndex).getOriginalName()) {
+										count++;
 										renamingList.get(x).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 										paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
-									}else {
-									
-								
 									}
+								}
+								if(count==0) {
+									renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
+									renamingList.add(renamingListError.get(pageIndex));
+									paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
+									count=0;
 								}
 							}else {
 								renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());

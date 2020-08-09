@@ -52,7 +52,7 @@ public class OperationTvdb {
 
 	
 	
-	//Get info from PrimaryController to use in the logic;
+	//Get info from MainController to use in the logic;
 	public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
 		System.out.println("--Inside setInfo--");
 		controlArrayListEpisode=x;
@@ -67,13 +67,16 @@ public class OperationTvdb {
 	
 		
 	}
-	//
+	//Get info from MainController to use in the logic in the Alternative Route.
 	public void setInfoAlternative(Item item2,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {
 		System.out.println("--Inside setInfoAlternative--");
+		
 		item=item2;
+		
 		checkboxSeries_value = checkboxSeries;
 		checkboxSeason_value = checkboxSeason;
 		checkboxFolder_value = checkboxFolder;
+		fillFilter();
 		//Get the Alternative Value is this String and start Querying it to get data
 		String value = item.getAlternetiveInfo();
 		//Getting The Name of the Series
@@ -102,7 +105,7 @@ public class OperationTvdb {
 		//Check if the Series Has its year in the Name, and remove to only 
 		//leave the Season and Episode Values to the next Part
 		
-		String yearTest = isDate(item.getOriginalName());
+		String yearTest = isYear(item.getOriginalName());
 		String nameValue="";
 		System.out.println("teste rTes "+yearTest);	
 		if(yearTest!=null) {
@@ -119,24 +122,7 @@ public class OperationTvdb {
 
 		}
 		getSeasonAlternative(nameValue,item);
-		/*
-		 * else {
 
-			String tempName = item.getOriginalName();
-			int count =0;
-			for(int x=0;x<item.getOriginalName().length();x++) {
-				if(isNumeric(String.valueOf(tempName.charAt(x)))) {
-					if(isNumeric(String.valueOf(tempName.charAt(x+1)))) {
-						if(isNumeric(String.valueOf(tempName.charAt(x+2)))) {
-							System.out.println("Test Value of TempName-"+tempName.substring(x));
-
-						}
-					}
-				}
-
-			}
-		}
-		 */
 
 	}
 	//	
@@ -190,6 +176,7 @@ public class OperationTvdb {
 				responseBody = responseBody.substring(0,(responseBody.lastIndexOf("}")));
 				JSONArray albums =  new JSONArray(responseBody);
 				if(albums.length()==1){
+					System.out.println("Inside Erroe 1");
 					item.setError("");
 					JSONObject album = albums.getJSONObject(0);
 					item.setId(album.getInt("id"));
@@ -213,7 +200,7 @@ public class OperationTvdb {
 		}
 		return null;
 	}
-
+	//
 	public void breakFileNameSlug(String name){
 		name = name+" x x";
 		System.out.println(name);
@@ -245,7 +232,7 @@ public class OperationTvdb {
 			item.setError("02");
 		}
 	}
-
+	//
 	public static String responseSeriesIdSlug(String responseBody){
 		if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 
@@ -347,6 +334,7 @@ public class OperationTvdb {
 						if(!isNumeric(test.substring(s_index, s_index + 1))){
 							item.setSeason(season);
 							getEpisode(test,namesBlocks, controlNameBlock);
+							System.out.println("");
 							item.setError("");	
 						}
 						if(test.length()==1 && isNumeric(test)){
@@ -406,6 +394,7 @@ public class OperationTvdb {
 						if(!isNumeric(test.substring(s_index, s_index + 1))){
 							item.setSeason(season);
 							getEpisode(test,namesBlocks, controlNameBlock);
+							System.out.println("sdsdsds");
 							item.setError("");	
 						}
 						if(test.length()==1 && isNumeric(test)){
@@ -463,20 +452,25 @@ public class OperationTvdb {
 				if(test.length()==1 &&isNumeric(test)){
 					absolute_episode = absolute_episode + test;
 					item.setAbsolute_episode(absolute_episode);
-					JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
 					item.setError("");	
+					JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);			
+				
 				}else{
 					item.setAbsolute_episode(absolute_episode);
-					JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
 					item.setError("");	
+					JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
+			
+					
 				}
 			}else{
 				if(!absolute_episode.isEmpty()){
 					item.setAbsolute_episode(absolute_episode);
-					JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
 					item.setError("");	
+					JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
+		
+			
 				}else {
-					System.out.println("No Absolute Episode Found");
+					System.out.println("No Absolute Episode Found4");
 					item.setError("07");	
 				}
 
@@ -485,8 +479,9 @@ public class OperationTvdb {
 			if(test.length()==1 &&isNumeric(test)){
 				absolute_episode = test;
 				item.setAbsolute_episode(absolute_episode);
-				JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
+				System.out.println("No Absolute Episode Found5");
 				item.setError("");	
+				JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);				
 			}else{
 				System.out.println("No Absolute Episode Found");
 				item.setError("07");	
@@ -554,8 +549,8 @@ public class OperationTvdb {
 		}else{
 			if(responseBody.contains("{\"Error\":\"")){
 				item.setError("06");
-
-				System.out.println(responseBody);
+				System.out.println("API Error Response 2: "+item.getError());
+				System.out.println("API Error Response : "+responseBody);
 
 			}else{
 				if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
@@ -564,32 +559,31 @@ public class OperationTvdb {
 				}else {
 					String name = item.getName();
 					System.out.println("Name Start Renaming ---"+name);
-					
-					//Sorting in the json data
+
+					//Sorting in the Json Data
 					JSONObject album = new JSONObject(responseBody);
 					JSONArray albums =  album.getJSONArray("data");
 					album = albums.getJSONObject(0);
 					album.getInt("airedSeason");
 					album.getInt("airedEpisodeNumber");
 					album.getString("episodeName");
-					
-					//End in sorting in the json data
-					
+					//End in sorting in the Json Data
+
 					//Renaming the file to new name
-					File f = item.getOriginalFile();
-					//System.out.println(f.getAbsolutePath());
-					//String newName = name+" S"+album.getInt("airedSeason")+"E"+ album.getInt("airedEpisodeNumber")+" - "+album.getString("episodeName")+item.getOriginalName().substring(item.getOriginalName().lastIndexOf("."));
-					String newName = nameScheme(album.getInt("airedSeason"),album.getInt("airedEpisodeNumber"),album.getString("episodeName"),item.getOriginalName().substring(item.getOriginalName().lastIndexOf(".")),album.getInt("absoluteNumber"));
-					//System.out.println(nameScheme(album.getInt("airedSeason"),album.getInt("airedEpisodeNumber"),album.getString("episodeName"),item.getOriginalName().substring(item.getOriginalName().lastIndexOf("."))));
+					File f = item.getOriginalFile();				
+					String newName = nameScheme(album.getInt("airedSeason"),album.getInt("airedEpisodeNumber"),
+							album.getString("episodeName"),item.getOriginalName().substring(item.getOriginalName().lastIndexOf(".")),album.getInt("absoluteNumber"));
+					//End Renaming the file 
+	
 					//Removing Characters that Windows dont let name files have
-					newName = formatName_Windows(newName);
-					name = formatName_Windows(name);
+					newName = formatNameWindows(newName);
+					name = formatNameWindows(name);
 					//Set the final name
 					item.setName(newName);
 
 					System.out.println("Name Middle Renaming ---"+item.getName());
 					//End Removing Characters that Windows don't let name files have
-					
+
 					String absolutePath;
 					if(checkboxFolder_value){
 						if(textFieldFolder_value==null) {
@@ -661,7 +655,7 @@ public class OperationTvdb {
 
 							Boolean x =f.renameTo(new File(newPath));
 							if(x){
-								System.out.println("Rename was ok");
+								System.out.println("Rename was ok");							
 								item.setError("");
 							}else{
 								System.out.println("Sorry couldnt create specified directory");
@@ -695,15 +689,15 @@ public class OperationTvdb {
 		return null;
 	}
 
-	//
+	//Get Series Scheme for Properties and format the File Name according to stored schematics.
 	public static String nameScheme(Integer season, Integer episode, String episodeName, String ext,Integer absolute) {
 		String scheme = DataStored.propertiesGetSeriesScheme();
 		scheme = scheme.replace("Name", item.getName());
 		//Year Rotine
-		if(isDate(item.getName())==null) {
+		if(isYear(item.getName())==null) {
 			scheme = scheme.replace("Year", String.valueOf(item.getYear()));
 		}else {
-			if(isDate(item.getName()).equals(String.valueOf(item.getYear()))) {
+			if(isYear(item.getName()).equals(String.valueOf(item.getYear()))) {
 				scheme = scheme.replace("Year", "");
 			}else {
 				scheme = scheme.replace("Year", String.valueOf(item.getYear()));
@@ -719,8 +713,8 @@ public class OperationTvdb {
 					
 		return scheme;
 	}
-	//
-	public static String isDate(String newName) {
+	//Check the String for Numeric Values and then check is its a Year between 1800 and the system date.
+	public static String isYear(String newName) {
 		String date ="";
 		for(int x=0;x<newName.length();x++) {
 			if(isNumeric(newName.substring(x,x+1)) && date.length()<4) {
@@ -756,22 +750,7 @@ public class OperationTvdb {
 
 	}
 	
-	//Remove character that Windows don't let files name have.
-	public static String formatName_Windows(String newName){
 
-		newName = newName.replace("<","");
-		newName = newName.replace(">","");
-		newName = newName.replace("*","");
-		newName = newName.replace("?","");
-		newName = newName.replace("/","");
-		newName = newName.replace("|","");
-		newName = newName.replace("\"","");
-		newName = newName.replace(String.valueOf('"'),"");
-		newName = newName.replace(":","");
-
-		return newName;
-
-	}
 	//Remove unwanted special character and names that only disturb the logic to find the episode
 	public String formatName(String name){
 		exceptions =DataStored.readExceptions();
@@ -829,9 +808,24 @@ public class OperationTvdb {
 		return name;
 
 	}
+	//Remove character that Windows don't let files name have.
+	public static String formatNameWindows(String newName){
 
+		newName = newName.replace("<","");
+		newName = newName.replace(">","");
+		newName = newName.replace("*","");
+		newName = newName.replace("?","");
+		newName = newName.replace("/","");
+		newName = newName.replace("|","");
+		newName = newName.replace("\"","");
+		newName = newName.replace(String.valueOf('"'),"");
+		newName = newName.replace(":","");
+
+		return newName;
+
+	}
+	//Examples of frequently used words that hinder program logic.
 	public void fillFilter() {
-		
 		//Names that only disturb the logic to find the episode
 		filterList.add("horriblesubs");
 		filterList.add("subproject");
@@ -841,9 +835,8 @@ public class OperationTvdb {
 		filterList.add("hdtv");
 		filterList.add("animetc");
 		//End Names that only disturb the logic to find the episode
-
 	}
-	//Simple Method to check is a given character is numeric
+	//Simple Method to check is a given character is Numeric
 	public static boolean isNumeric(String strNum) {
 		if (strNum == null) {
 			return false;
@@ -856,17 +849,5 @@ public class OperationTvdb {
 		return true;
 	}
 
-	
-	/*
-	 * private String getExtension(String fileName){
 
-		String extension = "";
-
-		int i = fileName.lastIndexOf('.');
-		if (i > 0 && i < fileName.length() - 1) //if the name is not empty
-			return fileName.substring(i + 1).toLowerCase();
-
-		return extension;
-	}
-	*/
 }
