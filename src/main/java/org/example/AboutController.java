@@ -32,6 +32,7 @@ public class AboutController {
 	@FXML
 	private ImageView ImageViewTVDB;
 	
+	//Load the Images
 	public void initialize() {
 		
 		try {
@@ -44,6 +45,8 @@ public class AboutController {
 			e.printStackTrace();
 		}
 	}
+	
+	//Open the Default Browser of the System on TVDB Website.
 	public void hyperlinkTVDB(javafx.event.ActionEvent actionEvent) {
 		try {
 		    Desktop.getDesktop().browse(new URL("https://thetvdb.com/").toURI());
@@ -53,6 +56,8 @@ public class AboutController {
 		    e.printStackTrace();
 		}
 	}
+	
+	//Open the Default Browser of the System on TMDB Website.
 	public void hyperlinkTMDB(javafx.event.ActionEvent actionEvent) {
 		try {
 		    Desktop.getDesktop().browse(new URL("https://www.themoviedb.org/").toURI());
@@ -62,6 +67,8 @@ public class AboutController {
 		    e.printStackTrace();
 		}
 	}
+	
+	//Open the Default Browser of the System on GitHub Project Page.
 	public void hyperlinkGIT(javafx.event.ActionEvent actionEvent) {
 		try {
 		    Desktop.getDesktop().browse(new URL("https://github.com/bielmarfran/NameIT-Simple-Renamer").toURI());

@@ -108,6 +108,7 @@ public class ConfiguraionController {
 		ComboBoxLanguageDataBase.setValue(language);
 
 	}
+	
 	//Save the Language in the properties
 	public void storeMenuLanguage(String x) {
 		String language = "";		
@@ -136,7 +137,7 @@ public class ConfiguraionController {
 		DataStored.propertiesSetLanguage(language);
 
 	}
-	//
+
 	//Show the Example in Example Label according to the Scheme in the TextField Movie
 	public void showExempleMovieScheme() {
 
@@ -148,6 +149,7 @@ public class ConfiguraionController {
 		LabelMovieExemple.setText(value);
 
 	}
+	
 	//Show the Example in Example Label according to the Scheme in the TextField Series
 	public void showExempleSeriesScheme() {
 
@@ -167,6 +169,7 @@ public class ConfiguraionController {
 		LabelSeriesExemple.setText(value);
 
 	}
+	
 	//Implementing the TextFormatter to the TextFields Movie and Series
 	public void textFormatter() {
 		TextFieldMovie.textProperty().addListener(new ChangeListener<String>() {
@@ -235,6 +238,7 @@ public class ConfiguraionController {
 		});
 		TextFieldSeries.setTextFormatter(textFormatter2);
 	}
+	
 	//Check if the TextField Value has Reserved Windows Characters
 	public boolean isValid(String text) {
 		if(text.contains("*")) {
@@ -265,29 +269,35 @@ public class ConfiguraionController {
 		
 		
 	}
+	
 	//Action of Save Movies Button
 	public void buttonSaveMoviesAction(javafx.event.ActionEvent actionEvent) {
 		DataStored.propertiesMovieScheme(TextFieldMovie.getText());
 		ButtonSaveMovies.setVisible(false);
 		buttonMovieValue=false;
 	}
-	//
+	
+	//Save the current Movies Scheme, calling the DataStored routine.
 	public static void saveMovies() {
 		
 
 		DataStored.propertiesMovieScheme(moviesValue);
 	}
+	
 	//Action of Save Series Button
 	public void buttonSaveSeriesAction(javafx.event.ActionEvent actionEvent) {
 		DataStored.propertiesSeriesScheme(TextFieldSeries.getText());
 		ButtonSaveSeries.setVisible(false);
 		buttonSeriesValue=false;
 	}
-	//
+	
+	//Save the current Series Scheme, calling the DataStored routine.
 	public static void saveSeries() {			
 		DataStored.propertiesSeriesScheme(seriesValue);
 	} 
-	//
+	
+	//Routine Operations for when closing the Windows
+	//Main Function ask if want to save, a unsaved Scheme.
 	public static void shutdown() {
 		// cleanup code here...
 

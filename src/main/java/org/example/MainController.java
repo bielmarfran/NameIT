@@ -174,7 +174,7 @@ public class MainController {
 		setMode();		
 		fillFilterExtention();
 		tooltips();
-		
+
 		//renameMenuLanguage();
 		//isDate(null);
 		//JsonOperationsTmdb.getSearchSeries(null);	
@@ -182,13 +182,32 @@ public class MainController {
 		paginationErrorList.setPageCount(1);
 		listViewErrorText.setVisible(false);
 		paintCircle();
-		
-		
+
+
+	}
+	//Check the stored mode value in the properties, and deal with UI element to change change the mode
+	public void setMode() {
+		String mode = DataStored.propertiesGetMode();
+		ComboBoxMode.setValue(mode);
+		checkBoxMode(mode);
+		ObservableList<String> list = FXCollections.observableArrayList();
+		list.addAll("Series","Movies");	
+		ComboBoxMode.setItems(list);
+		EventHandler<ActionEvent> event = 
+				new EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent e) 
+			{ 
+				DataStored.propertiesSetMode(ComboBoxMode.getValue());
+				checkBoxMode(ComboBoxMode.getValue());
+			} 
+		}; 
+		ComboBoxMode.setOnAction(event);
+
 	}
 	//End
-	
-	
-	//UI Trigger
+
+
+	//UI Trigger--------------------------------------------------
 	public void handleDragOverListView(DragEvent dragEvent) {
 		if(dragEvent.getDragboard().hasFiles()){
 			dragEvent.acceptTransferModes(TransferMode.ANY);
@@ -216,9 +235,7 @@ public class MainController {
 		}
 
 	}
-	//
-
-	//
+	//Method to Call Configuration Page
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
 		 Parent parent;
@@ -249,8 +266,6 @@ public class MainController {
 		 
 		  
 	}
-
-
 	//Star the logic to the renaming the files
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
 		
@@ -397,15 +412,7 @@ public class MainController {
 				}
 				for(x=0;x<size;x++){
 					String n =renamingList.get(x).getError();
-					System.out.println("Teste Error - "+item.getOriginalName());
-					System.out.println("Teste Error - "+item.getError());
-					//
-					System.out.println("Teste Error - "+renamingList.get(x).getOriginalName());
-					System.out.println("Teste Error - "+renamingList.get(x).getError());
-					System.out.println("Teste Error - "+renamingList.get(x).getName());
-					System.out.println("Teste Error - "+renamingList.get(x).getYear());
-					if(n.isEmpty()) {
-					
+					if(n.isEmpty()) {					
 						System.out.println("---Inside n.isEmpty()---");
 						listViewFilesRenamed.getItems().add(renamingList.get(x).getName());
 						int count=0;
@@ -461,14 +468,14 @@ public class MainController {
 
 		
 	}
-	//
+	//Clear Button Click Event
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
 		System.out.println("Clear Button");
 		clearALL();
 			
 
 	}
-	//
+	//textfieldPath Click Event
 	public void textfieldPathAction(javafx.scene.input.MouseEvent mouseEvent) {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("JavaFX Projects");
@@ -496,10 +503,7 @@ public class MainController {
 
 
 	}
-	//End UI Trigger
-
-	
-	//
+	//Call the Exceptions Page.
 	public void buttonExceptions(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Exception.fxml"));
 		 Parent parent;
@@ -519,7 +523,7 @@ public class MainController {
 		 
 		  
 	}
-	//
+	//Call the About Page.
 	public void showAbout(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("About.fxml"));
 		 Parent parent;
@@ -553,11 +557,10 @@ public class MainController {
 
 
 	}
-	//
+	//End UI Trigger--------------------------------------------------
 
 
-	//Support UI
-
+	//Support UI--------------------------------------------------
 	// Clear the Lists
 	public void clearList() {
 		System.out.println("--Clear List--");
@@ -707,53 +710,6 @@ public class MainController {
 
 
 	}
-	//
-	public void renameMenuLanguage() {
-		String language = DataStored.propertiesGetLanguage();		
-		switch (language) {
-		case "en": 
-			language ="EN - English";				
-			break;
-			//case "pt-br": 
-			//language ="PT-BR - Português Brasileiro";				
-			//break;
-		case "de": 
-			language ="DE - Deutsche";
-			break;
-		case "pt": 
-			language ="PT - Português de Portugal";
-			break;
-		case "es": 
-			language ="ES - Español";
-			break;
-		case "fr": 
-			language ="FR - Français";		
-			break;
-		default:
-			break;
-		}
-		menuLanguage.setText(language);
-
-	}
-	//Check the stored mode value in the properties, and deal with UI element to change change the mode
-	public void setMode() {
-		String mode = DataStored.propertiesGetMode();
-		ComboBoxMode.setValue(mode);
-		checkBoxMode(mode);
-		ObservableList<String> list = FXCollections.observableArrayList();
-		list.addAll("Series","Movies");	
-		ComboBoxMode.setItems(list);
-		EventHandler<ActionEvent> event = 
-				new EventHandler<ActionEvent>() { 
-			public void handle(ActionEvent e) 
-			{ 
-				DataStored.propertiesSetMode(ComboBoxMode.getValue());
-				checkBoxMode(ComboBoxMode.getValue());
-			} 
-		}; 
-		ComboBoxMode.setOnAction(event);
-
-	}
 	//Change the Check boxes UI elements according to the mode.
 	public void checkBoxMode(String mode) {
 		if(mode.equals("Series")) {
@@ -770,7 +726,7 @@ public class MainController {
 
 		}
 	}
-	//
+	//Method to Display in The UI
 	public void errorDisplay(String Error,Integer x,String name,ListView<String> listUI) {
 
 		if(Error.equals("01")){
@@ -838,7 +794,7 @@ public class MainController {
 		}
 
 	}
-	//
+	//Main Routine that Control the Pagination Element, that shows Errors Values and Alternative Values when available. 
 	public void paginationError() {
 		paginationErrorList.setVisible(true);
 		if(renamingListError.size()==0) {
@@ -941,11 +897,10 @@ public class MainController {
 		}
 		return true;
 	}
-	//End Support UI
+	//End Support UI--------------------------------------------------
 
-
-	//Get the response from checkConnection(), and check if the current key is still working, if not send start login().
-	//
+	//Connecting API--------------------------------------------------
+	//Check if the TVDB API is responding correctly.
 	public static Integer statusTVDB(Integer responseBody){
 		System.out.println(responseBody);
 
@@ -959,7 +914,7 @@ public class MainController {
 		}
 		return null;
 	}
-	//
+	//Check if the TMDB API is responding correctly.
 	public static Integer statusTMDB(Integer responseBody){
 		System.out.println(responseBody);
 
@@ -971,18 +926,17 @@ public class MainController {
 		}
 		return null;
 	}
-	//
+	//Method that show a Popup when the API is Down.
 	public static void statusAlert(String api) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Warning Dialog");
 		alert.setHeaderText("No response from the "+api+" API");
 		alert.setContentText("Check your internet conection");
 	}
-	//End Connecting API
+	//End Connecting API--------------------------------------------------
 
+	//Global Suport Operation
 	//Remove character that Windows don't let files name have.
-	
-
 	public void fillFilterExtention() {
 		//Files Types Supported
 		//Video Format
@@ -1018,7 +972,7 @@ public class MainController {
 		}
 		return true;
 	}
-	//
+	//Return the extension of a File
 	private String getExtension(String fileName){
 		String extension = "";
 

@@ -125,7 +125,7 @@ public class OperationTvdb {
 
 
 	}
-	//	
+	//Get the File Name and break it to blocks to send one at time to the API.
 	public void breakFileName(String name){
 		//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 		System.out.println("--Inside Break File Name--");
@@ -160,7 +160,7 @@ public class OperationTvdb {
 		}
 
 	}
-	//
+	//Get the response from the Name Block Send to the API, and check if have good information.
 	public static String responseSeriesId(String responseBody){		
 		if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 			System.out.println("Resource not found");
@@ -200,7 +200,7 @@ public class OperationTvdb {
 		}
 		return null;
 	}
-	//
+	//Get the File Name and break it to blocks to send one at time to the API, but using the SLUG camp instead of Name.
 	public void breakFileNameSlug(String name){
 		name = name+" x x";
 		System.out.println(name);
@@ -232,7 +232,7 @@ public class OperationTvdb {
 			item.setError("02");
 		}
 	}
-	//
+	//Get the response from the Name Block SLUG Send to the API, and check if have good information.
 	public static String responseSeriesIdSlug(String responseBody){
 		if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
 

@@ -23,10 +23,6 @@ import javafx.scene.text.Text;
 
 public class ExceptionController {
 
-    //@FXML
-    //private void switchToPrimary() throws IOException {
-    //    App.setRoot("primary");
-    //}
 	private static ArrayList<String> exceptions = new ArrayList<String>();
 	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 
@@ -38,16 +34,17 @@ public class ExceptionController {
 	private TextField textFieldException;
 	@FXML
 	private TextField textFieldExceptionRenamed;
-	
-	
+
+
 	public void initialize() {
 		read(); 
 		final Tooltip tooltip = new Tooltip();
 		tooltip.setText("The character '-' alone represent's a empty value");
 		listViewExceptionsRenamed.setTooltip(tooltip);
-	
+
 	}
-	
+
+	// Routine that get the values on the TextFields and add to Exp List.
 	public void buttonAdd(javafx.event.ActionEvent actionEvent) {
 		if(!textFieldException.getText().isEmpty() && !textFieldExceptionRenamed.getText().isEmpty()) {						
 			System.out.println(textFieldException.getText());
@@ -61,7 +58,7 @@ public class ExceptionController {
 			}
 			textFieldException.setText("");
 			textFieldExceptionRenamed.setText("");
-		
+
 		}else {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Warning Dialog");
@@ -89,26 +86,26 @@ public class ExceptionController {
 					textFieldException.setText("");
 					textFieldExceptionRenamed.setText("");
 				}								
-				
+
 			} else {
-			    // ... user chose CANCEL or closed the dialog
+				// ... user chose CANCEL or closed the dialog
 			}
 		}
-		
+
 	}
-	
-	
+
+	//Get the selected ListView Item, and Remove it and its counterpart.
 	public void buttonRemove(javafx.event.ActionEvent actionEvent) {
 		System.out.println("--Remove--");
 		final int select =listViewExceptions.getSelectionModel().getSelectedIndex();		
 		System.out.println(select);
-	
+
 		if(select != -1) {
 			exceptions.remove(select);
 			exceptionsRenamed.remove(select);
 			listViewExceptions.getItems().remove(select);
 			listViewExceptionsRenamed.getItems().remove(select);
-			
+
 		}
 		try {
 			save();
@@ -118,7 +115,8 @@ public class ExceptionController {
 		}
 		populateLists();
 	}
-	
+
+	//Fill the List with the Stored Values in the Txt Files.
 	public void populateLists() {
 		System.out.println(exceptions.size());
 		listViewExceptions.getItems().clear();
@@ -131,13 +129,17 @@ public class ExceptionController {
 			listViewExceptionsRenamed.getItems().add(exceptionsRenamed.get(x));
 		}
 		System.out.println("---"+listViewExceptionsRenamed.getItems().size());
-		
+
 	}
+	
+	//Routine to Read the value of the Txt Files and Save to the correct ArrayList
 	@SuppressWarnings("resource")
+
+	
 	public void read() {
 		exceptions.clear();
 		exceptionsRenamed.clear();
-	
+
 		Scanner s;
 		try {
 			s = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt"));
@@ -163,16 +165,18 @@ public class ExceptionController {
 				exceptionsRenamed.add(z.nextLine());
 			}
 			z.close();
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		
+
 		}
 		populateLists();
-	
-	
+
+
 	}
+	
+	//Save the values to the Txt Files.
 	public void save() throws FileNotFoundException {
 		//Create a file with the saved values of exceptions.
 		File Fileright = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt");
@@ -181,7 +185,7 @@ public class ExceptionController {
 			output.println(exceptions.get(x));  				    
 		}
 		output.close();
-		
+
 		//Create a file with the saved values of exceptionsRenamed.
 		File Fileleft = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptionsRenamed.txt");
 		PrintWriter  output2 = new PrintWriter(Fileleft);
@@ -190,9 +194,9 @@ public class ExceptionController {
 		}
 		output2.close();
 		populateLists();
-	    
-    }
-	
-	
-	
+
+	}
+
+
+
 }

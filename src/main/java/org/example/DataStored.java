@@ -12,13 +12,10 @@ import java.util.Scanner;
 import java.util.prefs.Preferences;
 
 public class DataStored {
+	
 	static Properties config;
 	private static String keyTvdb="";
 	private static String keyTmdb="";
-	//private static ArrayList<String> listt = new ArrayList<String>();
-
-
-
 
 	//Create the folder NameIT on user/Document and the Exceptions txt files,properties file.
 	public static void createFiles() {
@@ -109,6 +106,7 @@ public class DataStored {
 		}
 
 	}
+	
 	//Save the Api Key Used for TVDB
 	public static void savePreferencekeyTvdb(String keyValue) {
 		Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
@@ -123,11 +121,13 @@ public class DataStored {
 		}
 
     }
-    //Reed the stored TVDB key.
+    
+	//Reed the stored TVDB key.
     public static String readPreferencekeyTvdb() {
         Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
         return prefs.get(keyTvdb, "default");
     }
+    
     //Get the readExceptions.txt content
     public static ArrayList<String> readExceptions() {
     	ArrayList<String> exceptions = new ArrayList<String>();
@@ -150,6 +150,7 @@ public class DataStored {
 		}
 
     }
+    
     //Get the ExceptionsRenamed content
     public static ArrayList<String> readExceptionsRenamed() {
     	ArrayList<String>exceptionsRenamed = new ArrayList<String>();
@@ -171,6 +172,7 @@ public class DataStored {
 		
 		}
     }
+    
     //Get the Language Properties from config.properties.
     public static String propertiesGetLanguage() {
     	config = new Properties();
@@ -190,6 +192,7 @@ public class DataStored {
 
     	return config.getProperty("Language");
     }
+   
     //Save the Language Properties to config.properties.
     public static void propertiesSetLanguage(String newLanguage) {
     	System.out.println("Dentro propertiesSetLanguage");
@@ -239,6 +242,7 @@ public class DataStored {
 
     	return config.getProperty("Mode");
     }
+    
     //Save the Mode Properties to config.properties.
     public static void propertiesSetMode(String newMode) {
     	System.out.println("Dentro propertiesSetMode");
@@ -269,7 +273,6 @@ public class DataStored {
 		}
     }
     
-    //-----------
     //Get the Movie Name Scheme Properties from config.properties.
     public static String propertiesGetMovieScheme() {
     	config = new Properties();
@@ -290,6 +293,7 @@ public class DataStored {
     	return config.getProperty("Movie");
     	
     }
+    
     //Save theMovie Name Scheme Properties to config.properties.
     public static void propertiesMovieScheme(String newMovie) {
     	System.out.println("Dentro propertiesSetMode");
@@ -319,6 +323,7 @@ public class DataStored {
 			e.printStackTrace();
 		}	
     }
+    
     //Get the Series Name Scheme Properties from config.properties.
     public static String propertiesGetSeriesScheme() {
     	config = new Properties();
@@ -339,6 +344,7 @@ public class DataStored {
     	return config.getProperty("Series");
     	
     }
+    
     //Save theMovie Name Scheme Properties to config.properties.
     public static void propertiesSeriesScheme(String newSeries) {
     	System.out.println("Dentro propertiesSetMode");
@@ -382,6 +388,7 @@ public class DataStored {
     	}
 
     }
+   
     //Reed the stored TMDB key.
     public static String readPreferencekeyTmdb() {
     	Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
