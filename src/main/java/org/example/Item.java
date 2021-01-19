@@ -37,17 +37,16 @@ public class Item {
 
 	public Item() {
 
-		
-		// TODO Auto-generated constructor stub
 	}
+	
+	
 	public Item(String orignalName,String originalPatch,File originalFile) {
 		this.orignalName =orignalName;
 		this.originalPath =originalPatch;
 		this.originalFile =originalFile;
 
-		
-		// TODO Auto-generated constructor stub
 	}
+	
 	public Item(String orignalName,String Name,int id,String originalPatch,File originalFile) {
 		this.orignalName =orignalName;
 		this.originalPath =originalPatch;
@@ -58,6 +57,7 @@ public class Item {
 		
 		// TODO Auto-generated constructor stub
 	}
+	
 	public Item(String name, String orignalName, int id, String season, String episode, String absolute_episode,String original_name, String key, String error, int year) {
 		super();
 		this.name = name;

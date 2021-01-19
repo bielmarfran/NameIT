@@ -81,7 +81,7 @@ public class OperationTmdb {
 					}else{
 						if(controlBreakFile==0){
 							namesBlocks[x] = namesBlocks[x-1]+"%20"+namesBlocks[x];
-							//System.out.println(names_blocks[x]);
+							
 							controlNameBlock =x;
 							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
 						}else {

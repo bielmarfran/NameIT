@@ -10,29 +10,34 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ExceptionController">
    <children>
-      <ListView fx:id="listViewExceptions" layoutX="14.0" layoutY="122.0" prefHeight="360.0" prefWidth="253.0" />
-      <ListView fx:id="listViewExceptionsRenamed" layoutX="373.0" layoutY="122.0" prefHeight="360.0" prefWidth="253.0" />
-      <Button fx:id="buttonAdd" layoutX="278.0" layoutY="91.0" mnemonicParsing="false" onAction="#buttonAdd" prefHeight="51.0" prefWidth="85.0" text="Add" />
-      <TextField fx:id="textFieldException" layoutX="14.0" layoutY="91.0" prefHeight="25.0" prefWidth="253.0" />
-      <TextField fx:id="textFieldExceptionRenamed" layoutX="373.0" layoutY="91.0" prefHeight="25.0" prefWidth="253.0" />
-      <Button fx:id="buttonRemove" layoutX="278.0" layoutY="162.0" mnemonicParsing="false" onAction="#buttonRemove" prefHeight="51.0" prefWidth="85.0" text="Remove" />
-      <Label layoutX="14.0" layoutY="63.0" text="Before">
+      <ListView fx:id="listViewExceptions" layoutX="14.0" layoutY="167.0" prefHeight="315.0" prefWidth="253.0" />
+      <ListView fx:id="listViewExceptionsRenamed" layoutX="373.0" layoutY="167.0" prefHeight="315.0" prefWidth="253.0" />
+      <Button fx:id="buttonAdd" layoutX="276.0" layoutY="135.0" mnemonicParsing="false" onAction="#buttonAdd" prefHeight="51.0" prefWidth="85.0" text="Add" />
+      <TextField fx:id="textFieldException" layoutX="12.0" layoutY="135.0" prefHeight="25.0" prefWidth="253.0" />
+      <TextField fx:id="textFieldExceptionRenamed" layoutX="371.0" layoutY="135.0" prefHeight="25.0" prefWidth="253.0" />
+      <Button fx:id="buttonRemove" layoutX="276.0" layoutY="206.0" mnemonicParsing="false" onAction="#buttonRemove" prefHeight="51.0" prefWidth="85.0" text="Remove" />
+      <Label layoutX="12.0" layoutY="107.0" text="Before">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label layoutX="373.0" layoutY="63.0" text="After">
+      <Label layoutX="371.0" layoutY="107.0" text="After">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Separator layoutX="-2.0" layoutY="60.0" prefHeight="3.0" prefWidth="640.0" />
+      <Separator layoutX="-1.0" layoutY="106.0" prefHeight="3.0" prefWidth="640.0" />
       <Label layoutX="8.0" layoutY="4.0" text="Exceptions List">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="8.0" layoutY="31.0" lineSpacing="1.0" prefHeight="27.0" prefWidth="518.0" text="Change a part of the file name for the program logic, to help match with the Api">
+      <Label layoutX="8.0" layoutY="31.0" lineSpacing="1.0" prefHeight="40.0" prefWidth="518.0" text="Change a part of the file name for the program logic, to help match with the Api, &#10;useful if you have many files with short names.">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="13.0" layoutY="81.0" prefHeight="20.0" prefWidth="486.0" text="File Name : Onpx.900.mkv to One Piece.900.mkv">
          <font>
             <Font size="14.0" />
          </font>

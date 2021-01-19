@@ -3,6 +3,7 @@ package org.example;
 
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -22,6 +23,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Tooltip;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -44,12 +48,18 @@ public class ConfiguraionController {
 	private Button ButtonSaveMovies;
 	@FXML
 	private Button ButtonSaveSeries;
+	@FXML
+	private TextFlow TextFlowMovies;
+	@FXML
+	private TextFlow TextFlowSeries;
 
+	
 	private static boolean buttonMovieValue;
 	private static boolean buttonSeriesValue;
 	private static String moviesValue;
 	private static String seriesValue;
-
+	public static ArrayList<Text> textList = new ArrayList<>();
+	
 	public void initialize() {
 		//Visibility Routine
 		ButtonSaveMovies.setVisible(false);
@@ -70,8 +80,18 @@ public class ConfiguraionController {
 		ComboBoxLanguageDataBase.setOnAction(event);
 		//End Language Routine
 		//Getting Info from properties to Movie and Series Scheme
+		
 		TextFieldMovie.setText(DataStored.propertiesGetMovieScheme());
+		paintText(DataStored.propertiesGetMovieScheme());
+		//System.out.println("-1-"+textList.get(0).getText());
+		//System.out.println("-2-"+textList.get(1).getText());
+		//System.out.println("-3-"+textList.get(2).getText());
+		Text t1 = new Text(DataStored.propertiesGetMovieScheme());
+		TextFlowMovies.getChildren().addAll(textList);
+		
 		TextFieldSeries.setText(DataStored.propertiesGetSeriesScheme());
+		Text t2= new Text(DataStored.propertiesGetSeriesScheme());
+		TextFlowSeries.getChildren().add(t2);
 		//End
 		//Show the Example Labels
 		showExempleMovieScheme();
@@ -296,6 +316,16 @@ public class ConfiguraionController {
 		DataStored.propertiesSeriesScheme(seriesValue);
 	} 
 	
+	//
+	public void paintText(String name) {
+		if(name.contains("Year")) {
+		
+			//textList.add(new Text(name.substring(0,name.indexOf("Year"))));
+			//textList.add(new Text(name.substring(name.indexOf("Year"),name.indexOf("Year")+4)));
+			//textList.get(textList.size()-1).setFill(Color.RED);
+			//textList.add(new Text(name.substring(name.indexOf("Year")+4)));
+		}
+	}
 	//Routine Operations for when closing the Windows
 	//Main Function ask if want to save, a unsaved Scheme.
 	public static void shutdown() {

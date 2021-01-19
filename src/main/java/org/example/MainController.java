@@ -151,7 +151,7 @@ public class MainController {
 	private static final String DEFAULT_CONTROL_INNER_BACKGROUND = "derive(-fx-base,80%)";
 	//Static Value for Red ListView Background Color
 	private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
-	//
+	// Test
 	private static Integer enter=0;
 
 	
@@ -765,30 +765,29 @@ public class MainController {
 		if(Error.equals("06")){
 			System.out.println("Error 06");
 			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 06 - Negative response from the Api for season and episode parameters.");
+			listUI.getItems().add("Error 06 - No API response for season and episode parameters.");
 
 		}
 		if(Error.equals("07")){
 			System.out.println("Error 07");
 			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 07 - It was not possible to determine Season/Episode.");
+			listUI.getItems().add("Error 07 - It was not possible to determine Season/Episode value.");
 
 		}
 		if(Error.equals("08")){
 			System.out.println("Error 08");
 			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 08 - Path Value is Empy. ");
+			listUI.getItems().add("Error 08 - The path value is Empy.");
 
 		}
 		if(Error.equals("09")){
 			System.out.println("Error 09");
 			listUI.getItems().add(name);
-			listUI.getItems().add("Error 09 - To many options ");
+			listUI.getItems().add("Error 09 - No suitable match.");
 
 		}
 
 		if(Error.equals("10")){
-
 			System.out.println("Error 10");					
 			listUI.getItems().add(String.valueOf("File -- "+name));
 		}
@@ -848,7 +847,7 @@ public class MainController {
 							alert.showAndWait();
 							//End PopUp
 						}else {
-							//Rotine to make sure that the User can change 
+							//Routine to make sure that the User can change 
 							if(renamingList.size()>0) {
 								int count=0;
 								for(int x=0;x<renamingList.size();x++) {
@@ -926,7 +925,7 @@ public class MainController {
 		}
 		return null;
 	}
-	//Method that show a Popup when the API is Down.
+	//Method that show a Pop-up when the API is Down.
 	public static void statusAlert(String api) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Warning Dialog");
@@ -935,7 +934,7 @@ public class MainController {
 	}
 	//End Connecting API--------------------------------------------------
 
-	//Global Suport Operation
+	//Global Support Operations
 	//Remove character that Windows don't let files name have.
 	public void fillFilterExtention() {
 		//Files Types Supported
@@ -982,7 +981,7 @@ public class MainController {
 
 		return extension;
 	}
-	
+	//End Global Support Operations
 }
 
 
