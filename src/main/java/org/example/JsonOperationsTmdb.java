@@ -88,15 +88,12 @@ public class JsonOperationsTmdb {
 		default:
 			break;
 		}
-		
-		
-		
+	
 		return l;
 		
 	}
 
 
 	//Send a Get request for informations about the series, using the series id.
-
 
 }

@@ -38,15 +38,15 @@ public class AboutController {
 		try {
 			Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"tmdblogo.png"));
 			ImageViewTMDB.setImage(image);
-			Image image2 =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"TVDBlogo.png"));
-			ImageViewTVDB.setImage(image2);
+			//Image image2 =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"TVDBlogo.png"));
+			//ImageViewTVDB.setImage(image2);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	//Open the Default Browser of the System on TVDB Website.
+	/*//Open the Default Browser of the System on TVDB Website.
 	public void hyperlinkTVDB(javafx.event.ActionEvent actionEvent) {
 		try {
 		    Desktop.getDesktop().browse(new URL("https://thetvdb.com/").toURI());
@@ -56,7 +56,7 @@ public class AboutController {
 		    e.printStackTrace();
 		}
 	}
-	
+	*/
 	//Open the Default Browser of the System on TMDB Website.
 	public void hyperlinkTMDB(javafx.event.ActionEvent actionEvent) {
 		try {
