@@ -473,6 +473,8 @@ public class OperationTmdb {
 		public static String isDate(String newName) {
 			System.out.println("Inside isDate");
 			String date ="";
+			Boolean test = null;
+			Integer holder = null;
 			
 			for(int x=0;x<newName.length();x++) {
 				if(isNumeric(newName.substring(x,x+1))) {
@@ -487,9 +489,14 @@ public class OperationTmdb {
 				for(int x =0;x<size;x++) {
 					datesBlocks[x] = date.substring(x*4,(x+1)*4);
 					if(Integer.valueOf(datesBlocks[x])>=1900 && Integer.valueOf(datesBlocks[x])<=Year.now().getValue()) {
-						newName = newName.replace(datesBlocks[x], "");
-						item.setYear(Integer.valueOf(datesBlocks[x]));
+						test = true;
+						holder = x;
+						
 					}
+				}
+				if(test){
+					newName = newName.replace(datesBlocks[holder], "");
+					item.setYear(Integer.valueOf(datesBlocks[holder]));
 				}
 				
 			}
