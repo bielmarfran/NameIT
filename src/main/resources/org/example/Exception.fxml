@@ -32,7 +32,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="8.0" layoutY="31.0" lineSpacing="1.0" prefHeight="40.0" prefWidth="518.0" text="Change a part of the file name for the program logic, to help match with the Api, &#10;useful if you have many files with short names.">
+      <Label layoutX="8.0" layoutY="31.0" lineSpacing="1.0" prefHeight="40.0" prefWidth="518.0" text="Change a part of the file name for the program logic, to help match with the Api, &#10;useful if you have many files with short names/ abbreviations.">
          <font>
             <Font size="14.0" />
          </font>

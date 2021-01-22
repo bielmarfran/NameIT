@@ -191,7 +191,7 @@ public class MainController {
 		ComboBoxMode.setValue(mode);
 		checkBoxMode(mode);
 		ObservableList<String> list = FXCollections.observableArrayList();
-		list.addAll("Series","Movies");	
+		list.addAll("Movies");	//"Series",
 		ComboBoxMode.setItems(list);
 		EventHandler<ActionEvent> event = 
 				new EventHandler<ActionEvent>() { 
@@ -898,7 +898,7 @@ public class MainController {
 	}
 	//End Support UI--------------------------------------------------
 
-	//Connecting API--------------------------------------------------
+	//Connecting API--------------------------------------------------	
 	//Check if the TVDB API is responding correctly.
 	public static Integer statusTVDB(Integer responseBody){
 		System.out.println(responseBody);
@@ -913,6 +913,7 @@ public class MainController {
 		}
 		return null;
 	}
+	
 	//Check if the TMDB API is responding correctly.
 	public static Integer statusTMDB(Integer responseBody){
 		System.out.println(responseBody);

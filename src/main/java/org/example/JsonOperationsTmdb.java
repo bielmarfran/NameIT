@@ -38,11 +38,14 @@ public class JsonOperationsTmdb {
 		language = languageTmdb(language);
 		String uri = "";
 		if(year==0) {
+			
 			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+name+
 					"&page=1&include_adult=false";
+			System.out.println(uri);
 		}else {
 			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+name+
 					"&page=1&include_adult=false&year="+year;
+			System.out.println(uri);
 		}
 	
 

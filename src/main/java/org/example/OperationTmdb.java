@@ -3,6 +3,7 @@ package org.example;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -349,6 +350,7 @@ public class OperationTmdb {
 		}
 		//Remove unwanted special character and names that only disturb the logic to find the episode
 		public String formatName(String name){
+			System.out.println("Inside format Name");
 			exceptions =DataStored.readExceptions();
 			exceptionsRenamed =DataStored.readExceptionsRenamed();
 			name = name.toLowerCase();
@@ -430,8 +432,9 @@ public class OperationTmdb {
 			}
 			return true;
 		}
-		//
+		/*
 		public static String isDate(String newName) {
+			System.out.println("Inside isDate");
 			String date ="";
 			for(int x=0;x<newName.length();x++) {
 				if(isNumeric(newName.substring(x,x+1))) {
@@ -451,10 +454,10 @@ public class OperationTmdb {
 					dmin = sdf.parse(min);
 					//dmax= sdf.format(max);					
 					if(dcheck.after(dmin) && dcheck.before(dmax) ) {
-						System.out.println(dcheck);
+						System.out.println("Valor dcheck"+dcheck);
 						newName = newName.replace(date, "");
 						item.setYear(Integer.valueOf(date));
-						System.out.println(newName);
+						System.out.println("New name after date removed"+newName);
 						return newName;
 					}
 				} catch (ParseException e) {
@@ -464,9 +467,35 @@ public class OperationTmdb {
 
 			}
 			return newName;
-
+		
 		}
-		//
+		*/
+		public static String isDate(String newName) {
+			System.out.println("Inside isDate");
+			String date ="";
+			
+			for(int x=0;x<newName.length();x++) {
+				if(isNumeric(newName.substring(x,x+1))) {
+					date= date+newName.charAt(x);
+				}
+			}
+			System.out.println(date);
+			
+			int size =date.length()/4;
+			String[] datesBlocks = new String[size];		
+			if(date.length()>=4) {				
+				for(int x =0;x<size;x++) {
+					datesBlocks[x] = date.substring(x*4,(x+1)*4);
+					if(Integer.valueOf(datesBlocks[x])>=1900 && Integer.valueOf(datesBlocks[x])<=Year.now().getValue()) {
+						newName = newName.replace(datesBlocks[x], "");
+						item.setYear(Integer.valueOf(datesBlocks[x]));
+					}
+				}
+				
+			}
+			return newName;
+		}	
+		
 		private static String getExtension(String fileName){
 			String extension = "";
 
