@@ -175,9 +175,6 @@ public class MainController {
 		fillFilterExtention();
 		tooltips();
 
-		//renameMenuLanguage();
-		//isDate(null);
-		//JsonOperationsTmdb.getSearchSeries(null);	
 		paginationErrorList.setVisible(true);
 		paginationErrorList.setPageCount(1);
 		listViewErrorText.setVisible(false);
@@ -191,7 +188,7 @@ public class MainController {
 		ComboBoxMode.setValue(mode);
 		checkBoxMode(mode);
 		ObservableList<String> list = FXCollections.observableArrayList();
-		list.addAll("Movies");	//"Series",
+		list.addAll("Series","Movies");	//"Series",
 		ComboBoxMode.setItems(list);
 		EventHandler<ActionEvent> event = 
 				new EventHandler<ActionEvent>() { 
@@ -327,33 +324,9 @@ public class MainController {
 									if(renamingList.size()<1) {
 										updateProgress(0.00, 100.00);
 										cancel();
-									}								
-									for(int x=0;x<renamingList.size();x++){		
-										System.out.println("TVDB");
-										OperationTvdb tvdb = new OperationTvdb();
-										
-										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
-											System.out.println("Inside Alternetive TVDB");
-											item = renamingList.get(x);
-											tvdb.setInfoAlternative(item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
-										}else {
-											controlArrayListEpisode=x;
-											item = renamingList.get(x);
-											controlBreakFile=0;
-											controlBreakFileSlug=0;
-											controlBreakFileSlug2=0;
-											tvdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
-											if(item.getError()==null) {										
-												tvdb.breakFileName(renamingList.get(x).getOriginalName());
-												//breakFileName(episodeList.get(x).getOriginalName());
-											}else {												
-												renamingList.remove(x);
-											}
-											System.out.println("-----------------------------");
-											double max =renamingList.size();
-											updateProgress(x+1, max);
-										}									
 									}
+									
+			
 								}else {
 									System.out.println("renamingList.size() -- "+renamingList.size());
 									if(renamingList.size()<1) {
@@ -361,7 +334,7 @@ public class MainController {
 										cancel();
 									}
 									for(int x=0;x<renamingList.size();x++){
-										System.out.println("TMDB");
+										System.out.println("TMDB Movies");
 										OperationTmdb tmdb = new OperationTmdb();
 										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
 											tmdb.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
@@ -394,7 +367,6 @@ public class MainController {
 				};
 			}
 		};
-
 		backgroundTaks.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
@@ -711,7 +683,7 @@ public class MainController {
 	//Change the Check boxes UI elements according to the mode.
 	public void checkBoxMode(String mode) {
 		if(mode.equals("Series")) {
-			JsonOperationsTvdb.checkConnection();	
+			JsonOperationsTmdb.checkConnection();	
 			checkboxSeries.setDisable(false);
 			checkboxSeries.setText("Series");
 			checkboxSeason.setDisable(false);
@@ -897,20 +869,6 @@ public class MainController {
 	//End Support UI--------------------------------------------------
 
 	//Connecting API--------------------------------------------------	
-	//Check if the TVDB API is responding correctly.
-	public static Integer statusTVDB(Integer responseBody){
-		System.out.println(responseBody);
-
-		if(responseBody==401){
-			JsonOperationsTvdb.login();
-		}else{
-			DataStored.readPreferencekeyTvdb();
-			controlCircle = 1;
-
-
-		}
-		return null;
-	}
 	
 	//Check if the TMDB API is responding correctly.
 	public static Integer statusTMDB(Integer responseBody){

@@ -17,13 +17,13 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="26.0" layoutY="76.0" text="Language for the Data Base">
+      <Label layoutX="29.0" layoutY="78.0" text="Desired language for research">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <ComboBox fx:id="ComboBoxLanguageDataBase" layoutX="38.0" layoutY="113.0" prefWidth="150.0" promptText="--Deafult--" />
-      <Label layoutX="282.0" layoutY="79.0" lineSpacing="1.0" text="If the Database dont have the information on the &#10;select langague, it will return in English" textAlignment="CENTER" />
+      <ComboBox fx:id="ComboBoxLanguageDataBase" layoutX="291.0" layoutY="76.0" prefWidth="150.0" promptText="--Deafult--" />
+      <Label layoutX="38.0" layoutY="121.0" lineSpacing="1.0" text="If the Database dont have the information on the select langague, it will return in English" textAlignment="CENTER" />
       <Separator layoutY="152.0" prefHeight="3.0" prefWidth="640.0" />
       <Separator layoutX="-2.0" layoutY="283.0" prefHeight="3.0" prefWidth="640.0" />
       <Label layoutX="27.0" layoutY="167.0" text="Naming Scheme for Movies">

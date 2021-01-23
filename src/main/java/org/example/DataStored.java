@@ -14,7 +14,6 @@ import java.util.prefs.Preferences;
 public class DataStored {
 	
 	static Properties config;
-	private static String keyTvdb="";
 	private static String keyTmdb="";
 
 	//Create the folder NameIT on user/Document and the Exceptions txt files,properties file.
@@ -107,27 +106,7 @@ public class DataStored {
 
 	}
 	
-	//Save the Api Key Used for TVDB
-	public static void savePreferencekeyTvdb(String keyValue) {
-		Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
 
-		if(keyValue==String.valueOf(401)){
-			MainController.statusAlert("TVDB");
-			MainController.setControl_circle(2);
-		}else{
-			keyTvdb="";
-			keyValue = keyValue.substring(10,keyValue.length()-2);
-			prefs.put(keyTvdb,keyValue);
-		}
-
-    }
-    
-	//Reed the stored TVDB key.
-    public static String readPreferencekeyTvdb() {
-        Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
-        return prefs.get(keyTvdb, "default");
-    }
-    
     //Get the readExceptions.txt content
     public static ArrayList<String> readExceptions() {
     	ArrayList<String> exceptions = new ArrayList<String>();
