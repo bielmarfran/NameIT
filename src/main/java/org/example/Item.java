@@ -17,6 +17,8 @@ public class Item {
 	private String episode;
 	//Absolute Episode value of the file, when normal episode value not found
 	private String absoluteEpisode;
+	//Episode value of the file
+	private String episodeName;
 	//Original Path of the file
 	private String originalPath;
 	//Key value of the API
@@ -58,7 +60,7 @@ public class Item {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Item(String name, String orignalName, int id, String season, String episode, String absolute_episode,String original_name, String key, String error, int year) {
+	public Item(String name, String orignalName, int id, String season, String episode, String absolute_episode,String original_name, String key, String error, int year, String episodeName) {
 		super();
 		this.name = name;
 		this.orignalName = orignalName;
@@ -70,6 +72,7 @@ public class Item {
 		this.key = key;
 		this.error = error;
 		this.year = year;
+		this.episodeName = episodeName;
 	}
 	
 	public String getName() {
@@ -157,6 +160,13 @@ public class Item {
 	}
 	public void setAlternetiveInfo(String alternetiveInfo) {
 		this.alternetiveInfo = alternetiveInfo;
+	}
+	
+	public String getEpisodeName() {
+		return episodeName;
+	}
+	public void setEpisodeName(String episodeName) {
+		this.episodeName = episodeName;
 	}
 	
 }

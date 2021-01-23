@@ -325,7 +325,26 @@ public class MainController {
 										updateProgress(0.00, 100.00);
 										cancel();
 									}
-									
+									for(int x=0;x<renamingList.size();x++){
+										System.out.println("TMDB Series");
+										OperationTmdb tmdb = new OperationTmdb();
+										controlArrayListEpisode=x;
+										item = renamingList.get(x);
+										controlBreakFile=0;
+										controlBreakFileSlug=0;
+										controlBreakFileSlug2=0;
+										tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+										if(item.getError()==null) {										
+											tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Series");
+											//breakFileName(episodeList.get(x).getOriginalName());
+										}else {
+											System.out.println("II");
+											renamingList.remove(x);
+										}
+									}
+										
+										
+										
 			
 								}else {
 									System.out.println("renamingList.size() -- "+renamingList.size());
@@ -346,7 +365,7 @@ public class MainController {
 											controlBreakFileSlug2=0;
 											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
 											if(item.getError()==null) {										
-												tmdb.breakFileName(renamingList.get(x).getOriginalName());
+												tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
 												//breakFileName(episodeList.get(x).getOriginalName());
 											}else {
 												System.out.println("II");

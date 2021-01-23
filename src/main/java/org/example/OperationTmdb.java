@@ -52,7 +52,7 @@ public class OperationTmdb {
 	
 		//
 		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
-			System.out.println("--Inside setInfo--");
+			System.out.println("--Inside setInfo TMDB--");
 			controlArrayListEpisode=x;
 			item = episode;
 			controlBreakFile=0;
@@ -66,25 +66,35 @@ public class OperationTmdb {
 			
 		}
 		//
-		public void breakFileName(String name){
+		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 			System.out.println("--Inside Break File Name--");
 			item.setYear(0);
 			if(!name.isEmpty()){
-				name = formatName(name);
+				name = formatName(name, mode);
 				//System.out.println(name);
 				namesBlocks = name.split(" ");
 				for(int x=0;x<namesBlocks.length;x++){
 					System.out.println("----"+namesBlocks.length);
 					if(x<=0 && controlBreakFile==0){
 						//Send one block of the name at a time
-						JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
+						if(mode.equals("Movies")) {
+							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
+						}else {
+							JsonOperationsTmdb.getSearchSerie(namesBlocks[x],item.getYear());
+						}
+						
 					}else{
 						if(controlBreakFile==0){
 							namesBlocks[x] = namesBlocks[x-1]+"%20"+namesBlocks[x];
 							
 							controlNameBlock =x;
-							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
+							if(mode.equals("Movies")) {
+								JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
+							}else {
+								JsonOperationsTmdb.getSearchSerie(namesBlocks[x],item.getYear());
+							}
+							
 						}else {
 							x=namesBlocks.length;
 							System.out.println("ERROR");
@@ -147,11 +157,181 @@ public class OperationTmdb {
 			return null;
 		}
 
+		//
+		
+		public static String responseSerieId(String responseBody){	
+			System.out.println(responseBody);
+			if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
+				System.out.println("Resource not found");
+				item.setError("02");
+
+			}else{
+				if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
+					item.setError("03");
+					//JsonOperationsTvdb.checkConnection();
+				}else {
+
+					responseBody = responseBody.substring((responseBody.indexOf("[")));
+					responseBody = responseBody.substring(0,(responseBody.lastIndexOf("]")+1));
+
+					JSONArray albums =  new JSONArray(responseBody);
+					if(albums.length()==1){					
+						item.setError("");
+						JSONObject album = albums.getJSONObject(0);
+						item.setId(album.getInt("id"));
+						item.setName(album.getString("name"));							
+						String year = album.getString("first_air_date").substring(0,4);						
+						item.setYear(Integer.valueOf(year));
+						
+						getSeason();
+						controlBreakFile =1;
+						
+						
+
+					}
+					if(albums.length()<=10 && albums.length()>1 ){
+						item.setError("10");
+						item.setOptionsList(responseBody);
+						
+
+					}else {
+						if(albums.length()>10) {
+							item.setError("09");
+							
+						}
+					}
+				}
+			}
+			return null;
+		}
+		//
+		public static void getSeason() {
+			System.out.println("-Inside Season-");
+
+			String test="";
+			String season="";
+			controlNameBlock++;
+			int control_season=0;
+			int size =namesBlocks.length- controlNameBlock;
+			for(int x=0;x<size;x++){
+				test= test + namesBlocks[x+controlNameBlock];
+			}
+			System.out.println("Valor test inside season"+test);
+			for(int x=0;x<10;x++){
+				if(!test.isEmpty()) {
+					if(test.contains("s"+x)){
+						int s_index = test.indexOf("s"+x);
+						if(test.length()>1){
+							test = test.substring(s_index+1);
+							s_index=0;
+							while(isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
+								control_season++;
+								season = season+test.substring(s_index,s_index+1);
+								test = test.substring(s_index+1);
+							}
+							if(!isNumeric(test.substring(s_index, s_index + 1))){
+								item.setSeason(season);
+								getEpisode(test,namesBlocks, controlNameBlock);
+								System.out.println("");
+								item.setError("");	
+							}
+							if(test.length()==1 && isNumeric(test)){
+								item.setError("05");	
+								season = season+test;
+								control_season++;
+							}else {
+								if(test.length()==1 && !isNumeric(test)){
+									item.setError("04");	
+								}
+
+							}
+						}else {
+							item.setError("04");	
+							System.out.println("Error");
+							
+
+						}
+					}
+				}else{
+					System.out.println("File name Empty after part used for id reconition");
+					item.setError("04");	
+					x=10;
+				}
+			}
+
+			//if(control_season==0 && !(item.getError().equals("04"))){
+				//check_absolute(test);
+			//}
+		}
+		//
+		public static void getEpisode(String test,String[] namesBlocks,Integer control){
+			System.out.println("--Inside Episode--");
+			control++;
+			String episode="";
+			System.out.println("Episode"+test);
+			if(!test.isEmpty()) {
+				if(test.contains("e")){
+					test = test.replace("episode","ep");
+					if(test.contains("e")){
+						test = test.replace("ep","e");
+						if(test.contains("e")){
+							test = test.replace("e","");
+							if(isNumeric(test.substring(0,1))){
+								if(test.length()>1){
+									episode = test.substring(0,1);
+									test = test.substring(1);
+									System.out.println("Parte 2 -"+test);
+									while(isNumeric(test.substring(0,1)) && test.length()>1 ){
+										episode = episode + test.substring(0,1);
+										test = test.substring(1);
+									}
+								}
+								if(test.length()==1 && isNumeric(test)){
+									episode = episode + test;
+									item.setEpisode(episode);						
+									JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
+									item.setError("");	
+								}else{
+									item.setEpisode(episode);
+									JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
+									item.setError("");	
+								}
+
+							}else {
+								item.setError("05");
+							}
+						}
+					}
+				}else{
+					item.setError("05");
+					System.out.println("No e found");
+
+				}
+			}
+
+		}
+		
+		//
+		public static String responseFinalSerie(String responseBody){
+			System.out.println("Inside responseFinalSerie");
+			System.out.println(responseBody);
+			JSONObject series = new JSONObject(responseBody);
+			item.setEpisode(String.valueOf(series .getInt("episode_number")));
+			item.setSeason(String.valueOf(series .getInt("season_number")));	
+			item.setEpisodeName(series.getString("name"));
+			System.out.println(item.getEpisode());
+			System.out.println(item.getEpisodeName());
+			System.out.println(item.getSeason());
+			renameFileCreateDirectorySerie();
+
+			return null;
+
+		}
 		//Last method that takes the response from jsonGetInfoApi, and rename the files.
 		public static String renameFileCreateDirectory(){
 			System.out.println("Test Error -- "+item.getError());
 			String name = item.getName();
-			
+
 			//String newName =  item.getName()+" ("+item.getYear()+")";
 			String newName = nameScheme();
 			//Removing Characters that Windows dont let name files have
@@ -227,7 +407,7 @@ public class OperationTmdb {
 
 		//Last method that takes the response from jsonGetInfoApi, and rename the files.
 		public String renameFileCreateDirectory(Item item,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder){
-			
+
 			checkboxSeries_value = checkboxSeries;
 			checkboxSeason_value = checkboxSeason;
 			checkboxFolder_value = checkboxFolder;
@@ -241,10 +421,10 @@ public class OperationTmdb {
 			System.out.println("name"+name);
 			//String newName =  name+" ("+year+")";
 			String newName = nameScheme(name,year);
-			
 
-			
-	
+
+
+
 			//Removing Characters that Windows dont let name files have
 			File f = item.getOriginalFile();
 			String exetention = getExtension(f.getName());
@@ -313,10 +493,133 @@ public class OperationTmdb {
 				}
 
 			}
-			
+
 			return null;
 		}
+
 		//
+		public static String renameFileCreateDirectorySerie(){
+			System.out.println("Test Error -- "+item.getError());
+
+			String name = item.getName();
+
+			//String newName =  item.getName()+" ("+item.getYear()+")";
+
+			//Removing Characters that Windows dont let name files have
+			File f = item.getOriginalFile();
+			String exetention = getExtension(f.getName());
+
+			System.out.println("Test --  2");
+			String newName = nameSchemeSeries(exetention);
+			System.out.println("Test --  3");
+
+			newName = newName+"."+exetention;
+			newName = formatName_Windows(newName);
+			name = formatName_Windows(name);
+
+			System.out.println("Dentro de renameFileCreateDirectorySerie");
+			//Set the final name
+			item.setName(newName);
+			String absolutePath;
+			if(checkboxFolder_value){
+				if(textFieldFolder_value==null) {
+					absolutePath = textFieldFolder_value;
+				}else {
+					absolutePath = textFieldFolder_value;
+				}
+
+			}else{
+				absolutePath = item.getOriginalPath();
+			}
+
+			if(absolutePath==null) {
+				System.out.println("The path where the file will be saved is empth");	
+				item.setError("08");
+			}else {
+				if(checkboxSeries_value  && !checkboxSeason_value ){
+					System.out.println("Create Series");
+					File file = new File(absolutePath+"\\"+name);
+					boolean bool = file.mkdirs();
+					if(bool){
+						System.out.println("Directory created successfully");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+					absolutePath = absolutePath+"\\"+name;
+					String newPath = absolutePath+"\\"+newName;
+
+					Boolean x =f.renameTo(new File(newPath));
+					if(x){
+						System.out.println("Rename was ok");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+
+				}else{
+					if(!checkboxSeries_value && checkboxSeason_value){
+						System.out.println("Create Season");
+						File file = new File(absolutePath+"\\"+"Season "+item.getSeason());
+						boolean bool = file.mkdirs();
+						if(bool){
+							System.out.println("Directory created successfully");
+						}else{
+							System.out.println("Sorry couldnt create specified directory");
+						}
+						absolutePath = absolutePath+"\\"+"Season "+item.getSeason();
+						String newPath = absolutePath+"\\"+newName;
+						Boolean x =f.renameTo(new File(newPath));
+						if(x){
+							//System.out.println("Directory created successfully");
+						}else{
+							//System.out.println("Sorry couldnt create specified directory");
+						}
+
+					}
+				}
+				if(checkboxSeries_value && checkboxSeason_value){
+					System.out.println("Create Season and Series");
+					File file = new File(absolutePath+"\\"+name+"\\"+"Season "+item.getSeason());
+					boolean bool = file.mkdirs();
+					if(bool){
+						System.out.println("Directory created successfully");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+					absolutePath = absolutePath+"\\"+name+"\\"+"Season "+item.getSeason();
+					String newPath = absolutePath+"\\"+newName;
+					System.out.println(newPath);	
+
+					Boolean x =f.renameTo(new File(newPath));
+					if(x){
+						System.out.println("Rename was ok");							
+						item.setError("");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+				}else{
+					File file = new File(absolutePath);
+					boolean bool = file.mkdirs();
+					if(bool){
+						System.out.println("Directory created successfully");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+					//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
+					String newPath = absolutePath+"\\"+newName;
+					Boolean x =f.renameTo(new File(newPath));
+					if(x){
+						//System.out.println("Directory created successfully");
+					}else{
+						//System.out.println("Sorry couldnt create specified directory");
+					}
+
+				}
+			}
+			return null;
+		}
+
+
+		//Get the defined name format from properties.
 		public static String nameScheme() {
 			String scheme = DataStored.propertiesGetMovieScheme();
 			scheme = scheme.replace("Name", item.getName());
@@ -332,7 +635,23 @@ public class OperationTmdb {
 						
 			return scheme;
 		}
-		//Remove character that Windows don't let files name have.
+		
+		//Get Series Scheme for Properties and format the File Name according to stored schematics.
+		public static String nameSchemeSeries(String ext) {
+			
+			String scheme = DataStored.propertiesGetSeriesScheme();
+			scheme = scheme.replace("Year", String.valueOf(item.getYear()));	
+			scheme  = scheme.replace("Name", item.getName());		
+			scheme  = scheme.replace("Season", item.getSeason());
+			scheme  = scheme.replace("Episode", item.getEpisode());
+			scheme  = scheme.replace("EPN", item.getEpisodeName());
+			//scheme  = scheme .replace("Absolute", item.getAbsoluteEpisode());
+			//scheme =scheme+ext;
+						
+			return scheme;
+		}
+		
+		//Remove character that are invalid in windows files.
 		public static String formatName_Windows(String newName){
 
 			newName = newName.replace("<","");
@@ -349,7 +668,7 @@ public class OperationTmdb {
 
 		}
 		//Remove unwanted special character and names that only disturb the logic to find the episode
-		public String formatName(String name){
+		public String formatName(String name, String mode){
 			System.out.println("Inside format Name");
 			exceptions =DataStored.readExceptions();
 			exceptionsRenamed =DataStored.readExceptionsRenamed();
@@ -402,14 +721,14 @@ public class OperationTmdb {
 			}
 
 
-			name = isDate(name);
+			name = isDate(name, mode);
 			return name;
 
 		}
-		//
+		//Values that only disturb the logic of the program.
 		public void fillFilter() {
 			
-			//Names that only disturb the logic to find the episode
+			
 			filterList.add("horriblesubs");
 			filterList.add("subproject");
 			filterList.add("webrip");
@@ -432,12 +751,56 @@ public class OperationTmdb {
 			}
 			return true;
 		}
-		/*
-		public static String isDate(String newName) {
-			System.out.println("Inside isDate");
+		//Check for year value that is valid, 1900>= <=Current Year.
+		public static String isDate(String newName, String mode) {
+			System.out.println("Inside isDate TMDB");
 			String date ="";
+			Boolean test = null;
+			Integer holder = null;
+			
 			for(int x=0;x<newName.length();x++) {
 				if(isNumeric(newName.substring(x,x+1))) {
+					date= date+newName.charAt(x);
+				}
+			}
+			System.out.println(date);
+			
+			int size =date.length()/4;
+			String[] datesBlocks = new String[size];		
+			if(date.length()>=4) {				
+				for(int x =0;x<size;x++) {	
+					datesBlocks[x] = date.substring(x*4,(x+1)*4);
+					if(Integer.valueOf(datesBlocks[x])>=1900 && Integer.valueOf(datesBlocks[x])<=Year.now().getValue()) {
+						test = true;
+						holder = x;				
+					}			
+					if(mode.equals("Series")) {
+						x = size;
+					}
+				}
+				if(test){
+					newName = newName.replace(datesBlocks[holder], "");
+					item.setYear(Integer.valueOf(datesBlocks[holder]));
+				}
+				
+			}
+			return newName;
+		}	
+		//Check the last "." and the the value after that.
+		private static String getExtension(String fileName){
+			String extension = "";
+
+			int i = fileName.lastIndexOf('.');
+			if (i > 0 && i < fileName.length() - 1) //if the name is not empty
+				return fileName.substring(i + 1).toLowerCase();
+
+			return extension;
+		}
+
+		public static String isYear(String newName) {
+			String date ="";
+			for(int x=0;x<newName.length();x++) {
+				if(isNumeric(newName.substring(x,x+1)) && date.length()<4) {
 					date= date+newName.charAt(x);
 				}
 			}
@@ -454,10 +817,10 @@ public class OperationTmdb {
 					dmin = sdf.parse(min);
 					//dmax= sdf.format(max);					
 					if(dcheck.after(dmin) && dcheck.before(dmax) ) {
-						System.out.println("Valor dcheck"+dcheck);
+						System.out.println(dcheck);
 						newName = newName.replace(date, "");
-						item.setYear(Integer.valueOf(date));
-						System.out.println("New name after date removed"+newName);
+						//item.setYear(Integer.valueOf(date));
+						newName = String.valueOf(Integer.valueOf(date));
 						return newName;
 					}
 				} catch (ParseException e) {
@@ -466,50 +829,7 @@ public class OperationTmdb {
 				}
 
 			}
-			return newName;
-		
-		}
-		*/
-		public static String isDate(String newName) {
-			System.out.println("Inside isDate");
-			String date ="";
-			Boolean test = null;
-			Integer holder = null;
-			
-			for(int x=0;x<newName.length();x++) {
-				if(isNumeric(newName.substring(x,x+1))) {
-					date= date+newName.charAt(x);
-				}
-			}
-			System.out.println(date);
-			
-			int size =date.length()/4;
-			String[] datesBlocks = new String[size];		
-			if(date.length()>=4) {				
-				for(int x =0;x<size;x++) {
-					datesBlocks[x] = date.substring(x*4,(x+1)*4);
-					if(Integer.valueOf(datesBlocks[x])>=1900 && Integer.valueOf(datesBlocks[x])<=Year.now().getValue()) {
-						test = true;
-						holder = x;
-						
-					}
-				}
-				if(test){
-					newName = newName.replace(datesBlocks[holder], "");
-					item.setYear(Integer.valueOf(datesBlocks[holder]));
-				}
-				
-			}
-			return newName;
-		}	
-		
-		private static String getExtension(String fileName){
-			String extension = "";
+			return null;
 
-			int i = fileName.lastIndexOf('.');
-			if (i > 0 && i < fileName.length() - 1) //if the name is not empty
-				return fileName.substring(i + 1).toLowerCase();
-
-			return extension;
 		}
 }

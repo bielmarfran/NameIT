@@ -65,6 +65,65 @@ public class JsonOperationsTmdb {
 
 	}
 	
+	public static void getSearchSerie(String name, int year){
+		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String language = DataStored.propertiesGetLanguage();
+		language = languageTmdb(language);
+		String uri = "";
+		if(year==0) {
+			
+	
+			uri ="https://api.themoviedb.org/3/search/tv?api_key="+keynow+"&language="+language+"&query="+name+
+					"&page=1&include_adult=false";
+			System.out.println(uri);
+		}else {
+			uri ="https://api.themoviedb.org/3/search/tv?api_key="+keynow+"&language="+language+"&query="+name+
+					"&page=1&include_adult=false&first_air_date_year="+year;
+			System.out.println(uri);
+		}
+	
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(uri))				
+				.header("Content-Type", "application/json")
+				//.header("Accept-Language", language)
+				//.header("Authorization", "Bearer "+keynow)
+			
+				.build();
+
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+		.thenApply(HttpResponse::body)
+		.thenApply(OperationTmdb::responseSerieId)
+		.join();
+
+	}
+	public static void getInfoSerie(Integer id,String season,String episode){
+		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String language = DataStored.propertiesGetLanguage();
+		language = languageTmdb(language);
+		String uri = "";	
+			
+		uri ="https://api.themoviedb.org/3/tv/"+id+"/season/"+season+"/episode/"+episode+"?api_key="+keynow+"&language="+language;
+		//https://api.themoviedb.org/3/tv/60735/season/01/episode/01?api_key=ee7c5286c8b982e91fafcbbcce8ceb30&language=en-US
+		System.out.println(uri);
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(uri))				
+				.header("Content-Type", "application/json")
+				//.header("Accept-Language", language)
+				//.header("Authorization", "Bearer "+keynow)
+			
+				.build();
+
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+		.thenApply(HttpResponse::body)
+		.thenApply(OperationTmdb::responseFinalSerie)
+		.join();
+
+	}
+	//
 	public static String languageTmdb(String l) {
 		switch (l) {
 		case "en": 
