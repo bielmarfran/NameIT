@@ -224,17 +224,15 @@ public class MainController {
 					listViewFiles.getItems().add(files.get(i).getName());
 					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i))));
 					paintListView();
+				}else{
+					System.out.println("file is not valid");
 				}
-
-
-
 			}
 		}else{
 			System.out.println("file is not valid");
-
 		}
-
 	}
+	
 	//Method to Call Configuration Page
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));

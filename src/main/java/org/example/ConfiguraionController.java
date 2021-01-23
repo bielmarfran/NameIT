@@ -83,9 +83,6 @@ public class ConfiguraionController {
 		
 		TextFieldMovie.setText(DataStored.propertiesGetMovieScheme());
 		paintText(DataStored.propertiesGetMovieScheme());
-		//System.out.println("-1-"+textList.get(0).getText());
-		//System.out.println("-2-"+textList.get(1).getText());
-		//System.out.println("-3-"+textList.get(2).getText());
 		Text t1 = new Text(DataStored.propertiesGetMovieScheme());
 		TextFlowMovies.getChildren().addAll(textList);
 		
