@@ -156,7 +156,6 @@ public class MainController {
 
 	
 
-	
 
 	//Get - Set
 	public static Integer getControl_circle() {
@@ -168,18 +167,15 @@ public class MainController {
 	//End Get - Set
 
 
-
 	//Operations on the initialization of the UI.
 	public void initialize() {
 		setMode();		
 		fillFilterExtention();
 		tooltips();
-
 		paginationErrorList.setVisible(true);
 		paginationErrorList.setPageCount(1);
 		listViewErrorText.setVisible(false);
 		paintCircle();
-
 
 	}
 	//Check the stored mode value in the properties, and deal with UI element to change change the mode
@@ -268,6 +264,7 @@ public class MainController {
 		checkboxSeries_value = checkboxSeries.isSelected();
 		checkboxSeason_value = checkboxSeason.isSelected();
 		checkboxFolder_value = checkboxFolder.isSelected();
+		
 		//End Getting the value of the check boxes
 		listViewFilesRenamed.getItems().clear();
 		enter=0;
@@ -297,6 +294,7 @@ public class MainController {
 		}
 		System.out.println("-- before-backgroundTaks--");
 		renamingListError.clear();
+		//progressIndicator.visibleProperty().bind(backgroundTaks.runningProperty());
 		backgroundTaks = new Service<Void>() {					
 			@Override
 			protected Task<Void> createTask() {
@@ -305,26 +303,27 @@ public class MainController {
 					@Override
 					protected Void call() throws Exception{
 						System.out.println("-- inside-backgroundTaks--");
-
+						 
 						if((renamingList.size()<1 && renamingListError.size()<1) || listViewFiles.getItems().size()<1) {
 							clearList();
 							paginationErrorList.setVisible(false);
-							updateProgress(0.00, 100.00);
+							progressIndicator.setProgress(0);
 							cancel();
 
 						}else {
 							System.out.println(enter);
 							if(enter==1) {
-								updateProgress(0.00, 100.00);
+								progressIndicator.setProgress(0);
 								cancel();
 							}else {
 								String mode = DataStored.propertiesGetMode(); 
 								if(mode.equals("Series")) {
 									System.out.println("renamingList.size() -- "+renamingList.size());
 									if(renamingList.size()<1) {
-										updateProgress(0.00, 100.00);
+										progressIndicator.setProgress(0);
 										cancel();
 									}
+
 									for(int x=0;x<renamingList.size();x++){
 										System.out.println("TMDB Series");
 										OperationTmdb tmdb = new OperationTmdb();
@@ -333,7 +332,7 @@ public class MainController {
 										controlBreakFile=0;
 										controlBreakFileSlug=0;
 										controlBreakFileSlug2=0;
-										tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+										tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 										if(item.getError()==null) {										
 											tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Series");
 											//breakFileName(episodeList.get(x).getOriginalName());
@@ -341,15 +340,21 @@ public class MainController {
 											System.out.println("II");
 											renamingList.remove(x);
 										}
+										System.out.println("-----------------------------");
+										double max =100/renamingList.size();
+										//updateProgress(x+1, max);
+										Double progress = (x * max)/100;
+										progressIndicator.setProgress(progress);
+										if(x==renamingList.size()-1) {
+											progressIndicator.setProgress(1);
+										}
 									}
-										
-										
-										
+
 			
 								}else {
 									System.out.println("renamingList.size() -- "+renamingList.size());
 									if(renamingList.size()<1) {
-										updateProgress(0.00, 100.00);
+										progressIndicator.setProgress(0);
 										cancel();
 									}
 									for(int x=0;x<renamingList.size();x++){
@@ -363,7 +368,7 @@ public class MainController {
 											controlBreakFile=0;
 											controlBreakFileSlug=0;
 											controlBreakFileSlug2=0;
-											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 											if(item.getError()==null) {										
 												tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
 												//breakFileName(episodeList.get(x).getOriginalName());
@@ -373,11 +378,14 @@ public class MainController {
 											}
 
 										}
-
-										System.out.println("-----------------------------");
-										double max =renamingList.size();
-										updateProgress(x+1, max);
-									}
+										double max =100/renamingList.size();
+										//updateProgress(x+1, max);
+										Double progress = (x * max)/100;
+										progressIndicator.setProgress(progress);
+										if(x==renamingList.size()-1) {
+											progressIndicator.setProgress(1);
+										}
+									}									
 								}
 							}
 						}											
@@ -385,6 +393,7 @@ public class MainController {
 					}	
 				};
 			}
+			
 		};
 		backgroundTaks.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
@@ -425,7 +434,7 @@ public class MainController {
 		
 				
 				//Call the pagination routine to show the results in a pagination type.
-						
+				
 				paintListView();
 				clearList();
 				renamingList.clear();
@@ -452,8 +461,8 @@ public class MainController {
 			}
 		});
 
-		backgroundTaks.restart();
-		progressIndicator.progressProperty().bind(backgroundTaks.progressProperty());
+		backgroundTaks.restart();	
+		//progressIndicator.progressProperty().bind(backgroundTaks.progressProperty());
 
 		
 	}
@@ -573,13 +582,14 @@ public class MainController {
 	//Clear Button Action
 	public void clearALL() {
 		enter=0;
-
 		renamingList.clear();
 		renamingListError.clear();
 		listViewFiles.getItems().clear();
 		listViewFilesRenamed.getItems().clear();
 		listViewErrorText.getItems().clear();
 		labelDrop();
+		progressIndicator.setProgress(0);
+		//updateProgress(0);
 		paginationErrorList.setVisible(false);
 
 	}

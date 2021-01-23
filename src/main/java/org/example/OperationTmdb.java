@@ -51,7 +51,7 @@ public class OperationTmdb {
 		private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 	
 		//
-		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder) {	
+		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value) {	
 			System.out.println("--Inside setInfo TMDB--");
 			controlArrayListEpisode=x;
 			item = episode;
@@ -61,6 +61,7 @@ public class OperationTmdb {
 			checkboxSeries_value = checkboxSeries;
 			checkboxSeason_value = checkboxSeason;
 			checkboxFolder_value = checkboxFolder;
+			this.textFieldFolder_value = textFieldFolder_value;
 			fillFilter();
 		
 			
