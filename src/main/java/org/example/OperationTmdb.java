@@ -73,7 +73,10 @@ public class OperationTmdb {
 			item.setYear(0);
 			if(!name.isEmpty()){
 				name = formatName(name, mode);
-				//System.out.println(name);
+				if(!name.isEmpty()){
+					System.out.println("After formatName");
+				}
+				
 				namesBlocks = name.split(" ");
 				for(int x=0;x<namesBlocks.length;x++){
 					System.out.println("----"+namesBlocks.length);
@@ -619,7 +622,6 @@ public class OperationTmdb {
 			return null;
 		}
 
-
 		//Get the defined name format from properties.
 		public static String nameScheme() {
 			String scheme = DataStored.propertiesGetMovieScheme();
@@ -723,6 +725,7 @@ public class OperationTmdb {
 
 
 			name = isDate(name, mode);
+
 			return name;
 
 		}
@@ -756,7 +759,7 @@ public class OperationTmdb {
 		public static String isDate(String newName, String mode) {
 			System.out.println("Inside isDate TMDB");
 			String date ="";
-			Boolean test = null;
+			Boolean test = false;
 			Integer holder = null;
 			
 			for(int x=0;x<newName.length();x++) {
@@ -765,15 +768,15 @@ public class OperationTmdb {
 				}
 			}
 			System.out.println(date);
-			
 			int size =date.length()/4;
 			String[] datesBlocks = new String[size];		
-			if(date.length()>=4) {				
-				for(int x =0;x<size;x++) {	
-					datesBlocks[x] = date.substring(x*4,(x+1)*4);
+			if(date.length()>=4) {		
+				for(int x = 0;x<size;x++) {	
+					datesBlocks[x] = date.substring(x*4,(x+1)*4);	
+
 					if(Integer.valueOf(datesBlocks[x])>=1900 && Integer.valueOf(datesBlocks[x])<=Year.now().getValue()) {
 						test = true;
-						holder = x;				
+						holder = x;								
 					}			
 					if(mode.equals("Series")) {
 						x = size;
@@ -783,8 +786,8 @@ public class OperationTmdb {
 					newName = newName.replace(datesBlocks[holder], "");
 					item.setYear(Integer.valueOf(datesBlocks[holder]));
 				}
-				
 			}
+			
 			return newName;
 		}	
 		//Check the last "." and the the value after that.
