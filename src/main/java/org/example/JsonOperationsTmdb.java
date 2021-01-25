@@ -64,7 +64,7 @@ public class JsonOperationsTmdb {
 		.join();
 
 	}
-	
+	//
 	public static void getSearchSerie(String name, int year){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
@@ -98,6 +98,7 @@ public class JsonOperationsTmdb {
 		.join();
 
 	}
+	//
 	public static void getInfoSerie(Integer id,String season,String episode){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
@@ -152,7 +153,8 @@ public class JsonOperationsTmdb {
 		
 	}
 
-
-	//Send a Get request for informations about the series, using the series id.
+	//Get ID Groups
+	//Object 2 = Absolute Episode Numbers
+	//https://api.themoviedb.org/3/tv/37854/episode_groups?api_key=ee7c5286c8b982e91fafcbbcce8ceb30&language=en-US
 
 }

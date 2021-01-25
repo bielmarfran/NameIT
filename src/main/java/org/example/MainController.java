@@ -327,19 +327,24 @@ public class MainController {
 									for(int x=0;x<renamingList.size();x++){
 										System.out.println("TMDB Series");
 										OperationTmdb tmdb = new OperationTmdb();
-										controlArrayListEpisode=x;
-										item = renamingList.get(x);
-										controlBreakFile=0;
-										controlBreakFileSlug=0;
-										controlBreakFileSlug2=0;
-										tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
-										if(item.getError()==null) {										
-											tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Series");
-											//breakFileName(episodeList.get(x).getOriginalName());
+										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
+											item = renamingList.get(x);
+											tmdb.setInfoAlternative(item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 										}else {
-											System.out.println("II");
-											renamingList.remove(x);
-										}
+											controlArrayListEpisode=x;
+											item = renamingList.get(x);
+											controlBreakFile=0;
+											controlBreakFileSlug=0;
+											controlBreakFileSlug2=0;
+											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+											if(item.getError()==null) {										
+												tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Series");
+												//breakFileName(episodeList.get(x).getOriginalName());
+											}else {
+												System.out.println("II");
+												renamingList.remove(x);
+											}
+										}										
 										System.out.println("-----------------------------");
 										double max =100/renamingList.size();
 										//updateProgress(x+1, max);
@@ -819,7 +824,7 @@ public class MainController {
 						}else {
 							for(int x =0;x<options.length();x++) {							
 								JSONObject op = options.getJSONObject(x);
-								String value ="Title - "+op.getString("seriesName") + " | Year - "+op.getString("firstAired")+ " | ID - "+op.getInt("id");
+								String value ="Title - "+op.getString("name") + " | Year - "+op.getString("first_air_date")+ " | ID - "+op.getInt("id");
 								Text.getItems().add(value);
 							}	
 						}

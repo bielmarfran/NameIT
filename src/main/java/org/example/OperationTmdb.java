@@ -67,6 +67,67 @@ public class OperationTmdb {
 			
 		}
 		//
+		public void setInfoAlternative(Item item2,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder,String textFieldFolder_value) {
+			System.out.println("--Inside setInfoAlternative--");
+			
+			item=item2;
+			
+			checkboxSeries_value = checkboxSeries;
+			checkboxSeason_value = checkboxSeason;
+			checkboxFolder_value = checkboxFolder;
+			fillFilter();
+			//Get the Alternative Value is this String and start Querying it to get data
+			String value = item.getAlternetiveInfo();
+			//Getting The Name of the Series
+			value = value.replace("Title - ", "");
+			String name = value.substring(0,value.indexOf("|")-1);
+			item.setName(name);
+			value = value.replace(name, "");
+			//End Getting Name
+			
+			//Getting the Year
+			value = value.replace("| Year - ", "");
+			String year = value.substring(1,value.indexOf("-"));
+			item.setYear(Integer.valueOf(year));
+			value = value.replace(year , "");
+			//End Getting the Year
+			
+			//Getting the ID
+			value = value.substring(6);
+			value = value.replace("| ID - ", "");
+			System.out.println("Test of Value"+value.substring(2));		
+			int id = Integer.valueOf(value.substring(2));
+			item.setId(Integer.valueOf(id));
+			System.out.println("| ID - "+item.getId());
+			
+			getSeasonAlternative("",item);
+			//End Getting the ID
+			
+			//Check if the Series Has its year in the Name, and remove to only 
+			//leave the Season and Episode Values to the next Part
+			/*
+			String yearTest = isYear(item.getOriginalName());
+			String nameValue="";
+			System.out.println("teste rTes "+yearTest);	
+			if(yearTest!=null) {
+				System.out.println("Inside IF 1");
+				System.out.println("teste year "+year);
+				System.out.println("teste rTes "+yearTest);	
+				if(year.equals(yearTest)) {
+					System.out.println("Inside IF 2");
+					String namedfdf =  item.getOriginalName();
+					System.out.println("-1-"+namedfdf.lastIndexOf(yearTest));
+					System.out.println("-2-"+item.getOriginalName().substring(namedfdf.indexOf(yearTest)+4));
+					nameValue = item.getOriginalName().substring(namedfdf.indexOf(yearTest)+4);
+				}
+
+			}
+			*/
+
+
+
+		}
+		//
 		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 			System.out.println("--Inside Break File Name--");
@@ -265,6 +326,102 @@ public class OperationTmdb {
 
 			//if(control_season==0 && !(item.getError().equals("04"))){
 				//check_absolute(test);
+			//}
+		}
+		//
+		public static void getSeasonAlternative(String value,Item item) {
+			System.out.println("-Inside SeasonAlternative");
+			String test ="";
+			if(value.equals("")) {
+				test=item.getOriginalName();
+			}else {
+				test = value;
+			}
+			test = formatName(test, "Series");
+			String season="";
+			int control_season=0;
+
+			System.out.println("Valor test inside season = "+test);
+			for(int x=0;x<10;x++){
+				if(!test.isEmpty()) {
+					if(test.contains("s"+x)){
+						int s_index = test.indexOf("s"+x);
+						if(test.length()>1){
+							test = test.substring(s_index+1);
+							s_index=0;
+							while(isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
+								control_season++;
+								season = season+test.substring(s_index,s_index+1);
+								test = test.substring(s_index+1);
+							}
+							if(!isNumeric(test.substring(s_index, s_index + 1))){
+								item.setSeason(season);
+								getEpisode(test,namesBlocks, controlNameBlock);
+								System.out.println("sdsdsds");
+								item.setError("");	
+							}
+							if(test.length()==1 && isNumeric(test)){
+								item.setError("05");	
+								season = season+test;
+								control_season++;
+							}else {
+								if(test.length()==1 && !isNumeric(test)){
+									item.setError("04");	
+								}
+
+							}
+						}else {
+							item.setError("04");	
+							System.out.println("Error");
+							
+
+						}
+					}else {
+						if(test.contains("x"+x)){
+							int s_index = test.indexOf("x"+x);
+							if(test.length()>1){
+								test = test.substring(s_index-1);
+								s_index=0;
+								while(isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
+									control_season++;
+									season = season+test.substring(s_index,s_index+1);
+									test = test.substring(s_index+1);
+								}
+								if(!isNumeric(test.substring(s_index, s_index + 1))){
+									item.setSeason(season);
+									getEpisode(test,namesBlocks, controlNameBlock);
+									System.out.println("sdsdsds");
+									item.setError("");	
+								}
+								if(test.length()==1 && isNumeric(test)){
+									item.setError("05");	
+									season = season+test;
+									control_season++;
+								}else {
+									if(test.length()==1 && !isNumeric(test)){
+										item.setError("04");	
+									}
+
+								}
+							}else {
+								item.setError("04");	
+								System.out.println("Error");
+								
+
+							}
+						}
+						
+						
+					}
+				}else{
+					System.out.println("File name Empty after part used for id reconition");
+					item.setError("04");	
+					x=10;
+				}
+			}
+
+			//if(control_season==0 && !(item.getError().equals("04"))){
+			//	check_absolute(test);
 			//}
 		}
 		//
@@ -671,7 +828,7 @@ public class OperationTmdb {
 
 		}
 		//Remove unwanted special character and names that only disturb the logic to find the episode
-		public String formatName(String name, String mode){
+		public static String formatName(String name, String mode){
 			System.out.println("Inside format Name");
 			exceptions =DataStored.readExceptions();
 			exceptionsRenamed =DataStored.readExceptionsRenamed();
