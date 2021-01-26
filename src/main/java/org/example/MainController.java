@@ -178,6 +178,7 @@ public class MainController {
 		paintCircle();
 
 	}
+
 	//Check the stored mode value in the properties, and deal with UI element to change change the mode
 	public void setMode() {
 		String mode = DataStored.propertiesGetMode();
@@ -216,6 +217,7 @@ public class MainController {
 				if(extension.contains(getExtension(files.get(i).getName()))){
 					listViewFiles.getItems().add(files.get(i).getName());
 					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i))));
+					rename(); 
 					paintListView();
 				}else{
 					System.out.println("file is not valid");
@@ -226,6 +228,220 @@ public class MainController {
 		}
 	}
 	
+	public void rename() {
+		
+		//Getting the value of the check boxes
+		checkboxSeries_value = checkboxSeries.isSelected();
+		checkboxSeason_value = checkboxSeason.isSelected();
+		checkboxFolder_value = checkboxFolder.isSelected();
+		
+		//End Getting the value of the check boxes
+		listViewFilesRenamed.getItems().clear();
+		enter=0;
+		
+		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
+			enter=1;
+			System.out.println("--Inside alert if--");
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Empy Path");
+			alert.setContentText("The path to save your file is empy.");
+			alert.showAndWait();
+		}else {
+			if(controlCircle==2) {
+				enter=1;
+				System.out.println("--Inside alert if 2--");
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Warning Dialog");
+				alert.setHeaderText("Disconected from Api");
+				alert.setContentText("1 - Check you internet connection.\n"+
+						"2 - Restar the program. \n"+
+						"3 - The Api maybe be down. \n");
+
+				alert.showAndWait();
+
+			}
+		}
+		System.out.println("-- before-backgroundTaks--");
+		renamingListError.clear();
+		//progressIndicator.visibleProperty().bind(backgroundTaks.runningProperty());
+		backgroundTaks = new Service<Void>() {					
+			@Override
+			protected Task<Void> createTask() {
+				// TODO Auto-generated method stub
+				return new Task<Void>() {
+					@Override
+					protected Void call() throws Exception{
+						System.out.println("-- inside-backgroundTaks--");
+						 
+						if((renamingList.size()<1 && renamingListError.size()<1) || listViewFiles.getItems().size()<1) {
+							clearList();
+							paginationErrorList.setVisible(false);
+							progressIndicator.setProgress(0);
+							cancel();
+
+						}else {
+							System.out.println(enter);
+							if(enter==1) {
+								progressIndicator.setProgress(0);
+								cancel();
+							}else {
+								String mode = DataStored.propertiesGetMode(); 
+								if(mode.equals("Series")) {
+									System.out.println("renamingList.size() -- "+renamingList.size());
+									if(renamingList.size()<1) {
+										progressIndicator.setProgress(0);
+										cancel();
+									}
+
+									for(int x=0;x<renamingList.size();x++){
+										System.out.println("TMDB Series");
+										OperationTmdb tmdb = new OperationTmdb();
+										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
+											item = renamingList.get(x);
+											tmdb.setInfoAlternative(item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+										}else {
+											controlArrayListEpisode=x;
+											item = renamingList.get(x);
+											controlBreakFile=0;
+											controlBreakFileSlug=0;
+											controlBreakFileSlug2=0;
+											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+											if(item.getError()==null) {										
+												tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Series");
+												//breakFileName(episodeList.get(x).getOriginalName());
+											}else {
+												System.out.println("II");
+												renamingList.remove(x);
+											}
+										}										
+										System.out.println("-----------------------------");
+										double max =100/renamingList.size();
+										//updateProgress(x+1, max);
+										Double progress = (x * max)/100;
+										progressIndicator.setProgress(progress);
+										if(x==renamingList.size()-1) {
+											progressIndicator.setProgress(1);
+										}
+									}
+
+			
+								}else {
+									System.out.println("renamingList.size() -- "+renamingList.size());
+									if(renamingList.size()<1) {
+										progressIndicator.setProgress(0);
+										cancel();
+									}
+									for(int x=0;x<renamingList.size();x++){
+										System.out.println("TMDB Movies");
+										OperationTmdb tmdb = new OperationTmdb();
+										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
+											tmdb.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+										}else {
+											controlArrayListEpisode=x;
+											item = renamingList.get(x);
+											controlBreakFile=0;
+											controlBreakFileSlug=0;
+											controlBreakFileSlug2=0;
+											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+											if(item.getError()==null) {										
+												tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
+												//breakFileName(episodeList.get(x).getOriginalName());
+											}else {
+												System.out.println("II");
+												renamingList.remove(x);
+											}
+
+										}
+										double max =100/renamingList.size();
+										//updateProgress(x+1, max);
+										Double progress = (x * max)/100;
+										progressIndicator.setProgress(progress);
+										if(x==renamingList.size()-1) {
+											progressIndicator.setProgress(1);
+										}
+									}									
+								}
+							}
+						}											
+						return null;
+					}	
+				};
+			}
+			
+		};
+		backgroundTaks.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				System.out.println("backgroundTaks.setOnSucceeded");
+			
+				int x=0;
+				int size=renamingList.size();
+			
+				for(int y=0;y<renamingListError.size();y++){
+					if(!(renamingListError.get(y).getAlternetiveInfo()==null)) {
+						renamingListError.remove(y);
+					}	
+				}
+				for(x=0;x<size;x++){
+					String n =renamingList.get(x).getError();
+					if(n.isEmpty()) {					
+						System.out.println("---Inside n.isEmpty()---");
+						listViewFilesRenamed.getItems().add(renamingList.get(x).getName());
+						int count=0;
+						do {	
+							listViewFiles.getItems().get(count);
+							if(listViewFiles.getItems().get(count).equals(renamingList.get(x).getOriginalName())) {
+								listViewFiles.getItems().remove(count);
+								count=-1;
+							}else {
+								count++;
+							}
+
+						}while(count!=-1);
+					}else {		
+						//Add the item with a positive Error Value to the renamingListError.
+						renamingListError.add(renamingList.get(x));
+
+
+					}
+				}
+		
+				
+				//Call the pagination routine to show the results in a pagination type.
+				
+				paintListView();
+				clearList();
+				renamingList.clear();
+				paginationError();
+			}
+		});
+
+		backgroundTaks.setOnFailed(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				System.out.println("backgroundTaks.setOnFailed");	
+				clearList();
+
+			}
+		});
+		backgroundTaks.setOnCancelled(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				System.out.println("backgroundTaks.setOnCancelled");
+				clearList();
+				clearALL();
+				
+
+			}
+		});
+
+		backgroundTaks.restart();	
+		//progressIndicator.progressProperty().bind(backgroundTaks.progressProperty());
+
+		
+	}
+
 	//Method to Call Configuration Page
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
@@ -562,7 +778,7 @@ public class MainController {
 	}
 	//End UI Trigger--------------------------------------------------
 
-
+	
 	//Support UI--------------------------------------------------
 	// Clear the Lists
 	public void clearList() {

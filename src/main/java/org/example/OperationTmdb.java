@@ -483,7 +483,7 @@ public class OperationTmdb {
 			System.out.println(item.getEpisode());
 			System.out.println(item.getEpisodeName());
 			System.out.println(item.getSeason());
-			renameFileCreateDirectorySerie();
+			//renameFileCreateDirectorySerie();
 
 			return null;
 
@@ -779,6 +779,9 @@ public class OperationTmdb {
 			return null;
 		}
 
+		
+		
+		
 		//Get the defined name format from properties.
 		public static String nameScheme() {
 			String scheme = DataStored.propertiesGetMovieScheme();
@@ -887,8 +890,7 @@ public class OperationTmdb {
 
 		}
 		//Values that only disturb the logic of the program.
-		public void fillFilter() {
-			
+		public void fillFilter() {			
 			
 			filterList.add("horriblesubs");
 			filterList.add("subproject");

@@ -9,6 +9,8 @@ public class Item {
 	private int id;
 	//Name of the file in the END
 	private String name;
+	//Store the year value
+	private int year;
 	//Name of the file in the beginning
 	private String orignalName;
 	//Season value of the file
@@ -21,16 +23,14 @@ public class Item {
 	private String episodeName;
 	//Original Path of the file
 	private String originalPath;
-	//Key value of the API
-	private String key;
+	//State
+	private Integer state ;
 	//Store the value of an Error
 	private String error;
 	//Store the options of series
 	private String optionsList;
 	//Store the file episode
 	private File originalFile;
-	//Store the year value
-	private int year;
 	//Store the alternative info of the episode
 	private String alternetiveInfo;
 	
@@ -60,7 +60,7 @@ public class Item {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Item(String name, String orignalName, int id, String season, String episode, String absolute_episode,String original_name, String key, String error, int year, String episodeName) {
+	public Item(String name, String orignalName, int id, String season, String episode, String absolute_episode,String original_name, Integer state, String error, int year, String episodeName) {
 		super();
 		this.name = name;
 		this.orignalName = orignalName;
@@ -69,7 +69,7 @@ public class Item {
 		this.episode = episode;
 		this.absoluteEpisode = absolute_episode;
 		this.originalPath = original_name;
-		this.key = key;
+		this.state = state;
 		this.error = error;
 		this.year = year;
 		this.episodeName = episodeName;
@@ -112,11 +112,11 @@ public class Item {
 		this.absoluteEpisode = absolute_episode;
 	}
 	
-	public String getKey() {
-		return key;
+	public Integer getState() {
+		return state;
 	}
-	public void setKey(String key) {
-		this.key = key;
+	public void setState(Integer state) {
+		this.state = state;
 	}
 	public String getError() {
 		return error;
