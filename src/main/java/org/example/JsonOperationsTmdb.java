@@ -171,7 +171,31 @@ public class JsonOperationsTmdb {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdb::responseMovieId)
+		.thenApply(OperationTmdb::check_absolute)
+		.join();
+
+	}
+	
+	public static void getContentEpisodeGroups(String id){
+		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String language = DataStored.propertiesGetLanguage();
+		language = languageTmdb(language);
+		String uri = "";
+		uri ="https://api.themoviedb.org/3/tv/episode_group/"+id+"?api_key="+keynow+"&language="+language;
+	
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(uri))				
+				.header("Content-Type", "application/json")
+				//.header("Accept-Language", language)
+				//.header("Authorization", "Bearer "+keynow)
+			
+				.build();
+
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+		.thenApply(HttpResponse::body)
+		.thenApply(OperationTmdb::absolute_values)
 		.join();
 
 	}
