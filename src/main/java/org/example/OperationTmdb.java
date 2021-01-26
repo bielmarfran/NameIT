@@ -483,8 +483,9 @@ public class OperationTmdb {
 			System.out.println(item.getEpisode());
 			System.out.println(item.getEpisodeName());
 			System.out.println(item.getSeason());
+			finalName();
 			//renameFileCreateDirectorySerie();
-
+			//MainController.
 			return null;
 
 		}
@@ -659,6 +660,112 @@ public class OperationTmdb {
 		}
 
 		//
+		public static String rename2(Item item,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder){
+			
+			System.out.println("Dentro rename2");
+			
+			
+			checkboxSeries_value = checkboxSeries;
+			checkboxSeason_value = checkboxSeason;
+			checkboxFolder_value = checkboxFolder;
+			File f = item.getOriginalFile();
+			String absolutePath;
+			if(checkboxFolder_value){
+				if(textFieldFolder_value==null) {
+					absolutePath = textFieldFolder_value;
+				}else {
+					absolutePath = textFieldFolder_value;
+				}
+
+			}else{
+				absolutePath = item.getOriginalPath();
+			}
+			if(absolutePath==null) {
+				System.out.println("The path where the file will be saved is empth");	
+				item.setError("08");
+			}else {
+				if(checkboxSeries_value  && !checkboxSeason_value ){
+					System.out.println("Create Series");
+					File file = new File(absolutePath+"\\"+item.getName());
+					boolean bool = file.mkdirs();
+					if(bool){
+						System.out.println("Directory created successfully");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+					absolutePath = absolutePath+"\\"+item.getName();
+					String newPath = absolutePath+"\\"+item.getFinalFileName();
+
+					Boolean x =f.renameTo(new File(newPath));
+					if(x){
+						System.out.println("Rename was ok");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+
+				}else{
+					if(!checkboxSeries_value && checkboxSeason_value){
+						System.out.println("Create Season");
+						File file = new File(absolutePath+"\\"+"Season "+item.getSeason());
+						boolean bool = file.mkdirs();
+						if(bool){
+							System.out.println("Directory created successfully");
+						}else{
+							System.out.println("Sorry couldnt create specified directory");
+						}
+						absolutePath = absolutePath+"\\"+"Season "+item.getSeason();
+						String newPath = absolutePath+"\\"+item.getFinalFileName();
+						Boolean x =f.renameTo(new File(newPath));
+						if(x){
+							//System.out.println("Directory created successfully");
+						}else{
+							//System.out.println("Sorry couldnt create specified directory");
+						}
+
+					}
+				}
+				if(checkboxSeries_value && checkboxSeason_value){
+					System.out.println("Create Season and Series");
+					File file = new File(absolutePath+"\\"+item.getName()+"\\"+"Season "+item.getSeason());
+					boolean bool = file.mkdirs();
+					if(bool){
+						System.out.println("Directory created successfully");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+					absolutePath = absolutePath+"\\"+item.getName()+"\\"+"Season "+item.getSeason();
+					String newPath = absolutePath+"\\"+item.getFinalFileName();
+					System.out.println(newPath);	
+
+					Boolean x =f.renameTo(new File(newPath));
+					if(x){
+						System.out.println("Rename was ok");							
+						item.setError("");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+				}else{
+					File file = new File(absolutePath);
+					boolean bool = file.mkdirs();
+					if(bool){
+						System.out.println("Directory created successfully");
+					}else{
+						System.out.println("Sorry couldnt create specified directory");
+					}
+					//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
+					String newPath = absolutePath+"\\"+item.getFinalFileName();
+					Boolean x =f.renameTo(new File(newPath));
+					if(x){
+						//System.out.println("Directory created successfully");
+					}else{
+						//System.out.println("Sorry couldnt create specified directory");
+					}
+
+				}
+			}
+			return null;
+		}
+		
 		public static String renameFileCreateDirectorySerie(){
 			System.out.println("Test Error -- "+item.getError());
 
@@ -778,10 +885,26 @@ public class OperationTmdb {
 			}
 			return null;
 		}
+	
+		//
+		public static void finalName() {
+			System.out.println("--Inside finalName--");
+			String name = item.getName();
+			//Removing Characters that Windows dont let name files have
+			File f = item.getOriginalFile();
+			String exetention = getExtension(f.getName());
 
-		
-		
-		
+			System.out.println("Test --  2");
+			String newName = nameSchemeSeries(exetention);
+			System.out.println("Test --  3");
+
+			newName = newName+"."+exetention;
+			newName = formatName_Windows(newName);
+			name = formatName_Windows(name);
+			item.setState(1);
+			item.setFinalFileName(newName);
+			System.out.println(item.getFinalFileName());
+		}
 		//Get the defined name format from properties.
 		public static String nameScheme() {
 			String scheme = DataStored.propertiesGetMovieScheme();

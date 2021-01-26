@@ -7,8 +7,10 @@ public class Item {
 	
 	//Id of the Series in the API
 	private int id;
-	//Name of the file in the END
+	//Name of the series/movie
 	private String name;
+	//Name of file at the end
+	private String finalFileName;
 	//Store the year value
 	private int year;
 	//Name of the file in the beginning
@@ -24,7 +26,7 @@ public class Item {
 	//Original Path of the file
 	private String originalPath;
 	//State
-	private Integer state ;
+	private Integer state;
 	//Store the value of an Error
 	private String error;
 	//Store the options of series
@@ -42,11 +44,11 @@ public class Item {
 	}
 	
 	
-	public Item(String orignalName,String originalPatch,File originalFile) {
+	public Item(String orignalName,String originalPatch,File originalFile,Integer state) {
 		this.orignalName =orignalName;
 		this.originalPath =originalPatch;
 		this.originalFile =originalFile;
-
+		this.state = state;
 	}
 	
 	public Item(String orignalName,String Name,int id,String originalPatch,File originalFile) {
@@ -168,5 +170,11 @@ public class Item {
 	public void setEpisodeName(String episodeName) {
 		this.episodeName = episodeName;
 	}
-	
+	public String getFinalFileName() {
+		return finalFileName;
+	}
+
+	public void setFinalFileName(String finalFileName) {
+		this.finalFileName = finalFileName;
+	}
 }

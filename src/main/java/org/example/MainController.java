@@ -216,17 +216,17 @@ public class MainController {
 			for(int i=0;i <files.size();i++){
 				if(extension.contains(getExtension(files.get(i).getName()))){
 					listViewFiles.getItems().add(files.get(i).getName());
-					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i))));
-					rename(); 
+					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0)));	
 					paintListView();
-				}else{
 					System.out.println("file is not valid");
 				}
 			}
 		}else{
 			System.out.println("file is not valid");
 		}
+		rename(); 
 	}
+	
 	
 	public void rename() {
 		
@@ -236,7 +236,7 @@ public class MainController {
 		checkboxFolder_value = checkboxFolder.isSelected();
 		
 		//End Getting the value of the check boxes
-		listViewFilesRenamed.getItems().clear();
+		//listViewFilesRenamed.getItems().clear();
 		enter=0;
 		
 		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
@@ -297,23 +297,28 @@ public class MainController {
 									for(int x=0;x<renamingList.size();x++){
 										System.out.println("TMDB Series");
 										OperationTmdb tmdb = new OperationTmdb();
+										
 										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
-											item = renamingList.get(x);
-											tmdb.setInfoAlternative(item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+											//item = renamingList.get(x);
+											tmdb.setInfoAlternative(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 										}else {
-											controlArrayListEpisode=x;
-											item = renamingList.get(x);
-											controlBreakFile=0;
-											controlBreakFileSlug=0;
-											controlBreakFileSlug2=0;
-											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
-											if(item.getError()==null) {										
-												tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Series");
-												//breakFileName(episodeList.get(x).getOriginalName());
-											}else {
-												System.out.println("II");
-												renamingList.remove(x);
+											
+											//item = renamingList.get(x);
+											if(renamingList.get(x).getState()==0) {
+												controlArrayListEpisode=x;
+												controlBreakFile=0;
+												controlBreakFileSlug=0;
+												controlBreakFileSlug2=0;
+												tmdb.setInfo(x,renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+												if(item.getError()==null) {										
+													tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Series");
+													//breakFileName(episodeList.get(x).getOriginalName());
+												}else {
+													System.out.println("II");
+													renamingList.remove(x);
+												}
 											}
+											
 										}										
 										System.out.println("-----------------------------");
 										double max =100/renamingList.size();
@@ -335,24 +340,27 @@ public class MainController {
 									for(int x=0;x<renamingList.size();x++){
 										System.out.println("TMDB Movies");
 										OperationTmdb tmdb = new OperationTmdb();
-										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
-											tmdb.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
-										}else {
-											controlArrayListEpisode=x;
-											item = renamingList.get(x);
-											controlBreakFile=0;
-											controlBreakFileSlug=0;
-											controlBreakFileSlug2=0;
-											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
-											if(item.getError()==null) {										
-												tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
-												//breakFileName(episodeList.get(x).getOriginalName());
+										if(item.getState()==0) {
+											if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
+												tmdb.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
 											}else {
-												System.out.println("II");
-												renamingList.remove(x);
-											}
+												controlArrayListEpisode=x;
+												item = renamingList.get(x);
+												controlBreakFile=0;
+												controlBreakFileSlug=0;
+												controlBreakFileSlug2=0;
+												tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+												if(item.getError()==null) {										
+													tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
+													//breakFileName(episodeList.get(x).getOriginalName());
+												}else {
+													System.out.println("II");
+													renamingList.remove(x);
+												}
 
+											}	
 										}
+										
 										double max =100/renamingList.size();
 										//updateProgress(x+1, max);
 										Double progress = (x * max)/100;
@@ -373,46 +381,29 @@ public class MainController {
 		backgroundTaks.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
-				System.out.println("backgroundTaks.setOnSucceeded");
+				System.out.println("backgroundTaks.setOnSucceeded 2");
 			
-				int x=0;
-				int size=renamingList.size();
-			
-				for(int y=0;y<renamingListError.size();y++){
-					if(!(renamingListError.get(y).getAlternetiveInfo()==null)) {
-						renamingListError.remove(y);
-					}	
-				}
-				for(x=0;x<size;x++){
-					String n =renamingList.get(x).getError();
-					if(n.isEmpty()) {					
-						System.out.println("---Inside n.isEmpty()---");
-						listViewFilesRenamed.getItems().add(renamingList.get(x).getName());
-						int count=0;
-						do {	
-							listViewFiles.getItems().get(count);
-							if(listViewFiles.getItems().get(count).equals(renamingList.get(x).getOriginalName())) {
-								listViewFiles.getItems().remove(count);
-								count=-1;
-							}else {
-								count++;
-							}
+				int x = 0;
+				int size = renamingList.size();
+				System.out.println(size);
+				for(int y=0;y<renamingList.size();y++){
 
-						}while(count!=-1);
-					}else {		
-						//Add the item with a positive Error Value to the renamingListError.
-						renamingListError.add(renamingList.get(x));
-
-
+					if(renamingList.get(y).getState()==1) {
+						//System.out.println("Nome Final - "+renamingList.get(y).getName()+" em "+y);
+						if(!listViewFilesRenamed.getItems().contains(renamingList.get(y).getFinalFileName())) {
+							listViewFilesRenamed.getItems().add(renamingList.get(y).getFinalFileName());
+						}											
+					}else {
+						renamingListError.add(renamingList.get(y));
 					}
-				}
-		
+					
+				}	
 				
 				//Call the pagination routine to show the results in a pagination type.
 				
 				paintListView();
-				clearList();
-				renamingList.clear();
+				//clearList();
+				//renamingList.clear();
 				paginationError();
 			}
 		});
@@ -475,225 +466,23 @@ public class MainController {
 	}
 	//Star the logic to the renaming the files
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
-		
-		//Getting the value of the check boxes
-		checkboxSeries_value = checkboxSeries.isSelected();
-		checkboxSeason_value = checkboxSeason.isSelected();
-		checkboxFolder_value = checkboxFolder.isSelected();
-		
-		//End Getting the value of the check boxes
-		listViewFilesRenamed.getItems().clear();
-		enter=0;
-		
-		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
-			enter=1;
-			System.out.println("--Inside alert if--");
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning Dialog");
-			alert.setHeaderText("Empy Path");
-			alert.setContentText("The path to save your file is empy.");
-			alert.showAndWait();
-		}else {
-			if(controlCircle==2) {
-				enter=1;
-				System.out.println("--Inside alert if 2--");
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Warning Dialog");
-				alert.setHeaderText("Disconected from Api");
-				alert.setContentText("1 - Check you internet connection.\n"+
-						"2 - Restar the program. \n"+
-						"3 - The Api maybe be down. \n");
-
-				alert.showAndWait();
-
+		//checkboxSeries_value = checkboxSeries.isSelected();
+		//checkboxSeason_value = checkboxSeason.isSelected();
+		//checkboxFolder_value = checkboxFolder.isSelected();
+		for(int x=0;x<renamingList.size();x++){
+			if(renamingList.get(x).getState()==1) {
+				OperationTmdb tmdb = new OperationTmdb();
+				tmdb.rename2(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected());
 			}
-		}
-		System.out.println("-- before-backgroundTaks--");
-		renamingListError.clear();
-		//progressIndicator.visibleProperty().bind(backgroundTaks.runningProperty());
-		backgroundTaks = new Service<Void>() {					
-			@Override
-			protected Task<Void> createTask() {
-				// TODO Auto-generated method stub
-				return new Task<Void>() {
-					@Override
-					protected Void call() throws Exception{
-						System.out.println("-- inside-backgroundTaks--");
-						 
-						if((renamingList.size()<1 && renamingListError.size()<1) || listViewFiles.getItems().size()<1) {
-							clearList();
-							paginationErrorList.setVisible(false);
-							progressIndicator.setProgress(0);
-							cancel();
-
-						}else {
-							System.out.println(enter);
-							if(enter==1) {
-								progressIndicator.setProgress(0);
-								cancel();
-							}else {
-								String mode = DataStored.propertiesGetMode(); 
-								if(mode.equals("Series")) {
-									System.out.println("renamingList.size() -- "+renamingList.size());
-									if(renamingList.size()<1) {
-										progressIndicator.setProgress(0);
-										cancel();
-									}
-
-									for(int x=0;x<renamingList.size();x++){
-										System.out.println("TMDB Series");
-										OperationTmdb tmdb = new OperationTmdb();
-										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
-											item = renamingList.get(x);
-											tmdb.setInfoAlternative(item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
-										}else {
-											controlArrayListEpisode=x;
-											item = renamingList.get(x);
-											controlBreakFile=0;
-											controlBreakFileSlug=0;
-											controlBreakFileSlug2=0;
-											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
-											if(item.getError()==null) {										
-												tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Series");
-												//breakFileName(episodeList.get(x).getOriginalName());
-											}else {
-												System.out.println("II");
-												renamingList.remove(x);
-											}
-										}										
-										System.out.println("-----------------------------");
-										double max =100/renamingList.size();
-										//updateProgress(x+1, max);
-										Double progress = (x * max)/100;
-										progressIndicator.setProgress(progress);
-										if(x==renamingList.size()-1) {
-											progressIndicator.setProgress(1);
-										}
-									}
-
-			
-								}else {
-									System.out.println("renamingList.size() -- "+renamingList.size());
-									if(renamingList.size()<1) {
-										progressIndicator.setProgress(0);
-										cancel();
-									}
-									for(int x=0;x<renamingList.size();x++){
-										System.out.println("TMDB Movies");
-										OperationTmdb tmdb = new OperationTmdb();
-										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
-											tmdb.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
-										}else {
-											controlArrayListEpisode=x;
-											item = renamingList.get(x);
-											controlBreakFile=0;
-											controlBreakFileSlug=0;
-											controlBreakFileSlug2=0;
-											tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
-											if(item.getError()==null) {										
-												tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
-												//breakFileName(episodeList.get(x).getOriginalName());
-											}else {
-												System.out.println("II");
-												renamingList.remove(x);
-											}
-
-										}
-										double max =100/renamingList.size();
-										//updateProgress(x+1, max);
-										Double progress = (x * max)/100;
-										progressIndicator.setProgress(progress);
-										if(x==renamingList.size()-1) {
-											progressIndicator.setProgress(1);
-										}
-									}									
-								}
-							}
-						}											
-						return null;
-					}	
-				};
-			}
-			
-		};
-		backgroundTaks.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-			@Override
-			public void handle(WorkerStateEvent event) {
-				System.out.println("backgroundTaks.setOnSucceeded");
-			
-				int x=0;
-				int size=renamingList.size();
-			
-				for(int y=0;y<renamingListError.size();y++){
-					if(!(renamingListError.get(y).getAlternetiveInfo()==null)) {
-						renamingListError.remove(y);
-					}	
-				}
-				for(x=0;x<size;x++){
-					String n =renamingList.get(x).getError();
-					if(n.isEmpty()) {					
-						System.out.println("---Inside n.isEmpty()---");
-						listViewFilesRenamed.getItems().add(renamingList.get(x).getName());
-						int count=0;
-						do {	
-							listViewFiles.getItems().get(count);
-							if(listViewFiles.getItems().get(count).equals(renamingList.get(x).getOriginalName())) {
-								listViewFiles.getItems().remove(count);
-								count=-1;
-							}else {
-								count++;
-							}
-
-						}while(count!=-1);
-					}else {		
-						//Add the item with a positive Error Value to the renamingListError.
-						renamingListError.add(renamingList.get(x));
-
-
-					}
-				}
-		
-				
-				//Call the pagination routine to show the results in a pagination type.
-				
-				paintListView();
-				clearList();
-				renamingList.clear();
-				paginationError();
-			}
-		});
-
-		backgroundTaks.setOnFailed(new EventHandler<WorkerStateEvent>() {
-			@Override
-			public void handle(WorkerStateEvent event) {
-				System.out.println("backgroundTaks.setOnFailed");	
-				clearList();
-
-			}
-		});
-		backgroundTaks.setOnCancelled(new EventHandler<WorkerStateEvent>() {
-			@Override
-			public void handle(WorkerStateEvent event) {
-				System.out.println("backgroundTaks.setOnCancelled");
-				clearList();
-				clearALL();
-				
-
-			}
-		});
-
-		backgroundTaks.restart();	
-		//progressIndicator.progressProperty().bind(backgroundTaks.progressProperty());
-
-		
+		}	
 	}
 	//Clear Button Click Event
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
-		System.out.println("Clear Button");
-		clearALL();
-			
+			System.out.println("Clear Button");
+			clearALL();
+				
 
-	}
+		}
 	//textfieldPath Click Event
 	public void textfieldPathAction(javafx.scene.input.MouseEvent mouseEvent) {
 		DirectoryChooser chooser = new DirectoryChooser();
@@ -773,7 +562,7 @@ public class MainController {
 			//paintListViewError(listViewErrorText.getSelectionModel().getSelectedItem());
 
 		}
-
+System.out.println("dsdsds");
 
 	}
 	//End UI Trigger--------------------------------------------------
@@ -1074,19 +863,25 @@ public class MainController {
 									if(renamingList.get(x).getOriginalName()==renamingListError.get(pageIndex).getOriginalName()) {
 										count++;
 										renamingList.get(x).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
+										renamingList.get(x).setState(0);
 										paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
+										rename();
 									}
 								}
 								if(count==0) {
 									renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
+									renamingListError.get(pageIndex).setState(0);
 									renamingList.add(renamingListError.get(pageIndex));
 									paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
 									count=0;
+									rename();
 								}
 							}else {
 								renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
+								renamingListError.get(pageIndex).setState(0);
 								renamingList.add(renamingListError.get(pageIndex));
 								paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
+								rename();
 							}
 							
 						}
