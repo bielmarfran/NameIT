@@ -70,9 +70,7 @@ public class JsonOperationsTmdb {
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
-		if(year==0) {
-			
-	
+		if(year==0) {				
 			uri ="https://api.themoviedb.org/3/search/tv?api_key="+keynow+"&language="+language+"&query="+name+
 					"&page=1&include_adult=false";
 			System.out.println(uri);
@@ -124,7 +122,7 @@ public class JsonOperationsTmdb {
 		.join();
 
 	}
-	//
+	//	
 	public static String languageTmdb(String l) {
 		switch (l) {
 		case "en": 
@@ -152,9 +150,34 @@ public class JsonOperationsTmdb {
 		return l;
 		
 	}
+	//
+	public static void getSerieEpisodeGroups(Integer id){
+		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String language = DataStored.propertiesGetLanguage();
+		language = languageTmdb(language);
+		String uri = "";
 
+		uri ="https://api.themoviedb.org/3/tv/"+id+"/episode_groups?api_key="+keynow+"&language="+language;
+	
+
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(uri))				
+				.header("Content-Type", "application/json")
+				//.header("Accept-Language", language)
+				//.header("Authorization", "Bearer "+keynow)
+			
+				.build();
+
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+		.thenApply(HttpResponse::body)
+		.thenApply(OperationTmdb::responseMovieId)
+		.join();
+
+	}
+	
 	//Get ID Groups
 	//Object 2 = Absolute Episode Numbers
-	//https://api.themoviedb.org/3/tv/37854/episode_groups?api_key=ee7c5286c8b982e91fafcbbcce8ceb30&language=en-US
+	//
 
 }

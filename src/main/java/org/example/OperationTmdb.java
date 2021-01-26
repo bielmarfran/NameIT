@@ -101,30 +101,7 @@ public class OperationTmdb {
 			System.out.println("| ID - "+item.getId());
 			
 			getSeasonAlternative("",item);
-			//End Getting the ID
-			
-			//Check if the Series Has its year in the Name, and remove to only 
-			//leave the Season and Episode Values to the next Part
-			/*
-			String yearTest = isYear(item.getOriginalName());
-			String nameValue="";
-			System.out.println("teste rTes "+yearTest);	
-			if(yearTest!=null) {
-				System.out.println("Inside IF 1");
-				System.out.println("teste year "+year);
-				System.out.println("teste rTes "+yearTest);	
-				if(year.equals(yearTest)) {
-					System.out.println("Inside IF 2");
-					String namedfdf =  item.getOriginalName();
-					System.out.println("-1-"+namedfdf.lastIndexOf(yearTest));
-					System.out.println("-2-"+item.getOriginalName().substring(namedfdf.indexOf(yearTest)+4));
-					nameValue = item.getOriginalName().substring(namedfdf.indexOf(yearTest)+4);
-				}
-
-			}
-			*/
-
-
+			//End Getting the ID			
 
 		}
 		//
@@ -418,12 +395,80 @@ public class OperationTmdb {
 					item.setError("04");	
 					x=10;
 				}
+				
+			}
+			System.out.println(item.getError());
+			if(control_season==0 && !(item.getError().equals("04"))){
+				check_absolute(test);			
+			}
+		}
+		//Sometimes the series is not divided in Seasons, only absolute episode numbers this methods are for that.
+		public static void check_absolute(String test){
+			System.out.println("--Inside Absolute--");
+			//String v1="";
+
+			int c=0;
+			String absolute_episode="";
+			for(int x =0;x<test.length();x++){
+				if(isNumeric(test.substring(x,x+1)) && c<=0){
+					test = test.substring(x);
+					c=1;
+				}
+			}
+			System.out.println(test);
+			if(test.length()>1){
+				if(isNumeric(test.substring(0,1))){
+					absolute_episode = test.substring(0,1);
+					test = test.substring(1);
+
+					while(test.length()>1 && isNumeric(test.substring(0,1))  ){
+
+						absolute_episode = absolute_episode + test.substring(0,1);
+						test = test.substring(1);
+					}
+					if(test.length()==1 &&isNumeric(test)){
+						absolute_episode = absolute_episode + test;
+						item.setAbsolute_episode(absolute_episode);
+						item.setError("");	
+						//JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);			
+					
+					}else{
+						item.setAbsolute_episode(absolute_episode);
+						item.setError("");	
+						//JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
+				
+						
+					}
+				}else{
+					if(!absolute_episode.isEmpty()){
+						item.setAbsolute_episode(absolute_episode);
+						item.setError("");	
+						//JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);
+			
+				
+					}else {
+						System.out.println("No Absolute Episode Found4");
+						item.setError("07");	
+					}
+
+				}
+			}else{
+				if(test.length()==1 &&isNumeric(test)){
+					absolute_episode = test;
+					item.setAbsolute_episode(absolute_episode);
+					System.out.println("No Absolute Episode Found5");
+					item.setError("");	
+					//JsonOperationsTvdb.jsonGetInfoApiAbsolute(item.getId(),absolute_episode);				
+				}else{
+					System.out.println("No Absolute Episode Found");
+					item.setError("07");	
+				}
+
 			}
 
-			//if(control_season==0 && !(item.getError().equals("04"))){
-			//	check_absolute(test);
-			//}
+
 		}
+
 		//
 		public static void getEpisode(String test,String[] namesBlocks,Integer control){
 			System.out.println("--Inside Episode--");
