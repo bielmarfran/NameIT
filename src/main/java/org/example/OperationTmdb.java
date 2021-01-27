@@ -307,46 +307,64 @@ public class OperationTmdb {
 				}
 			}
 			if(control_season==0){
-				System.out.println("--No s found--");
+				System.out.println("--No s found 4--");
 				int c=0;
-				String absolute_season="";
+				String season_value="";
 				for(int y =0;y<test.length();y++){
 					if(isNumeric(test.substring(y,y+1)) && c<=0){
 						test = test.substring(y);
 						c=1;
 					}				
 				}
-				System.out.println(test);
-				if(test.length()>1){
-					if(isNumeric(test.substring(0,1))){
-						absolute_season = test.substring(0,1);
+				while(test.length()>1 && isNumeric(test.substring(0,1)) ){
+					season_value = season_value + test.substring(0,1);
+					test = test.substring(1);	
+				}
+				System.out.println("Size "+season_value.length());
+				switch (season_value.length()) {
+				case 0: 
+					System.out.println("File name Empty after part used for id reconition");
+					item.setError("04");
+					break;
+				case 1: 
+					System.out.println("Dentro 1"+test.substring(0,1));
+					if(test.substring(0,1).equals("x") ) {
 						test = test.substring(1);
-						System.out.println("Valor Season Dentro - "+absolute_season);
-						if(test.length()>1 && isNumeric(test.substring(0,1)) ){
-							control_season++;
-							absolute_season = absolute_season + test.substring(0,1);
-							item.setSeason(absolute_season);
-							test = test.substring(1);							
-							getEpisode(test,namesBlocks, controlNameBlock);
-						}else {
-							if(test.length()>1) {
-								if(test.substring(0,1).equals("x")) {
-									if(isNumeric(test.substring(1,2)) ) {
-										item.setSeason(absolute_season);
-										test = test.substring(1);							
-										getEpisode(test,namesBlocks, controlNameBlock);
-										control_season++;
-									}
-								}
-							}
-						}
+						item.setSeason(season_value.substring(0,1));
+						getEpisode(test,namesBlocks, controlNameBlock);
+					}
+					
+					break;
+				case 2: 
+					System.out.println("Dentro 2");
+					System.out.println(season_value.substring(0,2));
+					if(isNumeric(test.substring(1,2))) {
+						test = test.substring(2);
+						item.setSeason(season_value.substring(0,2));
+						getEpisode(test,namesBlocks, controlNameBlock);
+					}
+					break;
+				case 3: 
+					System.out.println("Dentro 3");
+					test = test.substring(1);
+					item.setSeason(season_value.substring(0,1));
+					getEpisode(season_value.substring(1,3),namesBlocks, controlNameBlock);
+					break;
+				case 4: 
+					System.out.println("Dentro 4");
+					item.setSeason(season_value.substring(0,2));
+					getEpisode(season_value.substring(2,4),namesBlocks, controlNameBlock);
+					break;
+				default:
+					//throw new IllegalArgumentException("Unexpected value: " + season_value.length());
+					if(season_value.length()>4 &&season_value.length()<7) {
+						System.out.println("Maior 4");
+						item.setSeason(season_value.substring(0,2));
+						getEpisode(season_value.substring(2,season_value.length()),namesBlocks, controlNameBlock);
 					}
 				}
+															
 			}
-
-			//if(control_season==0 && !(item.getError().equals("04"))){
-				//check_absolute(test);
-			//}
 		}
 		//
 		public static void getSeasonAlternative(String value,Item item) {
@@ -406,46 +424,65 @@ public class OperationTmdb {
 				
 			}
 			if(control_season==0){
-				System.out.println("--No s found--");
+				System.out.println("--No s found 4--");
 				int c=0;
-				String absolute_season="";
+				String season_value="";
 				for(int y =0;y<test.length();y++){
 					if(isNumeric(test.substring(y,y+1)) && c<=0){
 						test = test.substring(y);
 						c=1;
 					}				
 				}
-				System.out.println(test);
-				if(test.length()>1){
-					if(isNumeric(test.substring(0,1))){
-						absolute_season = test.substring(0,1);
+				while(test.length()>1 && isNumeric(test.substring(0,1)) ){
+					season_value = season_value + test.substring(0,1);
+					test = test.substring(1);	
+				}
+				System.out.println("Size "+season_value.length());
+				switch (season_value.length()) {
+				case 0: 
+					System.out.println("File name Empty after part used for id reconition");
+					item.setError("04");
+					break;
+				case 1: 
+					System.out.println("Dentro 1"+test.substring(0,1));
+					if(test.substring(0,1).equals("x") ) {
 						test = test.substring(1);
-						System.out.println("Valor Season Dentro - "+absolute_season);
-						if(test.length()>1 && isNumeric(test.substring(0,1)) ){
-							control_season++;
-							absolute_season = absolute_season + test.substring(0,1);
-							item.setSeason(absolute_season);
-							test = test.substring(1);								
-							getEpisode(test,namesBlocks, controlNameBlock);
-							item.setError("");
-						}else {
-							if(test.length()>1) {
-								if(test.substring(0,1).equals("x")) {
-									if(isNumeric(test.substring(1,2)) ) {
-										item.setSeason(absolute_season);
-										test = test.substring(1);												
-										getEpisode(test,namesBlocks, controlNameBlock);
-										item.setError("");
-										control_season++;
-									}
-								}
-							}
-						}
+						item.setSeason(season_value.substring(0,1));
+						getEpisode(test,namesBlocks, controlNameBlock);
+					}
+					
+					break;
+				case 2: 
+					System.out.println("Dentro 2");
+					System.out.println(season_value.substring(0,2));
+					if(isNumeric(test.substring(1,2))) {
+						test = test.substring(2);
+						item.setSeason(season_value.substring(0,2));
+						getEpisode(test,namesBlocks, controlNameBlock);
+					}
+					break;
+				case 3: 
+					System.out.println("Dentro 3");
+					test = test.substring(1);
+					item.setSeason(season_value.substring(0,1));
+					getEpisode(season_value.substring(1,3),namesBlocks, controlNameBlock);
+					break;
+				case 4: 
+					System.out.println("Dentro 4");
+					item.setSeason(season_value.substring(0,2));
+					getEpisode(season_value.substring(2,4),namesBlocks, controlNameBlock);
+					break;
+				default:
+					//throw new IllegalArgumentException("Unexpected value: " + season_value.length());
+					if(season_value.length()>4 &&season_value.length()<7) {
+						System.out.println("Maior 4");
+						item.setSeason(season_value.substring(0,2));
+						getEpisode(season_value.substring(2,season_value.length()),namesBlocks, controlNameBlock);
 					}
 				}
+															
 			}
-			
-			//System.out.println(item.getError());
+
 			
 			item.setAlternetiveInfo("");
 		}
@@ -512,15 +549,19 @@ public class OperationTmdb {
 			System.out.println("--Inside Episode--");
 			control++;
 			String episode="";
-			System.out.println("Episode Value - "+test);
+			System.out.println("Episode Value Start - "+test);
+			System.out.println("Season Value in Episode- "+item.getSeason());
 			if(!test.isEmpty()) {
 				if(test.contains("e")){
+					System.out.println("Ponto 1");
 					test = test.replace("episode","ep");
 					if(test.contains("e")){
 						test = test.replace("ep","e");
 						if(test.contains("e")){
 							test = test.replace("e","");
+							test = test.trim();
 							if(isNumeric(test.substring(0,1))){
+								
 								if(test.length()>1){
 									episode = test.substring(0,1);
 									test = test.substring(1);
@@ -555,11 +596,12 @@ public class OperationTmdb {
 							c=1;
 						}
 					}
-					while(test.length()>1 && isNumeric(test.substring(0,1))  ){
+					while(test.length()>=1 && isNumeric(test.substring(0,1))  ){
 
 						episode = episode + test.substring(0,1);
 						test = test.substring(1);
 					}
+					System.out.println("Epsideo Value End - "+episode);
 					JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
 					
 					//item.setError("05");
@@ -569,10 +611,10 @@ public class OperationTmdb {
 			}
 			System.out.println("Valor Episodio 2 - "+ item.getEpisode());
 			System.out.println("Valor Episodio 3 - "+ item.getError());
-			if(controlEpisode==0){
-				JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
+			//if(controlEpisode==0){
+				//JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
 				//check_absolute(test);			
-			}
+			//}
 			System.out.println("Valor Episodio 4 - ");
 		}
 		
@@ -784,7 +826,7 @@ public class OperationTmdb {
 		}
 
 		//
-		public static String rename2(Item item,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder){
+		public static String renameFileSeries(Item item,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder){
 			
 			System.out.println("Dentro rename2");
 			
@@ -889,126 +931,7 @@ public class OperationTmdb {
 			}
 			return null;
 		}
-		
-		public static String renameFileCreateDirectorySerie(){
-			System.out.println("Test Error -- "+item.getError());
-
-			String name = item.getName();
-
-			//String newName =  item.getName()+" ("+item.getYear()+")";
-
-			//Removing Characters that Windows dont let name files have
-			File f = item.getOriginalFile();
-			String exetention = getExtension(f.getName());
-
-			System.out.println("Test --  2");
-			String newName = nameSchemeSeries(exetention);
-			System.out.println("Test --  3");
-
-			newName = newName+"."+exetention;
-			newName = formatName_Windows(newName);
-			name = formatName_Windows(name);
-
-			System.out.println("Dentro de renameFileCreateDirectorySerie");
-			//Set the final name
-			item.setName(newName);
-			String absolutePath;
-			if(checkboxFolder_value){
-				if(textFieldFolder_value==null) {
-					absolutePath = textFieldFolder_value;
-				}else {
-					absolutePath = textFieldFolder_value;
-				}
-
-			}else{
-				absolutePath = item.getOriginalPath();
-			}
-
-			if(absolutePath==null) {
-				System.out.println("The path where the file will be saved is empth");	
-				item.setError("08");
-			}else {
-				if(checkboxSeries_value  && !checkboxSeason_value ){
-					System.out.println("Create Series");
-					File file = new File(absolutePath+"\\"+name);
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					absolutePath = absolutePath+"\\"+name;
-					String newPath = absolutePath+"\\"+newName;
-
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						System.out.println("Rename was ok");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-
-				}else{
-					if(!checkboxSeries_value && checkboxSeason_value){
-						System.out.println("Create Season");
-						File file = new File(absolutePath+"\\"+"Season "+item.getSeason());
-						boolean bool = file.mkdirs();
-						if(bool){
-							System.out.println("Directory created successfully");
-						}else{
-							System.out.println("Sorry couldnt create specified directory");
-						}
-						absolutePath = absolutePath+"\\"+"Season "+item.getSeason();
-						String newPath = absolutePath+"\\"+newName;
-						Boolean x =f.renameTo(new File(newPath));
-						if(x){
-							//System.out.println("Directory created successfully");
-						}else{
-							//System.out.println("Sorry couldnt create specified directory");
-						}
-
-					}
-				}
-				if(checkboxSeries_value && checkboxSeason_value){
-					System.out.println("Create Season and Series");
-					File file = new File(absolutePath+"\\"+name+"\\"+"Season "+item.getSeason());
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					absolutePath = absolutePath+"\\"+name+"\\"+"Season "+item.getSeason();
-					String newPath = absolutePath+"\\"+newName;
-					System.out.println(newPath);	
-
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						System.out.println("Rename was ok");							
-						item.setError("");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-				}else{
-					File file = new File(absolutePath);
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
-					String newPath = absolutePath+"\\"+newName;
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						//System.out.println("Directory created successfully");
-					}else{
-						//System.out.println("Sorry couldnt create specified directory");
-					}
-
-				}
-			}
-			return null;
-		}
+				
 	
 		//
 		public static void finalName() {

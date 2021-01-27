@@ -472,7 +472,7 @@ public class MainController {
 		for(int x=0;x<renamingList.size();x++){
 			if(renamingList.get(x).getState()==1) {
 				OperationTmdb tmdb = new OperationTmdb();
-				tmdb.rename2(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected());
+				tmdb.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected());
 			}
 		}	
 	}
