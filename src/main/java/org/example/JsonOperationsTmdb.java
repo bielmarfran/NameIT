@@ -158,7 +158,7 @@ public class JsonOperationsTmdb {
 		String uri = "";
 
 		uri ="https://api.themoviedb.org/3/tv/"+id+"/episode_groups?api_key="+keynow+"&language="+language;
-	
+		System.out.println(uri);
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
@@ -182,7 +182,7 @@ public class JsonOperationsTmdb {
 		language = languageTmdb(language);
 		String uri = "";
 		uri ="https://api.themoviedb.org/3/tv/episode_group/"+id+"?api_key="+keynow+"&language="+language;
-	
+		System.out.println(uri);
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()

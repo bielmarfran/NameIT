@@ -411,7 +411,7 @@ public class MainController {
 		backgroundTaks.setOnFailed(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
-				System.out.println("backgroundTaks.setOnFailed");	
+				System.out.println("backgroundTaks.setOnFailed 2");	
 				clearList();
 
 			}
@@ -419,7 +419,7 @@ public class MainController {
 		backgroundTaks.setOnCancelled(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
-				System.out.println("backgroundTaks.setOnCancelled");
+				System.out.println("backgroundTaks.setOnCancelled 2");
 				clearList();
 				clearALL();
 				

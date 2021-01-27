@@ -52,12 +52,15 @@ public class OperationTmdb {
 		private static ArrayList<String> exceptions = new ArrayList<String>();
 		//
 		private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
-	
+		//
+		private static Integer controlEpisode=0;
+		
 		//
 		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value) {	
 			System.out.println("--Inside setInfo TMDB--");
 			controlArrayListEpisode=x;
 			item = episode;
+			controlEpisode=0;
 			controlBreakFile=0;
 			controlBreakFileSlug=0;
 			controlBreakFileSlug2=0;
@@ -74,10 +77,11 @@ public class OperationTmdb {
 			System.out.println("--Inside setInfoAlternative--");
 			
 			item=item2;
-			
+			//item.setAlternetiveInfo("");
 			checkboxSeries_value = checkboxSeries;
 			checkboxSeason_value = checkboxSeason;
 			checkboxFolder_value = checkboxFolder;
+			controlEpisode=0;
 			fillFilter();
 			//Get the Alternative Value is this String and start Querying it to get data
 			String value = item.getAlternetiveInfo();
@@ -302,6 +306,43 @@ public class OperationTmdb {
 					x=10;
 				}
 			}
+			if(control_season==0){
+				System.out.println("--No s found--");
+				int c=0;
+				String absolute_season="";
+				for(int y =0;y<test.length();y++){
+					if(isNumeric(test.substring(y,y+1)) && c<=0){
+						test = test.substring(y);
+						c=1;
+					}				
+				}
+				System.out.println(test);
+				if(test.length()>1){
+					if(isNumeric(test.substring(0,1))){
+						absolute_season = test.substring(0,1);
+						test = test.substring(1);
+						System.out.println("Valor Season Dentro - "+absolute_season);
+						if(test.length()>1 && isNumeric(test.substring(0,1)) ){
+							control_season++;
+							absolute_season = absolute_season + test.substring(0,1);
+							item.setSeason(absolute_season);
+							test = test.substring(1);							
+							getEpisode(test,namesBlocks, controlNameBlock);
+						}else {
+							if(test.length()>1) {
+								if(test.substring(0,1).equals("x")) {
+									if(isNumeric(test.substring(1,2)) ) {
+										item.setSeason(absolute_season);
+										test = test.substring(1);							
+										getEpisode(test,namesBlocks, controlNameBlock);
+										control_season++;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 
 			//if(control_season==0 && !(item.getError().equals("04"))){
 				//check_absolute(test);
@@ -336,9 +377,8 @@ public class OperationTmdb {
 								test = test.substring(s_index+1);
 							}
 							if(!isNumeric(test.substring(s_index, s_index + 1))){
-								item.setSeason(season);
+								item.setSeason(season);							
 								getEpisode(test,namesBlocks, controlNameBlock);
-								System.out.println("sdsdsds");
 								item.setError("");	
 							}
 							if(test.length()==1 && isNumeric(test)){
@@ -366,7 +406,7 @@ public class OperationTmdb {
 				
 			}
 			if(control_season==0){
-				System.out.println("Alternative 12345");
+				System.out.println("--No s found--");
 				int c=0;
 				String absolute_season="";
 				for(int y =0;y<test.length();y++){
@@ -380,27 +420,38 @@ public class OperationTmdb {
 					if(isNumeric(test.substring(0,1))){
 						absolute_season = test.substring(0,1);
 						test = test.substring(1);
+						System.out.println("Valor Season Dentro - "+absolute_season);
 						if(test.length()>1 && isNumeric(test.substring(0,1)) ){
 							control_season++;
 							absolute_season = absolute_season + test.substring(0,1);
 							item.setSeason(absolute_season);
-							test = test.substring(1);							
+							test = test.substring(1);								
 							getEpisode(test,namesBlocks, controlNameBlock);
+							item.setError("");
+						}else {
+							if(test.length()>1) {
+								if(test.substring(0,1).equals("x")) {
+									if(isNumeric(test.substring(1,2)) ) {
+										item.setSeason(absolute_season);
+										test = test.substring(1);												
+										getEpisode(test,namesBlocks, controlNameBlock);
+										item.setError("");
+										control_season++;
+									}
+								}
+							}
 						}
 					}
 				}
 			}
 			
-			System.out.println(item.getError());
+			//System.out.println(item.getError());
 			
-			if(control_season==0 && !(item.getError().equals("04"))){
-				JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
-				//check_absolute(test);			
-			}
+			item.setAlternetiveInfo("");
 		}
 		//Get the response from the API, from the episode groups
 		public static String responseSerieEpisodeGroups(String responseBody){
-			System.out.println("--Inside Absolute--");
+			System.out.println("--responseSerieEpisodeGroups--");
 			//System.out.println(responseBody);
 			JSONObject teste = new JSONObject(responseBody);
 			JSONArray groups = teste.getJSONArray("results");
@@ -409,9 +460,9 @@ public class OperationTmdb {
 			return null;					
 		}
 		
-		//
+		//Get the value of the EpisodeGroups and get the Absolute Episode Values
 		public static String responseContentEpisodeGroups(String responseBody){
-			System.out.println("--Inside Absolute Values--");
+			System.out.println("--responseContentEpisodeGroups--");
 			//System.out.println(responseBody);
 			JSONObject response = new JSONObject(responseBody);
 			JSONArray absolute = response.getJSONArray("groups");
@@ -421,8 +472,9 @@ public class OperationTmdb {
 			
 			
 			String test = item.getOriginalName();
-			test.replace(item.getName(), "");
-			test.replace(String.valueOf(item.getYear()), "");
+			test = test.replace(item.getName().toLowerCase(), "");
+			test = test.replace(String.valueOf(item.getYear()), "");
+			System.out.println("responseContentEpisodeGroups = "+test);
 			int c=0;
 			String absolute_episode="";
 			for(int x =0;x<test.length();x++){
@@ -447,7 +499,7 @@ public class OperationTmdb {
 			}
 			
 			//System.out.println(absolute_episode);
-			JSONObject get = absoluteEpisode.getJSONObject(Integer.valueOf(absolute_episode));			
+			JSONObject get = absoluteEpisode.getJSONObject(Integer.valueOf(absolute_episode)-1);			
 			item.setEpisode(String.valueOf(get.getInt("episode_number")));
 			item.setSeason(String.valueOf(get.getInt("season_number")));	
 			item.setEpisodeName(get.getString("name"));
@@ -515,7 +567,13 @@ public class OperationTmdb {
 
 				}
 			}
-
+			System.out.println("Valor Episodio 2 - "+ item.getEpisode());
+			System.out.println("Valor Episodio 3 - "+ item.getError());
+			if(controlEpisode==0){
+				JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
+				//check_absolute(test);			
+			}
+			System.out.println("Valor Episodio 4 - ");
 		}
 		
 		//
@@ -535,9 +593,8 @@ public class OperationTmdb {
 				}else {
 					//JSONObject response = new JSONObject(responseBody);
 					if(responseBody.contains("\"success\":false")) {
-						item.setError("07");
+						item.setError("06");
 					}else {
-						System.out.println("sdsdgf66556");
 						JSONObject series = new JSONObject(responseBody);
 						item.setEpisode(String.valueOf(series.getInt("episode_number")));
 						item.setSeason(String.valueOf(series .getInt("season_number")));	
@@ -553,6 +610,9 @@ public class OperationTmdb {
 			
 			return null;
 		}
+		
+		//------------------------------------------------------------------------------
+		
 		//Last method that takes the response from jsonGetInfoApi, and rename the files.
 		public static String renameFileCreateDirectory(){
 			System.out.println("Test Error -- "+item.getError());
@@ -953,14 +1013,14 @@ public class OperationTmdb {
 		//
 		public static void finalName() {
 			System.out.println("--Inside finalName--");
+			item.setError("");
+			controlEpisode++;
 			String name = item.getName();
 			//Removing Characters that Windows dont let name files have
 			File f = item.getOriginalFile();
 			String exetention = getExtension(f.getName());
 
-			System.out.println("Test --  2");
 			String newName = nameSchemeSeries(exetention);
-			System.out.println("Test --  3");
 
 			newName = newName+"."+exetention;
 			newName = formatName_Windows(newName);
