@@ -171,7 +171,7 @@ public class JsonOperationsTmdb {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdb::check_absolute)
+		.thenApply(OperationTmdb::responseSerieEpisodeGroups)
 		.join();
 
 	}
@@ -195,7 +195,7 @@ public class JsonOperationsTmdb {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdb::absolute_values)
+		.thenApply(OperationTmdb::responseContentEpisodeGroups)
 		.join();
 
 	}

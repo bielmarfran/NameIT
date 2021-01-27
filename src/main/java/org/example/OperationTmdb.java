@@ -202,8 +202,7 @@ public class OperationTmdb {
 			return null;
 		}
 
-		//
-		
+		//		
 		public static String responseSerieId(String responseBody){	
 			System.out.println(responseBody);
 			if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
@@ -320,8 +319,10 @@ public class OperationTmdb {
 			test = formatName(test, "Series");
 			String season="";
 			int control_season=0;
-
+			test = test.replace(item.getName().toLowerCase(), "");
+			test = test.replace(String.valueOf(item.getYear()), "");
 			System.out.println("Valor test inside season = "+test);
+			
 			for(int x=0;x<10;x++){
 				if(!test.isEmpty()) {
 					if(test.contains("s"+x)){
@@ -352,45 +353,10 @@ public class OperationTmdb {
 							}
 						}else {
 							item.setError("04");	
-							System.out.println("Error");
-							
-
+							System.out.println("Error");							
 						}
-					}else {
-						if(test.contains("x"+x)){
-							int s_index = test.indexOf("x"+x);
-							if(test.length()>1){
-								test = test.substring(s_index-1);
-								s_index=0;
-								while(isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
-									control_season++;
-									season = season+test.substring(s_index,s_index+1);
-									test = test.substring(s_index+1);
-								}
-								if(!isNumeric(test.substring(s_index, s_index + 1))){
-									item.setSeason(season);
-									getEpisode(test,namesBlocks, controlNameBlock);
-									item.setError("");	
-								}
-								if(test.length()==1 && isNumeric(test)){
-									item.setError("05");	
-									season = season+test;
-									control_season++;
-								}else {
-									if(test.length()==1 && !isNumeric(test)){
-										item.setError("04");	
-									}
-
-								}
-							}else {
-								item.setError("04");	
-								System.out.println("Error");
-								
-
-							}
-						}
-						
-						
+					}else {	
+																							
 					}
 				}else{
 					System.out.println("File name Empty after part used for id reconition");
@@ -399,14 +365,41 @@ public class OperationTmdb {
 				}
 				
 			}
+			if(control_season==0){
+				System.out.println("Alternative 12345");
+				int c=0;
+				String absolute_season="";
+				for(int y =0;y<test.length();y++){
+					if(isNumeric(test.substring(y,y+1)) && c<=0){
+						test = test.substring(y);
+						c=1;
+					}				
+				}
+				System.out.println(test);
+				if(test.length()>1){
+					if(isNumeric(test.substring(0,1))){
+						absolute_season = test.substring(0,1);
+						test = test.substring(1);
+						if(test.length()>1 && isNumeric(test.substring(0,1)) ){
+							control_season++;
+							absolute_season = absolute_season + test.substring(0,1);
+							item.setSeason(absolute_season);
+							test = test.substring(1);							
+							getEpisode(test,namesBlocks, controlNameBlock);
+						}
+					}
+				}
+			}
+			
 			System.out.println(item.getError());
+			
 			if(control_season==0 && !(item.getError().equals("04"))){
 				JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
 				//check_absolute(test);			
 			}
 		}
-		//Sometimes the series is not divided in Seasons, only absolute episode numbers this methods are for that.
-		public static String check_absolute(String responseBody){
+		//Get the response from the API, from the episode groups
+		public static String responseSerieEpisodeGroups(String responseBody){
 			System.out.println("--Inside Absolute--");
 			//System.out.println(responseBody);
 			JSONObject teste = new JSONObject(responseBody);
@@ -417,9 +410,9 @@ public class OperationTmdb {
 		}
 		
 		//
-		public static String absolute_values(String responseBody){
+		public static String responseContentEpisodeGroups(String responseBody){
 			System.out.println("--Inside Absolute Values--");
-			System.out.println(responseBody);
+			//System.out.println(responseBody);
 			JSONObject response = new JSONObject(responseBody);
 			JSONArray absolute = response.getJSONArray("groups");
 			JSONObject info = absolute.getJSONObject(1);
@@ -428,7 +421,8 @@ public class OperationTmdb {
 			
 			
 			String test = item.getOriginalName();
-			
+			test.replace(item.getName(), "");
+			test.replace(String.valueOf(item.getYear()), "");
 			int c=0;
 			String absolute_episode="";
 			for(int x =0;x<test.length();x++){
@@ -466,7 +460,7 @@ public class OperationTmdb {
 			System.out.println("--Inside Episode--");
 			control++;
 			String episode="";
-			System.out.println("Episode"+test);
+			System.out.println("Episode Value - "+test);
 			if(!test.isEmpty()) {
 				if(test.contains("e")){
 					test = test.replace("episode","ep");
@@ -501,8 +495,23 @@ public class OperationTmdb {
 						}
 					}
 				}else{
-					item.setError("05");
-					System.out.println("No e found");
+					
+					int c=0;
+					for(int x =0;x<test.length();x++){
+						if(isNumeric(test.substring(x,x+1)) && c<=0){
+							test = test.substring(x);
+							c=1;
+						}
+					}
+					while(test.length()>1 && isNumeric(test.substring(0,1))  ){
+
+						episode = episode + test.substring(0,1);
+						test = test.substring(1);
+					}
+					JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
+					
+					//item.setError("05");
+					//System.out.println("No e found");
 
 				}
 			}
@@ -511,20 +520,38 @@ public class OperationTmdb {
 		
 		//
 		public static String responseFinalSerie(String responseBody){
-			System.out.println("Inside responseFinalSerie");
+							
+			System.out.println("Inside responseFinalSerie");						
 			System.out.println(responseBody);
-			JSONObject series = new JSONObject(responseBody);
-			item.setEpisode(String.valueOf(series.getInt("episode_number")));
-			item.setSeason(String.valueOf(series .getInt("season_number")));	
-			item.setEpisodeName(series.getString("name"));
-			System.out.println(item.getEpisode());
-			System.out.println(item.getEpisodeName());
-			System.out.println(item.getSeason());
-			finalName();
-			//renameFileCreateDirectorySerie();
-			//MainController.
-			return null;
+			
+			if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
+				System.out.println("Resource not found");
+				item.setError("02");
 
+			}else{
+				if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
+					item.setError("03");
+					//JsonOperationsTvdb.checkConnection();
+				}else {
+					//JSONObject response = new JSONObject(responseBody);
+					if(responseBody.contains("\"success\":false")) {
+						item.setError("07");
+					}else {
+						System.out.println("sdsdgf66556");
+						JSONObject series = new JSONObject(responseBody);
+						item.setEpisode(String.valueOf(series.getInt("episode_number")));
+						item.setSeason(String.valueOf(series .getInt("season_number")));	
+						item.setEpisodeName(series.getString("name"));
+						System.out.println(item.getEpisode());
+						System.out.println(item.getEpisodeName());
+						System.out.println(item.getSeason());
+						finalName();				
+					}
+					
+				}
+			}
+			
+			return null;
 		}
 		//Last method that takes the response from jsonGetInfoApi, and rename the files.
 		public static String renameFileCreateDirectory(){
