@@ -54,6 +54,8 @@ public class OperationTmdb {
 		private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 		//
 		private static Integer controlEpisode=0;
+		//
+		private static Boolean checkForAnime=true;
 		
 		//
 		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value) {	
@@ -115,6 +117,7 @@ public class OperationTmdb {
 		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 			System.out.println("--Inside Break File Name--");
+			item.setState(2);
 			item.setYear(0);
 			if(!name.isEmpty()){
 				name = formatName(name, mode);
@@ -311,7 +314,7 @@ public class OperationTmdb {
 				int c=0;
 				String season_value="";
 				for(int y =0;y<test.length();y++){
-					if(isNumeric(test.substring(y,y+1)) && c<=0){
+					if(isNumeric(test.substring(y,y+1)) && c<=0){						
 						test = test.substring(y);
 						c=1;
 					}				
@@ -329,6 +332,7 @@ public class OperationTmdb {
 				case 1: 
 					System.out.println("Dentro 1"+test.substring(0,1));
 					if(test.substring(0,1).equals("x") ) {
+						checkForAnime = false;
 						test = test.substring(1);
 						item.setSeason(season_value.substring(0,1));
 						getEpisode(test,namesBlocks, controlNameBlock);
@@ -446,6 +450,7 @@ public class OperationTmdb {
 				case 1: 
 					System.out.println("Dentro 1"+test.substring(0,1));
 					if(test.substring(0,1).equals("x") ) {
+						checkForAnime = false;
 						test = test.substring(1);
 						item.setSeason(season_value.substring(0,1));
 						getEpisode(test,namesBlocks, controlNameBlock);
@@ -509,6 +514,7 @@ public class OperationTmdb {
 			
 			
 			String test = item.getOriginalName();
+			test = formatName(test, "Series");
 			test = test.replace(item.getName().toLowerCase(), "");
 			test = test.replace(String.valueOf(item.getYear()), "");
 			System.out.println("responseContentEpisodeGroups = "+test);
@@ -520,7 +526,7 @@ public class OperationTmdb {
 					c=1;
 				}				
 			}
-			//System.out.println(test);
+			System.out.println("--"+test);
 			if(test.length()>1){
 				if(isNumeric(test.substring(0,1))){
 									
@@ -611,10 +617,11 @@ public class OperationTmdb {
 			}
 			System.out.println("Valor Episodio 2 - "+ item.getEpisode());
 			System.out.println("Valor Episodio 3 - "+ item.getError());
-			//if(controlEpisode==0){
+			if(controlEpisode==0 && checkForAnime==true){
 				//JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
+				JsonOperationsTmdb.getSeriesKeywords(item.getId());
 				//check_absolute(test);			
-			//}
+			}
 			System.out.println("Valor Episodio 4 - ");
 		}
 		
@@ -653,6 +660,21 @@ public class OperationTmdb {
 			return null;
 		}
 		
+		public static String checkAnime(String responseBody){
+			
+			System.out.println(responseBody);
+			JSONObject keywords = new JSONObject(responseBody);
+			JSONArray absolute = keywords.getJSONArray("results");
+			for(int x=0; x<absolute.length();x++) {
+				JSONObject keyword= absolute.getJSONObject(x);
+				if(keyword.getInt("id")==210024) {
+					JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
+					x=absolute.length();
+				}
+			}
+			return null;
+			
+		}
 		//------------------------------------------------------------------------------
 		
 		//Last method that takes the response from jsonGetInfoApi, and rename the files.
@@ -931,8 +953,7 @@ public class OperationTmdb {
 			}
 			return null;
 		}
-				
-	
+					
 		//
 		public static void finalName() {
 			System.out.println("--Inside finalName--");
@@ -951,6 +972,7 @@ public class OperationTmdb {
 			item.setState(1);
 			item.setFinalFileName(newName);
 			System.out.println(item.getFinalFileName());
+			
 		}
 		//Get the defined name format from properties.
 		public static String nameScheme() {

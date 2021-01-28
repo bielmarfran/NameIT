@@ -217,8 +217,8 @@ public class MainController {
 				if(extension.contains(getExtension(files.get(i).getName()))){
 					listViewFiles.getItems().add(files.get(i).getName());
 					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0)));	
-					paintListView();
-					System.out.println("file is not valid");
+					//paintListView();
+					System.out.println("Adding - "+files.get(i).getName());
 				}
 			}
 		}else{
@@ -227,7 +227,7 @@ public class MainController {
 		rename(); 
 	}
 	
-	
+	//
 	public void rename() {
 		
 		//Getting the value of the check boxes
@@ -298,7 +298,7 @@ public class MainController {
 										System.out.println("TMDB Series");
 										OperationTmdb tmdb = new OperationTmdb();
 										
-										if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
+										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
 											//item = renamingList.get(x);
 											tmdb.setInfoAlternative(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 										}else {
@@ -429,10 +429,15 @@ public class MainController {
 
 		backgroundTaks.restart();	
 		//progressIndicator.progressProperty().bind(backgroundTaks.progressProperty());
-
+		paintListView();
 		
 	}
-
+	//
+	public void buttonSelectFiles(javafx.event.ActionEvent actionEvent) {
+		rename();
+		
+	}
+	
 	//Method to Call Configuration Page
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
@@ -562,8 +567,6 @@ public class MainController {
 			//paintListViewError(listViewErrorText.getSelectionModel().getSelectedItem());
 
 		}
-System.out.println("dsdsds");
-
 	}
 	//End UI Trigger--------------------------------------------------
 
@@ -865,7 +868,7 @@ System.out.println("dsdsds");
 										renamingList.get(x).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 										renamingList.get(x).setState(0);
 										paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
-										rename();
+										//rename();
 									}
 								}
 								if(count==0) {
@@ -874,14 +877,14 @@ System.out.println("dsdsds");
 									renamingList.add(renamingListError.get(pageIndex));
 									paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
 									count=0;
-									rename();
+									//rename();
 								}
 							}else {
 								renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 								renamingListError.get(pageIndex).setState(0);
 								renamingList.add(renamingListError.get(pageIndex));
 								paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
-								rename();
+								//rename();
 							}
 							
 						}
