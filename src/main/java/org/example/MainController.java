@@ -151,6 +151,10 @@ public class MainController {
 	private static final String DEFAULT_CONTROL_INNER_BACKGROUND = "derive(-fx-base,80%)";
 	//Static Value for Red ListView Background Color
 	private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
+	//Static Value for Red ListView Background Color
+	private static final String HIGHLIGHTED_CONTROL_2_INNER_BACKGROUND = "#e4f542";
+	//
+	private static final String HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND = "#6ea364";
 	// Test
 	private static Integer enter=0;
 
@@ -622,13 +626,28 @@ public class MainController {
 								setText(null);
 								setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
 							} else {
-								setText(item);
-								if (!item.isEmpty() && renamingList.size()>=1) {
+								setText(item);					
+								 if (!item.isEmpty() && renamingList.size()>=1) {
 									int color_control=0;
 									for(int x=0;x<renamingList.size();x++){
 										if(item.equals(renamingList.get(x).getOriginalName())){
 											color_control++;
-											setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+											switch (renamingList.get(x).getState()) {
+											case 0:
+												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+												break;
+											case 1:
+												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND  + ";");
+												break;
+											case 2:
+												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_2_INNER_BACKGROUND + ";");
+												break;
+											default:
+												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+												break;
+											}
+
+											
 										}
 									}
 									if(color_control==0){
@@ -639,6 +658,8 @@ public class MainController {
 									System.out.println("Verde 2");
 									setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
 								}
+								 
+							
 							}
 
 						}

@@ -259,6 +259,7 @@ public class OperationTmdb {
 		public static void getSeason() {
 			System.out.println("-Inside Season-");
 
+			
 			String test="";
 			String season="";
 			controlNameBlock++;
@@ -275,23 +276,23 @@ public class OperationTmdb {
 						if(test.length()>1){
 							test = test.substring(s_index+1);
 							s_index=0;
-							while(isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
+							while(GlobalFunctions.isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
 								control_season++;
 								season = season+test.substring(s_index,s_index+1);
 								test = test.substring(s_index+1);
 							}
-							if(!isNumeric(test.substring(s_index, s_index + 1))){
+							if(!GlobalFunctions.isNumeric(test.substring(s_index, s_index + 1))){
 								item.setSeason(season);
 								getEpisode(test,namesBlocks, controlNameBlock);
 								System.out.println("");
 								item.setError("");	
 							}
-							if(test.length()==1 && isNumeric(test)){
+							if(test.length()==1 && GlobalFunctions.isNumeric(test)){
 								item.setError("05");	
 								season = season+test;
 								control_season++;
 							}else {
-								if(test.length()==1 && !isNumeric(test)){
+								if(test.length()==1 && !GlobalFunctions.isNumeric(test)){
 									item.setError("04");	
 								}
 
@@ -314,12 +315,12 @@ public class OperationTmdb {
 				int c=0;
 				String season_value="";
 				for(int y =0;y<test.length();y++){
-					if(isNumeric(test.substring(y,y+1)) && c<=0){						
+					if(GlobalFunctions.isNumeric(test.substring(y,y+1)) && c<=0){						
 						test = test.substring(y);
 						c=1;
 					}				
 				}
-				while(test.length()>1 && isNumeric(test.substring(0,1)) ){
+				while(test.length()>1 && GlobalFunctions.isNumeric(test.substring(0,1)) ){
 					season_value = season_value + test.substring(0,1);
 					test = test.substring(1);	
 				}
@@ -340,12 +341,16 @@ public class OperationTmdb {
 					
 					break;
 				case 2: 
-					System.out.println("Dentro 2");
+					System.out.println("Dentro 2" + test);
 					System.out.println(season_value.substring(0,2));
-					if(isNumeric(test.substring(1,2))) {
+					if(GlobalFunctions.isNumeric(test.substring(2,3))) {
 						test = test.substring(2);
 						item.setSeason(season_value.substring(0,2));
 						getEpisode(test,namesBlocks, controlNameBlock);
+					}else {
+						//test = test.substring(1);
+						item.setSeason(season_value.substring(0,1));
+						getEpisode(season_value.substring(1,2),namesBlocks, controlNameBlock);
 					}
 					break;
 				case 3: 
@@ -393,22 +398,22 @@ public class OperationTmdb {
 						if(test.length()>1){
 							test = test.substring(s_index+1);
 							s_index=0;
-							while(isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
+							while(GlobalFunctions.isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
 								control_season++;
 								season = season+test.substring(s_index,s_index+1);
 								test = test.substring(s_index+1);
 							}
-							if(!isNumeric(test.substring(s_index, s_index + 1))){
+							if(!GlobalFunctions.isNumeric(test.substring(s_index, s_index + 1))){
 								item.setSeason(season);							
 								getEpisode(test,namesBlocks, controlNameBlock);
 								item.setError("");	
 							}
-							if(test.length()==1 && isNumeric(test)){
+							if(test.length()==1 && GlobalFunctions.isNumeric(test)){
 								item.setError("05");	
 								season = season+test;
 								control_season++;
 							}else {
-								if(test.length()==1 && !isNumeric(test)){
+								if(test.length()==1 && !GlobalFunctions.isNumeric(test)){
 									item.setError("04");	
 								}
 
@@ -432,12 +437,12 @@ public class OperationTmdb {
 				int c=0;
 				String season_value="";
 				for(int y =0;y<test.length();y++){
-					if(isNumeric(test.substring(y,y+1)) && c<=0){
+					if(GlobalFunctions.isNumeric(test.substring(y,y+1)) && c<=0){
 						test = test.substring(y);
 						c=1;
 					}				
 				}
-				while(test.length()>1 && isNumeric(test.substring(0,1)) ){
+				while(test.length()>1 && GlobalFunctions.isNumeric(test.substring(0,1)) ){
 					season_value = season_value + test.substring(0,1);
 					test = test.substring(1);	
 				}
@@ -458,12 +463,16 @@ public class OperationTmdb {
 					
 					break;
 				case 2: 
-					System.out.println("Dentro 2");
+					System.out.println("Dentro 2" + test);
 					System.out.println(season_value.substring(0,2));
-					if(isNumeric(test.substring(1,2))) {
+					if(GlobalFunctions.isNumeric(test.substring(2,3))) {
 						test = test.substring(2);
 						item.setSeason(season_value.substring(0,2));
 						getEpisode(test,namesBlocks, controlNameBlock);
+					}else {
+						//test = test.substring(1);
+						item.setSeason(season_value.substring(0,1));
+						getEpisode(season_value.substring(1,2),namesBlocks, controlNameBlock);
 					}
 					break;
 				case 3: 
@@ -508,11 +517,16 @@ public class OperationTmdb {
 			//System.out.println(responseBody);
 			JSONObject response = new JSONObject(responseBody);
 			JSONArray absolute = response.getJSONArray("groups");
-			JSONObject info = absolute.getJSONObject(1);
+			JSONObject info = new JSONObject();
+			for(int x=0;x<7;x++) {
+				info = absolute.getJSONObject(x);
+				if(info.getInt("order")==1) {
+					x=7;
+				}
+			}
 			JSONArray absoluteEpisode = info.getJSONArray("episodes");
-			
-			
-			
+				
+						
 			String test = item.getOriginalName();
 			test = formatName(test, "Series");
 			test = test.replace(item.getName().toLowerCase(), "");
@@ -520,20 +534,20 @@ public class OperationTmdb {
 			System.out.println("responseContentEpisodeGroups = "+test);
 			int c=0;
 			String absolute_episode="";
-			for(int x =0;x<test.length();x++){
-				if(isNumeric(test.substring(x,x+1)) && c<=0){
-					test = test.substring(x);
+			for(int y =0;y<test.length();y++){
+				if(GlobalFunctions.isNumeric(test.substring(y,y+1)) && c<=0){
+					test = test.substring(y);
 					c=1;
 				}				
 			}
 			System.out.println("--"+test);
 			if(test.length()>1){
-				if(isNumeric(test.substring(0,1))){
+				if(GlobalFunctions.isNumeric(test.substring(0,1))){
 									
 					absolute_episode = test.substring(0,1);
 					test = test.substring(1);
 
-					while(test.length()>1 && isNumeric(test.substring(0,1)) ){
+					while(test.length()>1 && GlobalFunctions.isNumeric(test.substring(0,1)) ){
 
 						absolute_episode = absolute_episode + test.substring(0,1);
 						test = test.substring(1);
@@ -566,18 +580,18 @@ public class OperationTmdb {
 						if(test.contains("e")){
 							test = test.replace("e","");
 							test = test.trim();
-							if(isNumeric(test.substring(0,1))){
+							if(GlobalFunctions.isNumeric(test.substring(0,1))){
 								
 								if(test.length()>1){
 									episode = test.substring(0,1);
 									test = test.substring(1);
 									System.out.println("Parte 2 -"+test);
-									while(isNumeric(test.substring(0,1)) && test.length()>1 ){
+									while(GlobalFunctions.isNumeric(test.substring(0,1)) && test.length()>1 ){
 										episode = episode + test.substring(0,1);
 										test = test.substring(1);
 									}
 								}
-								if(test.length()==1 && isNumeric(test)){
+								if(test.length()==1 && GlobalFunctions.isNumeric(test)){
 									episode = episode + test;
 									item.setEpisode(episode);						
 									JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
@@ -597,12 +611,12 @@ public class OperationTmdb {
 					
 					int c=0;
 					for(int x =0;x<test.length();x++){
-						if(isNumeric(test.substring(x,x+1)) && c<=0){
+						if(GlobalFunctions.isNumeric(test.substring(x,x+1)) && c<=0){
 							test = test.substring(x);
 							c=1;
 						}
 					}
-					while(test.length()>=1 && isNumeric(test.substring(0,1))  ){
+					while(test.length()>=1 && GlobalFunctions.isNumeric(test.substring(0,1))  ){
 
 						episode = episode + test.substring(0,1);
 						test = test.substring(1);
@@ -686,7 +700,7 @@ public class OperationTmdb {
 			String newName = nameScheme();
 			//Removing Characters that Windows dont let name files have
 			File f = item.getOriginalFile();
-			String exetention = getExtension(f.getName());
+			String exetention = GlobalFunctions.getExtension(f.getName());
 			newName = newName+"."+exetention;
 			newName = formatName_Windows(newName);
 			name = formatName_Windows(name);
@@ -777,7 +791,7 @@ public class OperationTmdb {
 
 			//Removing Characters that Windows dont let name files have
 			File f = item.getOriginalFile();
-			String exetention = getExtension(f.getName());
+			String exetention = GlobalFunctions.getExtension(f.getName());
 			newName = newName+"."+exetention;
 			newName = formatName_Windows(newName);
 			name = formatName_Windows(name);
@@ -962,7 +976,7 @@ public class OperationTmdb {
 			String name = item.getName();
 			//Removing Characters that Windows dont let name files have
 			File f = item.getOriginalFile();
-			String exetention = getExtension(f.getName());
+			String exetention = GlobalFunctions.getExtension(f.getName());
 
 			String newName = nameSchemeSeries(exetention);
 
@@ -1076,7 +1090,7 @@ public class OperationTmdb {
 			}
 
 
-			name = isDate(name, mode);
+			name = GlobalFunctions.isDate(name, mode, item);
 
 			return name;
 
@@ -1094,97 +1108,5 @@ public class OperationTmdb {
 			//End Names that only disturb the logic to find the episode
 
 		}
-		//Simple Method to check is a given character is numeric
-		public static boolean isNumeric(String strNum) {
-			if (strNum == null) {
-				return false;
-			}
-			try {
-				double d = Integer.parseInt(strNum);
-			} catch (NumberFormatException nfe) {
-				return false;
-			}
-			return true;
-		}
-		//Check for year value that is valid, 1900>= <=Current Year.
-		public static String isDate(String newName, String mode) {
-			System.out.println("Inside isDate TMDB");
-			String date ="";
-			Boolean test = false;
-			Integer holder = null;
-			
-			for(int x=0;x<newName.length();x++) {
-				if(isNumeric(newName.substring(x,x+1))) {
-					date= date+newName.charAt(x);
-				}
-			}
-			System.out.println(date);
-			int size =date.length()/4;
-			String[] datesBlocks = new String[size];		
-			if(date.length()>=4) {		
-				for(int x = 0;x<size;x++) {	
-					datesBlocks[x] = date.substring(x*4,(x+1)*4);	
 
-					if(Integer.valueOf(datesBlocks[x])>=1900 && Integer.valueOf(datesBlocks[x])<=Year.now().getValue()) {
-						test = true;
-						holder = x;								
-					}			
-					if(mode.equals("Series")) {
-						x = size;
-					}
-				}
-				if(test){
-					newName = newName.replace(datesBlocks[holder], "");
-					item.setYear(Integer.valueOf(datesBlocks[holder]));
-				}
-			}
-			
-			return newName;
-		}	
-		//Check the last "." and the the value after that.
-		private static String getExtension(String fileName){
-			String extension = "";
-
-			int i = fileName.lastIndexOf('.');
-			if (i > 0 && i < fileName.length() - 1) //if the name is not empty
-				return fileName.substring(i + 1).toLowerCase();
-
-			return extension;
-		}
-
-		public static String isYear(String newName) {
-			String date ="";
-			for(int x=0;x<newName.length();x++) {
-				if(isNumeric(newName.substring(x,x+1)) && date.length()<4) {
-					date= date+newName.charAt(x);
-				}
-			}
-			System.out.println(date);
-			if(date.length()==4) {
-				String min = "1800";
-				//Date max = new Date();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-				Date dmin = null;
-				Date dmax =  new Date();
-				Date dcheck = null;
-				try {
-					dcheck =sdf.parse(date);
-					dmin = sdf.parse(min);
-					//dmax= sdf.format(max);					
-					if(dcheck.after(dmin) && dcheck.before(dmax) ) {
-						System.out.println(dcheck);
-						newName = newName.replace(date, "");
-						//item.setYear(Integer.valueOf(date));
-						newName = String.valueOf(Integer.valueOf(date));
-						return newName;
-					}
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-			return null;
-
-		}
 }
