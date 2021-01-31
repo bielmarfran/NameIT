@@ -218,7 +218,7 @@ public class MainController {
 
 		if(files != null){			
 			for(int i=0;i <files.size();i++){
-				if(extension.contains(getExtension(files.get(i).getName()))){
+				if(extension.contains(GlobalFunctions.getExtension(files.get(i).getName()))){
 					listViewFiles.getItems().add(files.get(i).getName());
 					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0)));	
 					//paintListView();
@@ -961,6 +961,7 @@ public class MainController {
 	//End Connecting API--------------------------------------------------
 
 	//Global Support Operations
+	
 	//Remove character that Windows don't let files name have.
 	public void fillFilterExtention() {
 		//Files Types Supported
@@ -986,28 +987,7 @@ public class MainController {
 	
 
 	}
-	//Simple Method to check is a given character is numeric
-	public static boolean isNumeric(String strNum) {
-		if (strNum == null) {
-			return false;
-		}
-		try {
-			double d = Integer.parseInt(strNum);
-		} catch (NumberFormatException nfe) {
-			return false;
-		}
-		return true;
-	}
-	//Return the extension of a File
-	private String getExtension(String fileName){
-		String extension = "";
 
-		int i = fileName.lastIndexOf('.');
-		if (i > 0 && i < fileName.length() - 1) //if the name is not empty
-			return fileName.substring(i + 1).toLowerCase();
-
-		return extension;
-	}
 	//End Global Support Operations
 }
 

@@ -82,13 +82,13 @@ public class DataStored {
 
 		}
 		if(config.getProperty("Movie") ==null){
-			config.setProperty("Movie", "Name (Year)");
+			config.setProperty("Movie", "&Name (&Year)");
 
 		}else {
 
 		}
 		if(config.getProperty("Series") ==null){
-			config.setProperty("Series", "Name (Year) SSeasonEEpisode - EPN");
+			config.setProperty("Series", "&Name (&Year) S&SeasonE&Episode - &EPN");
 
 		}else {
 

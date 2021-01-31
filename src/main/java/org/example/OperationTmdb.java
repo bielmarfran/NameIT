@@ -19,21 +19,13 @@ public class OperationTmdb {
 		private static Integer controlCircle=0;
 		//Extension allowed in the program
 		public static ArrayList<String> extension = new ArrayList<>();
-		//File name garbage that makes it difficult to identify the episode
-		public static ArrayList<String> filterList = new ArrayList<>();
+
 		//
-		private static Integer controlArrayListEpisode=0;
+		//private static Integer controlArrayListEpisode=0;
 		//Variable where the File name is store in char block's to send one at the time to the Api.
 		private static String[] namesBlocks;
-		//Temporary store for namesBlocks in the Slug logic part.
-		private static String[] namesBlocksSlug;
 		//Control the times that block's of files name are sent to the Api.
 		private static Integer controlBreakFile=0;
-		//Control the times that block's of files name are sent to the Api in the Slug method.
-		private static Integer controlBreakFileSlug=0;
-		private static Integer controlBreakFileSlug2=0;
-		//Control how many times the will call the slug getJson.
-		private static Integer countSlug=0;
 		//Control the times the name block position
 		private static Integer controlNameBlock=0;
 		//Local Episode Variable used during the logic in the class
@@ -48,10 +40,7 @@ public class OperationTmdb {
 		private static boolean checkboxSeason_value;
 		//Store the value of checkboxFolder
 		private static boolean checkboxFolder_value;
-		//
-		private static ArrayList<String> exceptions = new ArrayList<String>();
-		//
-		private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
+
 		//
 		private static Integer controlEpisode=0;
 		//
@@ -60,18 +49,14 @@ public class OperationTmdb {
 		//
 		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value) {	
 			System.out.println("--Inside setInfo TMDB--");
-			controlArrayListEpisode=x;
+			//controlArrayListEpisode=x;
 			item = episode;
 			controlEpisode=0;
 			controlBreakFile=0;
-			controlBreakFileSlug=0;
-			controlBreakFileSlug2=0;
 			checkboxSeries_value = checkboxSeries;
 			checkboxSeason_value = checkboxSeason;
 			checkboxFolder_value = checkboxFolder;
-			this.textFieldFolder_value = textFieldFolder_value;
-			fillFilter();
-		
+			this.textFieldFolder_value = textFieldFolder_value;					
 			
 		}
 		//
@@ -83,8 +68,7 @@ public class OperationTmdb {
 			checkboxSeries_value = checkboxSeries;
 			checkboxSeason_value = checkboxSeason;
 			checkboxFolder_value = checkboxFolder;
-			controlEpisode=0;
-			fillFilter();
+			controlEpisode=0;			
 			//Get the Alternative Value is this String and start Querying it to get data
 			String value = item.getAlternetiveInfo();
 			//Getting The Name of the Series
@@ -120,7 +104,7 @@ public class OperationTmdb {
 			item.setState(2);
 			item.setYear(0);
 			if(!name.isEmpty()){
-				name = formatName(name, mode);
+				name = GlobalFunctions.formatName(name, mode, item);
 				if(!name.isEmpty()){
 					System.out.println("After formatName");
 				}
@@ -384,7 +368,8 @@ public class OperationTmdb {
 			}else {
 				test = value;
 			}
-			test = formatName(test, "Series");
+			test = GlobalFunctions.formatName(test, "Series", item);
+					
 			String season="";
 			int control_season=0;
 			test = test.replace(item.getName().toLowerCase(), "");
@@ -528,7 +513,7 @@ public class OperationTmdb {
 				
 						
 			String test = item.getOriginalName();
-			test = formatName(test, "Series");
+			test = GlobalFunctions.formatName(test, "Series", item);
 			test = test.replace(item.getName().toLowerCase(), "");
 			test = test.replace(String.valueOf(item.getYear()), "");
 			System.out.println("responseContentEpisodeGroups = "+test);
@@ -702,8 +687,8 @@ public class OperationTmdb {
 			File f = item.getOriginalFile();
 			String exetention = GlobalFunctions.getExtension(f.getName());
 			newName = newName+"."+exetention;
-			newName = formatName_Windows(newName);
-			name = formatName_Windows(name);
+			newName = GlobalFunctions.formatName_Windows(newName);
+			name = GlobalFunctions.formatName_Windows(name);
 			//Set the final name
 			item.setName(newName);
 
@@ -793,8 +778,8 @@ public class OperationTmdb {
 			File f = item.getOriginalFile();
 			String exetention = GlobalFunctions.getExtension(f.getName());
 			newName = newName+"."+exetention;
-			newName = formatName_Windows(newName);
-			name = formatName_Windows(name);
+			newName = GlobalFunctions.formatName_Windows(newName);
+			name = GlobalFunctions.formatName_Windows(name);
 			//Set the final name
 			item.setName(newName);
 
@@ -981,8 +966,8 @@ public class OperationTmdb {
 			String newName = nameSchemeSeries(exetention);
 
 			newName = newName+"."+exetention;
-			newName = formatName_Windows(newName);
-			name = formatName_Windows(name);
+			newName = GlobalFunctions.formatName_Windows(newName);
+			name = GlobalFunctions.formatName_Windows(name);
 			item.setState(1);
 			item.setFinalFileName(newName);
 			System.out.println(item.getFinalFileName());
@@ -1009,104 +994,16 @@ public class OperationTmdb {
 		public static String nameSchemeSeries(String ext) {
 			
 			String scheme = DataStored.propertiesGetSeriesScheme();
-			scheme = scheme.replace("Year", String.valueOf(item.getYear()));	
-			scheme  = scheme.replace("Name", item.getName());		
-			scheme  = scheme.replace("Season", item.getSeason());
-			scheme  = scheme.replace("Episode", item.getEpisode());
-			scheme  = scheme.replace("EPN", item.getEpisodeName());
+			scheme =  scheme.replace("&Year", String.valueOf(item.getYear()));	
+			scheme  = scheme.replace("&Name", item.getName());		
+			scheme  = scheme.replace("&Season", item.getSeason());
+			scheme  = scheme.replace("&Episode", item.getEpisode());
+			scheme  = scheme.replace("&EPN", item.getEpisodeName());
 			//scheme  = scheme .replace("Absolute", item.getAbsoluteEpisode());
 			//scheme =scheme+ext;
 						
 			return scheme;
 		}
 		
-		//Remove character that are invalid in windows files.
-		public static String formatName_Windows(String newName){
-
-			newName = newName.replace("<","");
-			newName = newName.replace(">","");
-			newName = newName.replace("*","");
-			newName = newName.replace("?","");
-			newName = newName.replace("/","");
-			newName = newName.replace("|","");
-			newName = newName.replace("\"","");
-			newName = newName.replace(String.valueOf('"'),"");
-			newName = newName.replace(":","");
-
-			return newName;
-
-		}
-		//Remove unwanted special character and names that only disturb the logic to find the episode
-		public static String formatName(String name, String mode){
-			System.out.println("Inside format Name");
-			exceptions =DataStored.readExceptions();
-			exceptionsRenamed =DataStored.readExceptionsRenamed();
-			name = name.toLowerCase();
-			//Remove characters in between [], the are always junk information or complementary.
-			if(name.contains("[")) {
-				if(name.contains("]")) {
-					int start = name.indexOf("[");
-					int end= name.indexOf("]")+1;
-					name = name.replace(name.substring(start,end), " ");
-					System.out.println(name);
-				}
-			}
-			//End
-			name = name.replace(".pdf","");
-			name = name.replace(".mkv","");
-			name = name.replace("-"," ");
-			name = name.replace("_"," ");
-			name = name.replace("."," ");
-			name = name.replace("["," ");
-			name = name.replace("]"," ");
-			name = name.replace(":"," ");
-			name = name.replace("2160p","");
-			name = name.replace("1080p","");
-			name = name.replace("720p","");
-			for(int y=0;y<exceptions.size();y++){
-
-				String ex =String.valueOf(exceptions.get(y));
-				String exr =String.valueOf(exceptionsRenamed.get(y));
-				if(ex.equals("-")) {
-					ex = " ";
-				}
-				if(exr.equals("-")) {
-					exr = " ";
-				}
-				name = name.replace(ex ,exr);
-			}	
-			for(int x=0;x<10;x++){
-				name = name.replace("s"+x," s"+x);
-				name = name.replace("season"+x," s"+x);
-			}
-			for(int y=0;y<filterList.size();y++){
-				String v1 =String.valueOf(filterList.get(y));
-				name = name.replace(v1 ,"");
-			}
-			for(int z=0;z<name.length();z++){
-				if(name.startsWith(" ")){
-					name = name.substring(1);
-				}
-			}
-
-
-			name = GlobalFunctions.isDate(name, mode, item);
-
-			return name;
-
-		}
-		//Values that only disturb the logic of the program.
-		public void fillFilter() {			
-			
-			filterList.add("horriblesubs");
-			filterList.add("subproject");
-			filterList.add("webrip");
-			filterList.add("x264");
-			filterList.add("acc");
-			filterList.add("hdtv");
-			filterList.add("animetc");
-			//End Names that only disturb the logic to find the episode
-
-		}
-
+		
 }
