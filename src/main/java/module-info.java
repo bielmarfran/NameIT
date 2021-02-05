@@ -7,6 +7,7 @@ module org.example {
 	requires javafx.graphics;
 	requires javafx.base;
 	requires java.desktop;
+	requires com.google.gson;
 
     opens org.example to javafx.fxml;
     exports org.example;

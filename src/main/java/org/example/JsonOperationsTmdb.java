@@ -1,6 +1,5 @@
 package org.example;
 
-import org.json.JSONObject;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -44,7 +43,7 @@ public class JsonOperationsTmdb {
 			System.out.println(uri);
 		}else {
 			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+name+
-					"&page=1&include_adult=false&year="+year;
+					"&page=1&include_adult=false&primary_release_year="+year;
 			System.out.println(uri);
 		}
 	

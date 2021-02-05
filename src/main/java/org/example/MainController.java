@@ -13,7 +13,6 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -26,10 +25,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.DragEvent;
@@ -37,22 +33,13 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.File;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -344,10 +331,14 @@ public class MainController {
 									for(int x=0;x<renamingList.size();x++){
 										System.out.println("TMDB Movies");
 										OperationTmdb tmdb = new OperationTmdb();
-										if(item.getState()==0) {
-											if(!(renamingList.get(x).getAlternetiveInfo()==null)) {
-												tmdb.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
-											}else {
+										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
+											tmdb.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+										}else {
+											
+											//item = renamingList.get(x);
+											if(renamingList.get(x).getState()==0) {
+												controlArrayListEpisode=x;
+												System.out.println("BOm 2");
 												controlArrayListEpisode=x;
 												item = renamingList.get(x);
 												controlBreakFile=0;
@@ -361,10 +352,10 @@ public class MainController {
 													System.out.println("II");
 													renamingList.remove(x);
 												}
+											}
 
-											}	
-										}
-										
+										}										
+
 										double max =100/renamingList.size();
 										//updateProgress(x+1, max);
 										Double progress = (x * max)/100;

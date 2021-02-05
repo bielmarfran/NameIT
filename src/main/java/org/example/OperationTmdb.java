@@ -1,15 +1,15 @@
 package org.example;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Year;
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
 
@@ -161,9 +161,42 @@ public class OperationTmdb {
 					//JsonOperationsTvdb.checkConnection();
 				}else {
 
-					responseBody = responseBody.substring((responseBody.indexOf("[")));
-					responseBody = responseBody.substring(0,(responseBody.lastIndexOf("]")+1));
+					//responseBody = responseBody.substring((responseBody.indexOf("[")));
+					//responseBody = responseBody.substring(0,(responseBody.lastIndexOf("]")+1));
 
+					/*
+					 * 
+					 * 
+					 * 
+					 */
+					 JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+			    	 JsonElement size = jsonObject.get("total_results");
+			    	 JsonArray y = jsonObject.getAsJsonArray("results");
+			    	 
+			    	 if(size.getAsInt()==1) {
+			    		 item.setError("");
+			    		 System.out.println(y.get(0));
+			    		 JsonObject x = y.get(0).getAsJsonObject();
+						 item.setId(x.get("id").getAsInt());
+						 item.setName(x.get("title").getAsString());							
+						 String year =x.get("release_date").getAsString().substring(0,4);						
+						 item.setYear(Integer.valueOf(year));							
+						 controlBreakFile =1;
+						 renameFileCreateDirectory();			    		
+			    		 
+			    	 }
+			    	 if(size.getAsInt()<=10 && size.getAsInt()>1 ){
+			    		 
+			    	 }else {
+			    		 if(size.getAsInt()>10) {
+								item.setError("09");
+								
+							}
+			    	 }
+			    	 
+					/*
+					 * 
+					
 					JSONArray albums =  new JSONArray(responseBody);
 					if(albums.length()==1){					
 						item.setError("");
@@ -188,6 +221,7 @@ public class OperationTmdb {
 							
 						}
 					}
+					 */
 				}
 			}
 			return null;
