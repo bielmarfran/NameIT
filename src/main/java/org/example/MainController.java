@@ -194,8 +194,6 @@ public class MainController {
 		ComboBoxMode.setOnAction(event);
 
 
-
-
 	}
 	//End
 
@@ -215,7 +213,8 @@ public class MainController {
 			for(int i=0;i <files.size();i++){
 				if(extension.contains(GlobalFunctions.getExtension(files.get(i).getName()))){
 					listViewFiles.getItems().add(files.get(i).getName());
-					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0)));	
+					String mode = DataStored.propertiesGetMode(); 	
+					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0)));								
 					//paintListView();
 					System.out.println("Adding - "+files.get(i).getName());
 				}
@@ -295,11 +294,11 @@ public class MainController {
 
 									for(int x=0;x<renamingList.size();x++){
 										System.out.println("TMDB Series");
-										OperationTmdb tmdb = new OperationTmdb();
+										OperationTmdbSerie tmdbs = new OperationTmdbSerie();
 										
 										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
 											//item = renamingList.get(x);
-											tmdb.setInfoAlternative(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+											tmdbs.setInfoAlternative(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 										}else {
 											
 											//item = renamingList.get(x);
@@ -308,9 +307,9 @@ public class MainController {
 												controlBreakFile=0;
 												controlBreakFileSlug=0;
 												controlBreakFileSlug2=0;
-												tmdb.setInfo(x,renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+												tmdbs.setInfo(x,renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 												if(item.getError()==null) {										
-													tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Series");
+													tmdbs.breakFileName(renamingList.get(x).getOriginalName(), "Series");
 													//breakFileName(episodeList.get(x).getOriginalName());
 												}else {
 													System.out.println("II");
@@ -338,9 +337,9 @@ public class MainController {
 									}
 									for(int x=0;x<renamingList.size();x++){
 										System.out.println("TMDB Movies");
-										OperationTmdb tmdb = new OperationTmdb();
+										OperationTmdbMovie tmdbm = new OperationTmdbMovie();
 										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
-											tmdb.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+											tmdbm.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
 										}else {
 											
 											//item = renamingList.get(x);
@@ -352,9 +351,9 @@ public class MainController {
 												controlBreakFile=0;
 												controlBreakFileSlug=0;
 												controlBreakFileSlug2=0;
-												tmdb.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+												tmdbm.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 												if(item.getError()==null) {										
-													tmdb.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
+													tmdbm.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
 													//breakFileName(episodeList.get(x).getOriginalName());
 												}else {
 													System.out.println("II");
@@ -479,8 +478,8 @@ public class MainController {
 		//checkboxFolder_value = checkboxFolder.isSelected();
 		for(int x=0;x<renamingList.size();x++){
 			if(renamingList.get(x).getState()==1) {
-				OperationTmdb tmdb = new OperationTmdb();
-				tmdb.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected());
+				OperationTmdbSerie tmdbs = new OperationTmdbSerie();
+				tmdbs.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected());
 			}
 		}	
 	}

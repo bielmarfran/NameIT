@@ -2,26 +2,19 @@ package org.example;
 
 import java.io.File;
 import java.util.ArrayList;
-//import org.json.JSONArray;
-//import org.json.JSONObject;
-
-//import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+//The function of this class is to receive an Item from the MainController, and process it to the final result
 
-
-public class OperationTmdb {
-	//Logic Variable
+public class OperationTmdbSerie {
+		//Logic Variable
 		//Control the color of the Circle that represent the connection to the Api
 		private static Integer controlCircle=0;
 		//Extension allowed in the program
 		public static ArrayList<String> extension = new ArrayList<>();
-
-		//
-		//private static Integer controlArrayListEpisode=0;
 		//Variable where the File name is store in char block's to send one at the time to the Api.
 		private static String[] namesBlocks;
 		//Control the times that block's of files name are sent to the Api.
@@ -30,8 +23,7 @@ public class OperationTmdb {
 		private static Integer controlNameBlock=0;
 		//Local Episode Variable used during the logic in the class
 		private static Item item = new Item();
-		//Call for the Service Class, that good part of the program logic will run on.
-		//private Service<Void> backgroundTaks;
+
 		//Store the value of textFieldFolder
 		private static String textFieldFolder_value;
 		//Store the value of checkboxSeries
@@ -148,86 +140,7 @@ public class OperationTmdb {
 			}
 
 		}
-		//
-		public static String responseMovieId(String responseBody){	
-			System.out.println(responseBody);
-			if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
-				System.out.println("Resource not found");
-				item.setError("02");
-
-			}else{
-				if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
-					item.setError("03");
-					//JsonOperationsTvdb.checkConnection();
-				}else {
-
-					//responseBody = responseBody.substring((responseBody.indexOf("[")));
-					//responseBody = responseBody.substring(0,(responseBody.lastIndexOf("]")+1));
-
-					/*
-					 * 
-					 * 
-					 * 
-					 */
-					 JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-			    	 JsonElement size = jsonObject.get("total_results");
-			    	 JsonArray y = jsonObject.getAsJsonArray("results");
-			    	 
-			    	 if(size.getAsInt()==1) {
-			    		 item.setError("");
-			    		 System.out.println(y.get(0));
-			    		 JsonObject x = y.get(0).getAsJsonObject();
-						 item.setId(x.get("id").getAsInt());
-						 item.setName(x.get("title").getAsString());							
-						 String year =x.get("release_date").getAsString().substring(0,4);						
-						 item.setYear(Integer.valueOf(year));							
-						 controlBreakFile =1;
-						 renameFileCreateDirectory();			    		
-			    		 
-			    	 }
-			    	 if(size.getAsInt()<=10 && size.getAsInt()>1){
-			    		 item.setOptionsList(responseBody);
-			    	 }else {
-			    		 if(size.getAsInt()>10) {
-								item.setError("09");
-								
-							}
-			    	 }
-			    	 
-					/*
-					 * 
-					
-					JSONArray albums =  new JSONArray(responseBody);
-					if(albums.length()==1){					
-						item.setError("");
-						JSONObject album = albums.getJSONObject(0);
-						item.setId(album.getInt("id"));
-						item.setName(album.getString("title"));							
-						String year = album.getString("release_date").substring(0,4);						
-						item.setYear(Integer.valueOf(year));
-						
-						controlBreakFile =1;
-						renameFileCreateDirectory();
-
-					}
-					if(albums.length()<=10 && albums.length()>1 ){
-						item.setError("10");
-						item.setOptionsList(responseBody);
-						
-
-					}else {
-						if(albums.length()>10) {
-							item.setError("09");
-							
-						}
-					}
-					 */
-				}
-			}
-			return null;
-		}
-
-		//		
+		//	
 		public static String responseSerieId(String responseBody){	
 			System.out.println(responseBody);
 			if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
@@ -305,7 +218,6 @@ public class OperationTmdb {
 		public static void getSeason() {
 			System.out.println("-Inside Season-");
 
-			
 			String test="";
 			String season="";
 			controlNameBlock++;
@@ -328,6 +240,7 @@ public class OperationTmdb {
 								test = test.substring(s_index+1);
 							}
 							if(!GlobalFunctions.isNumeric(test.substring(s_index, s_index + 1))){
+								
 								item.setSeason(season);
 								getEpisode(test,namesBlocks, controlNameBlock);
 								System.out.println("");
@@ -426,6 +339,7 @@ public class OperationTmdb {
 			System.out.println("-Inside SeasonAlternative");
 			String test ="";
 			if(value.equals("")) {
+
 				test=item.getOriginalName();
 			}else {
 				test = value;
@@ -789,178 +703,7 @@ public class OperationTmdb {
 		}
 		//------------------------------------------------------------------------------
 		
-		//Last method that takes the response from jsonGetInfoApi, and rename the files.
-		public static String renameFileCreateDirectory(){
-			System.out.println("Test Error -- "+item.getError());
-			String name = item.getName();
-
-			//String newName =  item.getName()+" ("+item.getYear()+")";
-			String newName = nameScheme();
-			//Removing Characters that Windows dont let name files have
-			File f = item.getOriginalFile();
-			String exetention = GlobalFunctions.getExtension(f.getName());
-			newName = newName+"."+exetention;
-			newName = GlobalFunctions.formatName_Windows(newName);
-			name = GlobalFunctions.formatName_Windows(name);
-			//Set the final name
-			item.setName(newName);
-
-			System.out.println("Name Middle Renaming ---"+item.getName());
-			//End Removing Characters that Windows don't let name files have
-
-			String absolutePath;
-			if(checkboxFolder_value){
-				if(textFieldFolder_value==null) {
-					absolutePath = textFieldFolder_value;
-				}else {
-					absolutePath = textFieldFolder_value;
-				}
-
-			}else{
-				absolutePath = item.getOriginalPath();
-			}
-
-			if(absolutePath==null) {
-				System.out.println("Error aldlasaasasa");	
-				item.setError("08");
-			}else {
-				if(checkboxSeries_value){
-					item.setError("");
-					System.out.println("Create Film");
-					File file = new File(absolutePath+"\\"+name);
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					absolutePath = absolutePath+"\\"+name;
-					String newPath = absolutePath+"\\"+newName;
-
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						System.out.println("Rename was ok");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-
-				}else{
-					item.setError("");
-					File file = new File(absolutePath);
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
-					String newPath = absolutePath+"\\"+newName;
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						//System.out.println("Directory created successfully");
-					}else{
-						//System.out.println("Sorry couldnt create specified directory");
-					}
-				}
-
-			}
-			return null;
-		}
-
-		//Last method that takes the response from jsonGetInfoApi, and rename the files.
-		public String renameFileCreateDirectory(Item item,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder){
-
-			checkboxSeries_value = checkboxSeries;
-			checkboxSeason_value = checkboxSeason;
-			checkboxFolder_value = checkboxFolder;
-			String value = item.getAlternetiveInfo();
-			value = value.replace("Title - ", "");
-			String name = value.substring(0,value.indexOf("|")-1);
-			value = value.replace(name, "");
-			value = value.replace("| Year - ", "");
-			String year = value.substring(1,value.indexOf("-"));
-			System.out.println("year"+year);
-			System.out.println("name"+name);
-			//String newName =  name+" ("+year+")";
-			String newName = nameScheme(name,year);
-
-
-
-
-			//Removing Characters that Windows dont let name files have
-			File f = item.getOriginalFile();
-			String exetention = GlobalFunctions.getExtension(f.getName());
-			newName = newName+"."+exetention;
-			newName = GlobalFunctions.formatName_Windows(newName);
-			name = GlobalFunctions.formatName_Windows(name);
-			//Set the final name
-			item.setName(newName);
-
-			System.out.println("Name Middle Renaming ---"+item.getName());
-			//End Removing Characters that Windows don't let name files have
-
-			String absolutePath;
-			if(checkboxFolder_value){
-				if(textFieldFolder_value==null) {
-					absolutePath = textFieldFolder_value;
-				}else {
-					absolutePath = textFieldFolder_value;
-				}
-
-			}else{
-				absolutePath = item.getOriginalPath();
-			}
-
-			if(absolutePath==null) {
-				System.out.println("Error no Path");	
-				item.setError("08");
-			}else {
-				if(checkboxSeries_value){
-					System.out.println("Create Film");
-					item.setError("");
-					File file = new File(absolutePath+"\\"+name);
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					absolutePath = absolutePath+"\\"+name;
-					String newPath = absolutePath+"\\"+newName;
-					System.out.println("test path" + newPath );
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						System.out.println("Rename was ok");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-
-				}else{
-					item.setError("");
-					File file = new File(absolutePath);
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
-					String newPath = absolutePath+"\\"+newName;
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						//System.out.println("Directory created successfully");
-					}else{
-						//System.out.println("Sorry couldnt create specified directory");
-					}
-				}
-
-			}
-
-			return null;
-		}
-
-		//
-		public static String renameFileSeries(Item item,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder){
+		public static String renameFileSeries(Item item, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder){
 			
 			System.out.println("Dentro rename2");
 			
@@ -1086,23 +829,7 @@ public class OperationTmdb {
 			System.out.println(item.getFinalFileName());
 			
 		}
-		//Get the defined name format from properties.
-		public static String nameScheme() {
-			String scheme = DataStored.propertiesGetMovieScheme();
-			scheme = scheme.replace("&Name", item.getName());
-			scheme = scheme.replace("&Year", String.valueOf(item.getYear()));
-						
-			return scheme;
-		}
-		//
-		public  String nameScheme(String name,String year) {
-			String scheme = DataStored.propertiesGetMovieScheme();
-			scheme = scheme.replace("&Name", name);
-			scheme = scheme.replace("&Year", year);
-						
-			return scheme;
-		}
-		
+
 		//Get Series Scheme for Properties and format the File Name according to stored schematics.
 		public static String nameSchemeSeries(String ext) {
 			
