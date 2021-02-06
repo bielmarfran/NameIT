@@ -1,9 +1,20 @@
 package org.example;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class JsonOperationsTmdb {
 	
@@ -13,21 +24,39 @@ public class JsonOperationsTmdb {
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
-		String uri = "";
-		uri ="https://api.themoviedb.org/3/movie/76341?api_key="+keynow;
-			
-
-		HttpClient client = HttpClient.newHttpClient();
+		String uri = "";	
+		uri ="https://api.themoviedb.org/3/movie/76341";
+		//uri ="https://api.themoviedb.org/3/movie/76341?api_key="+keynow;
+		//uri = "https://httpbin.org/get";
+		System.out.println("checkConnectionTMDB 2");
+		
+		  final HttpClient client = HttpClient.newBuilder()
+		            .version(HttpClient.Version.HTTP_2)
+		            .connectTimeout(Duration.ofSeconds(10))
+		            .build();
 		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))				
+				.GET()
+				.uri(URI.create(uri))		
+				.header("Authorization","Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZTdjNTI4NmM4Yjk4M"
+						+ "mU5MWZhZmNiYmNjZThjZWIzMCIsInN1YiI6IjVlZmU0NmVhOWRlZTU4MDAzNWNmYmZhMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.CXNPdD5fMeOFvL5wJT4vhsmkMKbOA2SpndOlmv0EVOY")
+			
 				.header("Content-Type", "application/json")
+				//.header("User-Agent", "Java 11 HttpClient Bot")
 				.build();
 
+	
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::statusCode)
 		.thenApply(MainController::statusTMDB)
-		.join();
+		.join();  
+		 
 
+		 
+
+
+
+		
+		
 	}
 
 	//Send info to TMDB API to get a Response from Movies

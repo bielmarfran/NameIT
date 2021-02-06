@@ -9,24 +9,27 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>14</maven.compiler.source>
 		<maven.compiler.target>14</maven.compiler.target>
+		<maven.compiler.release>14</maven.compiler.release>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>11.0.2</version>
+			<version>15</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>11.0.2</version>
+			<version>15</version>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20200518</version>
 			<type>jar</type>
 		</dependency>
+		 -->
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
@@ -51,10 +54,14 @@
 				<version>0.0.4</version>
 				<configuration>
 					<mainClass>org.example.App</mainClass>
-					<stripDebug>true</stripDebug>
+					<release>${maven.compiler.release}</release>				
+					<!-- <stripDebug>true</stripDebug>
 					<compress>2</compress>
 					<noHeaderFiles>true</noHeaderFiles>
-					<noManPages>true</noManPages>
+					<noManPages>true</noManPages> -->
+					<jlinkImageName>NameIT</jlinkImageName>
+                    <launcher>launcher</launcher>
+					
 				</configuration>
 			</plugin>
 			<plugin>

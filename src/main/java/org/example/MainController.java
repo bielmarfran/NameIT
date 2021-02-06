@@ -182,6 +182,7 @@ public class MainController {
 		ObservableList<String> list = FXCollections.observableArrayList();
 		list.addAll("Series","Movies");	//"Series",
 		ComboBoxMode.setItems(list);
+
 		EventHandler<ActionEvent> event = 
 				new EventHandler<ActionEvent>() { 
 			public void handle(ActionEvent e) 
@@ -191,6 +192,9 @@ public class MainController {
 			} 
 		}; 
 		ComboBoxMode.setOnAction(event);
+
+
+
 
 	}
 	//End
@@ -946,7 +950,7 @@ public class MainController {
 	
 	//Check if the TMDB API is responding correctly.
 	public static Integer statusTMDB(Integer responseBody){
-		System.out.println(responseBody);
+		System.out.println("ResponseBody : "+responseBody);
 
 		if(responseBody==200){
 			controlCircle = 1;
