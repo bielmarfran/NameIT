@@ -39,8 +39,12 @@ import javafx.stage.WindowEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
 
@@ -831,20 +835,30 @@ public class MainController {
 			ListView<String> Text = new ListView<String>();		
 			if(!(renamingListError.size()==0)) {		
 					if(!(renamingListError.get(pageIndex).getOptionsList()==null) && checkErrorEpisodeSeason(renamingListError.get(pageIndex).getError())) {
-						JSONArray options =  new JSONArray(renamingListError.get(pageIndex).getOptionsList());
+						
+						 String holder = renamingListError.get(pageIndex).getOptionsList();
+						
+						 holder = holder.substring((holder.indexOf("[")));
+						 holder = holder.substring(0,(holder.lastIndexOf("]")+1));
+						 JsonArray options = JsonParser.parseString(holder).getAsJsonArray();
+						
+						//JSONArray options =  new JSONArray(renamingListError.get(pageIndex).getOptionsList());
+						
 						Text.getItems().add(renamingListError.get(pageIndex).getOriginalName());
 						Text.getItems().add("Double click if you find the correct information");
 						String mode = DataStored.propertiesGetMode(); 
 						if(mode.equals("Movies")) {
-							for(int x =0;x<options.length();x++) {							
-								JSONObject op = options.getJSONObject(x);
-								String value ="Title - "+op.getString("title") + " | Year - "+op.getString("release_date")+ " | ID - "+op.getInt("id");
+							for(int x =0;x<options.size();x++) {			
+								JsonObject op = options.get(x).getAsJsonObject();
+								//JSONObject op = options.getJSONObject(x);
+								String value ="Title - "+op.get("title").getAsString() + " | Year - "+op.get("release_date").getAsString()+ " | ID - "+op.get("id").getAsInt();
 								Text.getItems().add(value);
 							}	
 						}else {
-							for(int x =0;x<options.length();x++) {							
-								JSONObject op = options.getJSONObject(x);
-								String value ="Title - "+op.getString("name") + " | Year - "+op.getString("first_air_date")+ " | ID - "+op.getInt("id");
+							for(int x =0;x<options.size();x++) {							
+								//JSONObject op = options.getJSONObject(x);
+								JsonObject op = options.get(x).getAsJsonObject();
+								String value ="Title - "+op.get("name").getAsString() + " | Year - "+op.get("first_air_date").getAsString()+ " | ID - "+op.get("id").getAsInt();
 								Text.getItems().add(value);
 							}	
 						}

@@ -2,10 +2,10 @@ package org.example;
 
 import java.io.File;
 import java.util.ArrayList;
-import org.json.JSONArray;
-import org.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -185,8 +185,8 @@ public class OperationTmdb {
 						 renameFileCreateDirectory();			    		
 			    		 
 			    	 }
-			    	 if(size.getAsInt()<=10 && size.getAsInt()>1 ){
-			    		 
+			    	 if(size.getAsInt()<=10 && size.getAsInt()>1){
+			    		 item.setOptionsList(responseBody);
 			    	 }else {
 			    		 if(size.getAsInt()>10) {
 								item.setError("09");
@@ -239,7 +239,34 @@ public class OperationTmdb {
 					item.setError("03");
 					//JsonOperationsTvdb.checkConnection();
 				}else {
-
+					
+					 JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+			    	 JsonElement size = jsonObject.get("total_results");
+			    	 JsonArray y = jsonObject.getAsJsonArray("results");
+			    	 
+			    	 if(size.getAsInt()==1) {
+			    		 item.setError("");
+			    		 System.out.println(y.get(0));
+			    		 JsonObject x = y.get(0).getAsJsonObject();
+						 item.setId(x.get("id").getAsInt());
+						 item.setName(x.get("name").getAsString());		
+						 
+						 String year =x.get("first_air_date").getAsString().substring(0,4);						
+						 item.setYear(Integer.valueOf(year));		
+							getSeason();
+						 controlBreakFile =1;	    		
+			    		 
+			    	 }
+			    	 if(size.getAsInt()<=10 && size.getAsInt()>1 ){
+			    		 item.setOptionsList(responseBody);
+			    	 }else {
+			    		 if(size.getAsInt()>10) {
+								item.setError("09");
+								
+							}
+			    	 }
+					
+					/*
 					responseBody = responseBody.substring((responseBody.indexOf("[")));
 					responseBody = responseBody.substring(0,(responseBody.lastIndexOf("]")+1));
 
@@ -269,6 +296,7 @@ public class OperationTmdb {
 							
 						}
 					}
+					*/
 				}
 			}
 			return null;
@@ -523,10 +551,23 @@ public class OperationTmdb {
 		public static String responseSerieEpisodeGroups(String responseBody){
 			System.out.println("--responseSerieEpisodeGroups--");
 			//System.out.println(responseBody);
+			
+			
+			JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+			JsonArray y = jsonObject.getAsJsonArray("results");
+			JsonObject x = y.get(2).getAsJsonObject();
+			JsonElement result = x.get("id");
+			System.out.println(result.toString().substring(1, result.toString().length()-1));
+			JsonOperationsTmdb.getContentEpisodeGroups(result.toString().substring(1, result.toString().length()-1));
+			 
+
+
+			/*
 			JSONObject teste = new JSONObject(responseBody);
 			JSONArray groups = teste.getJSONArray("results");
 			JSONObject info = groups.getJSONObject(2);
 			JsonOperationsTmdb.getContentEpisodeGroups(info.getString("id"));
+			*/
 			return null;					
 		}
 		
@@ -534,7 +575,24 @@ public class OperationTmdb {
 		public static String responseContentEpisodeGroups(String responseBody){
 			System.out.println("--responseContentEpisodeGroups--");
 			//System.out.println(responseBody);
-			JSONObject response = new JSONObject(responseBody);
+			
+			JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+			JsonArray absolute2 = jsonObject.getAsJsonArray("groups");
+			JsonObject data = new JsonObject();
+			
+			for(int x=0;x<7;x++) {
+				data =  absolute2.get(x).getAsJsonObject();
+				if(data.get("order").getAsInt()==1) {
+					x=7;
+				}		
+			}
+			JsonArray absoluteEpisode = data.getAsJsonArray("episodes");
+
+			//Stop Here
+			
+			
+			/*
+			 * JSONObject response = new JSONObject(responseBody);
 			JSONArray absolute = response.getJSONArray("groups");
 			JSONObject info = new JSONObject();
 			for(int x=0;x<7;x++) {
@@ -545,6 +603,8 @@ public class OperationTmdb {
 			}
 			JSONArray absoluteEpisode = info.getJSONArray("episodes");
 				
+			 */
+			
 						
 			String test = item.getOriginalName();
 			test = GlobalFunctions.formatName(test, "Series", item);
@@ -575,10 +635,13 @@ public class OperationTmdb {
 			}
 			
 			//System.out.println(absolute_episode);
-			JSONObject get = absoluteEpisode.getJSONObject(Integer.valueOf(absolute_episode)-1);			
-			item.setEpisode(String.valueOf(get.getInt("episode_number")));
-			item.setSeason(String.valueOf(get.getInt("season_number")));	
-			item.setEpisodeName(get.getString("name"));
+			
+			JsonObject final_info = absoluteEpisode.get(Integer.valueOf(absolute_episode)-1).getAsJsonObject();
+			//JSONObject get = absoluteEpisode.getJSONObject(Integer.valueOf(absolute_episode)-1);
+			
+			item.setEpisode(String.valueOf(final_info.get("episode_number").getAsInt()));
+			item.setSeason(String.valueOf(final_info.get("season_number").getAsInt()));	
+			item.setEpisodeName(final_info.get("name").getAsString());
 			finalName();
 			return null;
 		}
@@ -677,10 +740,17 @@ public class OperationTmdb {
 					if(responseBody.contains("\"success\":false")) {
 						item.setError("06");
 					}else {
-						JSONObject series = new JSONObject(responseBody);
-						item.setEpisode(String.valueOf(series.getInt("episode_number")));
-						item.setSeason(String.valueOf(series .getInt("season_number")));	
-						item.setEpisodeName(series.getString("name"));
+						
+						JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+						JsonElement episode_number = jsonObject.get("episode_number");
+						JsonElement season_number = jsonObject.get("season_number");
+						JsonElement episode_name = jsonObject.get("name");
+						
+
+						item.setEpisode(String.valueOf(episode_number));
+						item.setSeason(String.valueOf(season_number));	
+						item.setEpisodeName(String.valueOf(episode_name));
+						
 						System.out.println(item.getEpisode());
 						System.out.println(item.getEpisodeName());
 						System.out.println(item.getSeason());
@@ -696,13 +766,22 @@ public class OperationTmdb {
 		public static String checkAnime(String responseBody){
 			
 			System.out.println(responseBody);
-			JSONObject keywords = new JSONObject(responseBody);
-			JSONArray absolute = keywords.getJSONArray("results");
-			for(int x=0; x<absolute.length();x++) {
-				JSONObject keyword= absolute.getJSONObject(x);
-				if(keyword.getInt("id")==210024) {
+			
+			
+			JsonObject keywords = JsonParser.parseString(responseBody).getAsJsonObject();
+			JsonArray absolute = keywords.getAsJsonArray("results");
+
+			
+			
+			//JSONObject keywords = new JSONObject(responseBody);
+			//JSONArray absolute = keywords.getJSONArray("results");
+			for(int x=0; x<absolute.size();x++) {
+				//JSONObject keyword= absolute.getJSONObject(x);
+	    		 JsonObject keyword = absolute.get(x).getAsJsonObject();
+
+				if(keyword.get("id").getAsInt()==210024) {
 					JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
-					x=absolute.length();
+					x=absolute.size();
 				}
 			}
 			return null;
@@ -1010,16 +1089,16 @@ public class OperationTmdb {
 		//Get the defined name format from properties.
 		public static String nameScheme() {
 			String scheme = DataStored.propertiesGetMovieScheme();
-			scheme = scheme.replace("Name", item.getName());
-			scheme = scheme.replace("Year", String.valueOf(item.getYear()));
+			scheme = scheme.replace("&Name", item.getName());
+			scheme = scheme.replace("&Year", String.valueOf(item.getYear()));
 						
 			return scheme;
 		}
 		//
 		public  String nameScheme(String name,String year) {
 			String scheme = DataStored.propertiesGetMovieScheme();
-			scheme = scheme.replace("Name", name);
-			scheme = scheme.replace("Year", year);
+			scheme = scheme.replace("&Name", name);
+			scheme = scheme.replace("&Year", year);
 						
 			return scheme;
 		}
