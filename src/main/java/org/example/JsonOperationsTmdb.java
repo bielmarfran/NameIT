@@ -54,7 +54,7 @@ public class JsonOperationsTmdb {
 
 	//Send info to TMDB API to get a Response from Movies
 	public static void getSearchMovie(String name, int year){
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";//0
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
@@ -88,7 +88,7 @@ public class JsonOperationsTmdb {
 
 	//Send info to TMDB API to get a Response from Series
 	public static void getSearchSerie(String name, int year){
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";//0
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";

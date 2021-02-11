@@ -205,5 +205,37 @@ public class GlobalFunctions {
 
 	}
 
+	//
+	public static String checkErrorApi(String responseBody) {
+		
+		if (responseBody.contains("\"success\":false") && responseBody.contains("Invalid API key: You must be granted a valid key.")) {
+			return "03";
+		}
+		if(responseBody.contains("\"The resource you requested could not be found.\"") ) {
+			return "02";
+		}
+		
+		return "";
+	}
 
+	//Get the defined name format from properties.
+	public static String nameScheme(Item item) {
+		String scheme = DataStored.propertiesGetMovieScheme();
+		scheme = scheme.replace("&Name", item.getName());
+		scheme = scheme.replace("&Year", String.valueOf(item.getYear()));
+					
+		return scheme;
+	}
+	//
+	public static  String nameScheme(String name,String year) {
+		String scheme = DataStored.propertiesGetMovieScheme();
+		scheme = scheme.replace("&Name", name);
+		scheme = scheme.replace("&Year", year);
+					
+		return scheme;
+	}
+
+	//------------------------------------------------------------------------------
+	
+	
 }

@@ -26,9 +26,9 @@ public class Item {
 	private String optionsList;
 	//Store the file episode
 	private File originalFile;
-	//Store the alternative info of the episode
+	//Store the alternative info
 	private String alternetiveInfo;	
-	//---------------------------------------------//
+		//---------------------------------------------//
 	//Season value of the file
 	private String season;
 	//Episode value of the file
@@ -37,8 +37,9 @@ public class Item {
 	private String absoluteEpisode;
 	//Episode value of the file
 	private String episodeName;
-	
-	
+	//
+	private Boolean  isAnimation;
+
 
 	public Item() {
 
@@ -172,6 +173,7 @@ public class Item {
 		this.alternetiveInfo = alternetiveInfo;
 	}
 
+	
 	public String getSeason() {
 		return season;
 	}
@@ -210,6 +212,15 @@ public class Item {
 	public void setEpisodeName(String episodeName) {
 		this.episodeName = episodeName;
 	}
+	
 
+	public Boolean getIsAnimation() {
+		return isAnimation;
+	}
+
+	
+	public void setIsAnimation(Boolean isAnimation) {
+		this.isAnimation = isAnimation;
+	}
 	
 }

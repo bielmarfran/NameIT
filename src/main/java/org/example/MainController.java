@@ -111,21 +111,6 @@ public class MainController {
 	private ArrayList<Item> renamingList = new  ArrayList<>();
 	//Array where all Episodes that during the run get an Error Mensagem are store waiting for handling.
 	private ArrayList<Item> renamingListError = new  ArrayList<>();
-	//Control variable to always access the right Episode
-	private static Integer controlArrayListEpisode=0;
-	//Variable where the File name is store in char block's to send one at the time to the Api.
-	private static String[] namesBlocks;
-	//Temporary store for namesBlocks in the Slug logic part.
-	private static String[] namesBlocksSlug;
-	//Control the times that block's of files name are sent to the Api.
-	private static Integer controlBreakFile=0;
-	//Control the times that block's of files name are sent to the Api in the Slug method.
-	private static Integer controlBreakFileSlug=0;
-	private static Integer controlBreakFileSlug2=0;
-	//Control how many times the will call the slug getJson.
-	private static Integer countSlug=0;
-	//Control the times the name block position
-	private static Integer controlNameBlock=0;
 	//Local Episode Variable used during the logic in the class
 	private static Item item = new Item();
 	//Call for the Service Class, that good part of the program logic will run on.
@@ -143,9 +128,9 @@ public class MainController {
 	//Static Value for Red ListView Background Color
 	private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
 	//Static Value for Red ListView Background Color
-	private static final String HIGHLIGHTED_CONTROL_2_INNER_BACKGROUND = "#e4f542";
+	private static final String HIGHLIGHTED_CONTROL_2_INNER_BACKGROUND = "#FADA5E";
 	//
-	private static final String HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND = "#6ea364";
+	private static final String HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND = "#6ea364";//
 	// Test
 	private static Integer enter=0;
 
@@ -189,6 +174,7 @@ public class MainController {
 			{ 
 				DataStored.propertiesSetMode(ComboBoxMode.getValue());
 				checkBoxMode(ComboBoxMode.getValue());
+				clearALL();
 			} 
 		}; 
 		ComboBoxMode.setOnAction(event);
@@ -213,7 +199,7 @@ public class MainController {
 			for(int i=0;i <files.size();i++){
 				if(extension.contains(GlobalFunctions.getExtension(files.get(i).getName()))){
 					listViewFiles.getItems().add(files.get(i).getName());
-					String mode = DataStored.propertiesGetMode(); 	
+					DataStored.propertiesGetMode(); 	
 					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0)));								
 					//paintListView();
 					System.out.println("Adding - "+files.get(i).getName());
@@ -303,10 +289,6 @@ public class MainController {
 											
 											//item = renamingList.get(x);
 											if(renamingList.get(x).getState()==0) {
-												controlArrayListEpisode=x;
-												controlBreakFile=0;
-												controlBreakFileSlug=0;
-												controlBreakFileSlug2=0;
 												tmdbs.setInfo(x,renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 												if(item.getError()==null) {										
 													tmdbs.breakFileName(renamingList.get(x).getOriginalName(), "Series");
@@ -339,18 +321,14 @@ public class MainController {
 										System.out.println("TMDB Movies");
 										OperationTmdbMovie tmdbm = new OperationTmdbMovie();
 										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
-											tmdbm.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value);
+											FileOperations.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 										}else {
 											
 											//item = renamingList.get(x);
 											if(renamingList.get(x).getState()==0) {
-												controlArrayListEpisode=x;
 												System.out.println("BOm 2");
-												controlArrayListEpisode=x;
 												item = renamingList.get(x);
-												controlBreakFile=0;
-												controlBreakFileSlug=0;
-												controlBreakFileSlug2=0;
+
 												tmdbm.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 												if(item.getError()==null) {										
 													tmdbm.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
@@ -385,17 +363,17 @@ public class MainController {
 			public void handle(WorkerStateEvent event) {
 				System.out.println("backgroundTaks.setOnSucceeded 2");
 			
-				int x = 0;
+
 				int size = renamingList.size();
 				System.out.println(size);
 				for(int y=0;y<renamingList.size();y++){
 
 					if(renamingList.get(y).getState()==1) {
-						//System.out.println("Nome Final - "+renamingList.get(y).getName()+" em "+y);
 						if(!listViewFilesRenamed.getItems().contains(renamingList.get(y).getFinalFileName())) {
 							listViewFilesRenamed.getItems().add(renamingList.get(y).getFinalFileName());
 						}											
 					}else {
+						System.out.println("Error = "+renamingList.get(y).getError());
 						renamingListError.add(renamingList.get(y));
 					}
 					
@@ -479,7 +457,7 @@ public class MainController {
 		for(int x=0;x<renamingList.size();x++){
 			if(renamingList.get(x).getState()==1) {
 				OperationTmdbSerie tmdbs = new OperationTmdbSerie();
-				tmdbs.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected());
+				FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value);
 			}
 		}	
 	}
@@ -632,16 +610,19 @@ public class MainController {
 											color_control++;
 											switch (renamingList.get(x).getState()) {
 											case 0:
-												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");//Gray
 												break;
 											case 1:
-												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND  + ";");
+												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND  + ";");//Green
 												break;
 											case 2:
-												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_2_INNER_BACKGROUND + ";");
+												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_2_INNER_BACKGROUND + ";");//Yellow
 												break;
+											case 3:
+												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");//Red
+												break;	
 											default:
-												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");//Gray
 												break;
 											}
 
@@ -738,8 +719,6 @@ public class MainController {
 						"\nRed = Disconnected"  
 				);
 		labelStatusApi.setTooltip(tooltip);
-
-
 	}
 	//Change the Check boxes UI elements according to the mode.
 	public void checkBoxMode(String mode) {
@@ -836,16 +815,17 @@ public class MainController {
 		System.out.println("renamingListError.size() -- "+renamingListError.size());
 		paginationErrorList.setPageFactory((pageIndex) -> {		
 			ListView<String> Text = new ListView<String>();		
+			Text.getItems().clear();
 			if(!(renamingListError.size()==0)) {		
 					if(!(renamingListError.get(pageIndex).getOptionsList()==null) && checkErrorEpisodeSeason(renamingListError.get(pageIndex).getError())) {
 						
-						 String holder = renamingListError.get(pageIndex).getOptionsList();
-						
+
+						 String holder = renamingListError.get(pageIndex).getOptionsList();					
 						 holder = holder.substring((holder.indexOf("[")));
 						 holder = holder.substring(0,(holder.lastIndexOf("]")+1));
 						 JsonArray options = JsonParser.parseString(holder).getAsJsonArray();
-						
-						//JSONArray options =  new JSONArray(renamingListError.get(pageIndex).getOptionsList());
+						 
+						 
 						
 						Text.getItems().add(renamingListError.get(pageIndex).getOriginalName());
 						Text.getItems().add("Double click if you find the correct information");
@@ -896,6 +876,7 @@ public class MainController {
 										count++;
 										renamingList.get(x).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 										renamingList.get(x).setState(0);
+										//renamingListError.remove(pageIndex);
 										paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
 										//rename();
 									}
@@ -904,6 +885,7 @@ public class MainController {
 									renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 									renamingListError.get(pageIndex).setState(0);
 									renamingList.add(renamingListError.get(pageIndex));
+									//renamingListError.remove(pageIndex);
 									paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
 									count=0;
 									//rename();
@@ -912,6 +894,7 @@ public class MainController {
 								renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 								renamingListError.get(pageIndex).setState(0);
 								renamingList.add(renamingListError.get(pageIndex));
+								//renamingListError.remove(pageIndex);
 								paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
 								//rename();
 							}
@@ -930,16 +913,19 @@ public class MainController {
 				}
 			}
 			
-			
+			System.out.println(Text.getItems());
 			Label label2 = new Label("Main content of the page ...");
 			clearList();
 			return new VBox(label2,Text);
+			
 		});
 	}
 	//Check if the Error value is related to S
 	public boolean checkErrorEpisodeSeason(String error) {
-		if(error.equals("04")|| error.equals("05")|| error.equals("06")|| error.equals("07")) {
-			return false;
+		if(error !=null){
+			if(error.equals("04")|| error.equals("05")|| error.equals("06")|| error.equals("07")) {
+				return false;
+			}
 		}
 		return true;
 	}

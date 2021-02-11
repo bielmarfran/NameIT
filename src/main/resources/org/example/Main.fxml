@@ -17,12 +17,12 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.MainController">
+<BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.MainController">
    <center>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="722.0" prefWidth="900.0">
          <children>
             <TextField fx:id="textfieldPath" disable="true" layoutX="530.0" layoutY="80.0" onMouseClicked="#textfieldPathAction" prefHeight="25.0" prefWidth="354.0" AnchorPane.rightAnchor="16.0" />
-            <ProgressIndicator fx:id="progressIndicator" layoutX="425.0" layoutY="158.0" prefHeight="40.0" prefWidth="80.0" progress="0.0" />
+            <ProgressIndicator fx:id="progressIndicator" layoutX="437.0" layoutY="146.0" prefHeight="40.0" prefWidth="80.0" progress="0.0" />
             <ListView fx:id="listViewFiles" layoutX="20.0" layoutY="131.0" onDragDropped="#handleDropListView" onDragOver="#handleDragOverListView" prefHeight="368.0" prefWidth="354.0" AnchorPane.leftAnchor="20.0" />
             <Label fx:id="labelDropFiles" layoutX="157.0" layoutY="302.0" mouseTransparent="true" text="Drop Files">
                <font>

@@ -24,14 +24,7 @@ public class OperationTmdbSerie {
 		//Local Episode Variable used during the logic in the class
 		private static Item item = new Item();
 
-		//Store the value of textFieldFolder
-		private static String textFieldFolder_value;
-		//Store the value of checkboxSeries
-		private static boolean checkboxSeries_value;
-		//Store the value of checkboxSeason
-		private static boolean checkboxSeason_value;
-		//Store the value of checkboxFolder
-		private static boolean checkboxFolder_value;
+
 
 		//
 		private static Integer controlEpisode=0;
@@ -45,22 +38,19 @@ public class OperationTmdbSerie {
 			item = episode;
 			controlEpisode=0;
 			controlBreakFile=0;
-			checkboxSeries_value = checkboxSeries;
-			checkboxSeason_value = checkboxSeason;
-			checkboxFolder_value = checkboxFolder;
-			this.textFieldFolder_value = textFieldFolder_value;					
+
+				
 			
 		}
 		//
 		public void setInfoAlternative(Item item2,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder,String textFieldFolder_value) {
 			System.out.println("--Inside setInfoAlternative--");
 			
+			
 			item=item2;
-			//item.setAlternetiveInfo("");
-			checkboxSeries_value = checkboxSeries;
-			checkboxSeason_value = checkboxSeason;
-			checkboxFolder_value = checkboxFolder;
 			controlEpisode=0;			
+			
+			
 			//Get the Alternative Value is this String and start Querying it to get data
 			String value = item.getAlternetiveInfo();
 			//Getting The Name of the Series
@@ -70,13 +60,21 @@ public class OperationTmdbSerie {
 			value = value.replace(name, "");
 			//End Getting Name
 			
+
 			//Getting the Year
 			value = value.replace("| Year - ", "");
 			String year = value.substring(1,value.indexOf("-"));
-			item.setYear(Integer.valueOf(year));
+			
+			try {
+				item.setYear(Integer.valueOf(year));
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		
 			value = value.replace(year , "");
 			//End Getting the Year
 			
+
 			//Getting the ID
 			value = value.substring(6);
 			value = value.replace("| ID - ", "");
@@ -84,7 +82,10 @@ public class OperationTmdbSerie {
 			int id = Integer.valueOf(value.substring(2));
 			item.setId(Integer.valueOf(id));
 			System.out.println("| ID - "+item.getId());
-			
+
+			item.setError("0");
+			item.setAlternetiveInfo("");
+			item.setOptionsList(null);
 			getSeasonAlternative("",item);
 			//End Getting the ID			
 
@@ -143,74 +144,45 @@ public class OperationTmdbSerie {
 		//	
 		public static String responseSerieId(String responseBody){	
 			System.out.println(responseBody);
-			if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
-				System.out.println("Resource not found");
-				item.setError("02");
+			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
+			if (returnApi.equals("")) {
+				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+				JsonElement size = jsonObject.get("total_results");
+				JsonArray y = jsonObject.getAsJsonArray("results");
 
-			}else{
-				if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
-					item.setError("03");
-					//JsonOperationsTvdb.checkConnection();
-				}else {
-					
-					 JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-			    	 JsonElement size = jsonObject.get("total_results");
-			    	 JsonArray y = jsonObject.getAsJsonArray("results");
-			    	 
-			    	 if(size.getAsInt()==1) {
-			    		 item.setError("");
-			    		 System.out.println(y.get(0));
-			    		 JsonObject x = y.get(0).getAsJsonObject();
-						 item.setId(x.get("id").getAsInt());
-						 item.setName(x.get("name").getAsString());		
-						 
-						 String year =x.get("first_air_date").getAsString().substring(0,4);						
-						 item.setYear(Integer.valueOf(year));		
-							getSeason();
-						 controlBreakFile =1;	    		
-			    		 
-			    	 }
-			    	 if(size.getAsInt()<=10 && size.getAsInt()>1 ){
-			    		 item.setOptionsList(responseBody);
-			    	 }else {
-			    		 if(size.getAsInt()>10) {
-								item.setError("09");
-								
-							}
-			    	 }
-					
-					/*
-					responseBody = responseBody.substring((responseBody.indexOf("[")));
-					responseBody = responseBody.substring(0,(responseBody.lastIndexOf("]")+1));
-
-					JSONArray albums =  new JSONArray(responseBody);
-					if(albums.length()==1){					
-						item.setError("");
-						JSONObject album = albums.getJSONObject(0);
-						item.setId(album.getInt("id"));
-						item.setName(album.getString("name"));							
-						String year = album.getString("first_air_date").substring(0,4);						
-						item.setYear(Integer.valueOf(year));
-						
-						getSeason();
-						controlBreakFile =1;
-						
-						
-
-					}
-					if(albums.length()<=10 && albums.length()>1 ){
-						item.setError("10");
-						item.setOptionsList(responseBody);
-						
-
-					}else {
-						if(albums.length()>10) {
-							item.setError("09");
-							
+				if(size.getAsInt()==1) {
+					item.setError("");
+					System.out.println(y.get(0));
+					JsonObject x = y.get(0).getAsJsonObject();
+					item.setId(x.get("id").getAsInt());
+					item.setName(x.get("name").getAsString());		
+					JsonArray genreIds = x.getAsJsonArray("genre_ids");
+					for (int i = 0; i < genreIds.size(); i++) {
+						if (genreIds.get(i).getAsInt()==16) {
+							item.setIsAnimation(true);
 						}
 					}
-					*/
+					String year =x.get("first_air_date").getAsString().substring(0,4);						
+					item.setYear(Integer.valueOf(year));		
+					getSeason();
+					controlBreakFile =1;	    		
+
 				}
+				if(size.getAsInt()<=10 && size.getAsInt()>1 ){
+					item.setOptionsList(responseBody);
+					item.setState(2);
+				}else {
+					if(size.getAsInt()==0 && item.getOptionsList()==null) {
+						item.setError("09");
+						item.setState(3);
+					}
+					if(size.getAsInt()>10 && item.getOptionsList()==null) {
+						item.setError("09");
+						item.setState(3);
+					}
+				}						
+			}else {
+				item.setError(returnApi.equals("02") ? "02" : "03");
 			}
 			return null;
 		}
@@ -236,15 +208,16 @@ public class OperationTmdbSerie {
 							s_index=0;
 							while(GlobalFunctions.isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
 								control_season++;
+								checkForAnime=false;
 								season = season+test.substring(s_index,s_index+1);
 								test = test.substring(s_index+1);
 							}
 							if(!GlobalFunctions.isNumeric(test.substring(s_index, s_index + 1))){
-								
+
 								item.setSeason(season);
-								getEpisode(test,namesBlocks, controlNameBlock);
-								System.out.println("");
 								item.setError("");	
+								getEpisode(test,namesBlocks, controlNameBlock);
+
 							}
 							if(test.length()==1 && GlobalFunctions.isNumeric(test)){
 								item.setError("05");	
@@ -259,7 +232,7 @@ public class OperationTmdbSerie {
 						}else {
 							item.setError("04");	
 							System.out.println("Error");
-							
+
 
 						}
 					}
@@ -269,6 +242,7 @@ public class OperationTmdbSerie {
 					x=10;
 				}
 			}
+			
 			if(control_season==0){
 				System.out.println("--No s found 4--");
 				int c=0;
@@ -297,7 +271,7 @@ public class OperationTmdbSerie {
 						item.setSeason(season_value.substring(0,1));
 						getEpisode(test,namesBlocks, controlNameBlock);
 					}
-					
+
 					break;
 				case 2: 
 					System.out.println("Dentro 2" + test);
@@ -324,14 +298,13 @@ public class OperationTmdbSerie {
 					getEpisode(season_value.substring(2,4),namesBlocks, controlNameBlock);
 					break;
 				default:
-					//throw new IllegalArgumentException("Unexpected value: " + season_value.length());
 					if(season_value.length()>4 &&season_value.length()<7) {
 						System.out.println("Maior 4");
 						item.setSeason(season_value.substring(0,2));
 						getEpisode(season_value.substring(2,season_value.length()),namesBlocks, controlNameBlock);
 					}
 				}
-															
+
 			}
 		}
 		//
@@ -464,24 +437,22 @@ public class OperationTmdbSerie {
 		//Get the response from the API, from the episode groups
 		public static String responseSerieEpisodeGroups(String responseBody){
 			System.out.println("--responseSerieEpisodeGroups--");
-			//System.out.println(responseBody);
-			
-			
-			JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-			JsonArray y = jsonObject.getAsJsonArray("results");
-			JsonObject x = y.get(2).getAsJsonObject();
-			JsonElement result = x.get("id");
-			System.out.println(result.toString().substring(1, result.toString().length()-1));
-			JsonOperationsTmdb.getContentEpisodeGroups(result.toString().substring(1, result.toString().length()-1));
-			 
 
+			if(responseBody.contains("\"success\":false")){
+				System.out.println("Resource not found");
+				item.setError("02");
+				item.setState(3);
+				
+			}else{
+				
+				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+				JsonArray y = jsonObject.getAsJsonArray("results");
+				JsonObject x = y.get(2).getAsJsonObject();
+				JsonElement result = x.get("id");
+				System.out.println(result.toString().substring(1, result.toString().length()-1));
+				JsonOperationsTmdb.getContentEpisodeGroups(result.toString().substring(1, result.toString().length()-1));			
+			}
 
-			/*
-			JSONObject teste = new JSONObject(responseBody);
-			JSONArray groups = teste.getJSONArray("results");
-			JSONObject info = groups.getJSONObject(2);
-			JsonOperationsTmdb.getContentEpisodeGroups(info.getString("id"));
-			*/
 			return null;					
 		}
 		
@@ -490,36 +461,25 @@ public class OperationTmdbSerie {
 			System.out.println("--responseContentEpisodeGroups--");
 			//System.out.println(responseBody);
 			
-			JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-			JsonArray absolute2 = jsonObject.getAsJsonArray("groups");
-			JsonObject data = new JsonObject();
 			
-			for(int x=0;x<7;x++) {
-				data =  absolute2.get(x).getAsJsonObject();
-				if(data.get("order").getAsInt()==1) {
-					x=7;
-				}		
-			}
-			JsonArray absoluteEpisode = data.getAsJsonArray("episodes");
-
-			//Stop Here
-			
-			
-			/*
-			 * JSONObject response = new JSONObject(responseBody);
-			JSONArray absolute = response.getJSONArray("groups");
-			JSONObject info = new JSONObject();
-			for(int x=0;x<7;x++) {
-				info = absolute.getJSONObject(x);
-				if(info.getInt("order")==1) {
-					x=7;
-				}
-			}
-			JSONArray absoluteEpisode = info.getJSONArray("episodes");
+			if(responseBody.contains("\"success\":false")){
+				System.out.println("Resource not found");
+				item.setError("02");
+				item.setState(3);
 				
-			 */
-			
-						
+			}else{
+				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+				JsonArray absolute2 = jsonObject.getAsJsonArray("groups");
+				JsonObject data = new JsonObject();
+				
+				for(int x=0;x<7;x++) {
+					data =  absolute2.get(x).getAsJsonObject();
+					if(data.get("order").getAsInt()==1) {
+						x=7;
+					}		
+				}
+				JsonArray absoluteEpisode = data.getAsJsonArray("episodes");
+				
 			String test = item.getOriginalName();
 			test = GlobalFunctions.formatName(test, "Series", item);
 			test = test.replace(item.getName().toLowerCase(), "");
@@ -557,6 +517,10 @@ public class OperationTmdbSerie {
 			item.setSeason(String.valueOf(final_info.get("season_number").getAsInt()));	
 			item.setEpisodeName(final_info.get("name").getAsString());
 			finalName();
+				
+			}
+		
+		
 			return null;
 		}
 
@@ -589,13 +553,16 @@ public class OperationTmdbSerie {
 								}
 								if(test.length()==1 && GlobalFunctions.isNumeric(test)){
 									episode = episode + test;
-									item.setEpisode(episode);						
-									JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
+									item.setEpisode(episode);	
+									controlEpisode++;
 									item.setError("");	
+									JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
+
 								}else{
 									item.setEpisode(episode);
-									JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
+									controlEpisode++;
 									item.setError("");	
+									JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
 								}
 
 							}else {
@@ -619,195 +586,75 @@ public class OperationTmdbSerie {
 					}
 					System.out.println("Epsideo Value End - "+episode);
 					JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
-					
-					//item.setError("05");
-					//System.out.println("No e found");
-
+				}
+				if(controlEpisode==0 && checkForAnime==true){
+					JsonOperationsTmdb.getSeriesKeywords(item.getId());
 				}
 			}
 			System.out.println("Valor Episodio 2 - "+ item.getEpisode());
-			System.out.println("Valor Episodio 3 - "+ item.getError());
-			if(controlEpisode==0 && checkForAnime==true){
-				//JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
-				JsonOperationsTmdb.getSeriesKeywords(item.getId());
-				//check_absolute(test);			
-			}
-			System.out.println("Valor Episodio 4 - ");
+			System.out.println("Error Code Before Exit Episode - "+ item.getError());
+			
 		}
-		
+
 		//
 		public static String responseFinalSerie(String responseBody){
-							
+
 			System.out.println("Inside responseFinalSerie");						
 			System.out.println(responseBody);
-			
-			if(responseBody.equals("{\"Error\":\"Resource not found\"}")){
-				System.out.println("Resource not found");
-				item.setError("02");
 
-			}else{
-				if(responseBody.equals("{\"Error\":\"Not Authorized\"}")){
-					item.setError("03");
-					//JsonOperationsTvdb.checkConnection();
-				}else {
-					//JSONObject response = new JSONObject(responseBody);
-					if(responseBody.contains("\"success\":false")) {
-						item.setError("06");
-					}else {
-						
-						JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-						JsonElement episode_number = jsonObject.get("episode_number");
-						JsonElement season_number = jsonObject.get("season_number");
-						JsonElement episode_name = jsonObject.get("name");
-						
+			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
+			if (returnApi.equals("")) {
+				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+				JsonElement episode_number = jsonObject.get("episode_number");
+				JsonElement season_number = jsonObject.get("season_number");
+				JsonElement episode_name = jsonObject.get("name");
 
-						item.setEpisode(String.valueOf(episode_number));
-						item.setSeason(String.valueOf(season_number));	
-						item.setEpisodeName(String.valueOf(episode_name));
-						
-						System.out.println(item.getEpisode());
-						System.out.println(item.getEpisodeName());
-						System.out.println(item.getSeason());
-						finalName();				
-					}
-					
-				}
+
+				item.setEpisode(String.valueOf(episode_number));
+				item.setSeason(String.valueOf(season_number));	
+				item.setEpisodeName(String.valueOf(episode_name));
+
+				System.out.println(item.getEpisode());
+				System.out.println(item.getEpisodeName());
+				System.out.println(item.getSeason());
+				finalName();											
+			}else {
+				item.setError(returnApi.equals("02") ? "06" : "03");
+				item.setState(3);
 			}
-			
+			System.out.println("Exit responseFinalSerie");
 			return null;
 		}
-		
+
 		public static String checkAnime(String responseBody){
 			
 			System.out.println(responseBody);
 			
 			
-			JsonObject keywords = JsonParser.parseString(responseBody).getAsJsonObject();
-			JsonArray absolute = keywords.getAsJsonArray("results");
+			if(responseBody.contains("\"success\":false")){
+				System.out.println("Resource not found");
+				item.setError("02");
+				item.setState(3);
+				
+			}else{
+				JsonObject keywords = JsonParser.parseString(responseBody).getAsJsonObject();
+				JsonArray absolute = keywords.getAsJsonArray("results");
 
-			
-			
-			//JSONObject keywords = new JSONObject(responseBody);
-			//JSONArray absolute = keywords.getJSONArray("results");
-			for(int x=0; x<absolute.size();x++) {
-				//JSONObject keyword= absolute.getJSONObject(x);
-	    		 JsonObject keyword = absolute.get(x).getAsJsonObject();
-
-				if(keyword.get("id").getAsInt()==210024) {
-					JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
-					x=absolute.size();
+				for(int x=0; x<absolute.size();x++) {
+		    		 JsonObject keyword = absolute.get(x).getAsJsonObject();
+					if(keyword.get("id").getAsInt()==210024) {
+						JsonOperationsTmdb.getSerieEpisodeGroups(item.getId());
+						x=absolute.size();
+					}
 				}
 			}
+			
+		
 			return null;
 			
 		}
 		//------------------------------------------------------------------------------
 		
-		public static String renameFileSeries(Item item, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder){
-			
-			System.out.println("Dentro rename2");
-			
-			
-			checkboxSeries_value = checkboxSeries;
-			checkboxSeason_value = checkboxSeason;
-			checkboxFolder_value = checkboxFolder;
-			File f = item.getOriginalFile();
-			String absolutePath;
-			if(checkboxFolder_value){
-				if(textFieldFolder_value==null) {
-					absolutePath = textFieldFolder_value;
-				}else {
-					absolutePath = textFieldFolder_value;
-				}
-
-			}else{
-				absolutePath = item.getOriginalPath();
-			}
-			if(absolutePath==null) {
-				System.out.println("The path where the file will be saved is empth");	
-				item.setError("08");
-			}else {
-				if(checkboxSeries_value  && !checkboxSeason_value ){
-					System.out.println("Create Series");
-					File file = new File(absolutePath+"\\"+item.getName());
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					absolutePath = absolutePath+"\\"+item.getName();
-					String newPath = absolutePath+"\\"+item.getFinalFileName();
-
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						System.out.println("Rename was ok");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-
-				}else{
-					if(!checkboxSeries_value && checkboxSeason_value){
-						System.out.println("Create Season");
-						File file = new File(absolutePath+"\\"+"Season "+item.getSeason());
-						boolean bool = file.mkdirs();
-						if(bool){
-							System.out.println("Directory created successfully");
-						}else{
-							System.out.println("Sorry couldnt create specified directory");
-						}
-						absolutePath = absolutePath+"\\"+"Season "+item.getSeason();
-						String newPath = absolutePath+"\\"+item.getFinalFileName();
-						Boolean x =f.renameTo(new File(newPath));
-						if(x){
-							//System.out.println("Directory created successfully");
-						}else{
-							//System.out.println("Sorry couldnt create specified directory");
-						}
-
-					}
-				}
-				if(checkboxSeries_value && checkboxSeason_value){
-					System.out.println("Create Season and Series");
-					File file = new File(absolutePath+"\\"+item.getName()+"\\"+"Season "+item.getSeason());
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					absolutePath = absolutePath+"\\"+item.getName()+"\\"+"Season "+item.getSeason();
-					String newPath = absolutePath+"\\"+item.getFinalFileName();
-					System.out.println(newPath);	
-
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						System.out.println("Rename was ok");							
-						item.setError("");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-				}else{
-					File file = new File(absolutePath);
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
-					String newPath = absolutePath+"\\"+item.getFinalFileName();
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						//System.out.println("Directory created successfully");
-					}else{
-						//System.out.println("Sorry couldnt create specified directory");
-					}
-
-				}
-			}
-			return null;
-		}
 					
 		//
 		public static void finalName() {

@@ -23,9 +23,9 @@ public class DataStored {
 		File f0 = new File(System.getProperty("user.home")+"\\Documents\\NameIT");
 		boolean bool = f0.mkdirs();
 		if(bool){
-			System.out.println("Directory created successfully");
+			//System.out.println("Directory created successfully");
 		}else{
-			//System.out.println("Sorry couldnt create specified directory");
+			////System.out.println("Sorry couldnt create specified directory");
 		}
 		//Create exceptions.txt
 		File f = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt");
@@ -167,14 +167,14 @@ public class DataStored {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	System.out.println(config.getProperty("Language"));
+    	//System.out.println(config.getProperty("Language"));
 
     	return config.getProperty("Language");
     }
    
     //Save the Language Properties to config.properties.
     public static void propertiesSetLanguage(String newLanguage) {
-    	System.out.println("Dentro propertiesSetLanguage");
+    	//System.out.println("Dentro propertiesSetLanguage");
     	config = new Properties();
     	FileInputStream fis;
     	//FileOutputStream fisout;
@@ -188,7 +188,7 @@ public class DataStored {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	//System.out.println(config.getProperty("Language"));
+    	////System.out.println(config.getProperty("Language"));
     	//config.remove("Language");
     	config.setProperty("Language", newLanguage);
     	try {
@@ -208,7 +208,7 @@ public class DataStored {
     	FileInputStream fis;
     	try {
 			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
-			//System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
+			////System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -217,14 +217,14 @@ public class DataStored {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	System.out.println(config.getProperty("Mode"));
+    	//System.out.println(config.getProperty("Mode"));
 
     	return config.getProperty("Mode");
     }
     
     //Save the Mode Properties to config.properties.
     public static void propertiesSetMode(String newMode) {
-    	System.out.println("Dentro propertiesSetMode");
+    	//System.out.println("Dentro propertiesSetMode");
     	config = new Properties();
     	FileInputStream fis;
     	//FileOutputStream fisout;
@@ -238,7 +238,7 @@ public class DataStored {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	//System.out.println(config.getProperty("Language"));
+    	////System.out.println(config.getProperty("Language"));
     	//config.remove("Language");
     	config.setProperty("Mode", newMode);
     	try {
@@ -258,7 +258,7 @@ public class DataStored {
     	FileInputStream fis;
     	try {
 			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
-			//System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
+			////System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -267,7 +267,7 @@ public class DataStored {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	System.out.println(config.getProperty("Movie"));
+    	//System.out.println(config.getProperty("Movie"));
 
     	return config.getProperty("Movie");
     	
@@ -275,7 +275,7 @@ public class DataStored {
     
     //Save theMovie Name Scheme Properties to config.properties.
     public static void propertiesMovieScheme(String newMovie) {
-    	System.out.println("Dentro propertiesSetMode");
+    	//System.out.println("Dentro propertiesSetMode");
     	config = new Properties();
     	FileInputStream fis;
     	//FileOutputStream fisout;
@@ -289,7 +289,7 @@ public class DataStored {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	//System.out.println(config.getProperty("Language"));
+    	////System.out.println(config.getProperty("Language"));
     	//config.remove("Language");
     	config.setProperty("Movie", newMovie);
     	try {
@@ -309,7 +309,7 @@ public class DataStored {
     	FileInputStream fis;
     	try {
 			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
-			//System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
+			////System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -318,7 +318,7 @@ public class DataStored {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	System.out.println(config.getProperty("Series"));
+    	//System.out.println(config.getProperty("Series"));
 
     	return config.getProperty("Series");
     	
@@ -326,7 +326,7 @@ public class DataStored {
     
     //Save theMovie Name Scheme Properties to config.properties.
     public static void propertiesSeriesScheme(String newSeries) {
-    	System.out.println("Dentro propertiesSetMode");
+    	//System.out.println("Dentro propertiesSetMode");
     	config = new Properties();
     	FileInputStream fis;
     	//FileOutputStream fisout;
@@ -340,7 +340,7 @@ public class DataStored {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	//System.out.println(config.getProperty("Language"));
+    	////System.out.println(config.getProperty("Language"));
     	//config.remove("Language");
     	config.setProperty("Series", newSeries);
     	try {

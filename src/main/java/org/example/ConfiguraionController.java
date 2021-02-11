@@ -281,6 +281,7 @@ public class ConfiguraionController {
 	}
 	
 	//Action of Save Movies Button
+	@SuppressWarnings("exports")
 	public void buttonSaveMoviesAction(javafx.event.ActionEvent actionEvent) {
 		DataStored.propertiesMovieScheme(TextFieldMovie.getText());
 		ButtonSaveMovies.setVisible(false);
