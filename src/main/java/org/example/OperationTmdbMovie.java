@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 
 
 public class OperationTmdbMovie {
+	
 		//Extension allowed in the program
 		public static ArrayList<String> extension = new ArrayList<>();
 		//Variable where the File name is store in char block's to send one at the time to the Api.
@@ -20,18 +21,26 @@ public class OperationTmdbMovie {
 		private static Item item = new Item();
 
 	
-		//
-		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value) {	
+		/**
+		 * 
+		 * @param x
+		 * @param episode
+		 */
+		public void setInfo(Integer x,Item episode) {	
 			System.out.println("--Inside setInfo TMDB--");
 			//controlArrayListEpisode=x;
 			item = episode;
 			controlBreakFile=0;
-			//checkboxSeries_value = checkboxSeries;
-			//checkboxFolder_value = checkboxFolder;
-			//OperationTmdbMovie.textFieldFolder_value = textFieldFolder_value;					
+			
 			
 		}
 		//
+		
+		/**
+		 * 
+		 * @param name
+		 * @param mode
+		 */
 		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 			System.out.println("--Inside Break File Name--");
@@ -81,7 +90,11 @@ public class OperationTmdbMovie {
 			}
 
 		}
-		//
+		/**
+		 * 
+		 * @param responseBody
+		 * @return
+		 */
 		public static String responseMovieId(String responseBody){	
 			System.out.println(responseBody);
 			
@@ -101,7 +114,7 @@ public class OperationTmdbMovie {
 					item.setYear(Integer.valueOf(year));							
 					controlBreakFile =1;
 					finalName();
-					//renameFileCreateDirectory();			    		
+			    		
 
 				}
 				if(size.getAsInt()<=10 && size.getAsInt()>1 ){
@@ -124,7 +137,9 @@ public class OperationTmdbMovie {
 			
 			return null;
 		}
-
+		/**
+		 * 
+		 */
 		public static void finalName() {
 			System.out.println("--Inside finalName--");
 			item.setError("");

@@ -32,18 +32,16 @@ public class OperationTmdbSerie {
 		private static Boolean checkForAnime=true;
 		
 		//
-		public void setInfo(Integer x,Item episode, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value) {	
+		public void setInfo(Integer x,Item episode) {	
 			System.out.println("--Inside setInfo TMDB--");
 			//controlArrayListEpisode=x;
 			item = episode;
 			controlEpisode=0;
 			controlBreakFile=0;
-
-				
-			
+		
 		}
 		//
-		public void setInfoAlternative(Item item2,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder,String textFieldFolder_value) {
+		public void setInfoAlternative(Item item2) {
 			System.out.println("--Inside setInfoAlternative--");
 			
 			

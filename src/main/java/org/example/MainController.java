@@ -284,15 +284,14 @@ public class MainController {
 										
 										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
 											//item = renamingList.get(x);
-											tmdbs.setInfoAlternative(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+											tmdbs.setInfoAlternative(renamingList.get(x));
 										}else {
 											
 											//item = renamingList.get(x);
 											if(renamingList.get(x).getState()==0) {
-												tmdbs.setInfo(x,renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+												tmdbs.setInfo(x,renamingList.get(x));
 												if(item.getError()==null) {										
 													tmdbs.breakFileName(renamingList.get(x).getOriginalName(), "Series");
-													//breakFileName(episodeList.get(x).getOriginalName());
 												}else {
 													System.out.println("II");
 													renamingList.remove(x);
@@ -321,7 +320,7 @@ public class MainController {
 										System.out.println("TMDB Movies");
 										OperationTmdbMovie tmdbm = new OperationTmdbMovie();
 										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
-											FileOperations.renameFileCreateDirectory(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+											FileOperations.renameFileMovie2(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
 										}else {
 											
 											//item = renamingList.get(x);
@@ -329,7 +328,7 @@ public class MainController {
 												System.out.println("BOm 2");
 												item = renamingList.get(x);
 
-												tmdbm.setInfo(x,item,checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+												tmdbm.setInfo(x,item);
 												if(item.getError()==null) {										
 													tmdbm.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
 													//breakFileName(episodeList.get(x).getOriginalName());
@@ -414,8 +413,7 @@ public class MainController {
 	}
 	//
 	public void buttonSelectFiles(javafx.event.ActionEvent actionEvent) {
-		rename();
-		
+		rename();		
 	}
 	
 	//Method to Call Configuration Page
@@ -455,11 +453,18 @@ public class MainController {
 		//checkboxSeason_value = checkboxSeason.isSelected();
 		//checkboxFolder_value = checkboxFolder.isSelected();
 		for(int x=0;x<renamingList.size();x++){
-			if(renamingList.get(x).getState()==1) {
-				OperationTmdbSerie tmdbs = new OperationTmdbSerie();
-				FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value);
+			String mode = DataStored.propertiesGetMode(); 
+				if(mode.equals("Series")) {
+					if(renamingList.get(x).getState()==1) {
+						FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value);
+					}
+				}else{
+					if(renamingList.get(x).getState()==1) {
+						FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value);
+					}
+				}
 			}
-		}	
+			
 	}
 	//Clear Button Click Event
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
