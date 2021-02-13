@@ -8,19 +8,29 @@ import java.util.Date;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-
+/**
+ * <h1>Global Functions</h1>
+ * Global Functions is a class that aggregates different methods 
+ * that are reused in more than one class in the project.
+ * 
+ * @author bielm
+ *
+ */
 public class GlobalFunctions {
 
 	//File name garbage that makes it difficult to identify the episode
 	public static ArrayList<String> filterList = new ArrayList<>();
-	
-	//
 	private static ArrayList<String> exceptions = new ArrayList<String>();
-	
-	//
 	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 
-	//Simple Method to check is a given character is numeric
+
+	
+	/**
+	 * Checks whether the input is numeric.
+	 * 
+	 * @param strNum This is the first paramter to isNumeric method
+	 * @return This return a boolean value according to the test
+	 */
 	public static boolean isNumeric(String strNum) {
 		if (strNum == null) {
 			return false;
@@ -34,6 +44,19 @@ public class GlobalFunctions {
 	}
 	
 	//Check for year value that is valid, 1900>= <=Current Year.
+	
+	/**
+	 * This method try to find a value that represents one year. Example 2020
+	 * 
+	 * Initially, the program searches for 4 consecutive number values, if 
+	 * it succeeds it will analyze whether  that number is the between 1900 
+	 * and the current system date
+	 * 
+	 * @param newName The string that will be analyzed for a year value.
+	 * @param mode The string with the current mode which influences the values in the method.
+	 * @param item
+	 * @return Returns the newName parameter, removing the value for the year if found.
+	 */
 	public static String isDate(String newName, String mode, Item item) {
 		System.out.println("Inside isDate TMDB");
 		String date ="";
@@ -70,6 +93,13 @@ public class GlobalFunctions {
 	}	
 	
 	//Check the last "." and the the value after that.
+	/**
+	 *This method finds the extension of a file from a file name.
+	 *Find the last occurrence of "." and stores the following values.
+	 * 
+	 * @param fileName The string with the file name
+	 * @return The value of the file extension
+	 */
 	public static String getExtension(String fileName){
 		String extension = "";
 
@@ -79,44 +109,17 @@ public class GlobalFunctions {
 
 		return extension;
 	}
-	//
-	public static String isYear(String newName) {
-		String date ="";
-		for(int x=0;x<newName.length();x++) {
-			if(isNumeric(newName.substring(x,x+1)) && date.length()<4) {
-				date= date+newName.charAt(x);
-			}
-		}
-		System.out.println(date);
-		if(date.length()==4) {
-			String min = "1800";
-			//Date max = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-			Date dmin = null;
-			Date dmax =  new Date();
-			Date dcheck = null;
-			try {
-				dcheck =sdf.parse(date);
-				dmin = sdf.parse(min);
-				//dmax= sdf.format(max);					
-				if(dcheck.after(dmin) && dcheck.before(dmax) ) {
-					System.out.println(dcheck);
-					newName = newName.replace(date, "");
-					//item.setYear(Integer.valueOf(date));
-					newName = String.valueOf(Integer.valueOf(date));
-					return newName;
-				}
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-		return null;
-
-	}
+	
+	
 
 	//Remove character that are invalid in windows files.
+	/**
+	 * This method removes the characters that Windows does not allow to be 
+	 * used in the file name.
+	 * 
+	 * @param newName The string with the file name
+	 * @return The file name without the characters prohibited by windows
+	 */
 	public static String formatName_Windows(String newName){
 
 		newName = newName.replace("<","");
@@ -134,7 +137,18 @@ public class GlobalFunctions {
 	}
 	
 	//Remove unwanted special character and names that only disturb the logic to find the episode
+	/**
+	 * 
+	 * This method removes useless characters and information that can interfere with 
+	 * the recognition of important information regarding the series / film.
+	 * 
+	 * @param name The string with the series / film name
+	 * @param mode The string with the current mode, needed in method called inside.
+	 * @param item 
+	 * @return The name without the useless extra information.
+	 */
 	public static String formatName(String name, String mode, Item item){
+		
 		System.out.println("Inside format Name");
 		exceptions =DataStored.readExceptions();
 		exceptionsRenamed =DataStored.readExceptionsRenamed();
@@ -188,13 +202,18 @@ public class GlobalFunctions {
 		}
 
 
-		name = GlobalFunctions.isDate(name, mode, item);
+		name = isDate(name, mode, item);
 
 		return name;
 
 	}
 	
 	//Values that only disturb the logic of the program.
+	/**
+	 * Names that only hinder the logic of the program.
+	 * This method is used {@link org.exemple.GlobalFucntions.formatName}
+	 * 
+	 */
 	public static void fillFilter() {			
 
 		filterList.add("horriblesubs");
@@ -204,11 +223,14 @@ public class GlobalFunctions {
 		filterList.add("acc");
 		filterList.add("hdtv");
 		filterList.add("animetc");
-		//End Names that only disturb the logic to find the episode
 
 	}
 
-	//
+	/**
+	 * 
+	 * @param responseBody
+	 * @return
+	 */
 	public static String checkErrorApi(String responseBody) {
 		
 		if (responseBody.contains("\"success\":false") && responseBody.contains("Invalid API key: You must be granted a valid key.")) {
