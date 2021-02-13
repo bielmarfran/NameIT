@@ -18,7 +18,15 @@ public class FileOperations {
 	
 	
 	
-
+	/**
+	 * 
+	 * @param item
+	 * @param checkboxSeries
+	 * @param checkboxSeason
+	 * @param checkboxFolder
+	 * @param textFieldFolder_value2
+	 * @return
+	 */
 	public static String renameFileSeries(Item item, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value2){
 		
 		System.out.println("Dentro rename Series");
@@ -43,11 +51,7 @@ public class FileOperations {
 			absolutePath = item.getOriginalPath();
 		}
 		if(absolutePath==null) {
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning Dialog");
-			alert.setHeaderText("Empy Path");
-			alert.setContentText("The path to save your file is empy.");
-			alert.showAndWait();
+			GlobalFunctions.alertCaller("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 			item.setError("08");
 		}else {
 			if(checkboxSeries_value  && !checkboxSeason_value ){
@@ -63,112 +67,15 @@ public class FileOperations {
 		}
 		return null;
 	}
-	
-	//Last method that takes the response from jsonGetInfoApi, and rename the files.
-	public static String renameFileMovie2(Item item,Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value2){
 
-			checkboxSeries_value = checkboxSeries;
-			checkboxFolder_value = checkboxFolder;
-			textFieldFolder_value = textFieldFolder_value2;		
-			
-
-			
-			String value = item.getAlternetiveInfo();
-			value = value.replace("Title - ", "");
-			String name = value.substring(0,value.indexOf("|")-1);
-			value = value.replace(name, "");
-			value = value.replace("| Year - ", "");
-			String year = value.substring(1,value.indexOf("-"));
-			System.out.println("year"+year);
-			System.out.println("name"+name);
-			//String newName =  name+" ("+year+")";
-			String newName = GlobalFunctions.nameScheme(name,year);
-
-
-
-
-			//Removing Characters that Windows dont let name files have
-			File f = item.getOriginalFile();
-			String exetention = GlobalFunctions.getExtension(f.getName());
-			newName = newName+"."+exetention;
-			newName = GlobalFunctions.formatName_Windows(newName);
-			name = GlobalFunctions.formatName_Windows(name);
-			//Set the final name
-			item.setName(newName);
-
-			System.out.println("Name Middle Renaming ---"+item.getName());
-			//End Removing Characters that Windows don't let name files have
-
-			String absolutePath;
-			if(checkboxFolder_value){
-				if(textFieldFolder_value==null) {
-					absolutePath = textFieldFolder_value;
-				}else {
-					absolutePath = textFieldFolder_value;
-				}
-
-			}else{
-				absolutePath = item.getOriginalPath();
-			}
-
-			if(absolutePath==null) {
-				System.out.println("Error no Path");	
-				item.setError("08");
-			}else {
-				if(checkboxSeries_value){
-					createFolderMovie(absolutePath,item,f,name,newName);
-					/*
-				 					System.out.println("Create Film");
-					item.setError("");
-					File file = new File(absolutePath+"\\"+name);
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					absolutePath = absolutePath+"\\"+name;
-					String newPath = absolutePath+"\\"+newName;
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						System.out.println("Rename was ok");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					
-
-					}
-					 */
-					
-					
-				}else{
-					/*
-									item.setError("");
-					File file = new File(absolutePath);
-					boolean bool = file.mkdirs();
-					if(bool){
-						System.out.println("Directory created successfully");
-					}else{
-						System.out.println("Sorry couldnt create specified directory");
-					}
-					String newPath = absolutePath+"\\"+newName;
-					Boolean x =f.renameTo(new File(newPath));
-					if(x){
-						//System.out.println("Directory created successfully");
-					}else{
-						//System.out.println("Sorry couldnt create specified directory");
-					}
-					 */
-					noFolderMovie(absolutePath,item,f,name,newName);
-				}
-
-			}
-
-			return null;
-		}
 		
 
-
-
+	/**
+	 * 
+	 * @param absolutePath
+	 * @param item
+	 * @param f
+	 */
 	public static void noFolders(String absolutePath, Item item, File f) {
 		File file = new File(absolutePath);
 		boolean bool = file.mkdirs();
@@ -187,6 +94,12 @@ public class FileOperations {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param absolutePath
+	 * @param item
+	 * @param f
+	 */
 	public static void createFolderSeries(String absolutePath, Item item, File f) {		
 		
 		System.out.println("Create Series");
@@ -210,7 +123,12 @@ public class FileOperations {
 
 		
 	}
-	
+	/**
+	 * 
+	 * @param absolutePath
+	 * @param item
+	 * @param f
+	 */
 	public static void createFolderSeason(String absolutePath, Item item, File f) {
 		
 		if(!checkboxSeries_value && checkboxSeason_value){
@@ -234,6 +152,12 @@ public class FileOperations {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param absolutePath
+	 * @param item
+	 * @param f
+	 */
 	public static void createFolderSeriesSeason(String absolutePath, Item item, File f) {
 		
 		System.out.println("Create Season and Series");
@@ -259,8 +183,15 @@ public class FileOperations {
 	
 	
 	
-	
-	
+	/**
+	 * 
+	 * @param item
+	 * @param checkboxSeries
+	 * @param checkboxSeason
+	 * @param checkboxFolder
+	 * @param textFieldFolder_value2
+	 * @return
+	 */
 	public static String renameFileMovie(Item item, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value2){
 		
 		checkboxSeries_value = checkboxSeries;
@@ -299,7 +230,7 @@ public class FileOperations {
 		}
 
 		if(absolutePath==null) {
-			System.out.println("Error aldlasaasasa");	
+			GlobalFunctions.alertCaller("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 			item.setError("08");
 		}else {
 			if(checkboxSeries_value){
@@ -313,6 +244,14 @@ public class FileOperations {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param absolutePath
+	 * @param item
+	 * @param f
+	 * @param name
+	 * @param newName
+	 */
 	public static void noFolderMovie(String absolutePath, Item item, File f, String name, String newName) {		
 		item.setError("");
 		File file = new File(absolutePath);
@@ -332,6 +271,14 @@ public class FileOperations {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param absolutePath
+	 * @param item
+	 * @param f
+	 * @param name
+	 * @param newName
+	 */
 	public static void createFolderMovie(String absolutePath, Item item, File f, String name, String newName) {		
 			
 		
@@ -356,7 +303,5 @@ public class FileOperations {
 	
 			
 		}
-	
-		
 		
 	}

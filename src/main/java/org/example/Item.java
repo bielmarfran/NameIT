@@ -44,14 +44,27 @@ public class Item {
 	public Item() {
 
 	}
-	
+	/**
+	 * 
+	 * @param orignalName
+	 * @param originalPatch
+	 * @param originalFile
+	 * @param state
+	 */
 	public Item(String orignalName,String originalPatch,File originalFile,Integer state) {
 		this.originalName =orignalName;
 		this.originalPath =originalPatch;
 		this.originalFile =originalFile;
 		this.state = state;
 	}
-	
+	/**
+	 * 
+	 * @param orignalName
+	 * @param Name
+	 * @param id
+	 * @param originalPatch
+	 * @param originalFile
+	 */
 	public Item(String orignalName,String Name,int id,String originalPatch,File originalFile) {
 		this.originalName =orignalName;
 		this.originalPath =originalPatch;

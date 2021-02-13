@@ -40,7 +40,10 @@ public class OperationTmdbSerie {
 			controlBreakFile=0;
 		
 		}
-		//
+		/**
+		 * 
+		 * @param item2
+		 */
 		public void setInfoAlternative(Item item2) {
 			System.out.println("--Inside setInfoAlternative--");
 			
@@ -128,10 +131,6 @@ public class OperationTmdbSerie {
 						}
 					}
 				}
-				//if(controlBreakFile==0){
-					//System.out.println("Could not determine a single series.");
-					//breakFileNameSlug(name);
-				//}
 
 			}else {
 				System.out.println("Empty Name");
@@ -219,16 +218,19 @@ public class OperationTmdbSerie {
 							}
 							if(test.length()==1 && GlobalFunctions.isNumeric(test)){
 								item.setError("05");	
+								item.setState(3);
 								season = season+test;
 								control_season++;
 							}else {
 								if(test.length()==1 && !GlobalFunctions.isNumeric(test)){
 									item.setError("04");	
+									item.setState(3);
 								}
 
 							}
 						}else {
 							item.setError("04");	
+							item.setState(3);
 							System.out.println("Error");
 
 
@@ -236,7 +238,8 @@ public class OperationTmdbSerie {
 					}
 				}else{
 					System.out.println("File name Empty after part used for id reconition");
-					item.setError("04");	
+					item.setError("04");
+					item.setState(3);
 					x=10;
 				}
 			}
@@ -255,57 +258,113 @@ public class OperationTmdbSerie {
 					season_value = season_value + test.substring(0,1);
 					test = test.substring(1);	
 				}
-				System.out.println("Size "+season_value.length());
+				//System.out.println("Size "+season_value.length());
 				switch (season_value.length()) {
 				case 0: 
 					System.out.println("File name Empty after part used for id reconition");
 					item.setError("04");
+					item.setState(3);
 					break;
 				case 1: 
-					System.out.println("Dentro 1"+test.substring(0,1));
-					if(test.substring(0,1).equals("x") ) {
-						checkForAnime = false;
-						test = test.substring(1);
-						item.setSeason(season_value.substring(0,1));
-						getEpisode(test,namesBlocks, controlNameBlock);
-					}
-
+					getSeasonCase1(test,namesBlocks,season_value);
 					break;
 				case 2: 
-					System.out.println("Dentro 2" + test);
-					System.out.println(season_value.substring(0,2));
-					if(GlobalFunctions.isNumeric(test.substring(2,3))) {
-						test = test.substring(2);
-						item.setSeason(season_value.substring(0,2));
-						getEpisode(test,namesBlocks, controlNameBlock);
-					}else {
-						//test = test.substring(1);
-						item.setSeason(season_value.substring(0,1));
-						getEpisode(season_value.substring(1,2),namesBlocks, controlNameBlock);
-					}
+					getSeasonCase2(test,namesBlocks,season_value);
 					break;
 				case 3: 
-					System.out.println("Dentro 3");
-					test = test.substring(1);
-					item.setSeason(season_value.substring(0,1));
-					getEpisode(season_value.substring(1,3),namesBlocks, controlNameBlock);
+					getSeasonCase3(test,namesBlocks,season_value);
 					break;
 				case 4: 
-					System.out.println("Dentro 4");
-					item.setSeason(season_value.substring(0,2));
-					getEpisode(season_value.substring(2,4),namesBlocks, controlNameBlock);
+					getSeasonCase4(test,namesBlocks,season_value);
 					break;
 				default:
 					if(season_value.length()>4 &&season_value.length()<7) {
-						System.out.println("Maior 4");
-						item.setSeason(season_value.substring(0,2));
-						getEpisode(season_value.substring(2,season_value.length()),namesBlocks, controlNameBlock);
+						getSeasonCaseDefault(test,namesBlocks,season_value);
 					}
 				}
 
 			}
 		}
-		//
+		
+		
+		/**
+		 * 
+		 * @param test
+		 * @param namesBlocks
+		 * @param season_value
+		 */
+		public static void getSeasonCase1(String test,String[] namesBlocks, String season_value) {
+			if(test.substring(0,1).equals("x") ) {
+				checkForAnime = false;
+				test = test.substring(1);
+				item.setSeason(season_value.substring(0,1));
+				getEpisode(test,namesBlocks, controlNameBlock);
+			}
+
+		}
+		
+		/**
+		 * 
+		 * @param test
+		 * @param namesBlocks
+		 * @param season_value
+		 */
+		public static void getSeasonCase2(String test,String[] namesBlocks, String season_value) {
+			
+			if(GlobalFunctions.isNumeric(test.substring(2,3))) {
+				test = test.substring(2);
+				item.setSeason(season_value.substring(0,2));
+				getEpisode(test,namesBlocks, controlNameBlock);
+			}else {
+				//test = test.substring(1);
+				item.setSeason(season_value.substring(0,1));
+				getEpisode(season_value.substring(1,2),namesBlocks, controlNameBlock);
+			}
+		}
+		
+	
+		/**
+		 * 
+		 * @param test
+		 * @param namesBlocks
+		 * @param season_value
+		 */
+		public static void getSeasonCase3(String test,String[] namesBlocks, String season_value) {
+			test = test.substring(1);
+			item.setSeason(season_value.substring(0,1));
+			getEpisode(season_value.substring(1,3),namesBlocks, controlNameBlock);
+		}
+		
+		
+		/**
+		 * 
+		 * @param test
+		 * @param namesBlocks
+		 * @param season_value
+		 */
+		public static void getSeasonCase4(String test,String[] namesBlocks, String season_value) {
+			item.setSeason(season_value.substring(0,2));
+			getEpisode(season_value.substring(2,4),namesBlocks, controlNameBlock);
+		}
+		
+		/**
+		 * 
+		 * @param test
+		 * @param namesBlocks
+		 * @param season_value
+		 */
+		public static void getSeasonCaseDefault(String test,String[] namesBlocks, String season_value) {
+			
+			item.setSeason(season_value.substring(0,2));
+			getEpisode(season_value.substring(2,season_value.length()),namesBlocks, controlNameBlock);
+		}
+		
+		
+		/**
+		 * 
+		 * @param value
+		 * @param item
+		 */
 		public static void getSeasonAlternative(String value,Item item) {
 			System.out.println("-Inside SeasonAlternative");
 			String test ="";
@@ -385,46 +444,19 @@ public class OperationTmdbSerie {
 					item.setError("04");
 					break;
 				case 1: 
-					System.out.println("Dentro 1"+test.substring(0,1));
-					if(test.substring(0,1).equals("x") ) {
-						checkForAnime = false;
-						test = test.substring(1);
-						item.setSeason(season_value.substring(0,1));
-						getEpisode(test,namesBlocks, controlNameBlock);
-					}
-					
+					getSeasonCase1(test,namesBlocks,season_value);
 					break;
 				case 2: 
-					System.out.println("Dentro 2" + test);
-					System.out.println(season_value.substring(0,2));
-					if(GlobalFunctions.isNumeric(test.substring(2,3))) {
-						test = test.substring(2);
-						item.setSeason(season_value.substring(0,2));
-						getEpisode(test,namesBlocks, controlNameBlock);
-					}else {
-						//test = test.substring(1);
-						item.setSeason(season_value.substring(0,1));
-						getEpisode(season_value.substring(1,2),namesBlocks, controlNameBlock);
-					}
+					getSeasonCase2(test,namesBlocks,season_value);
 					break;
 				case 3: 
-					System.out.println("Dentro 3");
-					test = test.substring(1);
-					item.setSeason(season_value.substring(0,1));
-					getEpisode(season_value.substring(1,3),namesBlocks, controlNameBlock);
+					getSeasonCase3(test,namesBlocks,season_value);
 					break;
 				case 4: 
-					System.out.println("Dentro 4");
-					item.setSeason(season_value.substring(0,2));
-					getEpisode(season_value.substring(2,4),namesBlocks, controlNameBlock);
+					getSeasonCase4(test,namesBlocks,season_value);
 					break;
 				default:
-					//throw new IllegalArgumentException("Unexpected value: " + season_value.length());
-					if(season_value.length()>4 &&season_value.length()<7) {
-						System.out.println("Maior 4");
-						item.setSeason(season_value.substring(0,2));
-						getEpisode(season_value.substring(2,season_value.length()),namesBlocks, controlNameBlock);
-					}
+					getSeasonCaseDefault(test,namesBlocks,season_value);
 				}
 															
 			}

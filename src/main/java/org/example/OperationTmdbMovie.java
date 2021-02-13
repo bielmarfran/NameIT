@@ -28,13 +28,30 @@ public class OperationTmdbMovie {
 		 */
 		public void setInfo(Integer x,Item episode) {	
 			System.out.println("--Inside setInfo TMDB--");
-			//controlArrayListEpisode=x;
 			item = episode;
-			controlBreakFile=0;
-			
-			
+			controlBreakFile=0;			
 		}
-		//
+		
+		/**
+		 * 
+		 * @param x
+		 * @param episode
+		 */
+		public void setInfoAlternative(Integer x,Item episode) {	
+			System.out.println("--Inside setInfo TMDB--");
+			item = episode;
+			controlBreakFile=0;		
+			String value = item.getAlternetiveInfo();
+			value = value.replace("Title - ", "");
+			String name = value.substring(0,value.indexOf("|")-1);
+			value = value.replace(name, "");
+			value = value.replace("| Year - ", "");
+			String year = value.substring(1,value.indexOf("-"));
+			item.setName(name);
+			item.setYear(Integer.parseInt(year));
+			finalName();
+		}
+		
 		
 		/**
 		 * 

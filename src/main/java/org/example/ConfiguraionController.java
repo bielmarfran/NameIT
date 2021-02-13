@@ -41,10 +41,6 @@ public class ConfiguraionController {
 	private Button ButtonSaveMovies;
 	@FXML
 	private Button ButtonSaveSeries;
-	@FXML
-	private TextFlow TextFlowMovies;
-	@FXML
-	private TextFlow TextFlowSeries;
 
 	
 	private static boolean buttonMovieValue;
@@ -77,11 +73,11 @@ public class ConfiguraionController {
 		TextFieldMovie.setText(DataStored.propertiesGetMovieScheme());
 		paintText(DataStored.propertiesGetMovieScheme());
 		Text t1 = new Text(DataStored.propertiesGetMovieScheme());
-		TextFlowMovies.getChildren().addAll(textList);
+
 		
 		TextFieldSeries.setText(DataStored.propertiesGetSeriesScheme());
 		Text t2= new Text(DataStored.propertiesGetSeriesScheme());
-		TextFlowSeries.getChildren().add(t2);
+
 		//End
 		//Show the Example Labels
 		showExempleMovieScheme();
@@ -154,8 +150,8 @@ public class ConfiguraionController {
 		String name = "Avengers";
 		String year = "2013";
 		String value = TextFieldMovie.getText();
-		value = value.replace("Name", name);
-		value = value.replace("Year", year);
+		value = value.replace("&Name", name);
+		value = value.replace("&Year", year);
 		LabelMovieExemple.setText(value);
 
 	}
@@ -163,19 +159,17 @@ public class ConfiguraionController {
 	//Show the Example in Example Label according to the Scheme in the TextField Series
 	public void showExempleSeriesScheme() {
 
-		String name = "The Flash (2014)";
-		String year = "";
+		String name = "The Flash";
+		String year = "2014";
 		String season = "01";
 		String episode = "01";
 		String episodeName = "Pilot";
-		String absolute = "01";
 		String value = TextFieldSeries.getText();
-		value = value.replace("Name", name);
-		value = value.replace("Year", year);
-		value = value.replace("Season", season);
-		value = value.replace("Episode", episode);
-		value = value.replace("EPN", episodeName);
-		value = value.replace("Absolute", absolute);
+		value = value.replace("&Name", name);
+		value = value.replace("&Year", year);
+		value = value.replace("&Season", season);
+		value = value.replace("&Episode", episode);
+		value = value.replace("&EPN", episodeName);
 		LabelSeriesExemple.setText(value);
 
 	}

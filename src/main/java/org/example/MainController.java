@@ -130,7 +130,7 @@ public class MainController {
 	//Static Value for Red ListView Background Color
 	private static final String HIGHLIGHTED_CONTROL_2_INNER_BACKGROUND = "#FADA5E";
 	//
-	private static final String HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND = "#6ea364";//
+	private static final String HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND = "#6ea364";
 	// Test
 	private static Integer enter=0;
 
@@ -220,35 +220,24 @@ public class MainController {
 		checkboxFolder_value = checkboxFolder.isSelected();
 		
 		//End Getting the value of the check boxes
-		//listViewFilesRenamed.getItems().clear();
 		enter=0;
 		
 		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
 			enter=1;
 			System.out.println("--Inside alert if--");
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning Dialog");
-			alert.setHeaderText("Empy Path");
-			alert.setContentText("The path to save your file is empy.");
-			alert.showAndWait();
+			GlobalFunctions.alertCaller("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 		}else {
 			if(controlCircle==2) {
 				enter=1;
 				System.out.println("--Inside alert if 2--");
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Warning Dialog");
-				alert.setHeaderText("Disconected from Api");
-				alert.setContentText("1 - Check you internet connection.\n"+
+				GlobalFunctions.alertCaller("Warning Dialog", "Disconected from Api", "1 - Check you internet connection.\n"+
 						"2 - Restar the program. \n"+
 						"3 - The Api maybe be down. \n");
-
-				alert.showAndWait();
-
 			}
 		}
 		System.out.println("-- before-backgroundTaks--");
 		renamingListError.clear();
-		//progressIndicator.visibleProperty().bind(backgroundTaks.runningProperty());
+		
 		backgroundTaks = new Service<Void>() {					
 			@Override
 			protected Task<Void> createTask() {
@@ -320,7 +309,7 @@ public class MainController {
 										System.out.println("TMDB Movies");
 										OperationTmdbMovie tmdbm = new OperationTmdbMovie();
 										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
-											FileOperations.renameFileMovie2(renamingList.get(x),checkboxSeries_value,checkboxSeason_value,checkboxFolder_value,textFieldFolder_value);
+											tmdbm.setInfoAlternative(x, item);
 										}else {
 											
 											//item = renamingList.get(x);
@@ -331,7 +320,6 @@ public class MainController {
 												tmdbm.setInfo(x,item);
 												if(item.getError()==null) {										
 													tmdbm.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
-													//breakFileName(episodeList.get(x).getOriginalName());
 												}else {
 													System.out.println("II");
 													renamingList.remove(x);
@@ -464,7 +452,7 @@ public class MainController {
 					}
 				}
 			}
-			
+			//clearALL();
 	}
 	//Clear Button Click Event
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {

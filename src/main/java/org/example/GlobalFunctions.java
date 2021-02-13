@@ -6,6 +6,9 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 public class GlobalFunctions {
 
 	//File name garbage that makes it difficult to identify the episode
@@ -235,6 +238,15 @@ public class GlobalFunctions {
 		return scheme;
 	}
 
+	//
+	public static void alertCaller(String title, String header, String text) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle(title);
+		alert.setHeaderText(header);
+		alert.setContentText(text);
+		alert.showAndWait();
+	}
+	
 	//------------------------------------------------------------------------------
 	
 	
