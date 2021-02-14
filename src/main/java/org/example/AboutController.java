@@ -34,17 +34,7 @@ public class AboutController {
 		}
 	}
 	
-	/*//Open the Default Browser of the System on TVDB Website.
-	public void hyperlinkTVDB(javafx.event.ActionEvent actionEvent) {
-		try {
-		    Desktop.getDesktop().browse(new URL("https://thetvdb.com/").toURI());
-		} catch (IOException e) {
-		    e.printStackTrace();
-		} catch (URISyntaxException e) {
-		    e.printStackTrace();
-		}
-	}
-	*/
+	
 	//Open the Default Browser of the System on TMDB Website.
 	public void hyperlinkTMDB(javafx.event.ActionEvent actionEvent) {
 		try {

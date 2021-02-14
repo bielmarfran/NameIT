@@ -1,6 +1,5 @@
 package org.example;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,6 +10,15 @@ import java.util.Properties;
 import java.util.Scanner;
 import java.util.prefs.Preferences;
 
+/**
+ *<h1>Data Stored</h1>
+ *Data Stored is a class that aggregates different methods used to store
+ * information used in the program, using txt files, properties files and 
+ * Preferences objects.
+ * 
+ * @author bielm
+ *
+ */
 public class DataStored {
 	
 	static Properties config;
@@ -107,7 +115,12 @@ public class DataStored {
 	}
 	
 
-    //Get the readExceptions.txt content
+	/**
+	 * This method reads  the readExceptions.txt, which stores user-defined strings 
+	 * to be replaced with other strings to help with the program's logic.
+	 * 
+	 * @return An ArrayList of String with the strings to be replaced.
+	 */
     public static ArrayList<String> readExceptions() {
     	ArrayList<String> exceptions = new ArrayList<String>();
     	Scanner s;
@@ -129,8 +142,15 @@ public class DataStored {
 		}
 
     }
+
     
-    //Get the ExceptionsRenamed content
+    
+    /**
+     * This method reads exceptionsRenamed.text, which stores user-defined strings,
+     *  which will assist in the logic of the program.
+     * 
+     * @return An ArrayList of String with the strings that will replace the old strings.
+     */
     public static ArrayList<String> readExceptionsRenamed() {
     	ArrayList<String>exceptionsRenamed = new ArrayList<String>();
     	Scanner z;
@@ -152,13 +172,19 @@ public class DataStored {
 		}
     }
     
-    //Get the Language Properties from config.properties.
+    
+    
+    /**
+     * This method accesses the properties file and reads the stored 
+     * attribute referring to the Language, which will be used in API requests.
+     * 
+     * @return The stored Language value.
+     */
     public static String propertiesGetLanguage() {
     	config = new Properties();
     	FileInputStream fis;
     	try {
 			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
-			//System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -172,7 +198,14 @@ public class DataStored {
     	return config.getProperty("Language");
     }
    
-    //Save the Language Properties to config.properties.
+
+    
+    /**
+     *This method accesses the properties file and saves a new value 
+     *in the Language attribute, which will be used in API requests.
+     * 
+     * @param newLanguage The new Language value.
+     */
     public static void propertiesSetLanguage(String newLanguage) {
     	//System.out.println("Dentro propertiesSetLanguage");
     	config = new Properties();
@@ -202,7 +235,14 @@ public class DataStored {
 		}
     }
   
-    //Get the Mode Properties from config.properties.
+    
+    
+    /**
+     * This method accesses the properties file and reads the stored
+     * attribute referring to the Mode, which will affect the functionality of the program.
+     * 
+     * @return  The stored Menu value.
+     */
     public static String propertiesGetMode() {
     	config = new Properties();
     	FileInputStream fis;
@@ -222,7 +262,14 @@ public class DataStored {
     	return config.getProperty("Mode");
     }
     
+    
     //Save the Mode Properties to config.properties.
+    /**
+     *This method accesses the properties file and saves a new value 
+     *in the Mode attribute, which will affect the functionality of the program.
+     *
+     * @param newMode The new Menu value.
+     */
     public static void propertiesSetMode(String newMode) {
     	//System.out.println("Dentro propertiesSetMode");
     	config = new Properties();
@@ -251,6 +298,8 @@ public class DataStored {
 			e.printStackTrace();
 		}
     }
+    
+    
     
     //Get the Movie Name Scheme Properties from config.properties.
     public static String propertiesGetMovieScheme() {

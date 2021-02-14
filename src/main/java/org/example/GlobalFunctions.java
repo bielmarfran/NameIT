@@ -227,9 +227,11 @@ public class GlobalFunctions {
 	}
 
 	/**
+	 * This method receives the response from the API, and checks if 
+	 * there was a response with error characteristics.
 	 * 
-	 * @param responseBody
-	 * @return
+	 * @param responseBody String with the Api response
+	 * @return An empty string when there is no error, or "02" / "03" depending on the error encountered.
 	 */
 	public static String checkErrorApi(String responseBody) {
 		
@@ -243,7 +245,13 @@ public class GlobalFunctions {
 		return "";
 	}
 
-	//Get the defined name format from properties.
+	/**
+	 * This method shapes the final name of the file according to 
+	 * user-defined rules that are stored in the program's properties.
+	 * 
+	 * @param item
+	 * @return The rules-shaped file name
+	 */
 	public static String nameScheme(Item item) {
 		String scheme = DataStored.propertiesGetMovieScheme();
 		scheme = scheme.replace("&Name", item.getName());
@@ -251,7 +259,14 @@ public class GlobalFunctions {
 					
 		return scheme;
 	}
-	//
+	/**
+	 * This method shapes the final name of the file according to 
+	 * user-defined rules that are stored in the program's properties.
+	 * 
+	 * @param name Name of the item
+	 * @param year Year of the item
+	 * @return The rules-shaped file name
+	 */
 	public static  String nameScheme(String name,String year) {
 		String scheme = DataStored.propertiesGetMovieScheme();
 		scheme = scheme.replace("&Name", name);
@@ -260,7 +275,14 @@ public class GlobalFunctions {
 		return scheme;
 	}
 
-	//
+	/**
+	 * 
+	 * This method is used to call an Alert Box.
+	 * 
+	 * @param title Title of the Alert Box
+	 * @param header Header of the Alert Box 
+	 * @param text BodyText of the Alert Box
+	 */
 	public static void alertCaller(String title, String header, String text) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle(title);
