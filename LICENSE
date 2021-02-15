@@ -3,11 +3,12 @@ NameIT - Simple Renamer is is released under the GNU GENERAL PUBLIC LICENSE, v3.
 The list of libraries used by NameIT - Simple Renamer:                    
  
                        -- Start libraries --
-JSON In Java (package org.json)
-Description: JSON is a light-weight, language independent, data interchange format.
-Website: https://github.com/douglascrockford/JSON-java
-License: The JSON License (MIT)
-License website: http://json.org/license.html  
+GSON (com.google.code.gson)
+Description: Gson is a Java library that can be used to convert Java Objects into their JSON representation. It can also be used to convert a JSON string to an equivalent Java object.
+Gson can work with arbitrary Java objects including pre-existing objects that you do not have source code of.
+Website: https://github.com/google/gson
+License: Apache License 2.0
+License website: https://github.com/google/gson/blob/master/LICENSE
                     --------------------
 OpenJFX (org.openjfx)    
 Description: OpenJFX is an open source, next generation client application platform for desktop, mobile and embedded systems built on Java.

@@ -299,9 +299,14 @@ public class DataStored {
 		}
     }
     
-    
-    
-    //Get the Movie Name Scheme Properties from config.properties.
+       
+
+    /**
+     * This method accesses the properties file and reads the stored
+     * attribute referring to the MovieScheme, which will affect the final name of the file.
+     * 
+     * @return The movie file name after the passing the rules
+     */
     public static String propertiesGetMovieScheme() {
     	config = new Properties();
     	FileInputStream fis;
@@ -322,7 +327,12 @@ public class DataStored {
     	
     }
     
-    //Save theMovie Name Scheme Properties to config.properties.
+    /**
+     * This method accesses the properties file and saves a new value 
+     * in the MovieScheme attribute, which will affect the final name of the file.
+     * 
+     * @param newMovie The new MovieScheme value.
+     */
     public static void propertiesMovieScheme(String newMovie) {
     	//System.out.println("Dentro propertiesSetMode");
     	config = new Properties();
@@ -352,7 +362,12 @@ public class DataStored {
 		}	
     }
     
-    //Get the Series Name Scheme Properties from config.properties.
+    /**
+     * This method accesses the properties file and reads the stored
+     * attribute referring to the SeriesScheme, which will affect the final name of the file.
+     * 
+     * @return The series file name after the passing the rules
+     */
     public static String propertiesGetSeriesScheme() {
     	config = new Properties();
     	FileInputStream fis;
@@ -373,7 +388,14 @@ public class DataStored {
     	
     }
     
-    //Save theMovie Name Scheme Properties to config.properties.
+    
+    
+    /**
+     * This method accesses the properties file and saves a new value 
+     * in the SeriesScheme attribute, which will affect the final name of the file.
+     * 
+     * @param newMovie The new SeriesScheme value.
+     */
     public static void propertiesSeriesScheme(String newSeries) {
     	//System.out.println("Dentro propertiesSetMode");
     	config = new Properties();
@@ -403,7 +425,16 @@ public class DataStored {
 		}
     }
     
-    //Save the Api Key Used for TMDB
+
+    /**
+     * This method takes the value of the TMDB API key and stores it
+     *  using the Preferences class of "java.util.prefs".If the test to 
+     *  ensure that the key is valid fails, the element in the interface 
+     *  that indicates the status of the API changes to red, which 
+     *  indicates that it was not possible to reach the API.
+     * 
+     * @param keyValue The TMDB API key value.
+     */
     public static void savePreferencekeyTmdb(String keyValue) {
     	Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
 
@@ -418,6 +449,12 @@ public class DataStored {
     }
    
     //Reed the stored TMDB key.
+    /**
+     * This method takes the value of the TMDB API key stored 
+     * in Preferences and returns it.
+     * 
+     * @return The stored TMDB API key.
+     */
     public static String readPreferencekeyTmdb() {
     	Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
     	return prefs.get(keyTmdb, "default");

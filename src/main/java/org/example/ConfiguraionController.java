@@ -1,10 +1,7 @@
 package org.example;
 
-
-
 import java.util.ArrayList;
 import java.util.Optional;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,6 +21,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 
+/**
+ * 
+ * @author bielm
+ *
+ */
 public class ConfiguraionController {
 	
 
