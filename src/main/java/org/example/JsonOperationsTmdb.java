@@ -6,7 +6,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
-/* The function of this class is to house the https request methods for the TMDB API*/
+/**
+ * This class  stores the methods that deal with https request methods for the TMDB API
+ * 
+ * @author bielm
+ *
+ */
 
 public class JsonOperationsTmdb {
 	

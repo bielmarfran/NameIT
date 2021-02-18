@@ -225,12 +225,12 @@ public class MainController {
 		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
 			enter=1;
 			System.out.println("--Inside alert if--");
-			GlobalFunctions.alertCaller("Warning Dialog", "Empy Path", "The path to save your file is empy.");
+			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 		}else {
 			if(controlCircle==2) {
 				enter=1;
 				System.out.println("--Inside alert if 2--");
-				GlobalFunctions.alertCaller("Warning Dialog", "Disconected from Api", "1 - Check you internet connection.\n"+
+				GlobalFunctions.alertCallerWarning("Warning Dialog", "Disconected from Api", "1 - Check you internet connection.\n"+
 						"2 - Restar the program. \n"+
 						"3 - The Api maybe be down. \n");
 			}
@@ -448,7 +448,7 @@ public class MainController {
 					}
 				}else{
 					if(renamingList.get(x).getState()==1) {
-						FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value);
+						FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value);
 					}
 				}
 			}

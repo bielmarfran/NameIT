@@ -2,9 +2,13 @@ package org.example;
 
 import java.io.File;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
+/**
+ * This class stores the methods that deal with the processes of renaming files, moving files and creating folders.
+ * 
+ * @author bielm
+ *
+ */
 public class FileOperations {
 	
 	//Store the value of textFieldFolder
@@ -19,12 +23,15 @@ public class FileOperations {
 	
 	
 	/**
+	 * This method is called for series files, it receives several parameters 
+	 * that decide how the files will be worked.
+	 * 
 	 * 
 	 * @param item
-	 * @param checkboxSeries
-	 * @param checkboxSeason
-	 * @param checkboxFolder
-	 * @param textFieldFolder_value2
+	 * @param checkboxSeries Controls the creation of the folder for the series
+	 * @param checkboxSeason Controls the creation of the folder for the season
+	 * @param checkboxFolder Controls the destination of the file
+	 * @param textFieldFolder_value2 Alternative destination, which the user chose
 	 * @return
 	 */
 	public static String renameFileSeries(Item item, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value2){
@@ -51,7 +58,7 @@ public class FileOperations {
 			absolutePath = item.getOriginalPath();
 		}
 		if(absolutePath==null) {
-			GlobalFunctions.alertCaller("Warning Dialog", "Empy Path", "The path to save your file is empy.");
+			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 			item.setError("08");
 		}else {
 			if(checkboxSeries_value  && !checkboxSeason_value ){
@@ -71,10 +78,11 @@ public class FileOperations {
 		
 
 	/**
+	 * This method is called when no support folder will be created
 	 * 
-	 * @param absolutePath
+	 * @param absolutePath File destination
 	 * @param item
-	 * @param f
+	 * @param f The file being worked on
 	 */
 	public static void noFolders(String absolutePath, Item item, File f) {
 		File file = new File(absolutePath);
@@ -95,10 +103,11 @@ public class FileOperations {
 	}
 	
 	/**
+	 *  This method is called when only the series folder will be created
 	 * 
-	 * @param absolutePath
+	 * @param absolutePath File destination
 	 * @param item
-	 * @param f
+	 * @param f The file being worked on
 	 */
 	public static void createFolderSeries(String absolutePath, Item item, File f) {		
 		
@@ -123,11 +132,13 @@ public class FileOperations {
 
 		
 	}
+	
 	/**
+	 *  This method is called when only the season folder will be created
 	 * 
-	 * @param absolutePath
+	 * @param absolutePath File destination
 	 * @param item
-	 * @param f
+	 * @param f The file being worked on
 	 */
 	public static void createFolderSeason(String absolutePath, Item item, File f) {
 		
@@ -153,10 +164,11 @@ public class FileOperations {
 	}
 	
 	/**
+	 *  This method is called when both series/season folder will be created
 	 * 
-	 * @param absolutePath
+	 * @param absolutePath File destination
 	 * @param item
-	 * @param f
+	 * @param f The file being worked on
 	 */
 	public static void createFolderSeriesSeason(String absolutePath, Item item, File f) {
 		
@@ -184,15 +196,17 @@ public class FileOperations {
 	
 	
 	/**
+	 * This method is called for movie files, it receives several parameters 
+	 * that decide how the files will be worked.
+	 * 
 	 * 
 	 * @param item
-	 * @param checkboxSeries
-	 * @param checkboxSeason
-	 * @param checkboxFolder
-	 * @param textFieldFolder_value2
+	 * @param checkboxSeries Controls the creation of the folder for the movie
+	 * @param checkboxFolder Controls the destination of the file
+	 * @param textFieldFolder_value2 Alternative destination, which the user chose
 	 * @return
 	 */
-	public static String renameFileMovie(Item item, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value2){
+	public static String renameFileMovie(Item item, Boolean checkboxSeries, Boolean checkboxFolder, String textFieldFolder_value2){
 		
 		checkboxSeries_value = checkboxSeries;
 		checkboxFolder_value = checkboxFolder;
@@ -230,14 +244,14 @@ public class FileOperations {
 		}
 
 		if(absolutePath==null) {
-			GlobalFunctions.alertCaller("Warning Dialog", "Empy Path", "The path to save your file is empy.");
+			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 			item.setError("08");
 		}else {
 			if(checkboxSeries_value){
 				createFolderMovie(absolutePath,item,f,name,newName);
 			
 			}else{
-				noFolderMovie(absolutePath,item,f,name,newName);
+				noFolderMovie(absolutePath,item,f,newName);
 			}
 
 		}
@@ -245,14 +259,14 @@ public class FileOperations {
 	}
 	
 	/**
+	 * This method is called when no support folder will be created
 	 * 
-	 * @param absolutePath
+	 * @param absolutePath File destination
 	 * @param item
-	 * @param f
-	 * @param name
-	 * @param newName
+	 * @param f The file being worked on
+	 * @param newName New name of the file
 	 */
-	public static void noFolderMovie(String absolutePath, Item item, File f, String name, String newName) {		
+	public static void noFolderMovie(String absolutePath, Item item, File f, String newName) {		
 		item.setError("");
 		File file = new File(absolutePath);
 		boolean bool = file.mkdirs();
@@ -273,11 +287,11 @@ public class FileOperations {
 	
 	/**
 	 * 
-	 * @param absolutePath
+	 * @param absolutePath File destination
 	 * @param item
-	 * @param f
-	 * @param name
-	 * @param newName
+	 * @param f The file being worked on
+	 * @param name Temporary name
+	 * @param newName New name of the file
 	 */
 	public static void createFolderMovie(String absolutePath, Item item, File f, String name, String newName) {		
 			

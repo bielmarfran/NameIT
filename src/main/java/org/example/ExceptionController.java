@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
@@ -15,11 +14,18 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 
+/**
+ * This class is the controller for the Exceptions Stage where there are two ListBox's
+ * that store data entered by the user that are used by the program, in order to help 
+ * in the recognition of information with the API.
+ * 
+ * @author bielm
+ *
+ */
+
 public class ExceptionController {
 
-	private static ArrayList<String> exceptions = new ArrayList<String>();
-	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
-
+	
 	@FXML
 	private ListView<String> listViewExceptions;
 	@FXML
@@ -29,6 +35,8 @@ public class ExceptionController {
 	@FXML
 	private TextField textFieldExceptionRenamed;
 
+	private static ArrayList<String> exceptions = new ArrayList<String>();
+	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 
 	public void initialize() {
 		read(); 
@@ -39,6 +47,13 @@ public class ExceptionController {
 	}
 
 	// Routine that get the values on the TextFields and add to Exp List.
+	/**
+	 * This method takes the current values in textFieldException and textFieldExceptionRenamed, 
+	 * checks if the values are null, if not, calls {@link save()}
+	 * to save the new values.
+	 * 
+	 * @param actionEvent Button Click event
+	 */
 	public void buttonAdd(javafx.event.ActionEvent actionEvent) {
 		if(!textFieldException.getText().isEmpty() && !textFieldExceptionRenamed.getText().isEmpty()) {						
 			System.out.println(textFieldException.getText());
@@ -88,11 +103,19 @@ public class ExceptionController {
 
 	}
 
-	//Get the selected ListView Item, and Remove it and its counterpart.
+	/**
+	 * 
+	 * This method checks if there is an item selected in the before list, 
+	 * and removes it from the list, then calls {@link save()} 
+	 * to save the current state.
+	 * 
+	 * @param actionEvent Button Click event
+	 */
 	public void buttonRemove(javafx.event.ActionEvent actionEvent) {
 		System.out.println("--Remove--");
-		final int select =listViewExceptions.getSelectionModel().getSelectedIndex();		
-		System.out.println(select);
+		final int select =listViewExceptions.getSelectionModel().getSelectedIndex();	
+			
+		System.out.println("Valor select :"+select);
 
 		if(select != -1) {
 			exceptions.remove(select);
@@ -100,6 +123,8 @@ public class ExceptionController {
 			listViewExceptions.getItems().remove(select);
 			listViewExceptionsRenamed.getItems().remove(select);
 
+		}else {
+			GlobalFunctions.alertCallerWarning("Error", "Unselected item", "Select an item from the before list");
 		}
 		try {
 			save();
@@ -110,7 +135,9 @@ public class ExceptionController {
 		populateLists();
 	}
 
-	//Fill the List with the Stored Values in the Txt Files.
+	/**
+	 * Fill in the lists in the interface with the values stored in the ArrayList <>.
+	 */
 	public void populateLists() {
 		System.out.println(exceptions.size());
 		listViewExceptions.getItems().clear();
@@ -127,6 +154,11 @@ public class ExceptionController {
 	}
 	
 	//Routine to Read the value of the Txt Files and Save to the correct ArrayList
+	/**
+	 * Get the values stored in the respective txt files at exceptions / exceptionsRenamed
+	 * and store them in ArrayList <>. 
+	 * 
+	 */
 	@SuppressWarnings("resource")
 
 	
@@ -171,6 +203,12 @@ public class ExceptionController {
 	}
 	
 	//Save the values to the Txt Files.
+	/**
+	 * This method saves the current stored values in exceptions/exceptionsRenamed 
+	 * for their respective files.
+	 * 
+	 * @throws FileNotFoundException
+	 */
 	public void save() throws FileNotFoundException {
 		//Create a file with the saved values of exceptions.
 		File Fileright = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt");

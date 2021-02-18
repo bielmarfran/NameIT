@@ -11,9 +11,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * This class is very simple, it indicates some information and links
- *  about the project and a copyright claim about the use of TMDB 
- *  information in the project.
+ * This class is very simple, its controller class for the About Stage
+ * where some information and links about the project and a copyright
+ * claim about the use of TMDB information in the project.
  * 
  * @author bielm
  *
@@ -23,8 +23,9 @@ public class AboutController {
 	@FXML
 	private ImageView ImageViewTMDB;
 	@FXML
+
 	private ImageView ImageViewTVDB;
-	
+
 
 	/**
 	 * A class initialization method, where an attempt is

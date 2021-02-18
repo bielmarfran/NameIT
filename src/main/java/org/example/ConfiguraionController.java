@@ -15,13 +15,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 
 /**
+ * This class is the controller for the Configuration Stage, where the user chooses 
+ * various aspects of the project's operation such as, API return language, scheme 
+ * for the names of the films and series.
  * 
  * @author bielm
  *
@@ -51,6 +53,10 @@ public class ConfiguraionController {
 	private static String seriesValue;
 	public static ArrayList<Text> textList = new ArrayList<>();
 	
+	/**
+	 * A class initialization method, where some Interface elements get their value
+	 * 
+	 */
 	public void initialize() {
 		//Visibility Routine
 		ButtonSaveMovies.setVisible(false);
@@ -73,7 +79,7 @@ public class ConfiguraionController {
 		//Getting Info from properties to Movie and Series Scheme
 		
 		TextFieldMovie.setText(DataStored.propertiesGetMovieScheme());
-		paintText(DataStored.propertiesGetMovieScheme());
+
 		Text t1 = new Text(DataStored.propertiesGetMovieScheme());
 
 		
@@ -88,7 +94,10 @@ public class ConfiguraionController {
 		textFormatter();
 	}
 
-	//Get the Store Language in the properties
+	/**
+	 * This method get the store language value from properties using {@link DataStored.propertiesGetLanguage() }
+	 * Transforms the information to a full version, for the Interface
+	 */
 	public void renameMenuLanguage() {
 		String language = DataStored.propertiesGetLanguage();		
 		switch (language) {
@@ -117,7 +126,15 @@ public class ConfiguraionController {
 
 	}
 	
-	//Save the Language in the properties
+
+	/**
+	 * This method is called when the user chooses a new language, first 
+	 * passes the language identification from the full version to an 
+	 * abbreviated one and then calls {@link DataStored.propertiesSetLanguage(String)}
+	 * to store the new language value.
+	 * 
+	 * @param x New language value
+	 */
 	public void storeMenuLanguage(String x) {
 		String language = "";		
 		switch (x) {
@@ -146,7 +163,12 @@ public class ConfiguraionController {
 
 	}
 
-	//Show the Example in Example Label according to the Scheme in the TextField Movie
+
+	/**
+	 * This method obtains the Movie Scheme currently in the TextField Movie
+	 *  and applies it to an example label, to assist the user when building
+	 *   the MovieScheme
+	 */
 	public void showExempleMovieScheme() {
 
 		String name = "Avengers";
@@ -158,7 +180,11 @@ public class ConfiguraionController {
 
 	}
 	
-	//Show the Example in Example Label according to the Scheme in the TextField Series
+	/**
+	 * This method obtains the Series Scheme currently in the TextField Series
+	 *  and applies it to an example label, to assist the user when building
+	 *   the Series Scheme
+	 */
 	public void showExempleSeriesScheme() {
 
 		String name = "The Flash";
@@ -177,6 +203,12 @@ public class ConfiguraionController {
 	}
 	
 	//Implementing the TextFormatter to the TextFields Movie and Series
+	/**
+	 * This method has two Event Listeners that monitor the change of values in 
+	 * TextFieldMovies and TextFieldSeries and checks if the values entered are
+	 *  characters that are prohibited by Windows in filenames, if so, an AlertBox
+	 *   warns that they are not allowed.
+	 */
 	public void textFormatter() {
 		TextFieldMovie.textProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -206,13 +238,8 @@ public class ConfiguraionController {
 			String text = change.getControlNewText();
 
 			if (isValid(text)) { // your validation logic
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Warning Dialog");
-				alert.setHeaderText("Invalid Characters");
-				alert.setContentText("Invalid Character for Windows in file names\n"
+				GlobalFunctions.alertCallerWarning("Warning Dialog","Invalid Characters", "Invalid Character for Windows in file names\n"
 						+ "Reserved Windows caracters *, <, >, ?, :, /, |, \"");
-
-				alert.showAndWait();
 				return null;
 			}
 
@@ -246,6 +273,12 @@ public class ConfiguraionController {
 	}
 	
 	//Check if the TextField Value has Reserved Windows Characters
+	/**
+	 * This method checks for characters prohibited by windows, used in {@link showExempleSeriesScheme()}
+	 * 
+	 * @param text String to be evaluated
+	 * @return True if a forbidden character was found, or False if it is not found
+	 */
 	public boolean isValid(String text) {
 		if(text.contains("*")) {
 			return true;
@@ -276,7 +309,14 @@ public class ConfiguraionController {
 		
 	}
 	
-	//Action of Save Movies Button
+	
+	/**
+	 * This method is called when the user clicks the save button,
+	 *  he takes the current value in the TextBox and uses {@link DataStored.propertiesMovieScheme(String)}
+	 * to save the new value.
+	 * 
+	 * @param actionEvent Button Click event
+	 */
 	@SuppressWarnings("exports")
 	public void buttonSaveMoviesAction(javafx.event.ActionEvent actionEvent) {
 		DataStored.propertiesMovieScheme(TextFieldMovie.getText());
@@ -284,37 +324,43 @@ public class ConfiguraionController {
 		buttonMovieValue=false;
 	}
 	
-	//Save the current Movies Scheme, calling the DataStored routine.
+
+	/**
+	 * This method is called in the {@link shutdown() } when the user wants to save 
+	 * the movie value using {@link DataStored.propertiesMovieScheme(String)}
+	 */
 	public static void saveMovies() {
 		
-
 		DataStored.propertiesMovieScheme(moviesValue);
 	}
 	
-	//Action of Save Series Button
+	/**
+	 * This method is called when the user clicks the save button,
+	 *  he takes the current value in the TextBox and uses {@link DataStored.propertiesSeriesScheme(String)}
+	 * to save the new value.
+	 * 
+	 * @param actionEvent Button Click event
+	 */
 	public void buttonSaveSeriesAction(javafx.event.ActionEvent actionEvent) {
 		DataStored.propertiesSeriesScheme(TextFieldSeries.getText());
 		ButtonSaveSeries.setVisible(false);
 		buttonSeriesValue=false;
 	}
 	
-	//Save the current Series Scheme, calling the DataStored routine.
+	/**
+	 * This method is called in the {@link shutdown() } when the user wants to save 
+	 * the movie value using {@linkDataStored.propertiesSeriesScheme(String)}
+	 */
 	public static void saveSeries() {			
 		DataStored.propertiesSeriesScheme(seriesValue);
 	} 
 	
-	//
-	public void paintText(String name) {
-		if(name.contains("Year")) {
-		
-			//textList.add(new Text(name.substring(0,name.indexOf("Year"))));
-			//textList.add(new Text(name.substring(name.indexOf("Year"),name.indexOf("Year")+4)));
-			//textList.get(textList.size()-1).setFill(Color.RED);
-			//textList.add(new Text(name.substring(name.indexOf("Year")+4)));
-		}
-	}
-	//Routine Operations for when closing the Windows
-	//Main Function ask if want to save, a unsaved Scheme.
+
+	/**
+	 * This method is called when closing the Configuration Windows,
+	 * it checks if the most recent values in the TextBoxes have
+	 *  been saved, if it doesn't ask if you want to save the values.
+	 */
 	public static void shutdown() {
 		// cleanup code here...
 

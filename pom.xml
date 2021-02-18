@@ -46,10 +46,6 @@
 				<configuration>
 					<mainClass>org.example.App</mainClass>
 					<release>${maven.compiler.release}</release>				
-					<!-- <stripDebug>true</stripDebug>
-					<compress>2</compress>
-					<noHeaderFiles>true</noHeaderFiles>
-					<noManPages>true</noManPages> -->
 					<jlinkImageName>NameIT</jlinkImageName>
                     <launcher>launcher</launcher>
 					

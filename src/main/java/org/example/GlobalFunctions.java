@@ -277,20 +277,20 @@ public class GlobalFunctions {
 
 	/**
 	 * 
-	 * This method is used to call an Alert Box.
+	 * This method is used to call an Alert Warning Box.
 	 * 
 	 * @param title Title of the Alert Box
 	 * @param header Header of the Alert Box 
 	 * @param text BodyText of the Alert Box
 	 */
-	public static void alertCaller(String title, String header, String text) {
+	public static void alertCallerWarning(String title, String header, String text) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle(title);
 		alert.setHeaderText(header);
 		alert.setContentText(text);
 		alert.showAndWait();
 	}
-	
+
 	//------------------------------------------------------------------------------
 	
 	
