@@ -484,7 +484,13 @@ public class MainController {
 		}
 	
 	
-	//textfieldPath Click Event
+
+	/**
+	 * This method is called when the user clicks on the text field path, it will open the system's standard 
+	 * file explorer, for the user to choose where he wants to move the renamed files.
+	 * 
+	 * @param mouseEvent Click Event
+	 */
 	public void textfieldPathAction(javafx.scene.input.MouseEvent mouseEvent) {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("JavaFX Projects");
@@ -499,7 +505,11 @@ public class MainController {
 	}
 	
 	
-	//identifies when there a drop event and Send to  handleDropListView.
+	/**
+	 * This method is called when the user select the check box folder, 
+	 * it will enable the textfieldPath.
+	 * @param actionEvent Click Event
+	 */
 	public void checkBoxFolder(javafx.event.ActionEvent actionEvent) {
 		if(checkboxFolder.isSelected()){
 			textfieldPath.setDisable(false);
@@ -511,7 +521,10 @@ public class MainController {
 	}
 	
 	
-	//Call the Exceptions Page.
+	/**
+	 * This method is called when the user clicks on the Exceptions Menu button, he opens the Exceptions page.
+	 * @param mouseEvent Click Event
+	 */
 	public void buttonExceptions(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Exception.fxml"));
 		 Parent parent;
@@ -533,7 +546,10 @@ public class MainController {
 	}
 	
 	
-	//Call the About Page.
+	/**
+	 * This method is called when the user clicks on the About Menu button, he opens the About page.
+	 * @param mouseEvent Click Event
+	 */
 	public void showAbout(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("About.fxml"));
 		 Parent parent;
@@ -555,23 +571,28 @@ public class MainController {
 	}
 	
 	
-	//
+	/**
+	 * 
+	 * @param mouseEvent
+	 */
 	public void listViewErrorTextAction(javafx.scene.input.MouseEvent mouseEvent) {
 
 		if(mouseEvent.getClickCount() == 2) {
 			for(int x=0;x<renamingListError.size();x++) {
 
 			}
-
-			//paintListViewError(listViewErrorText.getSelectionModel().getSelectedItem());
-
 		}
 	}
+	
 	//End UI Trigger--------------------------------------------------
 
 	
 	//Support UI--------------------------------------------------
-	// Clear the Lists
+
+	
+	/**
+	 *  This method is clear the listView's used in the interface.
+	 */
 	public void clearList() {
 		System.out.println("--Clear List--");
 		labelDrop();
@@ -588,7 +609,11 @@ public class MainController {
 		}
 
 	}
-	//Clear Button Action
+
+	
+	/**
+	 * This method is clear all the elements in the interface.
+	 */
 	public void clearALL() {
 		enter=0;
 		renamingList.clear();
@@ -602,7 +627,17 @@ public class MainController {
 		paginationErrorList.setVisible(false);
 
 	}
-	//Paint the element of the cells red if the renaming process fails
+	
+	
+	/**
+	 * This method implements a new setCellFactory for the  listViewFiles. 
+	 * It allows you to change the background color of the list items according to their situation.
+	 * Gray  : Waiting for Processing.
+	 * Yellow: After going through the processing once, it was not possible to define the correct name, 
+	 *         but there are few alternatives that will be available in the listViewErrorText.
+	 * Green : Correct name found.
+	 * Red   : Critical error, it was not possible to find the name and there are no possible alternatives.
+	 */
 	public void paintListView(){
 		System.out.println(listViewFiles.getItems().size());
 		if(listViewFiles.getItems().size()>=1) {
@@ -665,7 +700,18 @@ public class MainController {
 
 		labelDrop();
 	}
-	//Paint the element of listViewErrorText and change the color of the selected name
+	
+	
+
+	/**
+	 * This method implements a new setCellFactory for the  listViewErrorText.
+	 * It allows you to change the background color of the list items according to their situation.
+	 * Gray: Not selected.
+	 * Red :  Selected.
+	 * 
+	 * @param select
+	 * @param list
+	 */
 	public void paintListViewError(String select, ListView<String> list){
 
 		//LabelDropFiles.setVisible(false);
@@ -695,7 +741,11 @@ public class MainController {
 		});
 		labelDrop();
 	}
-	//Pain the UI Circle Element according to the API status
+	
+	
+	/**
+	 * This method paint the Circle Element according to the API status
+	 */
 	public void paintCircle() {
 
 		if(controlCircle==1) {
@@ -707,15 +757,13 @@ public class MainController {
 				System.out.println("Valor de Paint Circle Fora de Parametros:"+controlCircle);
 			}
 		}
-
-
-
-
-
-
-
 	}
-	//Control the UI Element of "+" to show when drooping files is enable.
+	
+
+	/**
+	 * This method control two support label elements, the "+" to show when 
+	 * drooping files is enable in the listViewFiles
+	 */
 	public void labelDrop() {
 		if(listViewFiles.getItems().size()<=0) {
 			labelDropFiles.setVisible(true);
@@ -726,7 +774,12 @@ public class MainController {
 
 		}
 	}
-	//Implement the UI Circle Element with instruction on the its color. 
+	
+	
+
+	/**
+	 * This Method Enable the tooltip element to the Circle in the Interface.
+	 */
 	public void tooltips() {
 		final Tooltip tooltip = new Tooltip();
 		tooltip.setText(
@@ -736,7 +789,13 @@ public class MainController {
 				);
 		labelStatusApi.setTooltip(tooltip);
 	}
-	//Change the Check boxes UI elements according to the mode.
+	
+	
+	/**
+	 * This method checks the current mode and adjusts the interface to reflect it.
+	 * 
+	 * @param mode Current mode
+	 */
 	public void checkBoxMode(String mode) {
 		if(mode.equals("Series")) {
 			JsonOperationsTmdb.checkConnection();	
@@ -752,8 +811,17 @@ public class MainController {
 
 		}
 	}
-	//Method to Display in The UI
-	public void errorDisplay(String Error,Integer x,String name,ListView<String> listUI) {
+	
+	
+	/**
+	 * This method get the the short identification of the error and inserts
+	 *  the complete description into the interface in the Error List.
+	 *  
+	 * @param Error Abbreviation of error value.
+	 * @param name Name of the file.
+	 * @param listUI ListView where information will be added.
+	 */
+	public void errorDisplay(String Error, String name,ListView<String> listUI) {
 
 		if(Error.equals("01")){
 			System.out.println("Error 01");					
@@ -819,7 +887,12 @@ public class MainController {
 		}
 
 	}
+	
+	
 	//Main Routine that Control the Pagination Element, that shows Errors Values and Alternative Values when available. 
+	/**
+	 * 
+	 */
 	public void paginationError() {
 		paginationErrorList.setVisible(true);
 		if(renamingListError.size()==0) {
@@ -833,7 +906,7 @@ public class MainController {
 			ListView<String> Text = new ListView<String>();		
 			Text.getItems().clear();
 			if(!(renamingListError.size()==0)) {		
-					if(!(renamingListError.get(pageIndex).getOptionsList()==null) && checkErrorEpisodeSeason(renamingListError.get(pageIndex).getError())) {
+					if(!(renamingListError.get(pageIndex).getOptionsList()==null) && !checkErrorEpisodeSeason(renamingListError.get(pageIndex).getError())) {
 						
 
 						 String holder = renamingListError.get(pageIndex).getOptionsList();					
@@ -863,7 +936,7 @@ public class MainController {
 						}
 						
 					}else {
-						errorDisplay(renamingListError.get(pageIndex).getError(),pageIndex,renamingListError.get(pageIndex).getOriginalName(),Text);
+						errorDisplay(renamingListError.get(pageIndex).getError(),renamingListError.get(pageIndex).getOriginalName(),Text);
 
 					}
 				
@@ -877,12 +950,7 @@ public class MainController {
 						}
 						if(Text.getSelectionModel().getSelectedIndex()<2) {
 							//Show A Alert PopUp if the user double click a Item in the ListView thats don't have Alternative Info.
-							Alert alert = new Alert(AlertType.WARNING);
-							alert.setTitle("Warning Dialog");
-							alert.setHeaderText("Wrong Item");
-							alert.setContentText("Select a item with Information.");
-							alert.showAndWait();
-							//End PopUp
+							GlobalFunctions.alertCallerWarning("Warning Dialog", "Wrong Item", "Select a item with Information.");
 						}else {
 							//Routine to make sure that the User can change 
 							if(renamingList.size()>0) {
@@ -892,32 +960,23 @@ public class MainController {
 										count++;
 										renamingList.get(x).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 										renamingList.get(x).setState(0);
-										//renamingListError.remove(pageIndex);
 										paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
-										//rename();
 									}
 								}
 								if(count==0) {
 									renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 									renamingListError.get(pageIndex).setState(0);
 									renamingList.add(renamingListError.get(pageIndex));
-									//renamingListError.remove(pageIndex);
 									paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
 									count=0;
-									//rename();
 								}
 							}else {
 								renamingListError.get(pageIndex).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 								renamingListError.get(pageIndex).setState(0);
 								renamingList.add(renamingListError.get(pageIndex));
-								//renamingListError.remove(pageIndex);
 								paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
-								//rename();
-							}
-							
-						}
-
-									
+							}						
+						}									
 					}
 				} 
 			};
@@ -933,18 +992,26 @@ public class MainController {
 			Label label2 = new Label("Main content of the page ...");
 			clearList();
 			return new VBox(label2,Text);
-			
 		});
 	}
-	//Check if the Error value is related to S
+	
+	
+	/**
+	 * This method checks whether the error code is referring to the season / episode values.
+	 * 
+	 * @param error String with the Error code
+	 * @returnTrue if the error is related to the season / episode.
+	 * False when not related.
+	 */
 	public boolean checkErrorEpisodeSeason(String error) {
 		if(error !=null){
 			if(error.equals("04")|| error.equals("05")|| error.equals("06")|| error.equals("07")) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
+	
 	
 	/**
 	 * This method is called when the renaming process was successful in 
@@ -962,9 +1029,15 @@ public class MainController {
 	}
 	//End Support UI--------------------------------------------------
 
-	//Connecting API--------------------------------------------------	
 	
 	//Check if the TMDB API is responding correctly.
+	/**
+	 * This method receives the response from the request {@link org.exemple.JsonOperationsTmdb.checkConnection()}
+	 * and updates the interface according to response.
+	 * 
+	 * @param responseBody Response from the A
+	 * @return
+	 */
 	public static Integer statusTMDB(Integer responseBody){
 		System.out.println("ResponseBody : "+responseBody);
 
@@ -976,20 +1049,25 @@ public class MainController {
 		}
 		return null;
 	}
-	//Method that show a Pop-up when the API is Down.
-	public static void statusAlert(String api) {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Warning Dialog");
-		alert.setHeaderText("No response from the "+api+" API");
-		alert.setContentText("Check your internet conection");
-	}
-	//End Connecting API--------------------------------------------------
-
-	//Global Support Operations
 	
-	//Remove character that Windows don't let files name have.
+	
+	/**
+	 * This method shows a Pop-up informing which API is inactive.
+	 * 
+	 * @param api Api Name
+	 */
+	public static void statusAlert(String api) {
+		GlobalFunctions.alertCallerWarning("Warning Dialog", "No response from the "+api+" API", "Check your internet conection");
+	}
+
+	
+	/**
+	 * This method fills an array with file extension values that are supported in the program.
+	 */
 	public void fillFilterExtention() {
+		
 		//Files Types Supported
+		
 		//Video Format
 		extension.add("mkv");
 		extension.add("pdf");
@@ -999,6 +1077,7 @@ public class MainController {
 		extension.add("mov");
 		extension.add("mp4");
 		extension.add("webm");
+		
 		//Subtitle Format
 		extension.add("srt");
 		extension.add("smi");
@@ -1009,11 +1088,7 @@ public class MainController {
 		extension.add("sbv");
 		extension.add("dfxp");
 		//End Files Types Suported
-	
-
 	}
-
-	//End Global Support Operations
 }
 
 
