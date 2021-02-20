@@ -437,18 +437,24 @@ public class MainController {
 	}
 	//Star the logic to the renaming the files
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
-		//checkboxSeries_value = checkboxSeries.isSelected();
-		//checkboxSeason_value = checkboxSeason.isSelected();
-		//checkboxFolder_value = checkboxFolder.isSelected();
 		for(int x=0;x<renamingList.size();x++){
 			String mode = DataStored.propertiesGetMode(); 
 				if(mode.equals("Series")) {
 					if(renamingList.get(x).getState()==1) {
 						FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value);
+						listViewFiles.getItems().remove(renamingList.get(x).getOriginalName());
+						listViewFilesRenamed.getItems().remove(renamingList.get(x).getName());
 					}
 				}else{
 					if(renamingList.get(x).getState()==1) {
-						FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value);
+						if(FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
+							listViewFiles.getItems().remove(renamingList.get(x).getOriginalName());
+							listViewFilesRenamed.getItems().remove(renamingList.get(x).getName());
+						}else {
+							
+						}
+					
+				
 					}
 				}
 			}

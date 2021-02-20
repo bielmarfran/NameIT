@@ -22,6 +22,7 @@ public class OperationTmdbMovie {
 
 	
 		/**
+		 * This method get a item object save it on local global object variable.
 		 * 
 		 * @param x
 		 * @param episode
@@ -31,8 +32,10 @@ public class OperationTmdbMovie {
 			item = episode;
 			controlBreakFile=0;			
 		}
+	
 		
 		/**
+		 * 
 		 * 
 		 * @param x
 		 * @param episode
@@ -107,6 +110,8 @@ public class OperationTmdbMovie {
 			}
 
 		}
+		
+		
 		/**
 		 * 
 		 * @param responseBody
@@ -154,6 +159,7 @@ public class OperationTmdbMovie {
 			
 			return null;
 		}
+	
 		/**
 		 * 
 		 */

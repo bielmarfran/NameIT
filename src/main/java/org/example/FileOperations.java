@@ -206,7 +206,7 @@ public class FileOperations {
 	 * @param textFieldFolder_value2 Alternative destination, which the user chose
 	 * @return
 	 */
-	public static String renameFileMovie(Item item, Boolean checkboxSeries, Boolean checkboxFolder, String textFieldFolder_value2){
+	public static boolean renameFileMovie(Item item, Boolean checkboxSeries, Boolean checkboxFolder, String textFieldFolder_value2){
 		
 		checkboxSeries_value = checkboxSeries;
 		checkboxFolder_value = checkboxFolder;
@@ -246,6 +246,7 @@ public class FileOperations {
 		if(absolutePath==null) {
 			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 			item.setError("08");
+			return false;
 		}else {
 			if(checkboxSeries_value){
 				createFolderMovie(absolutePath,item,f,name,newName);
@@ -255,7 +256,7 @@ public class FileOperations {
 			}
 
 		}
-		return null;
+		return true;
 	}
 	
 	/**

@@ -15,7 +15,12 @@ import java.time.Duration;
 
 public class JsonOperationsTmdb {
 	
-	//Try to connect to the Api with the stored Api key.
+
+	/**
+	 * This method verifies the connection with the TMDB API, for the moment I have not found a
+	 * special request to check the status of the API, so in this method I use a  generic get
+	 * request that is presented in the official API guide.
+	 */
 	public static void checkConnection(){
 		System.out.println("checkConnectionTMDB");
 		
@@ -57,9 +62,15 @@ public class JsonOperationsTmdb {
 		
 	}
 
-	//Send info to TMDB API to get a Response from Movies
+
+	/**
+	 * This method is called to make an API request, to find information about Movies.
+	 * 
+	 * @param name Movie Name
+	 * @param year Year the film was released
+	 */
 	public static void getSearchMovie(String name, int year){
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";//0
+		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
@@ -91,7 +102,13 @@ public class JsonOperationsTmdb {
 
 	}
 
-	//Send info to TMDB API to get a Response from Series
+	
+	/**
+	 * This method is called to make an API request, to find information about Series.
+	 * 
+	 * @param name Series Name
+	 * @param year Year the series has started
+	 */
 	public static void getSearchSerie(String name, int year){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";//0
 		String language = DataStored.propertiesGetLanguage();
@@ -123,7 +140,16 @@ public class JsonOperationsTmdb {
 		.join();
 
 	}
-	//Get Info for a specific episode
+	
+	
+
+	/**
+	 * This method is called to make an API request, to find information about specific episode
+	 * 
+	 * @param id Id of the series
+	 * @param season Season value
+	 * @param episode Episode value
+	 */
 	public static void getInfoSerie(Integer id,String season,String episode){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
@@ -150,7 +176,13 @@ public class JsonOperationsTmdb {
 
 	}
 
-	//Get the EpisodeGroups for a given Series
+	
+
+	/**
+	 *This method is called to make an API request, returning the groups of alternative episodes in the series.
+	 * 
+	 * @param id Id of the series
+	 */
 	public static void getSerieEpisodeGroups(Integer id){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
@@ -175,7 +207,13 @@ public class JsonOperationsTmdb {
 		.join();
 
 	}
-	//Get the info from a given EpisodeGroups
+	
+
+	/**
+	 * This method is called to make an API request, returning the alternate episode group values.
+	 * 
+	 * @param id Id of the episode group
+	 */
 	public static void getContentEpisodeGroups(String id){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
@@ -200,6 +238,12 @@ public class JsonOperationsTmdb {
 
 	}
 	
+	
+	/**
+	 * This method is called to make an API request, returning the keywords of the series
+	 * 
+	 * @param id Id of the series
+	 */
 	public static void getSeriesKeywords(Integer id){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
@@ -225,7 +269,14 @@ public class JsonOperationsTmdb {
 
 	}
 
-	//Convert the stored language information to the format that the API recognizes
+
+	/**
+	 * This method convert the stored language information 
+	 * to the format that the API recognizes
+	 * 
+	 * @param l Store language information
+	 * @return Language value that API recognizes
+	 */
 	public static String languageTmdb(String l) {
 		switch (l) {
 		case "en": 
