@@ -34,7 +34,7 @@ public class FileOperations {
 	 * @param textFieldFolder_value2 Alternative destination, which the user chose
 	 * @return
 	 */
-	public static String renameFileSeries(Item item, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value2){
+	public static boolean renameFileSeries(Item item, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value2){
 		
 		System.out.println("Dentro rename Series");
 		
@@ -60,6 +60,7 @@ public class FileOperations {
 		if(absolutePath==null) {
 			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 			item.setError("08");
+			return false;
 		}else {
 			if(checkboxSeries_value  && !checkboxSeason_value ){
 				createFolderSeries(absolutePath,item,f);							
@@ -72,7 +73,7 @@ public class FileOperations {
 				noFolders(absolutePath,item,f);
 			}
 		}
-		return null;
+		return true;
 	}
 
 		

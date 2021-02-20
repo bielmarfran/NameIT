@@ -19,6 +19,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 
 /**
  * This class is the controller for the Configuration Stage, where the user chooses 
@@ -45,7 +46,8 @@ public class ConfiguraionController {
 	private Button ButtonSaveMovies;
 	@FXML
 	private Button ButtonSaveSeries;
-
+	@FXML
+	private CheckBox checkBoxAnime;
 	
 	private static boolean buttonMovieValue;
 	private static boolean buttonSeriesValue;
@@ -80,11 +82,11 @@ public class ConfiguraionController {
 		
 		TextFieldMovie.setText(DataStored.propertiesGetMovieScheme());
 
-		Text t1 = new Text(DataStored.propertiesGetMovieScheme());
+		//Text t1 = new Text(DataStored.propertiesGetMovieScheme());
 
 		
 		TextFieldSeries.setText(DataStored.propertiesGetSeriesScheme());
-		Text t2= new Text(DataStored.propertiesGetSeriesScheme());
+		//Text t2= new Text(DataStored.propertiesGetSeriesScheme());
 
 		//End
 		//Show the Example Labels
@@ -92,6 +94,10 @@ public class ConfiguraionController {
 		showExempleSeriesScheme();
 		//End Show the Example Labels
 		textFormatter();
+		
+		if(DataStored.propertiesGetAnime().equals("true")) {
+			checkBoxAnime.setSelected(true);
+		}
 	}
 
 	/**
@@ -354,7 +360,13 @@ public class ConfiguraionController {
 	public static void saveSeries() {			
 		DataStored.propertiesSeriesScheme(seriesValue);
 	} 
-	
+
+	public void checkBoxAnimeAction(javafx.event.ActionEvent actionEvent) {
+		if (checkBoxAnime.isSelected()) 
+			DataStored.propertiesSetAnime("true");
+		else
+			DataStored.propertiesSetAnime("false"); 
+	}
 
 	/**
 	 * This method is called when closing the Configuration Windows,

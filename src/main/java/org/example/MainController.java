@@ -50,6 +50,13 @@ import com.google.gson.JsonParser;
 
 
 public class MainController {
+	
+	@FXML
+	private MenuBar menuBar;
+	@FXML
+	private Menu menuLanguage;
+	@FXML
+	private Circle statusApi;
 	@FXML
 	private ProgressIndicator progressIndicator;
 	@FXML
@@ -57,9 +64,13 @@ public class MainController {
 	@FXML
 	private ListView<String> listViewFilesRenamed;
 	@FXML
+	private ListView<String> listViewErrorText;
+	@FXML
 	private Button buttonRename;
 	@FXML
-	private Circle statusApi;
+	private Button buttonClear;
+	@FXML
+	private Button buttonSelectFiles;
 	@FXML
 	private TextField textfieldPath;
 	@FXML
@@ -69,34 +80,19 @@ public class MainController {
 	@FXML
 	private CheckBox checkboxFolder;
 	@FXML
-	private Button buttonClear;
+	private Pagination paginationErrorList;
 	@FXML
-	private Button buttonSelectFiles;
+	private ComboBox<String> ComboBoxMode;
 	@FXML
-	private ListView<CheckBox> listViewError;
+	private Label LabelErrorListFile;
 	@FXML
-	private ListView<String> listViewErrorText;
-	@FXML
-	private ListView<CheckBox> listViewErrorTextSelect;
+	private Label LabelExceptionList;
 	@FXML
 	private Label labelDropFiles;
 	@FXML
 	private Label labelDropFilesPlus;
 	@FXML
 	private Label labelStatusApi;
-	@FXML
-	private MenuBar menuBar;
-	@FXML
-	private Menu menuLanguage;
-	@FXML
-	private ComboBox<String> ComboBoxMode;
-	@FXML
-	private Label LabelErrorListFile;
-	@FXML
-	private Pagination paginationErrorList;
-	@FXML
-	private Label LabelExceptionList;
-
 	
 
 
@@ -117,20 +113,14 @@ public class MainController {
 	private Service<Void> backgroundTaks;
 	//Store the value of textFieldFolder
 	private static String textFieldFolder_value;
-	//Store the value of checkboxSeries
-	private static boolean checkboxSeries_value;
-	//Store the value of checkboxSeason
-	private static boolean checkboxSeason_value;
-	//Store the value of checkboxFolder
-	private static boolean checkboxFolder_value;
 	//Static Value for normal ListView Background Color
-	private static final String DEFAULT_CONTROL_INNER_BACKGROUND = "derive(-fx-base,80%)";
+	private static final String DEFAULT_CONTROL_GRAY_INNER_BACKGROUND = "derive(-fx-base,80%)";
 	//Static Value for Red ListView Background Color
-	private static final String HIGHLIGHTED_CONTROL_INNER_BACKGROUND = "derive(red, 50%)";
+	private static final String HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND = "derive(red, 50%)";
 	//Static Value for Red ListView Background Color
-	private static final String HIGHLIGHTED_CONTROL_2_INNER_BACKGROUND = "#FADA5E";
+	private static final String HIGHLIGHTED_CONTROL_YELLOW_INNER_BACKGROUND = "#FADA5E";
 	//
-	private static final String HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND = "#6ea364";
+	private static final String HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND = "#6ea364";
 	// Test
 	private static Integer enter=0;
 
@@ -147,19 +137,23 @@ public class MainController {
 	//End Get - Set
 
 
-	//Operations on the initialization of the UI.
+	/**
+	 * Operations on the initialization of the UI
+	 */
 	public void initialize() {
 		setMode();		
 		fillFilterExtention();
 		tooltips();
-		paginationErrorList.setVisible(true);
-		paginationErrorList.setPageCount(1);
+		paginationErrorList.setVisible(false);
 		listViewErrorText.setVisible(false);
 		paintCircle();
 
 	}
 
-	//Check the stored mode value in the properties, and deal with UI element to change change the mode
+	/**
+	 * This method get the store value in the properties file referring to the mode
+	 * and adjust the interface according to the value
+	 */
 	public void setMode() {
 		String mode = DataStored.propertiesGetMode();
 		ComboBoxMode.setValue(mode);
@@ -181,17 +175,28 @@ public class MainController {
 
 
 	}
-	//End
 
 
-	//UI Trigger--------------------------------------------------
+
+	/**
+	 * This method deals with a drag event on the listViewFiles, 
+	 * which is the list where the user drops the files.
+	 * @param dragEvent 
+	 */
 	public void handleDragOverListView(DragEvent dragEvent) {
 		if(dragEvent.getDragboard().hasFiles()){
 			dragEvent.acceptTransferModes(TransferMode.ANY);
 			paintListView();
 		}
 	}
-	//Gets the files dropped, and show the names on the list.
+
+	/**
+	 * This method takes files that have been dropped, and does two things.
+	 * 	First fill the interface, in this case listViewFiles with the names of the files.
+	 * 	Second it stores the created <Item> Objects in an ArrayList, which store various 
+	 * information about the files and are used throughout the program.
+	 * @param dragEvent
+	 */
 	public void handleDropListView(DragEvent dragEvent) {
 		List<File> files = dragEvent.getDragboard().getFiles();
 
@@ -199,7 +204,7 @@ public class MainController {
 			for(int i=0;i <files.size();i++){
 				if(extension.contains(GlobalFunctions.getExtension(files.get(i).getName()))){
 					listViewFiles.getItems().add(files.get(i).getName());
-					DataStored.propertiesGetMode(); 	
+					//DataStored.propertiesGetMode(); 	
 					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0)));								
 					//paintListView();
 					System.out.println("Adding - "+files.get(i).getName());
@@ -211,15 +216,12 @@ public class MainController {
 		rename(); 
 	}
 	
-	//
+	
+	/**
+	 * 
+	 */
 	public void rename() {
-		
-		//Getting the value of the check boxes
-		checkboxSeries_value = checkboxSeries.isSelected();
-		checkboxSeason_value = checkboxSeason.isSelected();
-		checkboxFolder_value = checkboxFolder.isSelected();
-		
-		//End Getting the value of the check boxes
+
 		enter=0;
 		
 		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
@@ -395,16 +397,22 @@ public class MainController {
 		});
 
 		backgroundTaks.restart();	
-		//progressIndicator.progressProperty().bind(backgroundTaks.progressProperty());
 		paintListView();
 		
 	}
-	//
+	/**
+	 * 
+	 * @param actionEvent
+	 */
 	public void buttonSelectFiles(javafx.event.ActionEvent actionEvent) {
 		rename();		
 	}
 	
-	//Method to Call Configuration Page
+
+	/**
+	 * This method is called when the user clicks on the configuration Menu button, he opens the configuration page.
+	 * @param mouseEvent Click Event
+	 */
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
 		 Parent parent;
@@ -435,38 +443,47 @@ public class MainController {
 		 
 		  
 	}
-	//Star the logic to the renaming the files
+
+	
+	/**
+	 * This method is called when the user clicks on the rename button, he takes the values stored in renamingList, 
+	 * and checks which ones have valid values for the renaming process. If possible using the methods of 
+	 *  {@link org.example.FileOperations} it makes the process of rename / move the files.
+	 * @param mouseEvent Click Event
+	 */
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
 		for(int x=0;x<renamingList.size();x++){
 			String mode = DataStored.propertiesGetMode(); 
-				if(mode.equals("Series")) {
-					if(renamingList.get(x).getState()==1) {
-						FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value);
-						listViewFiles.getItems().remove(renamingList.get(x).getOriginalName());
-						listViewFilesRenamed.getItems().remove(renamingList.get(x).getName());
+			if(mode.equals("Series")) {
+				if(renamingList.get(x).getState()==1) {
+					if(FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
+						removeItem(renamingList.get(x));
 					}
-				}else{
-					if(renamingList.get(x).getState()==1) {
-						if(FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
-							listViewFiles.getItems().remove(renamingList.get(x).getOriginalName());
-							listViewFilesRenamed.getItems().remove(renamingList.get(x).getName());
-						}else {
-							
-						}
-					
-				
+				}
+			}else{
+				if(renamingList.get(x).getState()==1) {
+					if(FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
+						removeItem(renamingList.get(x));
+					}else {
+
 					}
 				}
 			}
-			//clearALL();
+		}
 	}
-	//Clear Button Click Event
+	
+	
+	/**
+	 * This method is called when the user clicks on the clear button, it cleans up the interface elements
+	 * using the method {@link clearAll()}.
+	 * @param actionEvent
+	 */
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
 			System.out.println("Clear Button");
 			clearALL();
-				
-
 		}
+	
+	
 	//textfieldPath Click Event
 	public void textfieldPathAction(javafx.scene.input.MouseEvent mouseEvent) {
 		DirectoryChooser chooser = new DirectoryChooser();
@@ -480,21 +497,20 @@ public class MainController {
 		
 
 	}
+	
+	
 	//identifies when there a drop event and Send to  handleDropListView.
 	public void checkBoxFolder(javafx.event.ActionEvent actionEvent) {
 		if(checkboxFolder.isSelected()){
 			textfieldPath.setDisable(false);
-			//LabelFolder.setDisable(false);
 		}else{
 			textfieldPath.setDisable(true);
-			//LabelFolder.setDisable(true);
 			textfieldPath.clear();
 
 		}
-
-
-
 	}
+	
+	
 	//Call the Exceptions Page.
 	public void buttonExceptions(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Exception.fxml"));
@@ -515,6 +531,8 @@ public class MainController {
 		 
 		  
 	}
+	
+	
 	//Call the About Page.
 	public void showAbout(javafx.scene.input.MouseEvent mouseEvent) {
 		 FXMLLoader loader = new FXMLLoader(getClass().getResource("About.fxml"));
@@ -535,6 +553,8 @@ public class MainController {
 		 
 		  
 	}
+	
+	
 	//
 	public void listViewErrorTextAction(javafx.scene.input.MouseEvent mouseEvent) {
 
@@ -565,11 +585,8 @@ public class MainController {
 			listViewErrorText.getItems().clear();
 			paginationErrorList.setVisible(false);
 
-
 		}
 
-		//listViewError.getItems().clear();
-		//listViewErrorText.getItems().clear();
 	}
 	//Clear Button Action
 	public void clearALL() {
@@ -599,7 +616,7 @@ public class MainController {
 
 							if (item == null || empty) {
 								setText(null);
-								setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+								setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");
 							} else {
 								setText(item);					
 								 if (!item.isEmpty() && renamingList.size()>=1) {
@@ -609,19 +626,19 @@ public class MainController {
 											color_control++;
 											switch (renamingList.get(x).getState()) {
 											case 0:
-												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");//Gray
+												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");//Gray
 												break;
 											case 1:
-												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_3_INNER_BACKGROUND  + ";");//Green
+												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND  + ";");//Green
 												break;
 											case 2:
-												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_2_INNER_BACKGROUND + ";");//Yellow
+												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_YELLOW_INNER_BACKGROUND + ";");//Yellow
 												break;
 											case 3:
-												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");//Red
+												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");//Red
 												break;	
 											default:
-												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");//Gray
+												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");//Gray
 												break;
 											}
 
@@ -630,11 +647,11 @@ public class MainController {
 									}
 									if(color_control==0){
 										System.out.println("Verde 1");
-										setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
+										setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
 									}
 								} else {
 									System.out.println("Verde 2");
-									setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
+									setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
 								}
 								 
 							
@@ -662,11 +679,11 @@ public class MainController {
 
 						if (item == null || empty) {
 							setText(null);
-							setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_INNER_BACKGROUND + ";");
+							setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");
 						} else {
 							setText(item);
 							if(item ==select) {
-								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_INNER_BACKGROUND + ";");
+								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
 							}
 
 
@@ -927,6 +944,21 @@ public class MainController {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * This method is called when the renaming process was successful in 
+	 * order to remove data that no longer matters from the interface.
+	 * 
+	 * @param item Item to be removed from the interface.
+	 */
+	public void removeItem(Item item) {
+		
+		listViewFiles.getItems().remove(item.getOriginalName());
+		listViewFilesRenamed.getItems().remove(item.getName());
+		renamingList.remove(item);
+		renamingListError.remove(item);
+		
 	}
 	//End Support UI--------------------------------------------------
 

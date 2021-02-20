@@ -73,7 +73,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <CheckBox layoutX="272.0" layoutY="149.0" mnemonicParsing="false" />
+      <CheckBox fx:id="checkBoxAnime" layoutX="272.0" layoutY="149.0" mnemonicParsing="false" onAction="#checkBoxAnimeAction" />
       <Label layoutX="30.0" layoutY="147.0" text="Enable Absolute Episodes for Anime">
          <font>
             <Font size="14.0" />

@@ -263,7 +263,6 @@ public class DataStored {
     }
     
     
-    //Save the Mode Properties to config.properties.
     /**
      *This method accesses the properties file and saves a new value 
      *in the Mode attribute, which will affect the functionality of the program.
@@ -424,6 +423,68 @@ public class DataStored {
 			e.printStackTrace();
 		}
     }
+    
+    
+    /**
+     * This method accesses the properties file and reads the stored
+     * attribute referring to the Anime, which will affect the functionality of the program.
+     * 
+     * @return  The stored Menu value.
+     */
+    public static String propertiesGetAnime() {
+    	config = new Properties();
+    	FileInputStream fis;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	//System.out.println(config.getProperty("Mode"));
+
+    	return config.getProperty("Anime");
+    }
+    
+    
+    /**
+     *This method accesses the properties file and saves a new value 
+     *in the Anime attribute, which will affect the functionality of the program.
+     *
+     * @param newMode The new Menu value.
+     */
+    public static void propertiesSetAnime(String anime) {
+
+    	config = new Properties();
+    	FileInputStream fis;
+    	//FileOutputStream fisout;
+    	try {
+			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	////System.out.println(config.getProperty("Language"));
+    	//config.remove("Language");
+    	config.setProperty("Anime", anime);
+    	try {
+			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     
 
     /**
