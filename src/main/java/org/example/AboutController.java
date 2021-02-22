@@ -34,7 +34,7 @@ public class AboutController {
 	public void initialize() {
 		
 		try {
-			Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"tmdblogo.png"));
+			Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"tmdbLogo.png"));
 			ImageViewTMDB.setImage(image);
 			//Image image2 =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"TVDBlogo.png"));
 			//ImageViewTVDB.setImage(image2);

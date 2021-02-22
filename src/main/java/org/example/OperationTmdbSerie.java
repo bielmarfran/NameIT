@@ -2,6 +2,8 @@ package org.example;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,23 +25,28 @@ public class OperationTmdbSerie {
 		private static Integer controlNameBlock=0;
 		//Local Episode Variable used during the logic in the class
 		private static Item item = new Item();
-
-
-
 		//
 		private static Integer controlEpisode=0;
 		//
 		private static Boolean checkForAnime=true;
 		
-		//
+		
+		/**
+		 * 
+		 * @param x
+		 * @param episode
+		 */
 		public void setInfo(Integer x,Item episode) {	
 			System.out.println("--Inside setInfo TMDB--");
-			//controlArrayListEpisode=x;
+			
 			item = episode;
 			controlEpisode=0;
 			controlBreakFile=0;
-		
+			checkForAnime = Boolean.valueOf(DataStored.propertiesGetAnime());
+			System.out.println("Valor check - "+checkForAnime);
 		}
+		
+		
 		/**
 		 * 
 		 * @param item2
@@ -50,40 +57,52 @@ public class OperationTmdbSerie {
 			
 			item=item2;
 			controlEpisode=0;			
-			
+			checkForAnime = Boolean.valueOf(DataStored.propertiesGetAnime());
+			System.out.println("Valor check - "+checkForAnime);
 			
 			//Get the Alternative Value is this String and start Querying it to get data
 			String value = item.getAlternetiveInfo();
-			//Getting The Name of the Series
-			value = value.replace("Title - ", "");
-			String name = value.substring(0,value.indexOf("|")-1);
-			item.setName(name);
-			value = value.replace(name, "");
-			//End Getting Name
-			
+			String[] values = value.split("\\|");
 
-			//Getting the Year
-			value = value.replace("| Year - ", "");
-			String year = value.substring(1,value.indexOf("-"));
-			
-			try {
-				item.setYear(Integer.valueOf(year));
-			} catch (Exception e) {
-				// TODO: handle exception
+			for(int x=0;x<values.length;x++) {
+				switch (x) {
+				case 0: 
+					values[x]=values[x].replace("Title -", "");
+					values[x] = values[x].strip();
+					item.setName(values[x]);
+					break;
+				case 1: 
+					values[x]=values[x].replace("Year -", "");
+					values[x] = values[x].strip();
+					try {
+						String year = values[x].substring(0,value.indexOf("-")-2);
+						System.out.println("Year Value ="+year);
+						item.setYear(Integer.valueOf(year));
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					break;
+				case 2: 
+					values[x]=values[x].replace("ID -", "");
+					values[x] = values[x].strip();
+					item.setId(Integer.valueOf(values[x]));
+					break;
+				case 3: 
+					values[x]=values[x].replace("Animation -", "");
+					values[x] = values[x].strip();
+					if(values[x].equals("true")) {
+						item.setIsAnimation(true);
+					}else {
+						item.setIsAnimation(false);
+					}
+				
+					break;
+						
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + x);
+				}
 			}
 		
-			value = value.replace(year , "");
-			//End Getting the Year
-			
-
-			//Getting the ID
-			value = value.substring(6);
-			value = value.replace("| ID - ", "");
-			System.out.println("Test of Value"+value.substring(2));		
-			int id = Integer.valueOf(value.substring(2));
-			item.setId(Integer.valueOf(id));
-			System.out.println("| ID - "+item.getId());
-
 			item.setError("0");
 			item.setAlternetiveInfo("");
 			item.setOptionsList(null);
@@ -91,7 +110,16 @@ public class OperationTmdbSerie {
 			//End Getting the ID			
 
 		}
-		//
+		
+		
+		/**
+		 * This method is the logic base of the program.
+		 * It breaks the name of the files, and makes API requests each block at a time, 
+		 * waiting for an answer with a single answer, or a small set of possible answers.
+		 * 
+		 * @param name Name of the file.
+		 * @param mode Current Mode.
+		 */
 		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 			System.out.println("--Inside Break File Name--");
@@ -105,7 +133,7 @@ public class OperationTmdbSerie {
 				
 				namesBlocks = name.split(" ");
 				for(int x=0;x<namesBlocks.length;x++){
-					System.out.println("----"+namesBlocks.length);
+					System.out.println("namesBlocks.length - "+namesBlocks.length);
 					if(x<=0 && controlBreakFile==0){
 						//Send one block of the name at a time
 						if(mode.equals("Movies")) {
@@ -138,7 +166,19 @@ public class OperationTmdbSerie {
 			}
 
 		}
-		//	
+		
+		
+		/**
+		 * This method receives the response from the API, from the request made in 
+		 * {@linkplain org.exemple.JsonOperationsTmdb.getSearchSerie()} 
+		 * If there is a single series as an API response, its data is passed to the
+		 * Object, for the final name of the files to be built.If there are up to 5
+		 * series in the API response, your data is stored to be shown on the Interface 
+		 * as possible responses, which the user can choose.
+		 * 
+		 * @param responseBody  Response from the API
+		 * @return
+		 */
 		public static String responseSerieId(String responseBody){	
 			System.out.println(responseBody);
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
@@ -170,12 +210,10 @@ public class OperationTmdbSerie {
 					item.setState(2);
 				}else {
 					if(size.getAsInt()==0 && item.getOptionsList()==null) {
-						item.setError("09");
-						item.setState(3);
+						GlobalFunctions.setItemError(item, "09");
 					}
 					if(size.getAsInt()>10 && item.getOptionsList()==null) {
-						item.setError("09");
-						item.setState(3);
+						GlobalFunctions.setItemError(item, "09");
 					}
 				}						
 			}else {
@@ -183,7 +221,11 @@ public class OperationTmdbSerie {
 			}
 			return null;
 		}
-		//
+		
+		
+		/**
+		 * This method tries to find a value that represents the season.
+		 */
 		public static void getSeason() {
 			System.out.println("-Inside Season-");
 
@@ -205,7 +247,7 @@ public class OperationTmdbSerie {
 							s_index=0;
 							while(GlobalFunctions.isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
 								control_season++;
-								checkForAnime=false;
+								//checkForAnime=false;
 								season = season+test.substring(s_index,s_index+1);
 								test = test.substring(s_index+1);
 							}
@@ -213,33 +255,26 @@ public class OperationTmdbSerie {
 
 								item.setSeason(season);
 								item.setError("");	
-								getEpisode(test,namesBlocks, controlNameBlock);
+								getEpisode(test, controlNameBlock);
 
 							}
 							if(test.length()==1 && GlobalFunctions.isNumeric(test)){
-								item.setError("05");	
-								item.setState(3);
+								GlobalFunctions.setItemError(item, "05");
 								season = season+test;
 								control_season++;
 							}else {
 								if(test.length()==1 && !GlobalFunctions.isNumeric(test)){
-									item.setError("04");	
-									item.setState(3);
+									GlobalFunctions.setItemError(item, "04");
 								}
 
 							}
 						}else {
-							item.setError("04");	
-							item.setState(3);
-							System.out.println("Error");
-
-
+							GlobalFunctions.setItemError(item, "04");
 						}
 					}
 				}else{
 					System.out.println("File name Empty after part used for id reconition");
-					item.setError("04");
-					item.setState(3);
+					GlobalFunctions.setItemError(item, "04");
 					x=10;
 				}
 			}
@@ -266,20 +301,20 @@ public class OperationTmdbSerie {
 					item.setState(3);
 					break;
 				case 1: 
-					getSeasonCase1(test,namesBlocks,season_value);
+					getSeasonCase1(test,season_value);
 					break;
 				case 2: 
-					getSeasonCase2(test,namesBlocks,season_value);
+					getSeasonCase2(test,season_value);
 					break;
 				case 3: 
-					getSeasonCase3(test,namesBlocks,season_value);
+					getSeasonCase3(test,season_value);
 					break;
 				case 4: 
-					getSeasonCase4(test,namesBlocks,season_value);
+					getSeasonCase4(test,season_value);
 					break;
 				default:
 					if(season_value.length()>4 &&season_value.length()<7) {
-						getSeasonCaseDefault(test,namesBlocks,season_value);
+						getSeasonCaseDefault(test,season_value);
 					}
 				}
 
@@ -288,75 +323,81 @@ public class OperationTmdbSerie {
 		
 		
 		/**
+		 * This method is called when the number chain where the season value 
+		 * possibly has a single value.
 		 * 
-		 * @param test
-		 * @param namesBlocks
-		 * @param season_value
+		 * @param test File name currently.
+		 * @param season_value Value that possibly represents the season.
 		 */
-		public static void getSeasonCase1(String test,String[] namesBlocks, String season_value) {
+		public static void getSeasonCase1(String test,String season_value) {
 			if(test.substring(0,1).equals("x") ) {
 				checkForAnime = false;
 				test = test.substring(1);
 				item.setSeason(season_value.substring(0,1));
-				getEpisode(test,namesBlocks, controlNameBlock);
+				getEpisode(test, controlNameBlock);
 			}
 
 		}
 		
+		
 		/**
+		 * This method is called when the number chain where the season value 
+		 * possibly has has one of two values.
 		 * 
-		 * @param test
-		 * @param namesBlocks
-		 * @param season_value
+		 * @param test File name currently.
+		 * @param season_value Value that possibly represents the season.
 		 */
-		public static void getSeasonCase2(String test,String[] namesBlocks, String season_value) {
+		public static void getSeasonCase2(String test, String season_value) {
 			
 			if(GlobalFunctions.isNumeric(test.substring(2,3))) {
 				test = test.substring(2);
 				item.setSeason(season_value.substring(0,2));
-				getEpisode(test,namesBlocks, controlNameBlock);
+				getEpisode(test, controlNameBlock);
 			}else {
 				//test = test.substring(1);
 				item.setSeason(season_value.substring(0,1));
-				getEpisode(season_value.substring(1,2),namesBlocks, controlNameBlock);
+				getEpisode(season_value.substring(1,2),controlNameBlock);
 			}
 		}
 		
 	
 		/**
+		 * This method is called when the string of numbers where the season 
+		 * value possibly has three values.
 		 * 
-		 * @param test
-		 * @param namesBlocks
-		 * @param season_value
+		 * @param test File name currently.
+		 * @param season_value Value that possibly represents the season.
 		 */
-		public static void getSeasonCase3(String test,String[] namesBlocks, String season_value) {
+		public static void getSeasonCase3(String test, String season_value) {
 			test = test.substring(1);
 			item.setSeason(season_value.substring(0,1));
-			getEpisode(season_value.substring(1,3),namesBlocks, controlNameBlock);
+			getEpisode(season_value.substring(1,3), controlNameBlock);
 		}
 		
 		
 		/**
+		 * This method is called when the string of numbers where the value of
+		 *  the season possibly has four values.
 		 * 
-		 * @param test
-		 * @param namesBlocks
-		 * @param season_value
+		 * @param test File name currently.
+		 * @param season_value Value that possibly represents the season.
 		 */
-		public static void getSeasonCase4(String test,String[] namesBlocks, String season_value) {
+		public static void getSeasonCase4(String test, String season_value) {
 			item.setSeason(season_value.substring(0,2));
-			getEpisode(season_value.substring(2,4),namesBlocks, controlNameBlock);
+			getEpisode(season_value.substring(2,4), controlNameBlock);
 		}
 		
 		/**
+		 * This method is called when the string of numbers where the season value
+		 * possibly has more than 4 four values but less than 7.
 		 * 
 		 * @param test
-		 * @param namesBlocks
 		 * @param season_value
 		 */
-		public static void getSeasonCaseDefault(String test,String[] namesBlocks, String season_value) {
+		public static void getSeasonCaseDefault(String test, String season_value) {
 			
 			item.setSeason(season_value.substring(0,2));
-			getEpisode(season_value.substring(2,season_value.length()),namesBlocks, controlNameBlock);
+			getEpisode(season_value.substring(2,season_value.length()), controlNameBlock);
 		}
 		
 		
@@ -396,21 +437,21 @@ public class OperationTmdbSerie {
 							}
 							if(!GlobalFunctions.isNumeric(test.substring(s_index, s_index + 1))){
 								item.setSeason(season);							
-								getEpisode(test,namesBlocks, controlNameBlock);
-								item.setError("");	
+								getEpisode(test, controlNameBlock);
+								//item.setError("");	
 							}
 							if(test.length()==1 && GlobalFunctions.isNumeric(test)){
-								item.setError("05");	
+								GlobalFunctions.setItemError(item, "05");	
 								season = season+test;
 								control_season++;
 							}else {
-								if(test.length()==1 && !GlobalFunctions.isNumeric(test)){
-									item.setError("04");	
+								if(test.length()==1 && !GlobalFunctions.isNumeric(test)){	
+									GlobalFunctions.setItemError(item, "04");
 								}
 
 							}
 						}else {
-							item.setError("04");	
+							GlobalFunctions.setItemError(item, "05");	
 							System.out.println("Error");							
 						}
 					}else {	
@@ -418,7 +459,7 @@ public class OperationTmdbSerie {
 					}
 				}else{
 					System.out.println("File name Empty after part used for id reconition");
-					item.setError("04");	
+					GlobalFunctions.setItemError(item, "04");	
 					x=10;
 				}
 				
@@ -441,22 +482,22 @@ public class OperationTmdbSerie {
 				switch (season_value.length()) {
 				case 0: 
 					System.out.println("File name Empty after part used for id reconition");
-					item.setError("04");
+					GlobalFunctions.setItemError(item, "04");
 					break;
 				case 1: 
-					getSeasonCase1(test,namesBlocks,season_value);
+					getSeasonCase1(test,season_value);
 					break;
 				case 2: 
-					getSeasonCase2(test,namesBlocks,season_value);
+					getSeasonCase2(test,season_value);
 					break;
 				case 3: 
-					getSeasonCase3(test,namesBlocks,season_value);
+					getSeasonCase3(test,season_value);
 					break;
 				case 4: 
-					getSeasonCase4(test,namesBlocks,season_value);
+					getSeasonCase4(test,season_value);
 					break;
 				default:
-					getSeasonCaseDefault(test,namesBlocks,season_value);
+					getSeasonCaseDefault(test,season_value);
 				}
 															
 			}
@@ -464,7 +505,16 @@ public class OperationTmdbSerie {
 			
 			item.setAlternetiveInfo("");
 		}
-		//Get the response from the API, from the episode groups
+		
+
+		/**
+		 * This method receives the response from the API, from the request made in 
+		 * {@linkplain org.exemple.JsonOperationsTmdb.getSerieEpisodeGroups()} 
+		 *  Analyze the answer, looking for the alternative group of episodes in absolute order.
+		 *  
+		 * @param responseBody  Response from the API
+		 * @return
+		 */
 		public static String responseSerieEpisodeGroups(String responseBody){
 			System.out.println("--responseSerieEpisodeGroups--");
 
@@ -486,7 +536,17 @@ public class OperationTmdbSerie {
 			return null;					
 		}
 		
-		//Get the value of the EpisodeGroups and get the Absolute Episode Values
+
+		/**
+		 * This method receives the response from the API, from the request made in 
+		 * {@linkplain org.exemple.JsonOperationsTmdb.getContentEpisodeGroups()} 
+		 * With the values of the alternative groups, search for the group regarding 
+		 * the absolute order of episodes. And with the information in the file you 
+		 * will find the correct values.
+		 * 
+		 * @param responseBody Response from the API
+		 * @return
+		 */
 		public static String responseContentEpisodeGroups(String responseBody){
 			System.out.println("--responseContentEpisodeGroups--");
 			//System.out.println(responseBody);
@@ -523,7 +583,7 @@ public class OperationTmdbSerie {
 					c=1;
 				}				
 			}
-			System.out.println("--"+test);
+			System.out.println("Test Value - "+test);
 			if(test.length()>1){
 				if(GlobalFunctions.isNumeric(test.substring(0,1))){
 									
@@ -538,10 +598,9 @@ public class OperationTmdbSerie {
 				}
 			}
 			
-			//System.out.println(absolute_episode);
+
 			
 			JsonObject final_info = absoluteEpisode.get(Integer.valueOf(absolute_episode)-1).getAsJsonObject();
-			//JSONObject get = absoluteEpisode.getJSONObject(Integer.valueOf(absolute_episode)-1);
 			
 			item.setEpisode(String.valueOf(final_info.get("episode_number").getAsInt()));
 			item.setSeason(String.valueOf(final_info.get("season_number").getAsInt()));	
@@ -554,8 +613,13 @@ public class OperationTmdbSerie {
 			return null;
 		}
 
-		//
-		public static void getEpisode(String test,String[] namesBlocks,Integer control){
+		/**
+		 * 
+		 * @param test
+		 * @param namesBlocks
+		 * @param control
+		 */
+		public static void getEpisode(String test,Integer control){
 			System.out.println("--Inside Episode--");
 			control++;
 			String episode="";
@@ -617,7 +681,7 @@ public class OperationTmdbSerie {
 					System.out.println("Epsideo Value End - "+episode);
 					JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
 				}
-				if(controlEpisode==0 && checkForAnime==true){
+				if(controlEpisode==0 && checkForAnime==true && item.getIsAnimation()){
 					JsonOperationsTmdb.getSeriesKeywords(item.getId());
 				}
 			}
@@ -626,7 +690,14 @@ public class OperationTmdbSerie {
 			
 		}
 
-		//
+		/**
+		 * This method receives the response of the request made in 
+		 * {@link org.example.JsonOperationsTmdb.getContentEpisodeGroups()}
+		 *
+		 * 
+		 * @param responseBody  Response from the API
+		 * @return
+		 */
 		public static String responseFinalSerie(String responseBody){
 
 			System.out.println("Inside responseFinalSerie");						
@@ -643,11 +714,9 @@ public class OperationTmdbSerie {
 				item.setEpisode(String.valueOf(episode_number));
 				item.setSeason(String.valueOf(season_number));	
 				item.setEpisodeName(String.valueOf(episode_name));
-
-				System.out.println(item.getEpisode());
-				System.out.println(item.getEpisodeName());
-				System.out.println(item.getSeason());
-				finalName();											
+				finalName();	
+				
+				
 			}else {
 				item.setError(returnApi.equals("02") ? "06" : "03");
 				item.setState(3);
@@ -656,6 +725,15 @@ public class OperationTmdbSerie {
 			return null;
 		}
 
+		
+		/**
+		 * This method receives the response of the request made in 
+		 * {@link org.example.JsonOperationsTmdb.getSeriesKeywords()}
+		 * and check that in the keyword ids, there is the "anime" id.
+		 * 
+		 * @param responseBody  Response from the API
+		 * @return
+		 */
 		public static String checkAnime(String responseBody){
 			
 			System.out.println(responseBody);
@@ -683,10 +761,12 @@ public class OperationTmdbSerie {
 			return null;
 			
 		}
-		//------------------------------------------------------------------------------
-		
+	
 					
-		//
+		/**
+		 * This method takes the stored values from the API response and using the
+		 * stored rules for series names in the properties, constructs the final file name.
+		 */
 		public static void finalName() {
 			System.out.println("--Inside finalName--");
 			item.setError("");
@@ -707,7 +787,13 @@ public class OperationTmdbSerie {
 			
 		}
 
-		//Get Series Scheme for Properties and format the File Name according to stored schematics.
+		
+		/**
+		 * This method shapes the final name of the file according to 
+		 * user-defined rules that are stored in the program's properties.
+		 * 
+		 * @param ext Extension of the file.
+		 */
 		public static String nameSchemeSeries(String ext) {
 			
 			String scheme = DataStored.propertiesGetSeriesScheme();
@@ -716,8 +802,6 @@ public class OperationTmdbSerie {
 			scheme  = scheme.replace("&Season", item.getSeason());
 			scheme  = scheme.replace("&Episode", item.getEpisode());
 			scheme  = scheme.replace("&EPN", item.getEpisodeName());
-			//scheme  = scheme .replace("Absolute", item.getAbsoluteEpisode());
-			//scheme =scheme+ext;
 						
 			return scheme;
 		}

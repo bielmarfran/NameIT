@@ -1,6 +1,10 @@
 package org.example;
 
+
 import java.io.File;
+import java.util.ArrayList;
+
+
 
 
 public class Item {
@@ -28,7 +32,7 @@ public class Item {
 	private File originalFile;
 	//Store the alternative info
 	private String alternetiveInfo;	
-		//---------------------------------------------//
+
 	//Season value of the file
 	private String season;
 	//Episode value of the file
@@ -38,12 +42,25 @@ public class Item {
 	//Episode value of the file
 	private String episodeName;
 	//
-	private Boolean  isAnimation;
+	private Boolean isAnimation;
 
-
+	/**
+	 * 
+	 */
 	public Item() {
 
 	}
+	
+
+	
+	public Item(int id, int year, String error, Boolean isAnimation) {
+		super();
+		this.id = id;
+		this.year = year;
+		this.error = error;
+		this.isAnimation = isAnimation;
+	}
+
 	/**
 	 * 
 	 * @param orignalName
@@ -57,6 +74,8 @@ public class Item {
 		this.originalFile =originalFile;
 		this.state = state;
 	}
+	
+	
 	/**
 	 * 
 	 * @param orignalName
@@ -177,15 +196,12 @@ public class Item {
 	}
 
 
-	public String getAlternetiveInfo() {
-		return alternetiveInfo;
+	public void setIsAnimation(Boolean isAnimation) {
+		this.isAnimation = isAnimation;
 	}
 
 
-	public void setAlternetiveInfo(String alternetiveInfo) {
-		this.alternetiveInfo = alternetiveInfo;
-	}
-
+	
 	
 	public String getSeason() {
 		return season;
@@ -231,9 +247,18 @@ public class Item {
 		return isAnimation;
 	}
 
-	
-	public void setIsAnimation(Boolean isAnimation) {
-		this.isAnimation = isAnimation;
+
+
+	public String getAlternetiveInfo() {
+		return alternetiveInfo;
 	}
+
+
+
+	public void setAlternetiveInfo(String alternetiveInfo) {
+		this.alternetiveInfo = alternetiveInfo;
+	}
+
 	
+
 }

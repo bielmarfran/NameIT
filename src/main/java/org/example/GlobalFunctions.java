@@ -28,7 +28,7 @@ public class GlobalFunctions {
 	/**
 	 * Checks whether the input is numeric.
 	 * 
-	 * @param strNum This is the first paramter to isNumeric method
+	 * @param strNum This is the first parameter to isNumeric method
 	 * @return This return a boolean value according to the test
 	 */
 	public static boolean isNumeric(String strNum) {
@@ -43,7 +43,6 @@ public class GlobalFunctions {
 		return true;
 	}
 	
-	//Check for year value that is valid, 1900>= <=Current Year.
 	
 	/**
 	 * This method try to find a value that represents one year. Example 2020
@@ -92,7 +91,7 @@ public class GlobalFunctions {
 		return newName;
 	}	
 	
-	//Check the last "." and the the value after that.
+
 	/**
 	 *This method finds the extension of a file from a file name.
 	 *Find the last occurrence of "." and stores the following values.
@@ -111,8 +110,6 @@ public class GlobalFunctions {
 	}
 	
 	
-
-	//Remove character that are invalid in windows files.
 	/**
 	 * This method removes the characters that Windows does not allow to be 
 	 * used in the file name.
@@ -136,7 +133,7 @@ public class GlobalFunctions {
 
 	}
 	
-	//Remove unwanted special character and names that only disturb the logic to find the episode
+
 	/**
 	 * 
 	 * This method removes useless characters and information that can interfere with 
@@ -208,7 +205,7 @@ public class GlobalFunctions {
 
 	}
 	
-	//Values that only disturb the logic of the program.
+
 	/**
 	 * Names that only hinder the logic of the program.
 	 * This method is used {@link org.exemple.GlobalFucntions.formatName}
@@ -226,6 +223,7 @@ public class GlobalFunctions {
 
 	}
 
+	
 	/**
 	 * This method receives the response from the API, and checks if 
 	 * there was a response with error characteristics.
@@ -245,6 +243,7 @@ public class GlobalFunctions {
 		return "";
 	}
 
+	
 	/**
 	 * This method shapes the final name of the file according to 
 	 * user-defined rules that are stored in the program's properties.
@@ -259,6 +258,8 @@ public class GlobalFunctions {
 					
 		return scheme;
 	}
+	
+	
 	/**
 	 * This method shapes the final name of the file according to 
 	 * user-defined rules that are stored in the program's properties.
@@ -275,6 +276,8 @@ public class GlobalFunctions {
 		return scheme;
 	}
 
+	
+	
 	/**
 	 * 
 	 * This method is used to call an Alert Warning Box.
@@ -291,6 +294,11 @@ public class GlobalFunctions {
 		alert.showAndWait();
 	}
 
+	
+	public static void setItemError(Item item,String error) {
+		item.setError(error);	
+		item.setState(03);
+	}
 	//------------------------------------------------------------------------------
 	
 	

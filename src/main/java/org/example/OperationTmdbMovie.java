@@ -7,8 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-
-
 public class OperationTmdbMovie {
 	
 		//Extension allowed in the program
@@ -35,7 +33,7 @@ public class OperationTmdbMovie {
 	
 		
 		/**
-		 * 
+		 * This method
 		 * 
 		 * @param x
 		 * @param episode
@@ -57,9 +55,12 @@ public class OperationTmdbMovie {
 		
 		
 		/**
+		 * This method is the logic base of the program.
+		 * It breaks the name of the files, and makes API requests each block at a time, 
+		 * waiting for an answer with a single answer, or a small set of possible answers.
 		 * 
-		 * @param name
-		 * @param mode
+		 * @param name Name of the file.
+		 * @param mode Current Mode.
 		 */
 		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
@@ -77,11 +78,8 @@ public class OperationTmdbMovie {
 					System.out.println("----"+namesBlocks.length);
 					if(x<=0 && controlBreakFile==0){
 						//Send one block of the name at a time
-						if(mode.equals("Movies")) {
-							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
-						}else {
-							JsonOperationsTmdb.getSearchSerie(namesBlocks[x],item.getYear());
-						}
+						if(mode.equals("Movies")) 
+							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());						
 						
 					}else{
 						if(controlBreakFile==0){
@@ -99,11 +97,6 @@ public class OperationTmdbMovie {
 						}
 					}
 				}
-				//if(controlBreakFile==0){
-					//System.out.println("Could not determine a single series.");
-					//breakFileNameSlug(name);
-				//}
-
 			}else {
 				System.out.println("Empty Name");
 				item.setError("01");
@@ -113,8 +106,14 @@ public class OperationTmdbMovie {
 		
 		
 		/**
+		 * This method receives the response from the API, from the request made in
+		 *  {@linkplain org.exemple.JsonOperationsTmdb.getSearchMovie()}.
+		 * If there is a single movie as a response from the API, its data is passed 
+		 * to the Object, so the final name of the file will be built.
+		 * If there are up to 5 films in the API response, their data is stored to 
+		 * be shown on the Interface as possible responses, which the user can choose. 
 		 * 
-		 * @param responseBody
+		 * @param responseBody  Response from the API
 		 * @return
 		 */
 		public static String responseMovieId(String responseBody){	
@@ -160,8 +159,10 @@ public class OperationTmdbMovie {
 			return null;
 		}
 	
+		
 		/**
-		 * 
+		 * This method takes the stored values from the API response and using the
+		 * stored rules for movie names in the properties, constructs the final file name.
 		 */
 		public static void finalName() {
 			System.out.println("--Inside finalName--");

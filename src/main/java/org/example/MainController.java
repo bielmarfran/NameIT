@@ -15,8 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -36,18 +34,18 @@ import javafx.scene.shape.Circle;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
 import java.util.ArrayList;
 import java.util.List;
-//import org.json.JSONArray;
-//import org.json.JSONObject;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 
-
+/**
+ * 
+ * @author bielm
+ *
+ */
 
 public class MainController {
 	
@@ -147,6 +145,7 @@ public class MainController {
 		paginationErrorList.setVisible(false);
 		listViewErrorText.setVisible(false);
 		paintCircle();
+
 
 	}
 
@@ -486,12 +485,32 @@ public class MainController {
 	
 
 	/**
-	 * This method is called when the user clicks on the text field path, it will open the system's standard 
-	 * file explorer, for the user to choose where he wants to move the renamed files.
+	 * This method is called when the user clicks on the text field path, 
+	 * Calling the {@link getPath()}  for its actions.
 	 * 
 	 * @param mouseEvent Click Event
 	 */
 	public void textfieldPathAction(javafx.scene.input.MouseEvent mouseEvent) {
+		getPath();
+
+	}
+	
+	
+	/**
+	 * This method is called when the user select the check box folder, 
+	 * Calling the {@link checkBoxFolderAction()} for its actions.
+	 * @param actionEvent Click Event
+	 */
+	public void checkBoxFolder(javafx.event.ActionEvent actionEvent) {
+		checkBoxFolderAction();
+	}
+	
+	
+	/**
+	 * This method  will open the system's standard 
+	 * file explorer, for the user to choose where he wants to move the renamed files.
+	 */
+	public void getPath() {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("JavaFX Projects");
 
@@ -499,20 +518,22 @@ public class MainController {
 		if (selectedDirectory != null) {
 			textfieldPath.setText(selectedDirectory.getAbsolutePath());
 			textFieldFolder_value = selectedDirectory.getAbsolutePath();
+		}else {
+			checkboxFolder.setSelected(false);
+			checkBoxFolderAction();
 		}
-		
-
 	}
-	
+
 	
 	/**
-	 * This method is called when the user select the check box folder, 
-	 * it will enable the textfieldPath.
-	 * @param actionEvent Click Event
+	 * This method will enable the textfieldPath.
 	 */
-	public void checkBoxFolder(javafx.event.ActionEvent actionEvent) {
+	public void checkBoxFolderAction(){
 		if(checkboxFolder.isSelected()){
 			textfieldPath.setDisable(false);
+			textfieldPath.requestFocus();
+			getPath();
+			
 		}else{
 			textfieldPath.setDisable(true);
 			textfieldPath.clear();
@@ -729,7 +750,7 @@ public class MainController {
 						} else {
 							setText(item);
 							if(item ==select) {
-								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
+								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND+ ";");
 							}
 
 
@@ -891,7 +912,12 @@ public class MainController {
 	
 	//Main Routine that Control the Pagination Element, that shows Errors Values and Alternative Values when available. 
 	/**
-	 * 
+	 * This method is important, it has two important features.
+	 * First: It checks when there is alternative information that can help in 
+	 * the recognition of the file, if it shows this information in the interface.
+	 * Second: Implements an EventHandler, which if the user recognizes the desired
+	 * information, he chooses the information by double clicking on the item with 
+	 * the desired information in the list.
 	 */
 	public void paginationError() {
 		paginationErrorList.setVisible(true);
@@ -920,17 +946,25 @@ public class MainController {
 						Text.getItems().add("Double click if you find the correct information");
 						String mode = DataStored.propertiesGetMode(); 
 						if(mode.equals("Movies")) {
-							for(int x =0;x<options.size();x++) {			
+							for(int x =0;x<options.size();x++) {		
 								JsonObject op = options.get(x).getAsJsonObject();
 								//JSONObject op = options.getJSONObject(x);
+								
 								String value ="Title - "+op.get("title").getAsString() + " | Year - "+op.get("release_date").getAsString()+ " | ID - "+op.get("id").getAsInt();
+
 								Text.getItems().add(value);
 							}	
 						}else {
-							for(int x =0;x<options.size();x++) {							
-								//JSONObject op = options.getJSONObject(x);
+							for(int x =0;x<options.size();x++) {		
+								Boolean animation=false;
 								JsonObject op = options.get(x).getAsJsonObject();
-								String value ="Title - "+op.get("name").getAsString() + " | Year - "+op.get("first_air_date").getAsString()+ " | ID - "+op.get("id").getAsInt();
+								JsonArray genreIds = op.getAsJsonArray("genre_ids");
+								for (int i = 0; i < genreIds.size(); i++) {
+									if (genreIds.get(i).getAsInt()==16) {
+										animation = true;
+									}
+								}
+								String value ="Title - "+op.get("name").getAsString() + " | Year - "+op.get("first_air_date").getAsString()+ " | ID - "+op.get("id").getAsInt()+ " | Animation - "+animation.toString()+" |";
 								Text.getItems().add(value);
 							}	
 						}
@@ -1035,7 +1069,7 @@ public class MainController {
 	 * This method receives the response from the request {@link org.exemple.JsonOperationsTmdb.checkConnection()}
 	 * and updates the interface according to response.
 	 * 
-	 * @param responseBody Response from the A
+	 * @param responseBody Response from the API
 	 * @return
 	 */
 	public static Integer statusTMDB(Integer responseBody){
