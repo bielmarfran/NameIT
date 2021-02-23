@@ -68,7 +68,7 @@ public class MainController {
 	@FXML
 	private Button buttonClear;
 	@FXML
-	private Button buttonSelectFiles;
+	private Button buttonMatchInfo;
 	@FXML
 	private TextField textfieldPath;
 	@FXML
@@ -94,10 +94,18 @@ public class MainController {
 	
 
 
-	//Logic Variable
-	
+	//Final Variables
+	private static final String DEFAULT_CONTROL_GRAY_INNER_BACKGROUND = "derive(-fx-base,80%)";
+	private static final String HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND = "derive(red, 50%)";
+	private static final String HIGHLIGHTED_CONTROL_YELLOW_INNER_BACKGROUND = "#FADA5E";
+	private static final String HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND = "#6ea364";	
 	//
+	
+	//Boolean Variables
 	private static Boolean isApiValid = false;
+	private static boolean isFindInfoValid = true;
+	
+	//ArraysList
 	//Extension allowed in the program
 	public static ArrayList<String> extension = new ArrayList<>();
 	//File name garbage that makes it difficult to identify the episode
@@ -106,24 +114,16 @@ public class MainController {
 	private ArrayList<Item> renamingList = new  ArrayList<>();
 	//Array where all Episodes that during the run get an Error Mensagem are store waiting for handling.
 	private ArrayList<Item> renamingListError = new  ArrayList<>();
+	
+	//
 	//Local Episode Variable used during the logic in the class
 	private static Item item = new Item();
 	//Call for the Service Class, that good part of the program logic will run on.
 	private Service<Void> backgroundTaks;
 	//Store the value of textFieldFolder
 	private static String textFieldFolder_value;
-	//Static Value for normal ListView Background Color
-	private static final String DEFAULT_CONTROL_GRAY_INNER_BACKGROUND = "derive(-fx-base,80%)";
-	//Static Value for Red ListView Background Color
-	private static final String HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND = "derive(red, 50%)";
-	//Static Value for Red ListView Background Color
-	private static final String HIGHLIGHTED_CONTROL_YELLOW_INNER_BACKGROUND = "#FADA5E";
-	//
-	private static final String HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND = "#6ea364";
-	//
-	private static boolean isValid = true;
-
 	
+
 
 
 	//Get - Set
@@ -147,6 +147,7 @@ public class MainController {
 		tooltips();
 		paginationErrorList.setVisible(false);
 		listViewErrorText.setVisible(false);
+		buttonMatchInfo.setVisible(false);
 		paintCircle();
 
 
@@ -228,15 +229,15 @@ public class MainController {
 	public void findInfo() {
 
 
-		isValid = true;
+		isFindInfoValid = true;
 		
 		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
-			isValid=false;
+			isFindInfoValid=false;
 			System.out.println("--Inside alert if--");
 			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 		}else {
 			if(!isApiValid) {
-				isValid = false;
+				isFindInfoValid = false;
 				System.out.println("--Inside alert if 2--");
 				GlobalFunctions.alertCallerWarning("Warning Dialog", "Disconected from Api", "1 - Check you internet connection.\n"+
 						"2 - Restar the program. \n"+
@@ -263,7 +264,7 @@ public class MainController {
 
 						}else {
 
-							if(!isValid) {
+							if(!isFindInfoValid) {
 								progressIndicator.setProgress(0);
 								cancel();
 							}else {
@@ -378,7 +379,9 @@ public class MainController {
 				//item = renamingList.get(x);
 				if(renamingList.get(x).getState()==0) {
 					tmdbs.setInfo(x,renamingList.get(x));
-					if(item.getError()==null) {										
+					System.out.println("Erro Before -"+item.getError());
+					if(item.getError().isBlank()) {		//item.getError()==null || 			
+						System.out.println("No ERROR __--__");
 						tmdbs.breakFileName(renamingList.get(x).getOriginalName(), "Series");
 					}else {
 						renamingList.remove(x);
@@ -440,8 +443,9 @@ public class MainController {
 	 * 
 	 * @param actionEvent
 	 */
-	public void buttonSelectFiles(javafx.event.ActionEvent actionEvent) {
+	public void buttonMatchInfo(javafx.event.ActionEvent actionEvent) {
 		findInfo();		
+		buttonMatchInfo.setVisible(false);
 	}
 	
 
@@ -488,24 +492,31 @@ public class MainController {
 	 * @param mouseEvent Click Event
 	 */
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
-		for(int x=0;x<renamingList.size();x++){
-			String mode = DataStored.propertiesGetMode(); 
+		System.out.println(renamingList.size());
+		int size = renamingList.size();
+		String mode = DataStored.propertiesGetMode(); 
+		for(int x=0;x<=size-1;x++){	
+			System.out.println("Tamanho - "+x);
 			if(mode.equals("Series")) {
 				if(renamingList.get(x).getState()==1) {
 					if(FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
 						removeItem(renamingList.get(x));
+						size--;
+						x--;
 					}
 				}
 			}else{
 				if(renamingList.get(x).getState()==1) {
 					if(FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
 						removeItem(renamingList.get(x));
-					}else {
-
+						size--;
+						x--;
 					}
 				}
 			}
 		}
+	
+
 	}
 	
 	
@@ -654,7 +665,7 @@ public class MainController {
 	public void clearList() {
 		System.out.println("--Clear List--");
 		labelDrop();
-		isValid = true;
+		isFindInfoValid = true;
 		if(listViewFiles.getItems().size()==0) {
 
 			listViewErrorText.getItems().clear();
@@ -673,7 +684,7 @@ public class MainController {
 	 * This method is clear all the elements in the interface.
 	 */
 	public void clearALL() {
-		isValid = true;
+		isFindInfoValid = true;
 		renamingList.clear();
 		renamingListError.clear();
 		listViewFiles.getItems().clear();
@@ -681,7 +692,7 @@ public class MainController {
 		listViewErrorText.getItems().clear();
 		labelDrop();
 		progressIndicator.setProgress(0);
-		//updateProgress(0);
+		buttonMatchInfo.setVisible(false);
 		paginationErrorList.setVisible(false);
 
 	}
@@ -810,14 +821,6 @@ public class MainController {
 			statusApi.setFill(Paint.valueOf("green"));
 		}else {
 			statusApi.setFill(Paint.valueOf("black"));
-			/*
-			 * if(isApiValid==2) {
-				statusApi.setFill(Paint.valueOf("black"));
-			}else {
-				System.out.println("Valor de Paint Circle Fora de Parametros:"+isApiValid);
-			}
-			 */
-			
 		}
 	}
 	
@@ -1030,12 +1033,13 @@ public class MainController {
 							//Routine to make sure that the User can change 
 							if(renamingList.size()>0) {
 								int count=0;
+								buttonMatchInfo.setVisible(true);
 								for(int x=0;x<renamingList.size();x++) {
 									if(renamingList.get(x).getOriginalName()==renamingListError.get(pageIndex).getOriginalName()) {
 										count++;
 										renamingList.get(x).setAlternetiveInfo(Text.getSelectionModel().getSelectedItem());
 										renamingList.get(x).setState(0);
-										paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);
+										paintListViewError(Text.getSelectionModel().getSelectedItem(),Text);							
 									}
 								}
 								if(count==0) {
@@ -1095,9 +1099,9 @@ public class MainController {
 	 * @param item Item to be removed from the interface.
 	 */
 	public void removeItem(Item item) {
-		
+		System.out.println("----Removing ITEM-----");
 		listViewFiles.getItems().remove(item.getOriginalName());
-		listViewFilesRenamed.getItems().remove(item.getName());
+		listViewFilesRenamed.getItems().remove(item.getFinalFileName());
 		renamingList.remove(item);
 		renamingListError.remove(item);
 		

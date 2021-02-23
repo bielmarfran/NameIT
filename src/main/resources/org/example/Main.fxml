@@ -19,19 +19,19 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.MainController">
    <center>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="722.0" prefWidth="900.0">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="747.0" prefWidth="900.0">
          <children>
             <TextField fx:id="textfieldPath" disable="true" layoutX="530.0" layoutY="80.0" onMouseClicked="#textfieldPathAction" prefHeight="25.0" prefWidth="354.0" AnchorPane.rightAnchor="16.0" />
             <ProgressIndicator fx:id="progressIndicator" layoutX="437.0" layoutY="146.0" prefHeight="40.0" prefWidth="80.0" progress="0.0" />
-            <ListView fx:id="listViewFiles" layoutX="20.0" layoutY="131.0" onDragDropped="#handleDropListView" onDragOver="#handleDragOverListView" prefHeight="368.0" prefWidth="354.0" AnchorPane.leftAnchor="20.0" />
+            <ListView fx:id="listViewFiles" layoutX="20.0" layoutY="144.0" onDragDropped="#handleDropListView" onDragOver="#handleDragOverListView" prefHeight="368.0" prefWidth="354.0" AnchorPane.leftAnchor="20.0" />
             <Label fx:id="labelDropFiles" layoutX="157.0" layoutY="302.0" mouseTransparent="true" text="Drop Files">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="buttonSelectFiles" layoutX="73.0" layoutY="50.0" mnemonicParsing="false" onAction="#buttonSelectFiles" prefHeight="52.0" prefWidth="94.0" text="Select File's" />
+            <Button fx:id="buttonMatchInfo" layoutX="727.0" layoutY="578.0" mnemonicParsing="false" onAction="#buttonMatchInfo" prefHeight="122.0" prefWidth="143.0" text="Match Info" />
             <Button fx:id="buttonRename" layoutX="392.0" layoutY="361.0" mnemonicParsing="false" onAction="#buttonRenameAction" prefHeight="52.0" prefWidth="118.0" text="Rename" />
-            <Button fx:id="buttonClear" layoutX="176.0" layoutY="50.0" mnemonicParsing="false" onAction="#buttonClearAction" prefHeight="52.0" prefWidth="94.0" text="Clear All" />
+            <Button fx:id="buttonClear" layoutX="94.0" layoutY="47.0" mnemonicParsing="false" onAction="#buttonClearAction" prefHeight="61.0" prefWidth="112.0" text="Clear All" />
             <Circle fx:id="statusApi" fill="DODGERBLUE" layoutX="42.0" layoutY="76.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.leftAnchor="29.0" />
             <Pane layoutX="393.0" layoutY="238.0" prefHeight="89.0" prefWidth="118.0" style="-fx-background-color: #BEBEBE;">
                <children>
@@ -45,9 +45,9 @@
                </children>
             </Pane>
             <CheckBox fx:id="checkboxFolder" layoutX="530.0" layoutY="50.0" mnemonicParsing="false" onAction="#checkBoxFolder" text="Select Directory (Default Same Location)" />
-            <ListView fx:id="listViewFilesRenamed" layoutX="530.0" layoutY="131.0" prefHeight="368.0" prefWidth="354.0" AnchorPane.rightAnchor="16.0" />
-            <Separator layoutX="1.0" layoutY="508.0" prefHeight="4.0" prefWidth="900.0" />
-            <Label layoutX="18.0" layoutY="510.0" text="Suport List">
+            <ListView fx:id="listViewFilesRenamed" layoutX="530.0" layoutY="145.0" prefHeight="368.0" prefWidth="354.0" AnchorPane.rightAnchor="16.0" />
+            <Separator layoutX="1.0" layoutY="523.0" prefHeight="4.0" prefWidth="900.0" />
+            <Label layoutX="28.0" layoutY="529.0" text="Suport List">
                <font>
                   <Font size="16.0" />
                </font>
@@ -58,13 +58,23 @@
                </font>
             </Label>
             <Label fx:id="labelStatusApi" layoutX="29.0" layoutY="63.0" prefHeight="27.0" prefWidth="26.0" />
-            <Separator layoutX="1.0" layoutY="115.0" prefHeight="4.0" prefWidth="900.0" />
+            <Separator layoutX="1.0" layoutY="112.0" prefHeight="4.0" prefWidth="900.0" />
             <Separator layoutY="35.0" prefHeight="4.0" prefWidth="900.0" />
-            <Separator layoutX="447.0" layoutY="36.0" orientation="VERTICAL" prefHeight="81.0" prefWidth="9.0" />
-            <ComboBox fx:id="ComboBoxMode" layoutX="286.0" layoutY="64.0" prefWidth="150.0" />
-            <ListView fx:id="listViewErrorText" layoutX="26.0" layoutY="535.0" onMouseClicked="#listViewErrorTextAction" prefHeight="170.0" prefWidth="865.0" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="9.0" />
-            <Pagination fx:id="paginationErrorList" layoutX="19.0" layoutY="537.0" prefHeight="167.0" prefWidth="866.0" />
+            <Separator layoutX="446.0" layoutY="36.0" orientation="VERTICAL" prefHeight="76.0" prefWidth="10.0" />
+            <ComboBox fx:id="ComboBoxMode" layoutX="253.0" layoutY="64.0" prefHeight="26.0" prefWidth="156.0" />
+            <ListView fx:id="listViewErrorText" layoutX="29.0" layoutY="543.0" onMouseClicked="#listViewErrorTextAction" prefHeight="170.0" prefWidth="675.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="196.0" />
+            <Pagination fx:id="paginationErrorList" layoutX="25.0" layoutY="559.0" prefHeight="186.0" prefWidth="686.0" />
             <Label layoutX="51.0" layoutY="-26.0" prefHeight="37.0" prefWidth="83.0" text="Label" />
+            <Label layoutX="21.0" layoutY="117.0" text="File Name">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="530.0" layoutY="117.0" text="New File Name">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </center>

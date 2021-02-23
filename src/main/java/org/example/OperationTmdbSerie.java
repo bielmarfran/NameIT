@@ -10,9 +10,9 @@ import com.google.gson.JsonParser;
 //The function of this class is to receive an Item from the MainController, and process it to the final result
 
 public class OperationTmdbSerie {
+		
 		//Logic Variable
-		//Extension allowed in the program
-		//public static ArrayList<String> extension = new ArrayList<>();
+
 		//Variable where the File name is store in char block's to send one at the time to the Api.
 		private static String[] namesBlocks;
 		//Control the times that block's of files name are sent to the Api.
