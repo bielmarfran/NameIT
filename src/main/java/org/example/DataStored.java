@@ -500,7 +500,7 @@ public class DataStored {
     	Preferences prefs = Preferences.userNodeForPackage(DataStored.class);
 
     	if(keyValue==String.valueOf(401)){
-    		MainController.setControl_circle(2);
+    		MainController.setIsApiValid(false);
     	}else{
     		keyTmdb="";
     		keyValue = keyValue.substring(10,keyValue.length()-2);

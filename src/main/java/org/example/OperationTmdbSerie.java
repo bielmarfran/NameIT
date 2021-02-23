@@ -2,8 +2,6 @@ package org.example;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -13,10 +11,8 @@ import com.google.gson.JsonParser;
 
 public class OperationTmdbSerie {
 		//Logic Variable
-		//Control the color of the Circle that represent the connection to the Api
-		private static Integer controlCircle=0;
 		//Extension allowed in the program
-		public static ArrayList<String> extension = new ArrayList<>();
+		//public static ArrayList<String> extension = new ArrayList<>();
 		//Variable where the File name is store in char block's to send one at the time to the Api.
 		private static String[] namesBlocks;
 		//Control the times that block's of files name are sent to the Api.
@@ -59,54 +55,10 @@ public class OperationTmdbSerie {
 			controlEpisode=0;			
 			checkForAnime = Boolean.valueOf(DataStored.propertiesGetAnime());
 			System.out.println("Valor check - "+checkForAnime);
-			
-			//Get the Alternative Value is this String and start Querying it to get data
-			String value = item.getAlternetiveInfo();
-			String[] values = value.split("\\|");
 
-			for(int x=0;x<values.length;x++) {
-				switch (x) {
-				case 0: 
-					values[x]=values[x].replace("Title -", "");
-					values[x] = values[x].strip();
-					item.setName(values[x]);
-					break;
-				case 1: 
-					values[x]=values[x].replace("Year -", "");
-					values[x] = values[x].strip();
-					try {
-						String year = values[x].substring(0,value.indexOf("-")-2);
-						System.out.println("Year Value ="+year);
-						item.setYear(Integer.valueOf(year));
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-					break;
-				case 2: 
-					values[x]=values[x].replace("ID -", "");
-					values[x] = values[x].strip();
-					item.setId(Integer.valueOf(values[x]));
-					break;
-				case 3: 
-					values[x]=values[x].replace("Animation -", "");
-					values[x] = values[x].strip();
-					if(values[x].equals("true")) {
-						item.setIsAnimation(true);
-					}else {
-						item.setIsAnimation(false);
-					}
-				
-					break;
-						
-				default:
-					throw new IllegalArgumentException("Unexpected value: " + x);
-				}
-			}
-		
-			item.setError("0");
-			item.setAlternetiveInfo("");
-			item.setOptionsList(null);
-			getSeasonAlternative("",item);
+			
+			getAlternativeInfo();
+			getSeasonAlternative(item);
 			//End Getting the ID			
 
 		}
@@ -406,15 +358,10 @@ public class OperationTmdbSerie {
 		 * @param value
 		 * @param item
 		 */
-		public static void getSeasonAlternative(String value,Item item) {
+		public static void getSeasonAlternative(Item item) {
 			System.out.println("-Inside SeasonAlternative");
-			String test ="";
-			if(value.equals("")) {
-
-				test=item.getOriginalName();
-			}else {
-				test = value;
-			}
+			
+			String test = item.getOriginalName();
 			test = GlobalFunctions.formatName(test, "Series", item);
 					
 			String season="";
@@ -806,5 +753,54 @@ public class OperationTmdbSerie {
 			return scheme;
 		}
 		
-		
+		/**
+		 * This method takes the values stored in Alternative Information for the Item.
+		 */
+		public static void getAlternativeInfo() {
+			String value = item.getAlternetiveInfo();
+			String[] values = value.split("\\|");
+
+			for(int x=0;x<values.length;x++) {
+				switch (x) {
+				case 0: 
+					values[x]=values[x].replace("Title -", "");
+					values[x] = values[x].strip();
+					item.setName(values[x]);
+					break;
+				case 1: 
+					values[x]=values[x].replace("Year -", "");
+					values[x] = values[x].strip();
+					try {
+						String year = values[x].substring(0,value.indexOf("-")-2);
+						System.out.println("Year Value ="+year);
+						item.setYear(Integer.valueOf(year));
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					break;
+				case 2: 
+					values[x]=values[x].replace("ID -", "");
+					values[x] = values[x].strip();
+					item.setId(Integer.valueOf(values[x]));
+					break;
+				case 3: 
+					values[x]=values[x].replace("Animation -", "");
+					values[x] = values[x].strip();
+					if(values[x].equals("true")) {
+						item.setIsAnimation(true);
+					}else {
+						item.setIsAnimation(false);
+					}
+				
+					break;
+						
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + x);
+				}
+			}
+			
+			item.setError("0");
+			item.setAlternetiveInfo("");
+			item.setOptionsList(null);
+		}
 }

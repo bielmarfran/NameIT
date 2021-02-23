@@ -95,8 +95,9 @@ public class MainController {
 
 
 	//Logic Variable
-	//Control the color of the Circle that represent the connection to the Api
-	private static Integer controlCircle=0;
+	
+	//
+	private static Boolean isApiValid = false;
 	//Extension allowed in the program
 	public static ArrayList<String> extension = new ArrayList<>();
 	//File name garbage that makes it difficult to identify the episode
@@ -119,19 +120,21 @@ public class MainController {
 	private static final String HIGHLIGHTED_CONTROL_YELLOW_INNER_BACKGROUND = "#FADA5E";
 	//
 	private static final String HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND = "#6ea364";
-	// Test
-	private static Integer enter=0;
+	//
+	private static boolean isValid = true;
 
 	
 
 
 	//Get - Set
-	public static Integer getControl_circle() {
-		return controlCircle;
+	public static Boolean getIsApiValid() {
+		return isApiValid;
 	}
-	public static void setControl_circle(Integer control_circle) {
-		MainController.controlCircle = control_circle;
+
+	public static void setIsApiValid(Boolean isApiValid) {
+		MainController.isApiValid = isApiValid;
 	}
+
 	//End Get - Set
 
 
@@ -176,7 +179,6 @@ public class MainController {
 	}
 
 
-
 	/**
 	 * This method deals with a drag event on the listViewFiles, 
 	 * which is the list where the user drops the files.
@@ -212,24 +214,29 @@ public class MainController {
 		}else{
 			System.out.println("file is not valid");
 		}
-		rename(); 
+		findInfo(); 
 	}
 	
 	
 	/**
-	 * 
+	 * This is the main method of the program, it is called whenever
+	 * files are inserted into the program.
+	 * It checks the status of the Folder Path and the connection to the API.
+	 * If both are right, it starts a Service so that the entire API interaction
+	 * process does not interfere with the UI.
 	 */
-	public void rename() {
+	public void findInfo() {
 
-		enter=0;
+
+		isValid = true;
 		
 		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
-			enter=1;
+			isValid=false;
 			System.out.println("--Inside alert if--");
 			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 		}else {
-			if(controlCircle==2) {
-				enter=1;
+			if(!isApiValid) {
+				isValid = false;
 				System.out.println("--Inside alert if 2--");
 				GlobalFunctions.alertCallerWarning("Warning Dialog", "Disconected from Api", "1 - Check you internet connection.\n"+
 						"2 - Restar the program. \n"+
@@ -255,88 +262,27 @@ public class MainController {
 							cancel();
 
 						}else {
-							System.out.println(enter);
-							if(enter==1) {
+
+							if(!isValid) {
 								progressIndicator.setProgress(0);
 								cancel();
 							}else {
 								String mode = DataStored.propertiesGetMode(); 
 								if(mode.equals("Series")) {
 									System.out.println("renamingList.size() -- "+renamingList.size());
-									if(renamingList.size()<1) {
-										progressIndicator.setProgress(0);
+									if(isRenamingListEmpth(renamingList.size())) {
 										cancel();
 									}
-
-									for(int x=0;x<renamingList.size();x++){
-										System.out.println("TMDB Series");
-										OperationTmdbSerie tmdbs = new OperationTmdbSerie();
-										
-										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
-											//item = renamingList.get(x);
-											tmdbs.setInfoAlternative(renamingList.get(x));
-										}else {
-											
-											//item = renamingList.get(x);
-											if(renamingList.get(x).getState()==0) {
-												tmdbs.setInfo(x,renamingList.get(x));
-												if(item.getError()==null) {										
-													tmdbs.breakFileName(renamingList.get(x).getOriginalName(), "Series");
-												}else {
-													System.out.println("II");
-													renamingList.remove(x);
-												}
-											}
-											
-										}										
-										System.out.println("-----------------------------");
-										double max =100/renamingList.size();
-										//updateProgress(x+1, max);
-										Double progress = (x * max)/100;
-										progressIndicator.setProgress(progress);
-										if(x==renamingList.size()-1) {
-											progressIndicator.setProgress(1);
-										}
-									}
-
-			
+									findInfoSeries();
+									
+									
 								}else {
 									System.out.println("renamingList.size() -- "+renamingList.size());
-									if(renamingList.size()<1) {
-										progressIndicator.setProgress(0);
+									if(isRenamingListEmpth(renamingList.size())) {
 										cancel();
 									}
-									for(int x=0;x<renamingList.size();x++){
-										System.out.println("TMDB Movies");
-										OperationTmdbMovie tmdbm = new OperationTmdbMovie();
-										if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
-											tmdbm.setInfoAlternative(x, item);
-										}else {
-											
-											//item = renamingList.get(x);
-											if(renamingList.get(x).getState()==0) {
-												System.out.println("BOm 2");
-												item = renamingList.get(x);
-
-												tmdbm.setInfo(x,item);
-												if(item.getError()==null) {										
-													tmdbm.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
-												}else {
-													System.out.println("II");
-													renamingList.remove(x);
-												}
-											}
-
-										}										
-
-										double max =100/renamingList.size();
-										//updateProgress(x+1, max);
-										Double progress = (x * max)/100;
-										progressIndicator.setProgress(progress);
-										if(x==renamingList.size()-1) {
-											progressIndicator.setProgress(1);
-										}
-									}									
+									findInfoMovies();
+									
 								}
 							}
 						}											
@@ -399,12 +345,103 @@ public class MainController {
 		paintListView();
 		
 	}
+	
+	/**
+	 * This method check is @param is greater than 0.
+	 * @param size Value to be analyzed
+	 * @return True if the value is  less than 0, 
+	 * False if is greater than 0.
+	 */
+	public boolean isRenamingListEmpth(int size) {
+		if(size<1) {
+			progressIndicator.setProgress(0);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 */
+	public void findInfoSeries() {
+		System.out.println("renamingList.size() -- "+renamingList.size());
+
+		for(int x=0;x<renamingList.size();x++){
+			System.out.println("TMDB Series");
+			OperationTmdbSerie tmdbs = new OperationTmdbSerie();
+			
+			if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
+				//item = renamingList.get(x);
+				tmdbs.setInfoAlternative(renamingList.get(x));
+			}else {
+				
+				//item = renamingList.get(x);
+				if(renamingList.get(x).getState()==0) {
+					tmdbs.setInfo(x,renamingList.get(x));
+					if(item.getError()==null) {										
+						tmdbs.breakFileName(renamingList.get(x).getOriginalName(), "Series");
+					}else {
+						renamingList.remove(x);
+					}
+				}
+				
+			}	
+			progressBarUpdate(x);
+		}
+		
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public void findInfoMovies() {
+		for(int x=0;x<renamingList.size();x++){
+			System.out.println("TMDB Movies");
+			OperationTmdbMovie tmdbm = new OperationTmdbMovie();
+			if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
+				tmdbm.setInfoAlternative(item);
+			}else {
+				if(renamingList.get(x).getState()==0) {
+					System.out.println("BOm 2");
+					item = renamingList.get(x);
+
+					tmdbm.setInfo(item);
+					if(item.getError()==null) {										
+						tmdbm.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
+					}else {
+						renamingList.remove(x);
+					}
+				}
+
+			}										
+			progressBarUpdate(x);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @param x
+	 */
+	public void progressBarUpdate(int x) {
+		System.out.println("-----------------------------");
+		double max =100/renamingList.size();
+		//updateProgress(x+1, max);
+		Double progress = (x * max)/100;
+		progressIndicator.setProgress(progress);
+		if(x==renamingList.size()-1) {
+			progressIndicator.setProgress(1);
+		}
+	}
+	
+	
 	/**
 	 * 
 	 * @param actionEvent
 	 */
 	public void buttonSelectFiles(javafx.event.ActionEvent actionEvent) {
-		rename();		
+		findInfo();		
 	}
 	
 
@@ -617,7 +654,7 @@ public class MainController {
 	public void clearList() {
 		System.out.println("--Clear List--");
 		labelDrop();
-		enter=0;
+		isValid = true;
 		if(listViewFiles.getItems().size()==0) {
 
 			listViewErrorText.getItems().clear();
@@ -636,7 +673,7 @@ public class MainController {
 	 * This method is clear all the elements in the interface.
 	 */
 	public void clearALL() {
-		enter=0;
+		isValid = true;
 		renamingList.clear();
 		renamingListError.clear();
 		listViewFiles.getItems().clear();
@@ -769,14 +806,18 @@ public class MainController {
 	 */
 	public void paintCircle() {
 
-		if(controlCircle==1) {
+		if(isApiValid) {
 			statusApi.setFill(Paint.valueOf("green"));
 		}else {
-			if(controlCircle==2) {
+			statusApi.setFill(Paint.valueOf("black"));
+			/*
+			 * if(isApiValid==2) {
 				statusApi.setFill(Paint.valueOf("black"));
 			}else {
-				System.out.println("Valor de Paint Circle Fora de Parametros:"+controlCircle);
+				System.out.println("Valor de Paint Circle Fora de Parametros:"+isApiValid);
 			}
+			 */
+			
 		}
 	}
 	
@@ -1076,7 +1117,7 @@ public class MainController {
 		System.out.println("ResponseBody : "+responseBody);
 
 		if(responseBody==200){
-			controlCircle = 1;
+			isApiValid = true;
 		}else{
 			MainController.statusAlert("TMDB");
 

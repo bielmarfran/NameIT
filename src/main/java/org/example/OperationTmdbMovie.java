@@ -22,10 +22,9 @@ public class OperationTmdbMovie {
 		/**
 		 * This method get a item object save it on local global object variable.
 		 * 
-		 * @param x
-		 * @param episode
+		 * @param episode Object that holds the movie information.
 		 */
-		public void setInfo(Integer x,Item episode) {	
+		public void setInfo(Item episode) {	
 			System.out.println("--Inside setInfo TMDB--");
 			item = episode;
 			controlBreakFile=0;			
@@ -33,23 +32,16 @@ public class OperationTmdbMovie {
 	
 		
 		/**
-		 * This method
+		 * This method item object save it on local global object variable.
+		 * And calls {@link getAlternativeInfo()} to get the store alternative info.
+		 * And then call {@link finalName()} to define the final file name.
 		 * 
-		 * @param x
-		 * @param episode
+		 * @param episode Object that holds the movie information
 		 */
-		public void setInfoAlternative(Integer x,Item episode) {	
+		public void setInfoAlternative(Item episode) {	
 			System.out.println("--Inside setInfo TMDB--");
 			item = episode;
-			controlBreakFile=0;		
-			String value = item.getAlternetiveInfo();
-			value = value.replace("Title - ", "");
-			String name = value.substring(0,value.indexOf("|")-1);
-			value = value.replace(name, "");
-			value = value.replace("| Year - ", "");
-			String year = value.substring(1,value.indexOf("-"));
-			item.setName(name);
-			item.setYear(Integer.parseInt(year));
+			getAlternativeInfo();		
 			finalName();
 		}
 		
@@ -183,6 +175,20 @@ public class OperationTmdbMovie {
 
 		}
 
-		
+		/**
+		 * This method takes the values stored in Alternative Information for the Item.
+		 */
+		public static void getAlternativeInfo() {
+			
+			String value = item.getAlternetiveInfo();
+			value = value.replace("Title - ", "");
+			String name = value.substring(0,value.indexOf("|")-1);
+			value = value.replace(name, "");
+			value = value.replace("| Year - ", "");
+			String year = value.substring(1,value.indexOf("-"));
+			item.setName(name);
+			item.setYear(Integer.parseInt(year));
+			
+		}
 
 }
