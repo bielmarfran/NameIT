@@ -362,7 +362,7 @@ public class MainController {
 	}
 	
 	/**
-	 * 
+	 * This method is called when the item to be processed is a series.
 	 */
 	public void findInfoSeries() {
 		System.out.println("renamingList.size() -- "+renamingList.size());
@@ -372,16 +372,12 @@ public class MainController {
 			OperationTmdbSerie tmdbs = new OperationTmdbSerie();
 			
 			if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
-				//item = renamingList.get(x);
 				tmdbs.setInfoAlternative(renamingList.get(x));
 			}else {
 				
-				//item = renamingList.get(x);
 				if(renamingList.get(x).getState()==0) {
-					tmdbs.setInfo(x,renamingList.get(x));
-					System.out.println("Erro Before -"+item.getError());
-					if(item.getError().isBlank()) {		//item.getError()==null || 			
-						System.out.println("No ERROR __--__");
+					tmdbs.setInfo(renamingList.get(x));
+					if(item.getError().isBlank()) {				
 						tmdbs.breakFileName(renamingList.get(x).getOriginalName(), "Series");
 					}else {
 						renamingList.remove(x);
@@ -396,7 +392,7 @@ public class MainController {
 	}
 	
 	/**
-	 * 
+	 * This method is called when the item to be processed is a film.
 	 */
 	public void findInfoMovies() {
 		for(int x=0;x<renamingList.size();x++){
@@ -410,7 +406,7 @@ public class MainController {
 					item = renamingList.get(x);
 
 					tmdbm.setInfo(item);
-					if(item.getError()==null) {										
+					if(item.getError().isBlank()) {										
 						tmdbm.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
 					}else {
 						renamingList.remove(x);
@@ -424,13 +420,13 @@ public class MainController {
 	}
 	
 	/**
+	 * This method is called to update the progress bar progress in the UI.
 	 * 
-	 * @param x
+	 * @param x Current progress value.
 	 */
 	public void progressBarUpdate(int x) {
-		System.out.println("-----------------------------");
+
 		double max =100/renamingList.size();
-		//updateProgress(x+1, max);
 		Double progress = (x * max)/100;
 		progressIndicator.setProgress(progress);
 		if(x==renamingList.size()-1) {
@@ -440,8 +436,10 @@ public class MainController {
 	
 	
 	/**
+	 * This method is called when the user clicks on the configuration Match Info button, 
+	 * calls {@link findInfo()} but now it uses the information that the user chose in the UI.
 	 * 
-	 * @param actionEvent
+	 * @param actionEvent Click Event
 	 */
 	public void buttonMatchInfo(javafx.event.ActionEvent actionEvent) {
 		findInfo();		
@@ -451,6 +449,7 @@ public class MainController {
 
 	/**
 	 * This method is called when the user clicks on the configuration Menu button, he opens the configuration page.
+	 * 
 	 * @param mouseEvent Click Event
 	 */
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
@@ -702,10 +701,10 @@ public class MainController {
 	 * This method implements a new setCellFactory for the  listViewFiles. 
 	 * It allows you to change the background color of the list items according to their situation.
 	 * Gray  : Waiting for Processing.
-	 * Yellow: After going through the processing once, it was not possible to define the correct name, 
-	 *         but there are few alternatives that will be available in the listViewErrorText.
+	 * Yellow: After going through the processing once, it was not possible to define the correct info, 
+	 *         but there are few alternatives that will be available in the listViewErrorText (UI).
 	 * Green : Correct name found.
-	 * Red   : Critical error, it was not possible to find the name and there are no possible alternatives.
+	 * Red   : Critical error, it was not possible to find the info and there are no possible alternatives.
 	 */
 	public void paintListView(){
 		System.out.println(listViewFiles.getItems().size());
@@ -776,7 +775,7 @@ public class MainController {
 	 * This method implements a new setCellFactory for the  listViewErrorText.
 	 * It allows you to change the background color of the list items according to their situation.
 	 * Gray: Not selected.
-	 * Red :  Selected.
+	 * Green :  Selected.
 	 * 
 	 * @param select
 	 * @param list
@@ -1099,7 +1098,6 @@ public class MainController {
 	 * @param item Item to be removed from the interface.
 	 */
 	public void removeItem(Item item) {
-		System.out.println("----Removing ITEM-----");
 		listViewFiles.getItems().remove(item.getOriginalName());
 		listViewFilesRenamed.getItems().remove(item.getFinalFileName());
 		renamingList.remove(item);

@@ -28,11 +28,11 @@ public class OperationTmdbSerie {
 		
 		
 		/**
+		 * This method get a item object save it on local global object variable.
 		 * 
-		 * @param x
-		 * @param episode
+		 * @param movie Object that holds the episode information.
 		 */
-		public void setInfo(Integer x,Item episode) {	
+		public void setInfo(Item episode) {	
 			System.out.println("--Inside setInfo TMDB--");
 			
 			item = episode;
@@ -44,14 +44,17 @@ public class OperationTmdbSerie {
 		
 		
 		/**
+		 * This method item object save it on local global object variable.
+		 * And calls {@link getAlternativeInfo()} to get the store alternative info.
+		 * And then call {@link getSeasonAlternative()}.
 		 * 
-		 * @param item2
+		 * @param episode Object that holds the episode information
 		 */
-		public void setInfoAlternative(Item item2) {
+		public void setInfoAlternative(Item episode) {
 			System.out.println("--Inside setInfoAlternative--");
 			
 			
-			item=item2;
+			item=episode;
 			controlEpisode=0;			
 			checkForAnime = Boolean.valueOf(DataStored.propertiesGetAnime());
 			System.out.println("Valor check - "+checkForAnime);
@@ -343,8 +346,8 @@ public class OperationTmdbSerie {
 		 * This method is called when the string of numbers where the season value
 		 * possibly has more than 4 four values but less than 7.
 		 * 
-		 * @param test
-		 * @param season_value
+		 * @param test  File name currently.
+		 * @param season_value  Value that possibly represents the season.
 		 */
 		public static void getSeasonCaseDefault(String test, String season_value) {
 			
@@ -354,9 +357,11 @@ public class OperationTmdbSerie {
 		
 		
 		/**
+		 * This method tries to find a value that represents the season.
+		 * It's an implementation {@link getSeason()} adapted to the alternative 
+		 * information source.
 		 * 
-		 * @param value
-		 * @param item
+		 * @param item Object that holds the episode information.
 		 */
 		public static void getSeasonAlternative(Item item) {
 			System.out.println("-Inside SeasonAlternative");

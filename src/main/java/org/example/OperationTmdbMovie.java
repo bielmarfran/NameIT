@@ -22,11 +22,11 @@ public class OperationTmdbMovie {
 		/**
 		 * This method get a item object save it on local global object variable.
 		 * 
-		 * @param episode Object that holds the movie information.
+		 * @param movie Object that holds the movie information.
 		 */
-		public void setInfo(Item episode) {	
+		public void setInfo(Item movie) {	
 			System.out.println("--Inside setInfo TMDB--");
-			item = episode;
+			item = movie;
 			controlBreakFile=0;			
 		}
 	
@@ -36,11 +36,11 @@ public class OperationTmdbMovie {
 		 * And calls {@link getAlternativeInfo()} to get the store alternative info.
 		 * And then call {@link finalName()} to define the final file name.
 		 * 
-		 * @param episode Object that holds the movie information
+		 * @param movie Object that holds the movie information
 		 */
-		public void setInfoAlternative(Item episode) {	
+		public void setInfoAlternative(Item movie) {	
 			System.out.println("--Inside setInfo TMDB--");
-			item = episode;
+			item = movie;
 			getAlternativeInfo();		
 			finalName();
 		}

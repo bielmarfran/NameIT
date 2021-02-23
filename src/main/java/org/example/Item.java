@@ -2,46 +2,158 @@ package org.example;
 
 
 import java.io.File;
-import java.util.ArrayList;
 
 
+/**
+ * This class represents the main object that is used in the program.
+ *  The item stores all information from the files worked on.
+ * 
+ * @author bielm
+ *
+ */
 
 
 public class Item {
 	
 	
-	//Id of the Series in the API
+
+	/**
+	* Integer value that represents the ID in the API.
+	* @HasGetter
+	* @HasSetter
+	*/
 	private int id;
-	//Name of the series/movie
+	
+	
+
+	/**
+	* Name of the item.
+	* 
+	* @HasGetter
+	* @HasSetter
+	*/
 	private String name;
-	//Name of file at the end
+	
+	
+	/**
+	* Full Name of the file in the end of processing.
+	* 
+	* @HasGetter
+	* @HasSetter
+	*/
 	private String finalFileName;
-	//Store the year value
+	
+	
+	/**
+	* Integer value that represent the year of item "YYYY" format.
+	* 
+	* @HasGetter
+	* @HasSetter
+	*/
 	private int year;
-	//Name of the file in the beginning
+	
+	
+	/**
+	* Full Name of the file in the before processing.
+	* 
+	* @HasGetter
+	* @HasSetter
+	*/
 	private String originalName;
-	//Original Path of the file
+	
+	
+	/**
+	* Original Path of the file
+	* 
+	* @HasGetter
+	* @HasSetter
+	*/
 	private String originalPath;
-	//State
+	
+
+	/**
+	* State of the item in relation to processing.
+	* 
+	* Value - 0 - Before processing
+	* Value - 1 - Successfully processed
+	* Value - 2 - Processed failed
+	* Value - 3 - Processed failed critically
+	* 
+	* @HasGetter
+	* @HasSetter
+	*/
 	private Integer state;
-	//Store the value of an Error
+	
+	
+	/**
+	 * Stores the error ID.
+	 * 
+	 * @HasGetter
+	 * @HasSetter
+	 */
 	private String error;
-	//Store the options of series
+	
+	
+	/**
+	 * Store a string with the API response, with alternative information.
+	 * 
+	 * @HasGetter
+	 * @HasSetter
+	 */
 	private String optionsList;
-	//Store the file episode
+	
+
+	/**
+	 * Store the file in File format, before processing.
+	 * 
+	 * @HasGetter
+	 * @HasSetter
+	 */
 	private File originalFile;
-	//Store the alternative info
+	
+
+	/**
+	 * Stores the alternative information chosen by the user.
+	 * 
+	 * @HasGetter
+	 * @HasSetter
+	 */
 	private String alternetiveInfo;	
 
-	//Season value of the file
+
+	/**
+	 * Stores the season value
+	 * 
+	 * @HasGetter
+	 * @HasSetter
+	 */
 	private String season;
-	//Episode value of the file
+	
+
+	/**
+	 * Stores the episode value
+	 * 
+	 * @HasGetter
+	 * @HasSetter
+	 */
 	private String episode;
-	//Absolute Episode value of the file, when normal episode value not found
-	private String absoluteEpisode;
-	//Episode value of the file
+	
+
+	/**
+	 * Stores the name of the episode
+	 * 
+	 * @HasGetter
+	 * @HasSetter
+	 */
 	private String episodeName;
-	//
+	
+	
+	/**
+	 * Stores if the item is Animation or not.
+	 * 
+	 * @HasGetter
+	 * @HasSetter
+	 */
 	private Boolean isAnimation;
 
 	/**
@@ -200,8 +312,6 @@ public class Item {
 		this.isAnimation = isAnimation;
 	}
 
-
-	
 	
 	public String getSeason() {
 		return season;
@@ -223,16 +333,6 @@ public class Item {
 	}
 
 
-	public String getAbsoluteEpisode() {
-		return absoluteEpisode;
-	}
-
-
-	public void setAbsoluteEpisode(String absoluteEpisode) {
-		this.absoluteEpisode = absoluteEpisode;
-	}
-
-
 	public String getEpisodeName() {
 		return episodeName;
 	}
@@ -248,11 +348,9 @@ public class Item {
 	}
 
 
-
 	public String getAlternetiveInfo() {
 		return alternetiveInfo;
 	}
-
 
 
 	public void setAlternetiveInfo(String alternetiveInfo) {
