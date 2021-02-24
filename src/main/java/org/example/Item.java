@@ -180,11 +180,12 @@ public class Item {
 	 * @param originalFile
 	 * @param state
 	 */
-	public Item(String orignalName,String originalPatch,File originalFile,Integer state) {
+	public Item(String orignalName,String originalPatch,File originalFile,Integer state, String error) {
 		this.originalName =orignalName;
 		this.originalPath =originalPatch;
 		this.originalFile =originalFile;
 		this.state = state;
+		this.error = error;
 	}
 	
 	

@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import java.io.File;
+import java.io.FileInputStream;
+
 import javafx.util.Callback;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +28,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
@@ -207,7 +210,7 @@ public class MainController {
 				if(extension.contains(GlobalFunctions.getExtension(files.get(i).getName()))){
 					listViewFiles.getItems().add(files.get(i).getName());
 					//DataStored.propertiesGetMode(); 	
-					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0)));								
+					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0,"")));								
 					//paintListView();
 					System.out.println("Adding - "+files.get(i).getName());
 				}
@@ -376,9 +379,10 @@ public class MainController {
 			}else {
 				
 				if(renamingList.get(x).getState()==0) {
-					tmdbs.setInfo(renamingList.get(x));
-					if(item.getError().isBlank()) {				
-						tmdbs.breakFileName(renamingList.get(x).getOriginalName(), "Series");
+					item = renamingList.get(x);
+					tmdbs.setInfo(item);
+					if( item.getError().isBlank() || item.getError().isEmpty() ) {				
+						tmdbs.breakFileName(item.getOriginalName(), "Series");
 					}else {
 						renamingList.remove(x);
 					}
@@ -402,12 +406,10 @@ public class MainController {
 				tmdbm.setInfoAlternative(item);
 			}else {
 				if(renamingList.get(x).getState()==0) {
-					System.out.println("BOm 2");
 					item = renamingList.get(x);
-
 					tmdbm.setInfo(item);
-					if(item.getError().isBlank()) {										
-						tmdbm.breakFileName(renamingList.get(x).getOriginalName(), "Movies");
+					if( item.getError().isBlank() || item.getError().isEmpty() ) {		
+						tmdbm.breakFileName(item.getOriginalName(), "Movies");
 					}else {
 						renamingList.remove(x);
 					}
@@ -459,6 +461,8 @@ public class MainController {
 			parent = loader.load();
 			Scene scene = new Scene(parent);
 	        Stage stage = new Stage();	
+	        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
+	        stage.getIcons().add(image);
 	        stage.setTitle("Configuration");
 	        stage.setScene(scene);
 	        //stage.setOnHidden(e -> ConfiguraionController.shutdown());
@@ -600,6 +604,8 @@ public class MainController {
 			parent = loader.load();
 			Scene scene = new Scene(parent);
 	        Stage stage = new Stage();	
+	        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
+	        stage.getIcons().add(image);
 	        stage.setTitle("Exceptions List");
 	        stage.setScene(scene);
 	        stage.showAndWait();
@@ -625,6 +631,8 @@ public class MainController {
 			parent = loader.load();
 			Scene scene = new Scene(parent);
 	        Stage stage = new Stage();	
+	        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
+	        stage.getIcons().add(image);
 	        stage.setTitle("About");
 	        stage.setScene(scene);
 	        stage.showAndWait();
@@ -652,11 +660,8 @@ public class MainController {
 		}
 	}
 	
-	//End UI Trigger--------------------------------------------------
 
 	
-	//Support UI--------------------------------------------------
-
 	
 	/**
 	 *  This method is clear the listView's used in the interface.

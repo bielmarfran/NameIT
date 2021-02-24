@@ -26,8 +26,14 @@ public class OperationTmdbMovie {
 		 */
 		public void setInfo(Item movie) {	
 			System.out.println("--Inside setInfo TMDB--");
-			item = movie;
-			controlBreakFile=0;			
+			try {
+				item = movie;
+				controlBreakFile=0;	
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("handle exception");
+			}
+				
 		}
 	
 		
@@ -91,7 +97,7 @@ public class OperationTmdbMovie {
 				}
 			}else {
 				System.out.println("Empty Name");
-				item.setError("01");
+				GlobalFunctions.setItemError(item,"01");
 			}
 
 		}
@@ -135,12 +141,10 @@ public class OperationTmdbMovie {
 					item.setState(2);
 				}else {
 					if(size.getAsInt()==0 && item.getOptionsList()==null) {
-						item.setError("09");
-						item.setState(3);
+						GlobalFunctions.setItemError(item,"09");
 					}
 					if(size.getAsInt()>10 && item.getOptionsList()==null) {
-						item.setError("09");
-						item.setState(3);
+						GlobalFunctions.setItemError(item,"09");
 					}
 				}						
 			}else{
