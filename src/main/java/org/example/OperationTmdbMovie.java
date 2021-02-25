@@ -17,8 +17,21 @@ public class OperationTmdbMovie {
 		private static Integer controlBreakFile=0;
 		//Local Episode Variable used during the logic in the class
 		private static Item item = new Item();
+		
+		private static QueryInfo queryInfo;
+		
 
-	
+
+		public static QueryInfo getQueryInfo() {
+			return queryInfo;
+		}
+
+
+		public static void setQueryInfo(QueryInfo queryInfo) {
+			OperationTmdbMovie.queryInfo = queryInfo;
+		}
+
+
 		/**
 		 * This method get a item object save it on local global object variable.
 		 * 
@@ -115,16 +128,23 @@ public class OperationTmdbMovie {
 		 * @return
 		 */
 		public static String responseMovieId(String responseBody){	
+			System.out.println("Inside responseMovieId");
 			System.out.println(responseBody);
+
 			
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
-			if (returnApi.equals("")) {
+			if (returnApi.equals("") &&  !responseBody.isBlank()) {
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonElement size = jsonObject.get("total_results");
 				JsonArray y = jsonObject.getAsJsonArray("results");
 
 				if(size.getAsInt()==1) {
-					item.setError("");
+					
+					queryInfo.setValidResponce(true);
+					queryInfo.setApiResponse(responseBody);
+					DatabaseOperationsTmdb.insertMovie(queryInfo);
+					
+					item.setError("");			
 					System.out.println(y.get(0));
 					JsonObject x = y.get(0).getAsJsonObject();
 					item.setId(x.get("id").getAsInt());
@@ -139,12 +159,24 @@ public class OperationTmdbMovie {
 				if(size.getAsInt()<=10 && size.getAsInt()>1 ){
 					item.setOptionsList(responseBody);
 					item.setState(2);
+					queryInfo.setValidResponce(true);
+					queryInfo.setApiResponse(responseBody);
+					DatabaseOperationsTmdb.insertMovie(queryInfo);
 				}else {
 					if(size.getAsInt()==0 && item.getOptionsList()==null) {
 						GlobalFunctions.setItemError(item,"09");
+						queryInfo.setValidResponce(false);
+						DatabaseOperationsTmdb.insertMovie(queryInfo);
 					}
 					if(size.getAsInt()>10 && item.getOptionsList()==null) {
 						GlobalFunctions.setItemError(item,"09");
+						queryInfo.setValidResponce(false);
+						DatabaseOperationsTmdb.insertMovie(queryInfo);
+					}
+					if(size.getAsInt()>10) {
+						queryInfo.setValidResponce(false);
+						DatabaseOperationsTmdb.insertMovie(queryInfo);
+
 					}
 				}						
 			}else{

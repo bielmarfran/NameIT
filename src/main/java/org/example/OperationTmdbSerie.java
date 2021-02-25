@@ -26,6 +26,22 @@ public class OperationTmdbSerie {
 		//
 		private static Boolean checkForAnime=true;
 		
+		private static QueryInfo queryInfo;
+		
+
+
+		public static QueryInfo getQueryInfo() {
+			return queryInfo;
+		}
+
+
+		public static void setQueryInfo(QueryInfo queryInfo) {
+			OperationTmdbSerie.queryInfo = queryInfo;
+		}
+
+
+		
+		
 		
 		/**
 		 * This method get a item object save it on local global object variable.
@@ -137,14 +153,20 @@ public class OperationTmdbSerie {
 		public static String responseSerieId(String responseBody){	
 			System.out.println(responseBody);
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
-			if (returnApi.equals("")) {
+			System.out.println("Result 234");
+			if (returnApi.equals("") &&  !responseBody.isBlank()) {
+				System.out.println("Result");
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonElement size = jsonObject.get("total_results");
 				JsonArray y = jsonObject.getAsJsonArray("results");
 
 				if(size.getAsInt()==1) {
 					item.setError("");
-					System.out.println(y.get(0));
+					
+					queryInfo.setValidResponce(true);
+					queryInfo.setApiResponse(responseBody);
+					DatabaseOperationsTmdb.insertSerie(queryInfo);
+
 					JsonObject x = y.get(0).getAsJsonObject();
 					item.setId(x.get("id").getAsInt());
 					item.setName(x.get("name").getAsString());		
@@ -163,16 +185,30 @@ public class OperationTmdbSerie {
 				if(size.getAsInt()<=10 && size.getAsInt()>1 ){
 					item.setOptionsList(responseBody);
 					item.setState(2);
+					queryInfo.setValidResponce(true);
+					queryInfo.setApiResponse(responseBody);
+					DatabaseOperationsTmdb.insertSerie(queryInfo);
 				}else {
 					if(size.getAsInt()==0 && item.getOptionsList()==null) {
 						GlobalFunctions.setItemError(item, "09");
+						queryInfo.setValidResponce(false);
+						DatabaseOperationsTmdb.insertSerie(queryInfo);
 					}
 					if(size.getAsInt()>10 && item.getOptionsList()==null) {
 						GlobalFunctions.setItemError(item, "09");
+						queryInfo.setValidResponce(false);
+						DatabaseOperationsTmdb.insertSerie(queryInfo);
+					}
+					if(size.getAsInt()>10) {
+						queryInfo.setValidResponce(false);
+						DatabaseOperationsTmdb.insertSerie(queryInfo);
+
 					}
 				}						
 			}else {
 				item.setError(returnApi.equals("02") ? "02" : "03");
+				queryInfo.setValidResponce(false);
+				DatabaseOperationsTmdb.insertSerie(queryInfo);
 			}
 			return null;
 		}
@@ -476,6 +512,9 @@ public class OperationTmdbSerie {
 				item.setState(3);
 				
 			}else{
+				queryInfo.setValidResponce(true);
+				queryInfo.setApiResponse(responseBody);
+				DatabaseOperationsTmdb.insertSeriesEpisodeGroups(queryInfo);
 				
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonArray y = jsonObject.getAsJsonArray("results");
@@ -510,6 +549,10 @@ public class OperationTmdbSerie {
 				item.setState(3);
 				
 			}else{
+				queryInfo.setValidResponce(true);
+				queryInfo.setApiResponse(responseBody);
+				DatabaseOperationsTmdb.insertSeriesContentEpisodeGroups(queryInfo);
+				
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonArray absolute2 = jsonObject.getAsJsonArray("groups");
 				JsonObject data = new JsonObject();
@@ -657,6 +700,11 @@ public class OperationTmdbSerie {
 
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
 			if (returnApi.equals("")) {
+				
+				queryInfo.setValidResponce(true);
+				queryInfo.setApiResponse(responseBody);
+				DatabaseOperationsTmdb.insertSerieInfo(queryInfo);
+				
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonElement episode_number = jsonObject.get("episode_number");
 				JsonElement season_number = jsonObject.get("season_number");
@@ -687,7 +735,7 @@ public class OperationTmdbSerie {
 		 * @return
 		 */
 		public static String checkAnime(String responseBody){
-			
+			System.out.println("--checkAnime--");
 			System.out.println(responseBody);
 			
 			
@@ -697,6 +745,11 @@ public class OperationTmdbSerie {
 				item.setState(3);
 				
 			}else{
+				
+				queryInfo.setValidResponce(true);
+				queryInfo.setApiResponse(responseBody);
+				DatabaseOperationsTmdb.insertSeriesKeywords(queryInfo);
+				
 				JsonObject keywords = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonArray absolute = keywords.getAsJsonArray("results");
 

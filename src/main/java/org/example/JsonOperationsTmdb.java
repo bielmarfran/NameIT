@@ -1,9 +1,11 @@
 package org.example;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 /**
@@ -74,32 +76,47 @@ public class JsonOperationsTmdb {
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
+		String nameEncoded =URLEncoder.encode(name, StandardCharsets.UTF_8);
 		if(year==0) {
 			
-			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+name+
+			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+nameEncoded+
 					"&page=1&include_adult=false";
-			System.out.println(uri);
 		}else {
-			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+name+
+			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+nameEncoded+
 					"&page=1&include_adult=false&primary_release_year="+year;
-			System.out.println(uri);
+
 		}
-	
+		System.out.println("Request Before Send - "+uri);
+		
+		QueryInfo queryInfo= new QueryInfo();
+		setQuery(queryInfo, name, language, year, "Movies");
+		if(!DatabaseOperationsTmdb.selectMovie(queryInfo)) {
 
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))				
-				.header("Content-Type", "application/json")
-				//.header("Accept-Language", language)
-				//.header("Authorization", "Bearer "+keynow)
+			System.out.println("Info API");
 			
-				.build();
+			try {
+				HttpClient client = HttpClient.newHttpClient();
+				HttpRequest request = HttpRequest.newBuilder()
+						.uri(URI.create(uri))				
+						.header("Content-Type", "application/json")
+						//.header("Accept-Language", language)
+						//.header("Authorization", "Bearer "+keynow)
+					
+						.build();
 
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdbMovie::responseMovieId)
-		.join();
-
+				client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+				.thenApply(HttpResponse::body)
+				.thenApply(OperationTmdbMovie::responseMovieId)
+				.join();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.println(e);
+				
+			}	
+		
+		}
+		
+		
 	}
 
 	
@@ -114,30 +131,37 @@ public class JsonOperationsTmdb {
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
+		String nameEncoded =URLEncoder.encode(name, StandardCharsets.UTF_8);
 		if(year==0) {				
-			uri ="https://api.themoviedb.org/3/search/tv?api_key="+keynow+"&language="+language+"&query="+name+
+			uri ="https://api.themoviedb.org/3/search/tv?api_key="+keynow+"&language="+language+"&query="+nameEncoded+
 					"&page=1&include_adult=false";
-			System.out.println(uri);
-		}else {
-			uri ="https://api.themoviedb.org/3/search/tv?api_key="+keynow+"&language="+language+"&query="+name+
-					"&page=1&include_adult=false&first_air_date_year="+year;
-			System.out.println(uri);
-		}
 	
+		}else {
+			uri ="https://api.themoviedb.org/3/search/tv?api_key="+keynow+"&language="+language+"&query="+nameEncoded+
+					"&page=1&include_adult=false&first_air_date_year="+year;
 
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))				
-				.header("Content-Type", "application/json")
-				//.header("Accept-Language", language)
-				//.header("Authorization", "Bearer "+keynow)
-			
-				.build();
+		}
+		System.out.println("Request Before Send - "+uri);
+		QueryInfo queryInfo= new QueryInfo();
+		setQuery(queryInfo, name, language, year, "Series");
+		
+		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesQueries")) {
+			System.out.println("Info API");
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(uri))				
+					.header("Content-Type", "application/json")
+					//.header("Accept-Language", language)
+					//.header("Authorization", "Bearer "+keynow)
+				
+					.build();
 
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdbSerie::responseSerieId)
-		.join();
+			client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(HttpResponse::body)
+			.thenApply(OperationTmdbSerie::responseSerieId)
+			.join();
+		}
+		
 
 	}
 	
@@ -157,22 +181,29 @@ public class JsonOperationsTmdb {
 		String uri = "";	
 			
 		uri ="https://api.themoviedb.org/3/tv/"+id+"/season/"+season+"/episode/"+episode+"?api_key="+keynow+"&language="+language;
-		//https://api.themoviedb.org/3/tv/60735/season/01/episode/01?api_key=ee7c5286c8b982e91fafcbbcce8ceb30&language=en-US
-		System.out.println(uri);
 
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))				
-				.header("Content-Type", "application/json")
-				//.header("Accept-Language", language)
-				//.header("Authorization", "Bearer "+keynow)
-			
-				.build();
+		System.out.println("Request Before Send - "+uri);
 
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdbSerie::responseFinalSerie)
-		.join();
+		QueryInfo queryInfo= new QueryInfo();
+		setQuery(queryInfo, id+"/season/"+season+"/episode/"+episode, language, 0, "Series");
+		
+		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesQueriesInfo")) {
+			System.out.println("Info API");
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(uri))				
+					.header("Content-Type", "application/json")
+					//.header("Accept-Language", language)
+					//.header("Authorization", "Bearer "+keynow)
+				
+					.build();
+
+			client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(HttpResponse::body)
+			.thenApply(OperationTmdbSerie::responseFinalSerie)
+			.join();
+		}
+
 
 	}
 
@@ -190,22 +221,31 @@ public class JsonOperationsTmdb {
 		String uri = "";
 
 		uri ="https://api.themoviedb.org/3/tv/"+id+"/episode_groups?api_key="+keynow+"&language="+language;
-		System.out.println(uri);
+		
+		System.out.println("Request Before Send - "+uri);
 
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))				
-				.header("Content-Type", "application/json")
-				//.header("Accept-Language", language)
-				//.header("Authorization", "Bearer "+keynow)
-			
-				.build();
+		QueryInfo queryInfo= new QueryInfo();
+		setQuery(queryInfo, id.toString(), language, 0, "Series");
+		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesEpisodeGroups")) {
+			System.out.println("Info API");
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(uri))				
+					.header("Content-Type", "application/json")
+					//.header("Accept-Language", language)
+					//.header("Authorization", "Bearer "+keynow)
+				
+					.build();
 
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdbSerie::responseSerieEpisodeGroups)
-		.join();
+			client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(HttpResponse::body)
+			.thenApply(OperationTmdbSerie::responseSerieEpisodeGroups)
+			.join();
 
+		}
+		
+		
+	
 	}
 	
 
@@ -220,22 +260,32 @@ public class JsonOperationsTmdb {
 		language = languageTmdb(language);
 		String uri = "";
 		uri ="https://api.themoviedb.org/3/tv/episode_group/"+id+"?api_key="+keynow+"&language="+language;
-		System.out.println(uri);
+		
+		System.out.println("Request Before Send - "+uri);
 
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))				
-				.header("Content-Type", "application/json")
-				//.header("Accept-Language", language)
-				//.header("Authorization", "Bearer "+keynow)
+		QueryInfo queryInfo= new QueryInfo();
+		setQuery(queryInfo, id.toString(), language, 0, "Series");
+		
+		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesContentEpisodeGroups")) {
+			System.out.println("Info API");
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(uri))				
+					.header("Content-Type", "application/json")
+					//.header("Accept-Language", language)
+					//.header("Authorization", "Bearer "+keynow)
+				
+					.build();
+
+			client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(HttpResponse::body)
+			.thenApply(OperationTmdbSerie::responseContentEpisodeGroups)
+			.join();
+
 			
-				.build();
-
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdbSerie::responseContentEpisodeGroups)
-		.join();
-
+		}
+		
+		
 	}
 	
 	
@@ -251,21 +301,30 @@ public class JsonOperationsTmdb {
 		String uri = "";
 		uri ="https://api.themoviedb.org/3/tv/"+id+"/keywords?api_key="+keynow;
 		//https://api.themoviedb.org/3/tv/37854/keywords?api_key=ee7c5286c8b982e91fafcbbcce8ceb30
-		System.out.println(uri);
+		
+		System.out.println("Request Before Send - "+uri);
 
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(uri))				
-				.header("Content-Type", "application/json")
-				//.header("Accept-Language", language)
-				//.header("Authorization", "Bearer "+keynow)
-			
-				.build();
+		QueryInfo queryInfo= new QueryInfo();
+		setQuery(queryInfo, id.toString(), language, 0, "Series");
+		
+		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesKeywords")) {
+			System.out.println("Info API");
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(uri))				
+					.header("Content-Type", "application/json")
+					//.header("Accept-Language", language)
+					//.header("Authorization", "Bearer "+keynow)
+				
+					.build();
 
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-		.thenApply(HttpResponse::body)
-		.thenApply(OperationTmdbSerie::checkAnime)
-		.join();
+			client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(HttpResponse::body)
+			.thenApply(OperationTmdbSerie::checkAnime)
+			.join();
+		}
+		
+		
 
 	}
 
@@ -305,4 +364,24 @@ public class JsonOperationsTmdb {
 		
 	}
 
+	/**
+	 * This method 
+	 * @param queryInfo
+	 * @param name
+	 * @param language
+	 * @param year
+	 * @param mode
+	 */
+	public static void setQuery(QueryInfo queryInfo ,String name, String language, int year, String mode) {
+
+		queryInfo.setQueryValue(name);
+		queryInfo.setLanguage(language);
+		queryInfo.setYear(year);
+		if(mode.equals("Movies")) {
+			OperationTmdbMovie.setQueryInfo(queryInfo);
+		}else {
+			OperationTmdbSerie.setQueryInfo(queryInfo);
+		}
+		
+	}
 }
