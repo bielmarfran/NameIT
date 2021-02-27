@@ -86,7 +86,7 @@ public class OperationTmdbMovie {
 				
 				namesBlocks = name.split(" ");
 				for(int x=0;x<namesBlocks.length;x++){
-					System.out.println("----"+namesBlocks.length);
+					//System.out.println("----"+namesBlocks.length);
 					if(x<=0 && controlBreakFile==0){
 						//Send one block of the name at a time
 						if(mode.equals("Movies")) 
@@ -94,7 +94,7 @@ public class OperationTmdbMovie {
 						
 					}else{
 						if(controlBreakFile==0){
-							namesBlocks[x] = namesBlocks[x-1]+"%20"+namesBlocks[x];
+							namesBlocks[x] = namesBlocks[x-1]+" "+namesBlocks[x];
 							
 							if(mode.equals("Movies")) {
 								JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
@@ -104,12 +104,11 @@ public class OperationTmdbMovie {
 							
 						}else {
 							x=namesBlocks.length;
-							System.out.println("ERROR");
 						}
 					}
 				}
 			}else {
-				System.out.println("Empty Name");
+				//System.out.println("Empty Name");
 				GlobalFunctions.setItemError(item,"01");
 			}
 
@@ -129,7 +128,7 @@ public class OperationTmdbMovie {
 		 */
 		public static String responseMovieId(String responseBody){	
 			System.out.println("Inside responseMovieId");
-			System.out.println(responseBody);
+			System.out.println("responseBody = "+responseBody);
 
 			
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
@@ -174,14 +173,23 @@ public class OperationTmdbMovie {
 						DatabaseOperationsTmdb.insertMovie(queryInfo);
 					}
 					if(size.getAsInt()>10) {
+						GlobalFunctions.setItemError(item,"09");
 						queryInfo.setValidResponce(false);
 						DatabaseOperationsTmdb.insertMovie(queryInfo);
 
 					}
 				}						
 			}else{
-				item.setError(returnApi.equals("02") ? "02" : "03");
-				item.setState(3);
+
+				if(responseBody.isBlank()) {
+					GlobalFunctions.setItemError(item,"09");
+				}else {
+					item.setError(returnApi.equals("02") ? "02" : "03");
+					item.setState(3);
+				}
+
+				queryInfo.setValidResponce(false);
+				DatabaseOperationsTmdb.insertMovie(queryInfo);
 			}
 			
 			return null;

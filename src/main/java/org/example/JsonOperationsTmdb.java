@@ -71,12 +71,13 @@ public class JsonOperationsTmdb {
 	 * @param name Movie Name
 	 * @param year Year the film was released
 	 */
-	public static void getSearchMovie(String name, int year){
+	public static void getSearchMovie(String query, int year){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
-		String nameEncoded =URLEncoder.encode(name, StandardCharsets.UTF_8);
+		String nameEncoded =URLEncoder.encode(query, StandardCharsets.UTF_8);
+		nameEncoded = nameEncoded.replace("+", "%20");
 		if(year==0) {
 			
 			uri ="https://api.themoviedb.org/3/search/movie?api_key="+keynow+"&language="+language+"&query="+nameEncoded+
@@ -89,7 +90,7 @@ public class JsonOperationsTmdb {
 		System.out.println("Request Before Send - "+uri);
 		
 		QueryInfo queryInfo= new QueryInfo();
-		setQuery(queryInfo, name, language, year, "Movies");
+		setQuery(queryInfo, nameEncoded, language, year, "Movies");
 		if(!DatabaseOperationsTmdb.selectMovie(queryInfo)) {
 
 			System.out.println("Info API");
@@ -126,12 +127,13 @@ public class JsonOperationsTmdb {
 	 * @param name Series Name
 	 * @param year Year the series has started
 	 */
-	public static void getSearchSerie(String name, int year){
+	public static void getSearchSerie(String query, int year){
 		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";//0
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
-		String nameEncoded =URLEncoder.encode(name, StandardCharsets.UTF_8);
+		String nameEncoded =URLEncoder.encode(query, StandardCharsets.UTF_8);
+		nameEncoded = nameEncoded.replace("+", "%20");
 		if(year==0) {				
 			uri ="https://api.themoviedb.org/3/search/tv?api_key="+keynow+"&language="+language+"&query="+nameEncoded+
 					"&page=1&include_adult=false";
@@ -143,23 +145,30 @@ public class JsonOperationsTmdb {
 		}
 		System.out.println("Request Before Send - "+uri);
 		QueryInfo queryInfo= new QueryInfo();
-		setQuery(queryInfo, name, language, year, "Series");
+		System.out.println(nameEncoded);
+		setQuery(queryInfo, nameEncoded, language, year, "Series");
 		
 		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesQueries")) {
-			System.out.println("Info API");
-			HttpClient client = HttpClient.newHttpClient();
-			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create(uri))				
-					.header("Content-Type", "application/json")
-					//.header("Accept-Language", language)
-					//.header("Authorization", "Bearer "+keynow)
-				
-					.build();
+			
+			try {
+				System.out.println("Info API");
+				HttpClient client = HttpClient.newHttpClient();
+				HttpRequest request = HttpRequest.newBuilder()
+						.uri(URI.create(uri))				
+						.header("Content-Type", "application/json")
+						//.header("Accept-Language", language)
+						//.header("Authorization", "Bearer "+keynow)
+					
+						.build();
 
-			client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-			.thenApply(HttpResponse::body)
-			.thenApply(OperationTmdbSerie::responseSerieId)
-			.join();
+				client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+				.thenApply(HttpResponse::body)
+				.thenApply(OperationTmdbSerie::responseSerieId)
+				.join();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.println(e);
+			}
 		}
 		
 
@@ -365,16 +374,19 @@ public class JsonOperationsTmdb {
 	}
 
 	/**
-	 * This method 
-	 * @param queryInfo
-	 * @param name
-	 * @param language
-	 * @param year
-	 * @param mode
+	 * This method assign values to an queryInfo object, and passes the 
+	 * information to a global queryInfo object in the {@link org.exemple.OperationTmdbMovie}
+	 * or {@link org.exemple.OperationTmdbSerie} where is needed.
+	 * 
+	 * @param queryInfo Object with the information worked in the database
+	 * @param query Query value
+	 * @param language Language identification
+	 * @param year Year value
+	 * @param mode Current Mode
 	 */
-	public static void setQuery(QueryInfo queryInfo ,String name, String language, int year, String mode) {
+	public static void setQuery(QueryInfo queryInfo ,String query, String language, int year, String mode) {
 
-		queryInfo.setQueryValue(name);
+		queryInfo.setQueryValue(query);
 		queryInfo.setLanguage(language);
 		queryInfo.setYear(year);
 		if(mode.equals("Movies")) {
@@ -382,6 +394,24 @@ public class JsonOperationsTmdb {
 		}else {
 			OperationTmdbSerie.setQueryInfo(queryInfo);
 		}
+		
+	}
+
+	public String customEncoder(String url) {
+		url = url.replace(" ", "%20");
+		/*
+		 * 
+		 */
+		url = url.replace("%", "%25");
+		url = url.replace("$", "%24");
+		url = url.replace("#", "%23");
+		url = url.replace("&", "%26");
+		url = url.replace("!", "%21");
+		url = url.replace("@", "%40");
+		url = url.replace("{", "%7B");
+		url = url.replace("}", "%7D");
+	
+		return url;
 		
 	}
 }

@@ -101,11 +101,9 @@ public class GlobalFunctions {
 	 */
 	public static String getExtension(String fileName){
 		String extension = "";
-
 		int i = fileName.lastIndexOf('.');
 		if (i > 0 && i < fileName.length() - 1) //if the name is not empty
 			return fileName.substring(i + 1).toLowerCase();
-
 		return extension;
 	}
 	
@@ -148,8 +146,10 @@ public class GlobalFunctions {
 		
 		System.out.println("Inside format Name");
 		exceptions =DataStored.readExceptions();
-		exceptionsRenamed =DataStored.readExceptionsRenamed();
+		exceptionsRenamed =DataStored.readExceptionsRenamed();		
+		
 		name = name.toLowerCase();
+		name = name.replace(getExtension(name), "");
 		//Remove characters in between [], the are always junk information or complementary.
 		if(name.contains("[")) {
 			if(name.contains("]")) {
@@ -200,7 +200,7 @@ public class GlobalFunctions {
 
 
 		name = isDate(name, mode, item);
-
+					
 		return name;
 
 	}

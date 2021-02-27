@@ -146,6 +146,8 @@ public class MainController {
 	 */
 	public void initialize() {
 		setMode();		
+		SQLiteJDBC.createDatabase();
+		System.out.println(getClass().getResource("Main.fxml"));
 		fillFilterExtention();
 		tooltips();
 		paginationErrorList.setVisible(false);
@@ -1122,7 +1124,10 @@ public class MainController {
 	 */
 	public static Integer statusTMDB(Integer responseBody){
 		System.out.println("ResponseBody : "+responseBody);
+		System.out.println(System.getProperty("user.home"));
 
+		
+		
 		if(responseBody==200){
 			isApiValid = true;
 		}else{

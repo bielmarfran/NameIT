@@ -23,6 +23,7 @@ public class DataStored {
 	
 	static Properties config;
 	private static String keyTmdb="";
+	private static String appFilesPath = System.getProperty("user.home")+"\\AppData\\Local";
 
 	//Create the folder NameIT on user/Document and the Exceptions txt files,properties file.
 	public static void createFiles() {
@@ -35,6 +36,24 @@ public class DataStored {
 		}else{
 			////System.out.println("Sorry couldnt create specified directory");
 		}
+		//------------------------------
+		File f55 = new File(System.getProperty("user.home")+"\\AppData\\Local\\NameIT\\");
+		bool = f55.mkdirs();
+		if(bool){
+			//System.out.println("Directory created successfully");
+		}else{
+			////System.out.println("Sorry couldnt create specified directory");
+		}
+		f55 = new File(System.getProperty("user.home")+"\\AppData\\Local\\NameIT\\Database");
+		bool = f55.mkdirs();
+		if(bool){
+			//System.out.println("Directory created successfully");
+		}else{
+			////System.out.println("Sorry couldnt create specified directory");
+		}
+		
+		
+		//-------------------------
 		//Create exceptions.txt
 		File f = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt");
 		try {

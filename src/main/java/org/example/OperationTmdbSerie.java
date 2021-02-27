@@ -100,6 +100,7 @@ public class OperationTmdbSerie {
 				name = GlobalFunctions.formatName(name, mode, item);
 				if(!name.isEmpty()){
 					System.out.println("After formatName");
+					System.out.println(name);
 				}
 				
 				namesBlocks = name.split(" ");
@@ -115,7 +116,7 @@ public class OperationTmdbSerie {
 						
 					}else{
 						if(controlBreakFile==0){
-							namesBlocks[x] = namesBlocks[x-1]+"%20"+namesBlocks[x];
+							namesBlocks[x] = namesBlocks[x-1]+" "+namesBlocks[x];//%20
 							
 							controlNameBlock =x;
 							if(mode.equals("Movies")) {
@@ -133,7 +134,7 @@ public class OperationTmdbSerie {
 
 			}else {
 				System.out.println("Empty Name");
-				item.setError("01");
+				GlobalFunctions.setItemError(item,"01");
 			}
 
 		}
@@ -151,9 +152,9 @@ public class OperationTmdbSerie {
 		 * @return
 		 */
 		public static String responseSerieId(String responseBody){	
-			System.out.println(responseBody);
+			System.out.println("responseSerieId = "+responseBody);
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
-			System.out.println("Result 234");
+
 			if (returnApi.equals("") &&  !responseBody.isBlank()) {
 				System.out.println("Result");
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
@@ -189,24 +190,23 @@ public class OperationTmdbSerie {
 					queryInfo.setApiResponse(responseBody);
 					DatabaseOperationsTmdb.insertSerie(queryInfo);
 				}else {
+					queryInfo.setValidResponce(false);
+					DatabaseOperationsTmdb.insertSerie(queryInfo);
 					if(size.getAsInt()==0 && item.getOptionsList()==null) {
 						GlobalFunctions.setItemError(item, "09");
-						queryInfo.setValidResponce(false);
-						DatabaseOperationsTmdb.insertSerie(queryInfo);
 					}
 					if(size.getAsInt()>10 && item.getOptionsList()==null) {
 						GlobalFunctions.setItemError(item, "09");
-						queryInfo.setValidResponce(false);
-						DatabaseOperationsTmdb.insertSerie(queryInfo);
-					}
-					if(size.getAsInt()>10) {
-						queryInfo.setValidResponce(false);
-						DatabaseOperationsTmdb.insertSerie(queryInfo);
-
 					}
 				}						
 			}else {
-				item.setError(returnApi.equals("02") ? "02" : "03");
+				if(responseBody.isBlank() && item.getOptionsList()==null) {
+					GlobalFunctions.setItemError(item,"09");
+				}else {
+					item.setError(returnApi.equals("02") ? "02" : "03");
+					//item.setState(3);
+				}
+				System.out.println("Before Insert XXY");
 				queryInfo.setValidResponce(false);
 				DatabaseOperationsTmdb.insertSerie(queryInfo);
 			}
