@@ -1,4 +1,4 @@
-package org.example;
+package com.github.bielmarfran.nameit;
 
 /**
  * This class is used as a starting class to help distribute the application.

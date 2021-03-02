@@ -1,4 +1,4 @@
-package org.example;
+package com.github.bielmarfran.nameit;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
@@ -494,7 +494,7 @@ public class MainController {
 	/**
 	 * This method is called when the user clicks on the rename button, he takes the values stored in renamingList, 
 	 * and checks which ones have valid values for the renaming process. If possible using the methods of 
-	 *  {@link org.example.FileOperations} it makes the process of rename / move the files.
+	 *  {@link com.github.bielmarfran.nameit.FileOperations} it makes the process of rename / move the files.
 	 * @param mouseEvent Click Event
 	 */
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {

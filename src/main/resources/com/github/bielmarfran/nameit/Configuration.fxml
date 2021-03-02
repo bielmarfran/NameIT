@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="531.0" maxWidth="640.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="531.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ConfiguraionController">
+<AnchorPane maxHeight="531.0" maxWidth="640.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="531.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.bielmarfran.nameit.ConfiguraionController">
    <children>
       <Separator layoutX="-2.0" layoutY="60.0" prefHeight="3.0" prefWidth="640.0" />
       <Label layoutX="256.0" layoutY="21.0" text="Configuration">

@@ -1,4 +1,4 @@
-package org.example;
+package com.github.bielmarfran.nameit;
 
 import java.awt.Desktop;
 import java.io.FileInputStream;

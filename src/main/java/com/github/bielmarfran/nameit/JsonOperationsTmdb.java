@@ -1,4 +1,4 @@
-package org.example;
+package com.github.bielmarfran.nameit;
 
 import java.net.URI;
 import java.net.URLEncoder;

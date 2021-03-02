@@ -1,4 +1,4 @@
-package org.example;
+package com.github.bielmarfran.nameit;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

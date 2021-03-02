@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ExceptionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.bielmarfran.nameit.ExceptionController">
    <children>
       <ListView fx:id="listViewExceptions" layoutX="14.0" layoutY="197.0" prefHeight="285.0" prefWidth="253.0" />
       <ListView fx:id="listViewExceptionsRenamed" layoutX="373.0" layoutY="197.0" prefHeight="285.0" prefWidth="253.0" />

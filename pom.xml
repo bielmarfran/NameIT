@@ -2,8 +2,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.example</groupId>
-	<artifactId>NameIT</artifactId>
+	<groupId>com.github.bielmarfran</groupId>
+	<artifactId>nameit</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,7 +51,7 @@
 				<artifactId>javafx-maven-plugin</artifactId>
 				<version>0.0.4</version>
 				<configuration>
-					<mainClass>org.example.AppLauncher</mainClass>
+					<mainClass>ocom.github.bielmarfran.nameit.AppLauncher</mainClass>
 					<release>${maven.compiler.release}</release>				
 					<jlinkImageName>NameIT</jlinkImageName>
                     <launcher>launcher</launcher>
@@ -67,7 +67,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>org.example.AppLauncher</mainClass>
+							<mainClass>com.github.bielmarfran.nameit.AppLauncher</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

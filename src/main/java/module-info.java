@@ -1,4 +1,4 @@
-module org.example {
+module com.github.bielmarfran {
     requires javafx.controls;
     requires javafx.fxml;
 	requires java.prefs;
@@ -10,6 +10,6 @@ module org.example {
 	requires transitive javafx.graphics;
 
 
-    opens org.example to javafx.fxml;
-    exports org.example;
+    opens com.github.bielmarfran.nameit to javafx.fxml;
+    exports com.github.bielmarfran.nameit;
 }
