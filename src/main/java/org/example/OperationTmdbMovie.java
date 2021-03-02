@@ -127,8 +127,8 @@ public class OperationTmdbMovie {
 		 * @return
 		 */
 		public static String responseMovieId(String responseBody){	
-			System.out.println("Inside responseMovieId");
-			System.out.println("responseBody = "+responseBody);
+			//System.out.println("Inside responseMovieId");
+			//System.out.println("responseBody = "+responseBody);
 
 			
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
@@ -138,10 +138,8 @@ public class OperationTmdbMovie {
 				JsonArray y = jsonObject.getAsJsonArray("results");
 
 				if(size.getAsInt()==1) {
-					
-					queryInfo.setValidResponce(true);
-					queryInfo.setApiResponse(responseBody);
-					DatabaseOperationsTmdb.insertMovie(queryInfo);
+					setQueryInfo(true,responseBody);
+				
 					
 					item.setError("");			
 					System.out.println(y.get(0));
@@ -158,24 +156,19 @@ public class OperationTmdbMovie {
 				if(size.getAsInt()<=10 && size.getAsInt()>1 ){
 					item.setOptionsList(responseBody);
 					item.setState(2);
-					queryInfo.setValidResponce(true);
-					queryInfo.setApiResponse(responseBody);
-					DatabaseOperationsTmdb.insertMovie(queryInfo);
+					setQueryInfo(true,responseBody);
 				}else {
 					if(size.getAsInt()==0 && item.getOptionsList()==null) {
 						GlobalFunctions.setItemError(item,"09");
-						queryInfo.setValidResponce(false);
-						DatabaseOperationsTmdb.insertMovie(queryInfo);
+						setQueryInfo(false,responseBody);
 					}
 					if(size.getAsInt()>10 && item.getOptionsList()==null) {
 						GlobalFunctions.setItemError(item,"09");
-						queryInfo.setValidResponce(false);
-						DatabaseOperationsTmdb.insertMovie(queryInfo);
+						setQueryInfo(false,responseBody);
 					}
 					if(size.getAsInt()>10) {
 						GlobalFunctions.setItemError(item,"09");
-						queryInfo.setValidResponce(false);
-						DatabaseOperationsTmdb.insertMovie(queryInfo);
+						setQueryInfo(false,responseBody);
 
 					}
 				}						
@@ -188,8 +181,7 @@ public class OperationTmdbMovie {
 					item.setState(3);
 				}
 
-				queryInfo.setValidResponce(false);
-				DatabaseOperationsTmdb.insertMovie(queryInfo);
+				setQueryInfo(false,responseBody);
 			}
 			
 			return null;
@@ -235,4 +227,18 @@ public class OperationTmdbMovie {
 			
 		}
 
+		public static void setQueryInfo(Boolean validResponse, String responseBody) {
+			if(queryInfo.getQueryFound()==false) {
+				if(validResponse==true) {
+					queryInfo.setValidResponce(true);
+					queryInfo.setApiResponse(responseBody);
+					DatabaseOperationsTmdb.insertMovie(queryInfo);
+				}else {
+					queryInfo.setValidResponce(false);
+					DatabaseOperationsTmdb.insertMovie(queryInfo);
+				}
+			}
+	
+			
+		}
 }

@@ -2,10 +2,29 @@ package org.example;
 
 import java.sql.*;
 
+/**
+ * This class links to the sqllite database that is used by the program.
+ * 
+ * @author bielm
+ *
+ */
 public class SQLiteJDBC {
+	
+	/**
+	 * 
+	 */
 	static Statement stmt = null;
+	
+	/**
+	 * 
+	 */
 	private static String appFilesPath = System.getProperty("user.home")+"\\AppData\\Local\\NameIT\\Database\\NameIT.db";
 	
+	
+	/**
+	 * This method is called every time the program starts and checks whether the database exists,
+	 * if not, it creates a new database Then check if the tables are created if not, create the tables.
+	 */
 	public static void createDatabase( ) {		
 		 Connection connection = null;
 
@@ -47,6 +66,13 @@ public class SQLiteJDBC {
 	       
 	}
 		
+	
+	/**
+	 * This method makes a query select in the database
+	 * 
+	 * @param queryInfo Object used to interact with database.
+	 * @return Return QueryInfo Object 
+	 */
 	public static QueryInfo selectQuery(QueryInfo queryInfo) {		
 		 Connection connection = null;
 
@@ -68,7 +94,7 @@ public class SQLiteJDBC {
 	          ResultSet rs = stmt.executeQuery(sql);
 	          queryInfo.setQueryFound(false);
 	          while ( rs.next() ) {
-	        	  
+	        	  System.out.println("Inside 11");
 	        	  queryInfo.setValidResponce(rs.getInt("validResponce") == 1 ? true : false); 
 	        	  queryInfo.setApiResponse(rs.getString("apiResponse"));
 	        	  queryInfo.setQueryFound(true);
@@ -89,6 +115,12 @@ public class SQLiteJDBC {
 	        
 	}
 	
+	
+	/**
+	 * This method makes an insertion in the database
+	 * 
+	 * @param queryInfo Object used to interact with database.
+	 */
 	public static void insertQuery(QueryInfo queryInfo) {	
 
 		 Connection connection = null;

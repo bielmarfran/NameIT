@@ -465,14 +465,15 @@ public class MainController {
 	        Stage stage = new Stage();	
 	        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
 	        stage.getIcons().add(image);
+	        stage.setMaxHeight(590);
+	        stage.setMaxWidth(630);
+	        stage.setMinHeight(590);
+	        stage.setMinWidth(630);
 	        stage.setTitle("Configuration");
 	        stage.setScene(scene);
-	        //stage.setOnHidden(e -> ConfiguraionController.shutdown());
 	        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-
 	    		@Override
 	    		public void handle(WindowEvent WINDOW_CLOSE_REQUEST) {
-	    			//stage.hide();
 	    			ConfiguraionController.shutdown();
 	    		}
 	    	});
@@ -608,6 +609,10 @@ public class MainController {
 	        Stage stage = new Stage();	
 	        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
 	        stage.getIcons().add(image);
+	        stage.setMaxHeight(540.0);
+	        stage.setMaxWidth(660.0);
+	        stage.setMinHeight(540.0);
+	        stage.setMinWidth(660.0);
 	        stage.setTitle("Exceptions List");
 	        stage.setScene(scene);
 	        stage.showAndWait();
@@ -634,6 +639,10 @@ public class MainController {
 			Scene scene = new Scene(parent);
 	        Stage stage = new Stage();	
 	        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
+	        stage.setMaxHeight(540.0);
+	        stage.setMaxWidth(660.0);
+	        stage.setMinHeight(540.0);
+	        stage.setMinWidth(660.0);
 	        stage.getIcons().add(image);
 	        stage.setTitle("About");
 	        stage.setScene(scene);
@@ -714,7 +723,7 @@ public class MainController {
 	 * Red   : Critical error, it was not possible to find the info and there are no possible alternatives.
 	 */
 	public void paintListView(){
-		System.out.println(listViewFiles.getItems().size());
+		//System.out.println(listViewFiles.getItems().size());
 		if(listViewFiles.getItems().size()>=1) {
 			listViewFiles.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 				@Override
@@ -756,11 +765,11 @@ public class MainController {
 										}
 									}
 									if(color_control==0){
-										System.out.println("Verde 1");
+										//System.out.println("Verde 1");
 										setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
 									}
 								} else {
-									System.out.println("Verde 2");
+									//System.out.println("Verde 2");
 									setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
 								}
 								 
@@ -1014,8 +1023,25 @@ public class MainController {
 										animation = true;
 									}
 								}
-								String value ="Title - "+op.get("name").getAsString() + " | Year - "+op.get("first_air_date").getAsString()+ " | ID - "+op.get("id").getAsInt()+ " | Animation - "+animation.toString()+" |";
-								Text.getItems().add(value);
+								try {
+			
+									String name;
+									name = getValue(op,"name") == true ? op.get("name").getAsString() : "Error 05";
+									String year;
+									year = getValue(op,"first_air_date") == true ? op.get("first_air_date").getAsString() : "Error 05";
+									String id;
+									id = getValue(op,"id") == true ? op.get("id").getAsString() : "Error 05";
+	
+									
+									String value ="Title - "+name+ " | Year - "+year+ " | ID - "+id+ " | Animation - "+animation.toString()+" |";
+									if(!value.contains("Error 05")) {
+										Text.getItems().add(value);
+									}
+									
+								} catch (Exception e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 							}	
 						}
 						
@@ -1080,6 +1106,23 @@ public class MainController {
 		});
 	}
 	
+	/**
+	 * This method, checks if the Json item is null.
+	 * 
+	 * @param op Json Element
+	 * @param value Json attribute
+	 * @return True if the values is not null, False is the value is null
+	 */
+	public boolean getValue(JsonObject op,String value) {
+		
+		if(op.get(value) ==null || op.get(value).isJsonNull()) {
+			return false;
+		}
+		
+		return true;
+		
+	}
+	
 	
 	/**
 	 * This method checks whether the error code is referring to the season / episode values.
@@ -1088,7 +1131,7 @@ public class MainController {
 	 * @returnTrue if the error is related to the season / episode.
 	 * False when not related.
 	 */
-	public boolean checkErrorEpisodeSeason(String error) {
+ 	public boolean checkErrorEpisodeSeason(String error) {
 		if(error !=null){
 			if(error.equals("04")|| error.equals("05")|| error.equals("06")|| error.equals("07")) {
 				return true;

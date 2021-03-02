@@ -89,8 +89,10 @@ public class JsonOperationsTmdb {
 		}
 		System.out.println("Request Before Send - "+uri);
 		
-		QueryInfo queryInfo= new QueryInfo();
+		QueryInfo queryInfo = new QueryInfo();
 		setQuery(queryInfo, nameEncoded, language, year, "Movies");
+		
+		
 		if(!DatabaseOperationsTmdb.selectMovie(queryInfo)) {
 
 			System.out.println("Info API");
@@ -397,21 +399,5 @@ public class JsonOperationsTmdb {
 		
 	}
 
-	public String customEncoder(String url) {
-		url = url.replace(" ", "%20");
-		/*
-		 * 
-		 */
-		url = url.replace("%", "%25");
-		url = url.replace("$", "%24");
-		url = url.replace("#", "%23");
-		url = url.replace("&", "%26");
-		url = url.replace("!", "%21");
-		url = url.replace("@", "%40");
-		url = url.replace("{", "%7B");
-		url = url.replace("}", "%7D");
-	
-		return url;
-		
-	}
+
 }

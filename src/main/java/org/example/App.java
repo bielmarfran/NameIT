@@ -23,6 +23,10 @@ public class App extends Application {
         scene = new Scene(loadFXML("Main"));
         Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
         stage.getIcons().add(image);
+        stage.setMaxHeight(820.0);
+        stage.setMaxWidth(920.0);
+        stage.setMinHeight(820.0);
+        stage.setMinWidth(920.0);
         stage.setScene(scene);
         stage.setTitle("NameIT");
         stage.show();

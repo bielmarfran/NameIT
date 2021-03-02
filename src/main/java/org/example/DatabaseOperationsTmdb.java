@@ -7,17 +7,20 @@ package org.example;
  */
 public class DatabaseOperationsTmdb {
 
-	
+	/**
+	 * 
+	 * @param queryInfo
+	 * @return
+\
+	 */
 	public static Boolean selectMovie(QueryInfo queryInfo) {
 		QueryInfo queyInfo = new  QueryInfo();
 		queryInfo.setTableDB("MoviesQueries");
 		queyInfo = SQLiteJDBC.selectQuery(queryInfo);
-		
 		if(queyInfo.getQueryFound() && queyInfo.getQueryFound()!=null) {
-			//System.out.println("Encontrou Query");
-			if(queyInfo.getValidResponce()) {
+			if(queyInfo.getValidResponce() && queyInfo.getValidResponce()!=null ) {
 				//System.out.println(queyInfo.getApiResponse());
-				System.out.println("INFO DATABASE");
+				System.out.println("INFO DATABASE --------<---------<");
 				OperationTmdbMovie.responseMovieId(queyInfo.getApiResponse());
 				return true;
 			}else {
@@ -30,6 +33,12 @@ public class DatabaseOperationsTmdb {
 		}
 	}
 	
+	
+	/**
+	 * 
+	 * @param queryInfo
+	 * @return
+	 */
 	public static Boolean insertMovie(QueryInfo queryInfo) {
 		queryInfo.setTableDB("MoviesQueries");
 		SQLiteJDBC.insertQuery(queryInfo);
@@ -37,6 +46,13 @@ public class DatabaseOperationsTmdb {
 		
 	}
 
+	
+	/**
+	 * 
+	 * @param queryInfo
+	 * @param table
+	 * @return
+	 */
 	public static Boolean selectSerie(QueryInfo queryInfo, String table) {
 		QueryInfo queyInfo = new  QueryInfo();
 		queryInfo.setTableDB(table);
@@ -96,6 +112,12 @@ public class DatabaseOperationsTmdb {
 		}
 	}
 	
+	
+	/**
+	 * 
+	 * @param queryInfo
+	 * @return
+	 */
 	public static Boolean insertSerie(QueryInfo queryInfo) {
 		queryInfo.setTableDB("SeriesQueries");
 		SQLiteJDBC.insertQuery(queryInfo);
@@ -103,6 +125,12 @@ public class DatabaseOperationsTmdb {
 		
 	}
 	
+	
+	/**
+	 * 
+	 * @param queryInfo
+	 * @return
+	 */
 	public static Boolean insertSerieInfo(QueryInfo queryInfo) {
 		queryInfo.setTableDB("SeriesQueriesInfo");
 		SQLiteJDBC.insertQuery(queryInfo);
@@ -110,6 +138,12 @@ public class DatabaseOperationsTmdb {
 		
 	}
 	
+	
+	/**
+	 * 
+	 * @param queryInfo
+	 * @return
+	 */
 	public static Boolean insertSeriesKeywords(QueryInfo queryInfo) {
 		queryInfo.setTableDB("SeriesKeywords");
 		SQLiteJDBC.insertQuery(queryInfo);
@@ -117,6 +151,12 @@ public class DatabaseOperationsTmdb {
 		
 	}
 	
+	
+	/**
+	 * 
+	 * @param queryInfo
+	 * @return
+	 */
 	public static Boolean insertSeriesEpisodeGroups(QueryInfo queryInfo) {
 		queryInfo.setTableDB("SeriesEpisodeGroups");
 		SQLiteJDBC.insertQuery(queryInfo);
@@ -124,6 +164,12 @@ public class DatabaseOperationsTmdb {
 		
 	}
 	
+	
+	/**
+	 * 
+	 * @param queryInfo
+	 * @return
+	 */
 	public static Boolean insertSeriesContentEpisodeGroups(QueryInfo queryInfo) {
 		queryInfo.setTableDB("SeriesContentEpisodeGroups");
 		SQLiteJDBC.insertQuery(queryInfo);

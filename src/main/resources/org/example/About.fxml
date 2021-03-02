@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.AboutController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.AboutController">
    <children>
       <Separator layoutX="-2.0" layoutY="60.0" prefHeight="3.0" prefWidth="640.0" />
       <Label layoutX="291.0" layoutY="21.0" text="About ">
@@ -17,14 +17,14 @@
          </font>
       </Label>
       <Label layoutX="19.0" layoutY="101.0" text="NameIT-Simple-Renamer is open source project and  is is released under the GNU GENERAL PUBLIC LICENSE, v3.0" />
-      <Label layoutX="68.0" layoutY="291.0" text="This product uses the TMDb API&#10; but is not endorsed or certified by TMDb." />
-      <ImageView fx:id="ImageViewTMDB" fitHeight="153.0" fitWidth="200.0" layoutX="403.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true">
+      <Label layoutX="14.0" layoutY="270.0" prefHeight="34.0" prefWidth="399.0" text="This product uses the TMDb API but is not endorsed or certified by TMDb." />
+      <ImageView fx:id="ImageViewTMDB" fitHeight="138.0" fitWidth="178.0" layoutX="437.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../../../Documents/NameIT/tmdblogo.png" />
          </image>
       </ImageView>
-      <Hyperlink layoutX="209.0" layoutY="376.0" onAction="#hyperlinkTMDB" text="https://www.themoviedb.org/" />
-      <Label layoutX="25.0" layoutY="379.0" text="Visit and show your support at :" />
+      <Hyperlink layoutX="223.0" layoutY="350.0" onAction="#hyperlinkTMDB" text="https://www.themoviedb.org/" />
+      <Label layoutX="39.0" layoutY="353.0" text="Visit and show your support at :" />
       <Label layoutX="14.0" layoutY="147.0" text="Learn more about the project and post your feedback at :&#10; " />
       <Hyperlink fx:id="hyperlinkGIT" layoutX="320.0" layoutY="147.0" onAction="#hyperlinkGIT" text="https://github.com/bielmarfran/NameIT-Simple-Renamer" />
    </children>

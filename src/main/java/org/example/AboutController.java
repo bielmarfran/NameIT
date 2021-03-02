@@ -22,9 +22,7 @@ public class AboutController {
 	
 	@FXML
 	private ImageView ImageViewTMDB;
-	@FXML
 
-	private ImageView ImageViewTVDB;
 
 
 	/**
