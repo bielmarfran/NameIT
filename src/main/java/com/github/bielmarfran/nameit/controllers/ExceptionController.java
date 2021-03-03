@@ -190,7 +190,7 @@ public class ExceptionController {
 		Scanner z;
 
 		try {
-			z = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptionsRenamed.txt"));
+			z = new Scanner(new File(DataStored.appFilesPath+"exceptionsRenamed.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (z.hasNext()){
 				exceptionsRenamed.add(z.nextLine());
@@ -207,7 +207,6 @@ public class ExceptionController {
 
 	}
 	
-	//Save the values to the Txt Files.
 	/**
 	 * This method saves the current stored values in exceptions/exceptionsRenamed 
 	 * for their respective files.

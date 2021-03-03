@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import javafx.util.Callback;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -157,7 +159,39 @@ public class MainController {
 		listViewErrorText.setVisible(false);
 		buttonMatchInfo.setVisible(false);
 		paintCircle();
-
+		
+		listViewFiles.getSelectionModel().selectedItemProperty().addListener((ChangeListener<? super String>) new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				ArrayList<String> ex = new ArrayList<>();
+				for (int i = 0; i < renamingList.size(); i++) {
+					if (renamingList.get(i).getState()!=1) {
+						ex.add(renamingList.get(i).getOriginalName());
+					}
+				}	
+				//GlobalFunctions.alertCallerWarning(""+ex.size(), oldValue, newValue);
+				int index=0;
+				Boolean found =false;
+				for (int i = 0; i < ex.size(); i++) {
+					if (ex.get(i).equals(newValue)) {
+						index=i;
+						found=true;
+					}
+				}
+			
+				if (found) {
+					if(!paginationErrorList.isDisable()) {
+						try {
+							//System.out.println(index);
+							paginationErrorList.setCurrentPageIndex(index);
+						} catch (Exception e) {
+							// TODO: handle exception
+						}		
+					}
+				}
+				
+			}
+		});
 	}
 
 	
