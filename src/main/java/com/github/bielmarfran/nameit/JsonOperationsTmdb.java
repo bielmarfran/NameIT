@@ -8,6 +8,11 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
+import com.github.bielmarfran.nameit.controllers.MainController;
+import com.github.bielmarfran.nameit.dao.DataStored;
+import com.github.bielmarfran.nameit.dao.DatabaseOperationsTmdb;
+import com.github.bielmarfran.nameit.dao.QueryInfo;
+
 /**
  * This class  stores the methods that deal with https request methods for the TMDB API
  * 

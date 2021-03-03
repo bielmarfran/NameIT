@@ -1,4 +1,4 @@
-package com.github.bielmarfran.nameit;
+package com.github.bielmarfran.nameit.dao;
 
 import java.sql.*;
 
@@ -10,15 +10,9 @@ import java.sql.*;
  */
 public class SQLiteJDBC {
 	
-	/**
-	 * 
-	 */
+
 	static Statement stmt = null;
-	
-	/**
-	 * 
-	 */
-	private static String appFilesPath = System.getProperty("user.home")+"\\AppData\\Local\\NameIT\\Database\\NameIT.db";
+	private static String databasePath = DataStored.appFilesPath+"Database\\NameIT.db";
 	
 	
 	/**
@@ -31,7 +25,7 @@ public class SQLiteJDBC {
 	        try
 	        {
 	          // create a database connection
-	          connection = DriverManager.getConnection("jdbc:sqlite:"+appFilesPath);
+	          connection = DriverManager.getConnection("jdbc:sqlite:"+databasePath);
 	          Statement statement = connection.createStatement();
 	          statement.setQueryTimeout(30);  // set timeout to 30 sec.  
 	          String[] sql = {"Create table IF NOT EXISTS MoviesQueries (queryValue  varchar(100)  NOT NULL , year int NOT NULL, language varchar(10) NOT NULL, \r\n"
@@ -79,7 +73,7 @@ public class SQLiteJDBC {
 	        try
 	        {
 	          // create a database connection
-	        	connection = DriverManager.getConnection("jdbc:sqlite:"+appFilesPath);
+	        	connection = DriverManager.getConnection("jdbc:sqlite:"+databasePath);
 	          Statement statement = connection.createStatement();
 	          statement.setQueryTimeout(30);  // set timeout to 30 sec.  
 	          
@@ -128,7 +122,7 @@ public class SQLiteJDBC {
 	      
 	      try {
 	         Class.forName("org.sqlite.JDBC");
-	         connection = DriverManager.getConnection("jdbc:sqlite:"+appFilesPath);
+	         connection = DriverManager.getConnection("jdbc:sqlite:"+databasePath);
 	         connection.setAutoCommit(false);
 	         System.out.println("Opened database successfully");
 

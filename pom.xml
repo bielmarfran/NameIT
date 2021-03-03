@@ -10,17 +10,18 @@
 		<maven.compiler.source>15</maven.compiler.source>
 		<maven.compiler.target>15</maven.compiler.target>
 		<maven.compiler.release>15</maven.compiler.release>
+		<javafx.version>15.0.1</javafx.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>15</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>15</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>

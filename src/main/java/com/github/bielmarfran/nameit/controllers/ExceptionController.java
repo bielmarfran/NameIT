@@ -1,4 +1,8 @@
-package com.github.bielmarfran.nameit;
+package com.github.bielmarfran.nameit.controllers;
+
+
+import com.github.bielmarfran.nameit.GlobalFunctions;
+import com.github.bielmarfran.nameit.dao.DataStored;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -124,6 +128,7 @@ public class ExceptionController {
 			listViewExceptionsRenamed.getItems().remove(select);
 
 		}else {
+			
 			GlobalFunctions.alertCallerWarning("Error", "Unselected item", "Select an item from the before list");
 		}
 		try {
@@ -168,7 +173,7 @@ public class ExceptionController {
 
 		Scanner s;
 		try {
-			s = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt"));
+			s = new Scanner(new File(DataStored.appFilesPath+"exceptions.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (s.hasNext()){
 				exceptions.add(s.nextLine());
@@ -211,7 +216,7 @@ public class ExceptionController {
 	 */
 	public void save() throws FileNotFoundException {
 		//Create a file with the saved values of exceptions.
-		File Fileright = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt");
+		File Fileright = new File(DataStored.appFilesPath+"exceptions.txt");
 		PrintWriter  output = new PrintWriter(Fileright);
 		for(int x=0;x<exceptions.size();x++) {
 			output.println(exceptions.get(x));  				    
@@ -219,7 +224,7 @@ public class ExceptionController {
 		output.close();
 
 		//Create a file with the saved values of exceptionsRenamed.
-		File Fileleft = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptionsRenamed.txt");
+		File Fileleft = new File(DataStored.appFilesPath+"exceptionsRenamed.txt");
 		PrintWriter  output2 = new PrintWriter(Fileleft);
 		for(int x=0;x<exceptionsRenamed.size();x++) {
 			output2.println(exceptionsRenamed.get(x));  				    

@@ -1,6 +1,9 @@
-package com.github.bielmarfran.nameit;
+package com.github.bielmarfran.nameit.dao;
 
 import java.io.File;
+
+import com.github.bielmarfran.nameit.GlobalFunctions;
+import com.github.bielmarfran.nameit.Item;
 
 
 /**

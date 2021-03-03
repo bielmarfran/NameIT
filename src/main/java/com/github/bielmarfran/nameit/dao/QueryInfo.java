@@ -1,4 +1,4 @@
-package com.github.bielmarfran.nameit;
+package com.github.bielmarfran.nameit.dao;
 
 /**
  * 

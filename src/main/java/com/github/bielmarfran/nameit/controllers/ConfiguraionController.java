@@ -1,7 +1,11 @@
-package com.github.bielmarfran.nameit;
+package com.github.bielmarfran.nameit.controllers;
 
 import java.util.ArrayList;
 import java.util.Optional;
+
+import com.github.bielmarfran.nameit.GlobalFunctions;
+import com.github.bielmarfran.nameit.dao.DataStored;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;

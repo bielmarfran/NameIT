@@ -2,6 +2,9 @@ package com.github.bielmarfran.nameit;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import com.github.bielmarfran.nameit.dao.DatabaseOperationsTmdb;
+import com.github.bielmarfran.nameit.dao.QueryInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

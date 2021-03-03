@@ -6,6 +6,8 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.github.bielmarfran.nameit.dao.DataStored;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 /**

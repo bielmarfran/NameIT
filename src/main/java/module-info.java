@@ -11,5 +11,6 @@ module com.github.bielmarfran {
 
 
     opens com.github.bielmarfran.nameit to javafx.fxml;
+    opens com.github.bielmarfran.nameit.controllers to javafx.fxml;
     exports com.github.bielmarfran.nameit;
 }

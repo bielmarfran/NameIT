@@ -1,4 +1,4 @@
-package com.github.bielmarfran.nameit;
+package com.github.bielmarfran.nameit.controllers;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
@@ -39,6 +39,10 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+
+import com.github.bielmarfran.nameit.*;
+import com.github.bielmarfran.nameit.dao.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -147,7 +151,6 @@ public class MainController {
 	public void initialize() {
 		setMode();		
 		SQLiteJDBC.createDatabase();
-		System.out.println(getClass().getResource("Main.fxml"));
 		fillFilterExtention();
 		tooltips();
 		paginationErrorList.setVisible(false);
@@ -155,9 +158,9 @@ public class MainController {
 		buttonMatchInfo.setVisible(false);
 		paintCircle();
 
-
 	}
 
+	
 	/**
 	 * This method get the store value in the properties file referring to the mode
 	 * and adjust the interface according to the value
@@ -188,6 +191,7 @@ public class MainController {
 	/**
 	 * This method deals with a drag event on the listViewFiles, 
 	 * which is the list where the user drops the files.
+	 * 
 	 * @param dragEvent 
 	 */
 	public void handleDragOverListView(DragEvent dragEvent) {
@@ -202,6 +206,7 @@ public class MainController {
 	 * 	First fill the interface, in this case listViewFiles with the names of the files.
 	 * 	Second it stores the created <Item> Objects in an ArrayList, which store various 
 	 * information about the files and are used throughout the program.
+	 * 
 	 * @param dragEvent
 	 */
 	public void handleDropListView(DragEvent dragEvent) {
@@ -354,6 +359,7 @@ public class MainController {
 	
 	/**
 	 * This method check is @param is greater than 0.
+	 * 
 	 * @param size Value to be analyzed
 	 * @return True if the value is  less than 0, 
 	 * False if is greater than 0.
@@ -457,7 +463,7 @@ public class MainController {
 	 * @param mouseEvent Click Event
 	 */
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
-		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Configuration.fxml"));
+		 FXMLLoader loader = new FXMLLoader(App.class.getResource("Configuration.fxml"));
 		 Parent parent;
 		try {
 			parent = loader.load();
@@ -494,7 +500,8 @@ public class MainController {
 	/**
 	 * This method is called when the user clicks on the rename button, he takes the values stored in renamingList, 
 	 * and checks which ones have valid values for the renaming process. If possible using the methods of 
-	 *  {@link com.github.bielmarfran.nameit.FileOperations} it makes the process of rename / move the files.
+	 *  {@link com.github.bielmarfran.nameit.dao.FileOperations} it makes the process of rename / move the files.
+	 *  
 	 * @param mouseEvent Click Event
 	 */
 	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
@@ -529,6 +536,7 @@ public class MainController {
 	/**
 	 * This method is called when the user clicks on the clear button, it cleans up the interface elements
 	 * using the method {@link clearAll()}.
+	 * 
 	 * @param actionEvent
 	 */
 	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
@@ -553,6 +561,7 @@ public class MainController {
 	/**
 	 * This method is called when the user select the check box folder, 
 	 * Calling the {@link checkBoxFolderAction()} for its actions.
+	 * 
 	 * @param actionEvent Click Event
 	 */
 	public void checkBoxFolder(javafx.event.ActionEvent actionEvent) {
@@ -598,10 +607,11 @@ public class MainController {
 	
 	/**
 	 * This method is called when the user clicks on the Exceptions Menu button, he opens the Exceptions page.
+	 * 
 	 * @param mouseEvent Click Event
 	 */
 	public void buttonExceptions(javafx.scene.input.MouseEvent mouseEvent) {
-		 FXMLLoader loader = new FXMLLoader(getClass().getResource("Exception.fxml"));
+		 FXMLLoader loader = new FXMLLoader(App.class.getResource("Exception.fxml"));
 		 Parent parent;
 		try {
 			parent = loader.load();
@@ -629,10 +639,11 @@ public class MainController {
 	
 	/**
 	 * This method is called when the user clicks on the About Menu button, he opens the About page.
+	 * 
 	 * @param mouseEvent Click Event
 	 */
 	public void showAbout(javafx.scene.input.MouseEvent mouseEvent) {
-		 FXMLLoader loader = new FXMLLoader(getClass().getResource("About.fxml"));
+		 FXMLLoader loader = new FXMLLoader(App.class.getResource("About.fxml"));
 		 Parent parent;
 		try {
 			parent = loader.load();

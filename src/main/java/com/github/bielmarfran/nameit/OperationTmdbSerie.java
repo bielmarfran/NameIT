@@ -2,6 +2,10 @@ package com.github.bielmarfran.nameit;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import com.github.bielmarfran.nameit.dao.DataStored;
+import com.github.bielmarfran.nameit.dao.DatabaseOperationsTmdb;
+import com.github.bielmarfran.nameit.dao.QueryInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -144,12 +148,12 @@ public class OperationTmdbSerie {
 		 * This method receives the response from the API, from the request made in 
 		 * {@linkplain org.exemple.JsonOperationsTmdb.getSearchSerie()} 
 		 * If there is a single series as an API response, its data is passed to the
-		 * Object, for the final name of the files to be built.If there are up to 5
-		 * series in the API response, your data is stored to be shown on the Interface 
-		 * as possible responses, which the user can choose.
+		 * Object, for the final name of the files to be built.
+		 * If there are up to 5 series in the API response, your data is stored
+		 * to be shown on the Interface as possible responses, which the user can choose.
 		 * 
 		 * @param responseBody  Response from the API
-		 * @return
+		 * @return Null
 		 */
 		public static String responseSerieId(String responseBody){	
 			System.out.println("responseSerieId = "+responseBody);
@@ -501,7 +505,7 @@ public class OperationTmdbSerie {
 		 *  Analyze the answer, looking for the alternative group of episodes in absolute order.
 		 *  
 		 * @param responseBody  Response from the API
-		 * @return
+		 * @return Null
 		 */
 		public static String responseSerieEpisodeGroups(String responseBody){
 			System.out.println("--responseSerieEpisodeGroups--");
@@ -536,7 +540,7 @@ public class OperationTmdbSerie {
 		 * will find the correct values.
 		 * 
 		 * @param responseBody Response from the API
-		 * @return
+		 * @return Null
 		 */
 		public static String responseContentEpisodeGroups(String responseBody){
 			System.out.println("--responseContentEpisodeGroups--");
@@ -689,9 +693,8 @@ public class OperationTmdbSerie {
 		 * This method receives the response of the request made in 
 		 * {@link org.example.JsonOperationsTmdb.getContentEpisodeGroups()}
 		 *
-		 * 
 		 * @param responseBody  Response from the API
-		 * @return
+		 * @return Null
 		 */
 		public static String responseFinalSerie(String responseBody){
 
@@ -732,7 +735,7 @@ public class OperationTmdbSerie {
 		 * and check that in the keyword ids, there is the "anime" id.
 		 * 
 		 * @param responseBody  Response from the API
-		 * @return
+		 * @return Null
 		 */
 		public static String checkAnime(String responseBody){
 			System.out.println("--checkAnime--");

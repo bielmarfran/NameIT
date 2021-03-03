@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.github.bielmarfran.nameit.dao.DataStored;
+
 /**
  * JavaFX App Page
  */

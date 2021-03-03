@@ -1,4 +1,4 @@
-package com.github.bielmarfran.nameit;
+package com.github.bielmarfran.nameit.dao;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.prefs.Preferences;
+
+import com.github.bielmarfran.nameit.controllers.MainController;
 
 /**
  *<h1>Data Stored</h1>
@@ -23,13 +25,18 @@ public class DataStored {
 	
 	static Properties config;
 	private static String keyTmdb="";
-	private static String appFilesPath = System.getProperty("user.home")+"\\AppData\\Local";
+	public final static String appFilesPath = System.getProperty("user.home")+"\\AppData\\Local\\NameIT\\";
 
-	//Create the folder NameIT on user/Document and the Exceptions txt files,properties file.
+
+	/**
+	 * This method is called every when the program is started, it checks if the folder where 
+	 * the program stores its files, is created together with the files used by the program, 
+	 * if not, it creates the folder structure and the necessary files.
+	 */
 	public static void createFiles() {
 
 		//Create the NameIT folder
-		File f0 = new File(System.getProperty("user.home")+"\\Documents\\NameIT");
+		File f0 = new File(appFilesPath);
 		boolean bool = f0.mkdirs();
 		if(bool){
 			//System.out.println("Directory created successfully");
@@ -37,14 +44,14 @@ public class DataStored {
 			////System.out.println("Sorry couldnt create specified directory");
 		}
 		//------------------------------
-		File f55 = new File(System.getProperty("user.home")+"\\AppData\\Local\\NameIT\\");
+		File f55 = new File(appFilesPath);
 		bool = f55.mkdirs();
 		if(bool){
 			//System.out.println("Directory created successfully");
 		}else{
 			////System.out.println("Sorry couldnt create specified directory");
 		}
-		f55 = new File(System.getProperty("user.home")+"\\AppData\\Local\\NameIT\\Database");
+		f55 = new File(appFilesPath+"\\Database");
 		bool = f55.mkdirs();
 		if(bool){
 			//System.out.println("Directory created successfully");
@@ -55,7 +62,7 @@ public class DataStored {
 		
 		//-------------------------
 		//Create exceptions.txt
-		File f = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt");
+		File f = new File(appFilesPath+"exceptions.txt");
 		try {
 			if(f.createNewFile()) {
 
@@ -68,7 +75,7 @@ public class DataStored {
 		}
 
 		//Create exceptionsRenamed.txt
-		File f2 = new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptionsRenamed.txt");
+		File f2 = new File(appFilesPath+"exceptionsRenamed.txt");
 		try {
 			if(f2.createNewFile()) {
 
@@ -87,7 +94,7 @@ public class DataStored {
 		FileInputStream fis;
 
 		try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -120,9 +127,15 @@ public class DataStored {
 		}else {
 
 		}
+		if(config.getProperty("Anime") ==null){
+			config.setProperty("Anime", "true");
+
+		}else {
+
+		}
 
 		try {
-			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+			config.store(new FileOutputStream(appFilesPath+"config.properties"), null);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -144,7 +157,7 @@ public class DataStored {
     	ArrayList<String> exceptions = new ArrayList<String>();
     	Scanner s;
 		try {
-			s = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptions.txt"));
+			s = new Scanner(new File(appFilesPath+"exceptions.txt"));
 			
 			while (s.hasNext()){
 				exceptions.add(s.nextLine());
@@ -175,7 +188,7 @@ public class DataStored {
     	Scanner z;
 		
 		try {
-			z = new Scanner(new File(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"exceptionsRenamed.txt"));
+			z = new Scanner(new File(appFilesPath+"exceptionsRenamed.txt"));
 			//ArrayList<String> list = new ArrayList<String>();
 			while (z.hasNext()){
 				exceptionsRenamed.add(z.nextLine());
@@ -203,7 +216,7 @@ public class DataStored {
     	config = new Properties();
     	FileInputStream fis;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -231,7 +244,7 @@ public class DataStored {
     	FileInputStream fis;
     	//FileOutputStream fisout;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -266,7 +279,7 @@ public class DataStored {
     	config = new Properties();
     	FileInputStream fis;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			////System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
@@ -294,7 +307,7 @@ public class DataStored {
     	FileInputStream fis;
     	//FileOutputStream fisout;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -329,7 +342,7 @@ public class DataStored {
     	config = new Properties();
     	FileInputStream fis;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			////System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
@@ -357,7 +370,7 @@ public class DataStored {
     	FileInputStream fis;
     	//FileOutputStream fisout;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -390,7 +403,7 @@ public class DataStored {
     	config = new Properties();
     	FileInputStream fis;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			////System.out.println(System.getProperty("user.dir")+"\\Documents\\NameIT\\"+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
@@ -420,7 +433,7 @@ public class DataStored {
     	FileInputStream fis;
     	//FileOutputStream fisout;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -454,7 +467,7 @@ public class DataStored {
     	config = new Properties();
     	FileInputStream fis;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -481,7 +494,7 @@ public class DataStored {
     	FileInputStream fis;
     	//FileOutputStream fisout;
     	try {
-			fis = new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties");
+			fis = new FileInputStream(appFilesPath+"config.properties");
 			config.load(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -494,7 +507,7 @@ public class DataStored {
     	//config.remove("Language");
     	config.setProperty("Anime", anime);
     	try {
-			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+			config.store(new FileOutputStream(appFilesPath+"config.properties"), null);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,4 +1,7 @@
-package com.github.bielmarfran.nameit;
+package com.github.bielmarfran.nameit.dao;
+
+import com.github.bielmarfran.nameit.OperationTmdbMovie;
+import com.github.bielmarfran.nameit.OperationTmdbSerie;
 
 /**
  * 
