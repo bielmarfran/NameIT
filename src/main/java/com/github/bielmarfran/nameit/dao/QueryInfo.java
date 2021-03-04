@@ -1,6 +1,8 @@
 package com.github.bielmarfran.nameit.dao;
 
 /**
+ * This class is used to work with the Database, storing the information used in it, 
+ * and other auxiliary information to help with the logic of interacting with the DB.
  * 
  * @author bielm
  *
@@ -9,6 +11,7 @@ package com.github.bielmarfran.nameit.dao;
 public class QueryInfo {
 
 	/**
+	* String value which stores the query value. 
 	* 
 	* @HasGetter
 	* @HasSetter
@@ -17,6 +20,7 @@ public class QueryInfo {
 	
 	
 	/**
+	* Integer value that represent the year of item "YYYY" format.
 	* 
 	* @HasGetter
 	* @HasSetter
@@ -25,6 +29,8 @@ public class QueryInfo {
 	
 	
 	/**
+	* which stores the order language in the format recognized by the API.
+	* Example 'en-US'
 	* 
 	* @HasGetter
 	* @HasSetter
@@ -33,6 +39,8 @@ public class QueryInfo {
 	
 	
 	/**
+	* String value that stores the API response, this is in JSON, but 
+	* which is stored in String form to better integrate the program's logic.
 	* 
 	* @HasGetter
 	* @HasSetter
@@ -41,6 +49,8 @@ public class QueryInfo {
 	
 	
 	/**
+	* Boolean value that stores whether the answer is useful or not, 
+	* will speed up the program's logic when the information comes from the DB.
 	* 
 	* @HasGetter
 	* @HasSetter
@@ -49,6 +59,8 @@ public class QueryInfo {
 	
 	
 	/**
+	* Boolean value that indicates, in cases of select instruction whether the 
+	* answer was null or not, accelerates the logic and assists in false-positive cases.
 	* 
 	* @HasGetter
 	* @HasSetter
@@ -57,6 +69,7 @@ public class QueryInfo {
 	
 	
 	/**
+	* String value that indicates which table this information belongs to.
 	* 
 	* @HasGetter
 	* @HasSetter
@@ -64,14 +77,11 @@ public class QueryInfo {
 	private String tableDB;
 	
 
-
 	public QueryInfo() {
 		super();
 
 	}
 	
-
-
 	
 	public String getQueryValue() {
 		return queryValue;

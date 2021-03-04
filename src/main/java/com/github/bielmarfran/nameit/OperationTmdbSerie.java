@@ -168,10 +168,7 @@ public class OperationTmdbSerie {
 				if(size.getAsInt()==1) {
 					item.setError("");
 					
-					queryInfo.setValidResponce(true);
-					queryInfo.setApiResponse(responseBody);
-					DatabaseOperationsTmdb.insertSerie(queryInfo);
-
+					setQueryInfo(true,responseBody,"SeriesQueries");
 					JsonObject x = y.get(0).getAsJsonObject();
 					item.setId(x.get("id").getAsInt());
 					item.setName(x.get("name").getAsString());		
@@ -190,12 +187,9 @@ public class OperationTmdbSerie {
 				if(size.getAsInt()<=10 && size.getAsInt()>1 ){
 					item.setOptionsList(responseBody);
 					item.setState(2);
-					queryInfo.setValidResponce(true);
-					queryInfo.setApiResponse(responseBody);
-					DatabaseOperationsTmdb.insertSerie(queryInfo);
+					setQueryInfo(true,responseBody,"SeriesQueries");
 				}else {
-					queryInfo.setValidResponce(false);
-					DatabaseOperationsTmdb.insertSerie(queryInfo);
+					setQueryInfo(false,responseBody,"SeriesQueries");
 					if(size.getAsInt()==0 && item.getOptionsList()==null) {
 						GlobalFunctions.setItemError(item, "09");
 					}
@@ -211,8 +205,7 @@ public class OperationTmdbSerie {
 					//item.setState(3);
 				}
 				System.out.println("Before Insert XXY");
-				queryInfo.setValidResponce(false);
-				DatabaseOperationsTmdb.insertSerie(queryInfo);
+				setQueryInfo(false,responseBody,"SeriesQueries");
 			}
 			return null;
 		}
@@ -516,9 +509,8 @@ public class OperationTmdbSerie {
 				item.setState(3);
 				
 			}else{
-				queryInfo.setValidResponce(true);
-				queryInfo.setApiResponse(responseBody);
-				DatabaseOperationsTmdb.insertSeriesEpisodeGroups(queryInfo);
+				setQueryInfo(true,responseBody,"SeriesEpisodeGroups");
+
 				
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonArray y = jsonObject.getAsJsonArray("results");
@@ -555,7 +547,9 @@ public class OperationTmdbSerie {
 			}else{
 				queryInfo.setValidResponce(true);
 				queryInfo.setApiResponse(responseBody);
-				DatabaseOperationsTmdb.insertSeriesContentEpisodeGroups(queryInfo);
+				setQueryInfo(true,responseBody,"SeriesContentEpisodeGroups");
+
+				
 				
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonArray absolute2 = jsonObject.getAsJsonArray("groups");
@@ -597,14 +591,27 @@ public class OperationTmdbSerie {
 				}
 			}
 			
-
 			
-			JsonObject final_info = absoluteEpisode.get(Integer.valueOf(absolute_episode)-1).getAsJsonObject();
+		
 			
-			item.setEpisode(String.valueOf(final_info.get("episode_number").getAsInt()));
-			item.setSeason(String.valueOf(final_info.get("season_number").getAsInt()));	
-			item.setEpisodeName(final_info.get("name").getAsString());
-			finalName();
+			try {
+				JsonObject final_info = absoluteEpisode.get(Integer.valueOf(absolute_episode)-1).getAsJsonObject();	
+				item.setEpisode(String.valueOf(final_info.get("episode_number").getAsInt()));
+				item.setSeason(String.valueOf(final_info.get("season_number").getAsInt()));	
+				item.setEpisodeName(final_info.get("name").getAsString());
+				finalName();
+			} catch (Exception e) {
+				// TODO: handle exception
+				if(Integer.valueOf(absolute_episode) >= absoluteEpisode.size()) {
+					System.out.println("VALUE ___>>>>>"+absolute_episode);
+					System.out.println("VALUE 2___>>>>>"+absoluteEpisode.size());
+					JsonObject last_episode = absoluteEpisode.get(absoluteEpisode.size()-1).getAsJsonObject();
+					
+					JsonOperationsTmdb.getInfoSerie(item.getId(),String.valueOf(last_episode.get("season_number").getAsInt()),absolute_episode);
+					
+				}
+			}	
+			
 				
 			}
 		
@@ -691,7 +698,7 @@ public class OperationTmdbSerie {
 
 		/**
 		 * This method receives the response of the request made in 
-		 * {@link org.example.JsonOperationsTmdb.getContentEpisodeGroups()}
+		 * {@link com.github.bielmarfran.nameit.JsonOperationsTmdb.getContentEpisodeGroups()}
 		 *
 		 * @param responseBody  Response from the API
 		 * @return Null
@@ -704,9 +711,8 @@ public class OperationTmdbSerie {
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
 			if (returnApi.equals("")) {
 				
-				queryInfo.setValidResponce(true);
-				queryInfo.setApiResponse(responseBody);
-				DatabaseOperationsTmdb.insertSerieInfo(queryInfo);
+
+				setQueryInfo(true,responseBody,"SeriesQueriesInfo");
 				
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonElement episode_number = jsonObject.get("episode_number");
@@ -725,13 +731,19 @@ public class OperationTmdbSerie {
 				item.setState(3);
 			}
 			System.out.println("Exit responseFinalSerie");
-			return null;
+			// Clearing values of queryInfo to avoid insert data into the wrong table.
+			queryInfo.setApiResponse("");
+			queryInfo.setYear(0);
+			queryInfo.setQueryFound(false);
+			queryInfo.setQueryValue("");
+			queryInfo.setLanguage("");
+			return null;			
 		}
 
 		
 		/**
 		 * This method receives the response of the request made in 
-		 * {@link org.example.JsonOperationsTmdb.getSeriesKeywords()}
+		 * {@link com.github.bielmarfran.nameit.JsonOperationsTmdb.getSeriesKeywords()}
 		 * and check that in the keyword ids, there is the "anime" id.
 		 * 
 		 * @param responseBody  Response from the API
@@ -749,9 +761,10 @@ public class OperationTmdbSerie {
 				
 			}else{
 				
-				queryInfo.setValidResponce(true);
-				queryInfo.setApiResponse(responseBody);
-				DatabaseOperationsTmdb.insertSeriesKeywords(queryInfo);
+				//queryInfo.setValidResponce(true);
+				//queryInfo.setApiResponse(responseBody);
+				//DatabaseOperationsTmdb.insertSeriesKeywords(queryInfo);
+				setQueryInfo(true,responseBody,"SeriesKeywords");
 				
 				JsonObject keywords = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonArray absolute = keywords.getAsJsonArray("results");
@@ -864,4 +877,28 @@ public class OperationTmdbSerie {
 			item.setAlternetiveInfo("");
 			item.setOptionsList(null);
 		}
+
+		
+		/**
+		 * 
+		 * 
+		 * @param validResponse
+		 * @param responseBody
+		 * @param table
+		 */
+		public static void setQueryInfo(Boolean validResponse, String responseBody, String table) {
+
+			if(queryInfo.getQueryFound()==false) {
+				if(validResponse==true) {
+					queryInfo.setValidResponce(true);
+					queryInfo.setApiResponse(responseBody);
+					DatabaseOperationsTmdb.insertSerieInformation(queryInfo,table);
+				}else {
+					queryInfo.setValidResponce(false);
+					DatabaseOperationsTmdb.insertSerieInformation(queryInfo,table);
+				}
+			}
+
+		}
+
 }

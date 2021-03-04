@@ -8,7 +8,7 @@ module com.github.bielmarfran {
 	requires transitive com.google.gson;
 	requires jdk.crypto.ec;
 	requires transitive javafx.graphics;
-
+	requires java.sql;
 
     opens com.github.bielmarfran.nameit to javafx.fxml;
     opens com.github.bielmarfran.nameit.controllers to javafx.fxml;

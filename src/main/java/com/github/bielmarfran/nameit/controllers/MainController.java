@@ -503,7 +503,10 @@ public class MainController {
 			parent = loader.load();
 			Scene scene = new Scene(parent);
 	        Stage stage = new Stage();	
-	        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
+	        Image image =  GlobalFunctions.getLogo();
+	        if (image !=null) {
+	        	stage.getIcons().add(image);
+			}
 	        stage.getIcons().add(image);
 	        stage.setMaxHeight(590);
 	        stage.setMaxWidth(630);
@@ -534,7 +537,7 @@ public class MainController {
 	/**
 	 * This method is called when the user clicks on the rename button, he takes the values stored in renamingList, 
 	 * and checks which ones have valid values for the renaming process. If possible using the methods of 
-	 *  {@link com.github.bielmarfran.nameit.dao.FileOperations} it makes the process of rename / move the files.
+	 *  {@link com.github.bielmarfran.nameit.dao.FileOperations()} it makes the process of rename / move the files.
 	 *  
 	 * @param mouseEvent Click Event
 	 */
@@ -651,7 +654,10 @@ public class MainController {
 			parent = loader.load();
 			Scene scene = new Scene(parent);
 	        Stage stage = new Stage();	
-	        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
+	        Image image =  GlobalFunctions.getLogo();
+	        if (image !=null) {
+	        	stage.getIcons().add(image);
+			}
 	        stage.getIcons().add(image);
 	        stage.setMaxHeight(540.0);
 	        stage.setMaxWidth(660.0);
@@ -683,7 +689,10 @@ public class MainController {
 			parent = loader.load();
 			Scene scene = new Scene(parent);
 	        Stage stage = new Stage();	
-	        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
+	        Image image =  GlobalFunctions.getLogo();
+	        if (image !=null) {
+	        	stage.getIcons().add(image);
+			}
 	        stage.setMaxHeight(540.0);
 	        stage.setMaxWidth(660.0);
 	        stage.setMinHeight(540.0);
@@ -1204,7 +1213,7 @@ public class MainController {
 	
 	//Check if the TMDB API is responding correctly.
 	/**
-	 * This method receives the response from the request {@link org.exemple.JsonOperationsTmdb.checkConnection()}
+	 * This method receives the response from the request {@link  com.github.bielmarfran.nameit.JsonOperationsTmdb.checkConnection()}
 	 * and updates the interface according to response.
 	 * 
 	 * @param responseBody Response from the API

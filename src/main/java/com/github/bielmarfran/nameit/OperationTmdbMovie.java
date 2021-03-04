@@ -232,6 +232,7 @@ public class OperationTmdbMovie {
 
 		public static void setQueryInfo(Boolean validResponse, String responseBody) {
 			if(queryInfo.getQueryFound()==false) {
+				
 				if(validResponse==true) {
 					queryInfo.setValidResponce(true);
 					queryInfo.setApiResponse(responseBody);

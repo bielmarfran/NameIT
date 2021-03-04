@@ -4,8 +4,14 @@ import java.awt.Desktop;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+
+import com.github.bielmarfran.nameit.App;
+import com.github.bielmarfran.nameit.GlobalFunctions;
+import com.github.bielmarfran.nameit.dao.DataStored;
+
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,16 +36,16 @@ public class AboutController {
 	 *  made to load an image that represents the IMDB.
 	 */
 	public void initialize() {
-		
-		try {
-			Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"tmdbLogo.png"));
-			ImageViewTMDB.setImage(image);
-			//Image image2 =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"TVDBlogo.png"));
-			//ImageViewTVDB.setImage(image2);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+			try {
+				InputStream input = App.class.getResourceAsStream("tmdbLogo.png");
+				Image image =new Image(input);
+				ImageViewTMDB.setImage(image);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 	}
 	
 	

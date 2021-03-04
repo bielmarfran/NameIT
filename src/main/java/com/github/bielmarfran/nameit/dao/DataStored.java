@@ -320,7 +320,7 @@ public class DataStored {
     	//config.remove("Language");
     	config.setProperty("Mode", newMode);
     	try {
-			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+			config.store(new FileOutputStream(appFilesPath+"config.properties"), null);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -383,7 +383,7 @@ public class DataStored {
     	//config.remove("Language");
     	config.setProperty("Movie", newMovie);
     	try {
-			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+			config.store(new FileOutputStream(appFilesPath+"config.properties"), null);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -446,7 +446,7 @@ public class DataStored {
     	//config.remove("Language");
     	config.setProperty("Series", newSeries);
     	try {
-			config.store(new FileOutputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"config.properties"), null);
+			config.store(new FileOutputStream(appFilesPath+"config.properties"), null);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

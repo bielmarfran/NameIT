@@ -4,26 +4,32 @@ import com.github.bielmarfran.nameit.OperationTmdbMovie;
 import com.github.bielmarfran.nameit.OperationTmdbSerie;
 
 /**
+ * This class is used as an intermediary between other classes in the program and the database link class 
+ * {@link com.github.bielmarfran.nameit.dao.SQLiteJDBC.java  }
+ * In it some validations are made to ensure that requests to DB are made correctly.
  * 
  * @author bielm
  *
  */
 public class DatabaseOperationsTmdb {
 
+	
 	/**
+	 * This method is used to make select statements for the MoviesQueries table, 
+	 * controlling how the instruction response is returned.
 	 * 
-	 * @param queryInfo
-	 * @return
-\
+	 * @param queryInfo Object with the information worked on in the DB 
+	 * @return  True if the Instruction return is not null.
+	 * 			False if the Instruction return i null.
 	 */
 	public static Boolean selectMovie(QueryInfo queryInfo) {
+		
 		QueryInfo queyInfo = new  QueryInfo();
 		queryInfo.setTableDB("MoviesQueries");
+		
 		queyInfo = SQLiteJDBC.selectQuery(queryInfo);
 		if(queyInfo.getQueryFound() && queyInfo.getQueryFound()!=null) {
 			if(queyInfo.getValidResponce() && queyInfo.getValidResponce()!=null ) {
-				//System.out.println(queyInfo.getApiResponse());
-				System.out.println("INFO DATABASE --------<---------<");
 				OperationTmdbMovie.responseMovieId(queyInfo.getApiResponse());
 				return true;
 			}else {
@@ -38,9 +44,10 @@ public class DatabaseOperationsTmdb {
 	
 	
 	/**
+	 * This method is used to make insert statements for the MoviesQueries table, 
 	 * 
-	 * @param queryInfo
-	 * @return
+	 * @param queryInfo Object with the information worked on in the DB 
+	 * @return Null.
 	 */
 	public static Boolean insertMovie(QueryInfo queryInfo) {
 		queryInfo.setTableDB("MoviesQueries");
@@ -51,20 +58,22 @@ public class DatabaseOperationsTmdb {
 
 	
 	/**
+	 * This method is used to make select statements for the tables related to the Series, 
+	 * controlling how the instruction response is returned.
 	 * 
-	 * @param queryInfo
-	 * @param table
-	 * @return
+	 * @param queryInfo Object with the information worked on in the DB 
+	 * @param table Table that will be used in the statement
+	 * @return  True if the Instruction return is not null.
+	 * 			False if the Instruction return i null.
 	 */
-	public static Boolean selectSerie(QueryInfo queryInfo, String table) {
+	public static Boolean selectSerieInformation(QueryInfo queryInfo, String table) {
 		QueryInfo queyInfo = new  QueryInfo();
 		queryInfo.setTableDB(table);
 		queyInfo = SQLiteJDBC.selectQuery(queryInfo);
 		
 		if(queyInfo.getQueryFound() && queyInfo.getQueryFound()!=null) {
 			if(queyInfo.getValidResponce()) {
-				//System.out.println(queyInfo.getApiResponse());
-				System.out.println("INFO DATABASE");
+				//System.out.println("INFO DATABASE");
 				switch (table) {
 				case "SeriesQueries": 
 					OperationTmdbSerie.responseSerieId(queyInfo.getApiResponse());
@@ -86,6 +95,7 @@ public class DatabaseOperationsTmdb {
 				}
 				
 				return true;
+				
 			}else {
 				switch (table) {
 				case "SeriesQueries": 
@@ -117,67 +127,43 @@ public class DatabaseOperationsTmdb {
 	
 	
 	/**
+	 * This method is used to make insert statements  for the tables related to the Series, 
 	 * 
-	 * @param queryInfo
-	 * @return
+	 * @param queryInfo Object with the information worked on in the DB 
+	 * @return Null
 	 */
-	public static Boolean insertSerie(QueryInfo queryInfo) {
-		queryInfo.setTableDB("SeriesQueries");
-		SQLiteJDBC.insertQuery(queryInfo);
-		return null;
+	public static Boolean insertSerieInformation(QueryInfo queryInfo, String table) {
+
+		if (!queryInfo.getLanguage().equals("")) {
+			switch (table) {
+			case "SeriesQueries": 
+				queryInfo.setTableDB("SeriesQueries");
+				SQLiteJDBC.insertQuery(queryInfo);
+				break;
+			case "SeriesQueriesInfo": 
+				queryInfo.setTableDB("SeriesQueriesInfo");
+				SQLiteJDBC.insertQuery(queryInfo);
+					break;
+			case "SeriesEpisodeGroups": 
+				queryInfo.setTableDB("SeriesEpisodeGroups");
+				SQLiteJDBC.insertQuery(queryInfo);
+					break;
+			case "SeriesContentEpisodeGroups": 
+				queryInfo.setTableDB("SeriesContentEpisodeGroups");
+				SQLiteJDBC.insertQuery(queryInfo);
+				break;
+			case "SeriesKeywords": 
+				queryInfo.setTableDB("SeriesKeywords");
+				SQLiteJDBC.insertQuery(queryInfo);
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + table);
+			}
+			
+		}
 		
+		return null;
 	}
 	
-	
-	/**
-	 * 
-	 * @param queryInfo
-	 * @return
-	 */
-	public static Boolean insertSerieInfo(QueryInfo queryInfo) {
-		queryInfo.setTableDB("SeriesQueriesInfo");
-		SQLiteJDBC.insertQuery(queryInfo);
-		return null;
-		
-	}
-	
-	
-	/**
-	 * 
-	 * @param queryInfo
-	 * @return
-	 */
-	public static Boolean insertSeriesKeywords(QueryInfo queryInfo) {
-		queryInfo.setTableDB("SeriesKeywords");
-		SQLiteJDBC.insertQuery(queryInfo);
-		return null;
-		
-	}
-	
-	
-	/**
-	 * 
-	 * @param queryInfo
-	 * @return
-	 */
-	public static Boolean insertSeriesEpisodeGroups(QueryInfo queryInfo) {
-		queryInfo.setTableDB("SeriesEpisodeGroups");
-		SQLiteJDBC.insertQuery(queryInfo);
-		return null;
-		
-	}
-	
-	
-	/**
-	 * 
-	 * @param queryInfo
-	 * @return
-	 */
-	public static Boolean insertSeriesContentEpisodeGroups(QueryInfo queryInfo) {
-		queryInfo.setTableDB("SeriesContentEpisodeGroups");
-		SQLiteJDBC.insertQuery(queryInfo);
-		return null;
-		
-	}
 	
 }

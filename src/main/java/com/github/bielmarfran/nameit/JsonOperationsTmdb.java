@@ -155,7 +155,7 @@ public class JsonOperationsTmdb {
 		System.out.println(nameEncoded);
 		setQuery(queryInfo, nameEncoded, language, year, "Series");
 		
-		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesQueries")) {
+		if(!DatabaseOperationsTmdb.selectSerieInformation(queryInfo,"SeriesQueries")) {
 			
 			try {
 				System.out.println("Info API");
@@ -203,7 +203,7 @@ public class JsonOperationsTmdb {
 		QueryInfo queryInfo= new QueryInfo();
 		setQuery(queryInfo, id+"/season/"+season+"/episode/"+episode, language, 0, "Series");
 		
-		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesQueriesInfo")) {
+		if(!DatabaseOperationsTmdb.selectSerieInformation(queryInfo,"SeriesQueriesInfo")) {
 			System.out.println("Info API");
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder()
@@ -242,7 +242,7 @@ public class JsonOperationsTmdb {
 
 		QueryInfo queryInfo= new QueryInfo();
 		setQuery(queryInfo, id.toString(), language, 0, "Series");
-		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesEpisodeGroups")) {
+		if(!DatabaseOperationsTmdb.selectSerieInformation(queryInfo,"SeriesEpisodeGroups")) {
 			System.out.println("Info API");
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder()
@@ -282,7 +282,7 @@ public class JsonOperationsTmdb {
 		QueryInfo queryInfo= new QueryInfo();
 		setQuery(queryInfo, id.toString(), language, 0, "Series");
 		
-		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesContentEpisodeGroups")) {
+		if(!DatabaseOperationsTmdb.selectSerieInformation(queryInfo,"SeriesContentEpisodeGroups")) {
 			System.out.println("Info API");
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder()
@@ -323,7 +323,7 @@ public class JsonOperationsTmdb {
 		QueryInfo queryInfo= new QueryInfo();
 		setQuery(queryInfo, id.toString(), language, 0, "Series");
 		
-		if(!DatabaseOperationsTmdb.selectSerie(queryInfo,"SeriesKeywords")) {
+		if(!DatabaseOperationsTmdb.selectSerieInformation(queryInfo,"SeriesKeywords")) {
 			System.out.println("Info API");
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder()
@@ -382,8 +382,8 @@ public class JsonOperationsTmdb {
 
 	/**
 	 * This method assign values to an queryInfo object, and passes the 
-	 * information to a global queryInfo object in the {@link org.exemple.OperationTmdbMovie}
-	 * or {@link org.exemple.OperationTmdbSerie} where is needed.
+	 * information to a global queryInfo object in the {@link com.github.bielmarfran.nameit.OperationTmdbMovie}
+	 * or {@link com.github.bielmarfran.nameit.OperationTmdbSerie} where is needed.
 	 * 
 	 * @param queryInfo Object with the information worked in the database
 	 * @param query Query value

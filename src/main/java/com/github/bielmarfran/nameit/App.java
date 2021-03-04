@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.github.bielmarfran.nameit.dao.DataStored;
 
@@ -23,8 +24,12 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
     	DataStored.createFiles();
         scene = new Scene(loadFXML("Main"));
-        Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
-        stage.getIcons().add(image);
+        //Image image =new Image(new FileInputStream(System.getProperty("user.home")+"\\Documents\\NameIT\\"+"NameIT-logos_black.png"));
+        Image image =  GlobalFunctions.getLogo();
+        if (image !=null) {
+        	stage.getIcons().add(image);
+		}
+        
         stage.setMaxHeight(820.0);
         stage.setMaxWidth(920.0);
         stage.setMinHeight(820.0);

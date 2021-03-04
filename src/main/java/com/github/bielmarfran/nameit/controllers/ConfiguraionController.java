@@ -105,7 +105,7 @@ public class ConfiguraionController {
 	}
 
 	/**
-	 * This method get the store language value from properties using {@link DataStored.propertiesGetLanguage() }
+	 * This method get the store language value from properties using {@link com.github.bielmarfran.nameit.dao.DataStored.propertiesGetLanguage() }
 	 * Transforms the information to a full version, for the Interface
 	 */
 	public void renameMenuLanguage() {
@@ -140,7 +140,7 @@ public class ConfiguraionController {
 	/**
 	 * This method is called when the user chooses a new language, first 
 	 * passes the language identification from the full version to an 
-	 * abbreviated one and then calls {@link DataStored.propertiesSetLanguage(String)}
+	 * abbreviated one and then calls {@link com.github.bielmarfran.nameit.dao.DataStored.propertiesSetLanguage(String)}
 	 * to store the new language value.
 	 * 
 	 * @param x New language value
@@ -322,7 +322,7 @@ public class ConfiguraionController {
 	
 	/**
 	 * This method is called when the user clicks the save button,
-	 *  he takes the current value in the TextBox and uses {@link DataStored.propertiesMovieScheme(String)}
+	 *  he takes the current value in the TextBox and uses {@link  com.github.bielmarfran.nameit.dao.DataStored.propertiesMovieScheme(String)}
 	 * to save the new value.
 	 * 
 	 * @param actionEvent Button Click event
@@ -337,7 +337,7 @@ public class ConfiguraionController {
 
 	/**
 	 * This method is called in the {@link shutdown() } when the user wants to save 
-	 * the movie value using {@link DataStored.propertiesMovieScheme(String)}
+	 * the movie value using {@link  com.github.bielmarfran.nameit.dao.DataStored.propertiesMovieScheme(String)}
 	 */
 	public static void saveMovies() {
 		
@@ -346,7 +346,7 @@ public class ConfiguraionController {
 	
 	/**
 	 * This method is called when the user clicks the save button,
-	 *  he takes the current value in the TextBox and uses {@link DataStored.propertiesSeriesScheme(String)}
+	 *  he takes the current value in the TextBox and uses {@link  com.github.bielmarfran.nameit.dao.DataStored.propertiesSeriesScheme(String)}
 	 * to save the new value.
 	 * 
 	 * @param actionEvent Button Click event
@@ -359,7 +359,7 @@ public class ConfiguraionController {
 	
 	/**
 	 * This method is called in the {@link shutdown() } when the user wants to save 
-	 * the movie value using {@linkDataStored.propertiesSeriesScheme(String)}
+	 * the movie value using {@link  com.github.bielmarfran.nameit.dao.DataStored.propertiesSeriesScheme(String)}
 	 */
 	public static void saveSeries() {			
 		DataStored.propertiesSeriesScheme(seriesValue);

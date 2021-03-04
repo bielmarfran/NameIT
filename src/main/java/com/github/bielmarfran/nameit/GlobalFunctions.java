@@ -1,15 +1,13 @@
 package com.github.bielmarfran.nameit;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.InputStream;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Date;
-
 import com.github.bielmarfran.nameit.dao.DataStored;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+
 /**
  * <h1>Global Functions</h1>
  * Global Functions is a class that aggregates different methods 
@@ -210,7 +208,7 @@ public class GlobalFunctions {
 
 	/**
 	 * Names that only hinder the logic of the program.
-	 * This method is used {@link org.exemple.GlobalFucntions.formatName}
+	 * This method is used {@link formatName()}
 	 * 
 	 */
 	public static void fillFilter() {			
@@ -296,12 +294,27 @@ public class GlobalFunctions {
 		alert.showAndWait();
 	}
 
-	
+	/**
+	 * 
+	 * @param item
+	 * @param error
+	 */
 	public static void setItemError(Item item,String error) {
 		item.setError(error);	
 		item.setState(03);
 	}
-	//------------------------------------------------------------------------------
+
+	public static Image getLogo() {
+		try {
+			InputStream input = App.class.getResourceAsStream("NameIT-logos_black.png");
+			Image image =new Image(input);
+			return image;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	
 }
