@@ -25,7 +25,7 @@ public class DataStored {
 	
 	static Properties config;
 	private static String keyTmdb="";
-	public final static String appFilesPath = System.getProperty("user.home")+"\\Documents\\NameIT\\";
+	public final static String appFilesPath = System.getProperty("user.home")+"\\AppData\\Local\\NameIT\\";
 
 
 	/**

@@ -496,7 +496,7 @@ public class MainController {
 	 * @param mouseEvent Click Event
 	 */
 	public void menuConfiguration(javafx.scene.input.MouseEvent mouseEvent) {
-		 FXMLLoader loader = new FXMLLoader(App.class.getResource("Configuration.fxml"));
+		 FXMLLoader loader = new FXMLLoader(App.class.getClassLoader().getResource("Configuration.fxml"));
 		 Parent parent;
 		try {
 			parent = loader.load();
@@ -647,7 +647,7 @@ public class MainController {
 	 * @param mouseEvent Click Event
 	 */
 	public void buttonExceptions(javafx.scene.input.MouseEvent mouseEvent) {
-		 FXMLLoader loader = new FXMLLoader(App.class.getResource("Exception.fxml"));
+		 FXMLLoader loader = new FXMLLoader(App.class.getClassLoader().getResource("Exception.fxml"));
 		 Parent parent;
 		try {
 			parent = loader.load();
@@ -682,7 +682,7 @@ public class MainController {
 	 * @param mouseEvent Click Event
 	 */
 	public void showAbout(javafx.scene.input.MouseEvent mouseEvent) {
-		 FXMLLoader loader = new FXMLLoader(App.class.getResource("About.fxml"));
+		 FXMLLoader loader = new FXMLLoader(App.class.getClassLoader().getResource("About.fxml"));
 		 Parent parent;
 		try {
 			parent = loader.load();

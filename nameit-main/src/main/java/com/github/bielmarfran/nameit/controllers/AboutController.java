@@ -37,7 +37,7 @@ public class AboutController {
 	public void initialize() {
 
 			try {
-				InputStream input = com.github.bielmarfran.nameit.App.class.getResourceAsStream("tmdbLogo.png");
+				InputStream input = com.github.bielmarfran.nameit.App.class.getClassLoader().getResourceAsStream("tmdbLogo.png");
 				Image image =new Image(input);
 				ImageViewTMDB.setImage(image);
 			} catch (Exception e) {

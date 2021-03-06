@@ -77,12 +77,12 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --type %INSTALLER_TYPE% ^
   --dest target/installer ^
   --input target/installer/input/libs ^
-  --name NameITS ^
+  --name NameIT ^
   --main-class com.github.bielmarfran.nameit.AppLauncher ^
   --main-jar %MAIN_JAR% ^
   --java-options -Xmx2048m ^
   --runtime-image target/java-runtime ^
-  --icon src/main/logo/windows/duke.ico ^
+  --icon src/main/logo/windows/NameIT-logos_black.ico ^
   --app-version %APP_VERSION% ^
   --vendor "ACME Inc." ^
   --copyright "Copyright © 2019-20 ACME Inc." ^
