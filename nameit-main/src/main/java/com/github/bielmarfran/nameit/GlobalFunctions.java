@@ -307,6 +307,7 @@ public class GlobalFunctions {
 	public static Image getLogo() {
 		try {
 			InputStream input = App.class.getResourceAsStream("NameIT-logos_black.png");
+			//alertCallerWarning(App.class.getResourceAsStream("NameIT-logos_black.png")+"","","");
 			Image image =new Image(input);
 			return image;
 		} catch (Exception e) {

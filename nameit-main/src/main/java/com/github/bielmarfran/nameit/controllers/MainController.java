@@ -42,7 +42,6 @@ import javafx.stage.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.github.bielmarfran.nameit.*;
 import com.github.bielmarfran.nameit.dao.*;
 import com.google.gson.JsonArray;

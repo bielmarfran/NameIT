@@ -3,9 +3,10 @@ package com.github.bielmarfran.nameit.dao;
 import com.github.bielmarfran.nameit.OperationTmdbMovie;
 import com.github.bielmarfran.nameit.OperationTmdbSerie;
 
+
 /**
  * This class is used as an intermediary between other classes in the program and the database link class 
- * {@link com.github.bielmarfran.nameit.dao.SQLiteJDBC.java  }
+ * {@link com.github.bielmarfran.nameit.nameit.dao.SQLiteJDBC.java  }
  * In it some validations are made to ensure that requests to DB are made correctly.
  * 
  * @author bielm
