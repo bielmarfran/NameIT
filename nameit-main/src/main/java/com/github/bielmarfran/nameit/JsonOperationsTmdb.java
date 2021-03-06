@@ -31,7 +31,7 @@ public class JsonOperationsTmdb {
 	public static void checkConnection(){
 		System.out.println("checkConnectionTMDB");
 		
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		//String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";	
@@ -280,7 +280,7 @@ public class JsonOperationsTmdb {
 		System.out.println("Request Before Send - "+uri);
 
 		QueryInfo queryInfo= new QueryInfo();
-		setQuery(queryInfo, id.toString(), language, 0, "Series");
+		setQuery(queryInfo, id, language, 0, "Series");
 		
 		if(!DatabaseOperationsTmdb.selectSerieInformation(queryInfo,"SeriesContentEpisodeGroups")) {
 			System.out.println("Info API");
@@ -353,30 +353,31 @@ public class JsonOperationsTmdb {
 	 * @return Language value that API recognizes
 	 */
 	public static String languageTmdb(String l) {
+		String language="";
 		switch (l) {
 		case "en": 
-			l ="en-US";				
+			language = "en-US";				
 			break;
 		//case "pt-br": 
 			//language ="PT-BR - Português Brasileiro";				
 			//break;
 		case "de": 
-			l ="de";
+			language = "de";
 			break;
 		case "pt": 
-			l ="pt-PT";
+			language = "pt-PT";
 			break;
 		case "es": 
-			l ="es-ES";
+			language = "es-ES";
 			break;
 		case "fr": 
-			l="fr-FR";		
+			language = "fr-FR";		
 			break;
 		default:
 			break;
 		}
 	
-		return l;
+		return language;
 		
 	}
 

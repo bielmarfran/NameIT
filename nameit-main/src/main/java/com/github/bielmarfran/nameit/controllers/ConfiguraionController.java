@@ -1,11 +1,9 @@
 package com.github.bielmarfran.nameit.controllers;
 
-import java.util.ArrayList;
-import java.util.Optional;
 
 import com.github.bielmarfran.nameit.GlobalFunctions;
 import com.github.bielmarfran.nameit.dao.DataStored;
-
+import java.util.Optional;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,7 +16,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.text.Text;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -53,15 +50,34 @@ public class ConfiguraionController {
 	@FXML
 	private CheckBox checkBoxAnime;
 	
+	
+	/**
+	 * Stores the state of the button responsible for saving values from TextFieldMovie.
+	 */
 	private static boolean buttonMovieValue;
+	
+	
+	/**
+	 * Stores the state of the button responsible for saving values from TextFieldSeries.
+	 */
 	private static boolean buttonSeriesValue;
+	
+	
+	/**
+	 * Stores the value in TextFieldMovie.
+	 */
 	private static String moviesValue;
+	
+	/**
+	 *  Stores the value in TextFieldSeries.
+	 */
 	private static String seriesValue;
-	public static ArrayList<Text> textList = new ArrayList<>();
+	
+
+	
 	
 	/**
 	 * A class initialization method, where some Interface elements get their value
-	 * 
 	 */
 	public void initialize() {
 		//Visibility Routine
@@ -104,6 +120,7 @@ public class ConfiguraionController {
 		}
 	}
 
+	
 	/**
 	 * This method get the store language value from properties using {@link com.github.bielmarfran.nameit.dao.DataStored.propertiesGetLanguage() }
 	 * Transforms the information to a full version, for the Interface
@@ -212,12 +229,12 @@ public class ConfiguraionController {
 
 	}
 	
-	//Implementing the TextFormatter to the TextFields Movie and Series
+
 	/**
 	 * This method has two Event Listeners that monitor the change of values in 
 	 * TextFieldMovies and TextFieldSeries and checks if the values entered are
-	 *  characters that are prohibited by Windows in filenames, if so, an AlertBox
-	 *   warns that they are not allowed.
+	 * characters that are prohibited by Windows in filenames, if so, an AlertBox
+	 * warns that they are not allowed.
 	 */
 	public void textFormatter() {
 		TextFieldMovie.textProperty().addListener(new ChangeListener<String>() {
@@ -282,7 +299,7 @@ public class ConfiguraionController {
 		TextFieldSeries.setTextFormatter(textFormatter2);
 	}
 	
-	//Check if the TextField Value has Reserved Windows Characters
+
 	/**
 	 * This method checks for characters prohibited by windows, used in {@link showExempleSeriesScheme()}
 	 * 
@@ -290,30 +307,13 @@ public class ConfiguraionController {
 	 * @return True if a forbidden character was found, or False if it is not found
 	 */
 	public boolean isValid(String text) {
-		if(text.contains("*")) {
+		if(text.contains("*") || text.contains("<") || text.contains(">") || text.contains("?")) {
 			return true;
 		}
-		if(text.contains("<")) {
+		if(text.contains(":") || text.contains("/") || text.contains("\"") || text.contains("|")) {
 			return true;
 		}
-		if(text.contains(">")) {
-			return true;
-		}
-		if(text.contains("?")) {
-			return true;
-		}
-		if(text.contains(":")) {
-			return true;
-		}
-		if(text.contains("/")) {
-			return true;
-		}
-		if(text.contains("\"")) {
-			return true;
-		}
-		if(text.contains("|")) {
-			return true;
-		}
+
 		return false;
 		
 		
@@ -327,8 +327,8 @@ public class ConfiguraionController {
 	 * 
 	 * @param actionEvent Button Click event
 	 */
-	@SuppressWarnings("exports")
-	public void buttonSaveMoviesAction(javafx.event.ActionEvent actionEvent) {
+	//@SuppressWarnings("exports")
+	public void buttonSaveMoviesAction(ActionEvent actionEvent) {
 		DataStored.propertiesMovieScheme(TextFieldMovie.getText());
 		ButtonSaveMovies.setVisible(false);
 		buttonMovieValue=false;
@@ -344,6 +344,7 @@ public class ConfiguraionController {
 		DataStored.propertiesMovieScheme(moviesValue);
 	}
 	
+	
 	/**
 	 * This method is called when the user clicks the save button,
 	 *  he takes the current value in the TextBox and uses {@link  com.github.bielmarfran.nameit.dao.DataStored.propertiesSeriesScheme(String)}
@@ -351,11 +352,12 @@ public class ConfiguraionController {
 	 * 
 	 * @param actionEvent Button Click event
 	 */
-	public void buttonSaveSeriesAction(javafx.event.ActionEvent actionEvent) {
+	public void buttonSaveSeriesAction(ActionEvent actionEvent) {
 		DataStored.propertiesSeriesScheme(TextFieldSeries.getText());
 		ButtonSaveSeries.setVisible(false);
 		buttonSeriesValue=false;
 	}
+	
 	
 	/**
 	 * This method is called in the {@link shutdown() } when the user wants to save 
@@ -365,13 +367,19 @@ public class ConfiguraionController {
 		DataStored.propertiesSeriesScheme(seriesValue);
 	} 
 
-	public void checkBoxAnimeAction(javafx.event.ActionEvent actionEvent) {
+	
+	/**
+	 * 
+	 * @param actionEvent
+	 */
+	public void checkBoxAnimeAction(ActionEvent actionEvent) {
 		if (checkBoxAnime.isSelected()) 
 			DataStored.propertiesSetAnime("true");
 		else
 			DataStored.propertiesSetAnime("false"); 
 	}
 
+	
 	/**
 	 * This method is called when closing the Configuration Windows,
 	 * it checks if the most recent values in the TextBoxes have
@@ -380,7 +388,7 @@ public class ConfiguraionController {
 	public static void shutdown() {
 		// cleanup code here...
 
-		if(buttonMovieValue==true || buttonSeriesValue==true) {		
+		if(buttonMovieValue|| buttonSeriesValue) {		
 			ButtonType save = new ButtonType("Save", ButtonData.OK_DONE);
 			ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 			Alert alert = new Alert(AlertType.WARNING,
@@ -393,10 +401,10 @@ public class ConfiguraionController {
 
 			if (result.orElse(cancel) == save) {
 
-				if(buttonMovieValue==true) {
+				if(buttonMovieValue) {
 					saveMovies();
 				}
-				if(buttonSeriesValue==true) {
+				if(buttonSeriesValue) {
 					saveSeries(); 
 				}
 

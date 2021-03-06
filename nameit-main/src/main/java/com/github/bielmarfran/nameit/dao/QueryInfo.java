@@ -76,11 +76,6 @@ public class QueryInfo {
 	*/
 	private String tableDB;
 	
-
-	public QueryInfo() {
-		super();
-
-	}
 	
 	
 	public String getQueryValue() {

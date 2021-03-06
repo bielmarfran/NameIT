@@ -39,9 +39,18 @@ public class ExceptionController {
 	@FXML
 	private TextField textFieldExceptionRenamed;
 
+	/**
+	 * ArrayList that stores the values of exceptions that are inserted in listViewExceptions
+	 */
 	private static ArrayList<String> exceptions = new ArrayList<String>();
+	
+	
+	/**
+	 * ArrayList that stores the values of exceptionsRenamed that are inserted in listViewExceptionsRenamed
+	 */
 	private static ArrayList<String> exceptionsRenamed = new ArrayList<String>();
 
+	
 	public void initialize() {
 		read(); 
 		final Tooltip tooltip = new Tooltip();
@@ -50,7 +59,7 @@ public class ExceptionController {
 
 	}
 
-	// Routine that get the values on the TextFields and add to Exp List.
+
 	/**
 	 * This method takes the current values in textFieldException and textFieldExceptionRenamed, 
 	 * checks if the values are null, if not, calls {@link save()}
@@ -100,13 +109,14 @@ public class ExceptionController {
 					textFieldExceptionRenamed.setText("");
 				}								
 
-			} else {
+			}// else {
 				// ... user chose CANCEL or closed the dialog
-			}
+			//}
 		}
 
 	}
 
+	
 	/**
 	 * 
 	 * This method checks if there is an item selected in the before list, 
@@ -140,6 +150,7 @@ public class ExceptionController {
 		populateLists();
 	}
 
+	
 	/**
 	 * Fill in the lists in the interface with the values stored in the ArrayList <>.
 	 */
@@ -158,7 +169,7 @@ public class ExceptionController {
 
 	}
 	
-	//Routine to Read the value of the Txt Files and Save to the correct ArrayList
+	
 	/**
 	 * Get the values stored in the respective txt files at exceptions / exceptionsRenamed
 	 * and store them in ArrayList <>. 
@@ -207,6 +218,7 @@ public class ExceptionController {
 
 	}
 	
+	
 	/**
 	 * This method saves the current stored values in exceptions/exceptionsRenamed 
 	 * for their respective files.
@@ -232,7 +244,5 @@ public class ExceptionController {
 		populateLists();
 
 	}
-
-
 
 }

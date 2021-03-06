@@ -10,17 +10,45 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * This class receives Items objects referring to Films/Movies and processes 
+ * the information available in the file in order to find the series information in the API.
+ * 
+ * @author bielm
+ *
+ */
+
 public class OperationTmdbMovie {
 	
-		//Extension allowed in the program
-		public static ArrayList<String> extension = new ArrayList<>();
-		//Variable where the File name is store in char block's to send one at the time to the Api.
+	
+		/**
+		 * Variable where the file name is stored in char blocks to 
+		 * send one at a time to the API.
+		 */
 		private static String[] namesBlocks;
-		//Control the times that block's of files name are sent to the Api.
+		
+		
+		/**
+		 * Control the times that {@link namesBlocks} are sent to 
+		 * the API, avoiding useless repetitions.
+		 */
 		private static Integer controlBreakFile=0;
-		//Local Episode Variable used during the logic in the class
+		
+		
+		/**
+		 * Main program variable, the information about Films/Movies 
+		 * is stored during the entire execution.
+		 */
 		private static Item item = new Item();
 		
+		
+		/**
+		* Variable of a QueryInfo Object where the information worked
+		*  with the DB is stored.
+		* 
+		* @HasGetter
+		* @HasSetter
+		*/
 		private static QueryInfo queryInfo;
 		
 
@@ -73,21 +101,21 @@ public class OperationTmdbMovie {
 		 * It breaks the name of the files, and makes API requests each block at a time, 
 		 * waiting for an answer with a single answer, or a small set of possible answers.
 		 * 
-		 * @param name Name of the file.
+		 * @param nameValue Name of the file.
 		 * @param mode Current Mode.
 		 */
-		public void breakFileName(String name, String mode){
+		public void breakFileName(String nameValue, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 			System.out.println("--Inside Break File Name--");
 			item.setState(2);
 			item.setYear(0);
-			if(!name.isEmpty()){
-				name = GlobalFunctions.formatName(name, mode, item);
-				if(!name.isEmpty()){
+			if(!nameValue.isEmpty()){
+				nameValue = GlobalFunctions.formatName(nameValue, mode, item);
+				if(!nameValue.isEmpty()){
 					System.out.println("After formatName");
 				}
 				
-				namesBlocks = name.split(" ");
+				namesBlocks = nameValue.split(" ");
 				for(int x=0;x<namesBlocks.length;x++){
 					//System.out.println("----"+namesBlocks.length);
 					if(x<=0 && controlBreakFile==0){
@@ -206,14 +234,15 @@ public class OperationTmdbMovie {
 			String newName = GlobalFunctions.nameScheme(item);
 
 			newName = newName+"."+exetention;
-			newName = GlobalFunctions.formatName_Windows(newName);
-			name = GlobalFunctions.formatName_Windows(name);
+			newName = GlobalFunctions.formatNameWindows(newName);
+			name = GlobalFunctions.formatNameWindows(name);
 			item.setState(1);
 			item.setFinalFileName(newName);
 			System.out.println(item.getFinalFileName());
 
 		}
 
+		
 		/**
 		 * This method takes the values stored in Alternative Information for the Item.
 		 */
@@ -230,10 +259,21 @@ public class OperationTmdbMovie {
 			
 		}
 
+		
+		/**
+		 * This method is auxiliary, being called by the various methods of the class, 
+		 * when it is desired to save data to Variable queryInfo in order to insert
+		 *  this data in the DB.
+		 * 
+		 * @param validResponse Boolean value that indicates whether the information to 
+		 * be entered is useful for program logic.
+		 * @param responseBody Value of the API response that will be stored in the DB.
+		 * @param table Table that the information should be inserted.
+		 */
 		public static void setQueryInfo(Boolean validResponse, String responseBody) {
-			if(queryInfo.getQueryFound()==false) {
+			if(!queryInfo.getQueryFound()) {
 				
-				if(validResponse==true) {
+				if(validResponse) {
 					queryInfo.setValidResponce(true);
 					queryInfo.setApiResponse(responseBody);
 					DatabaseOperationsTmdb.insertMovie(queryInfo);

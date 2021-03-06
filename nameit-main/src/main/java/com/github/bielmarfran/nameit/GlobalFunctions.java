@@ -61,10 +61,11 @@ public class GlobalFunctions {
 		String date ="";
 		Boolean test = false;
 		Integer holder = null;
+		String newNameHolder = newName;
 
-		for(int x=0;x<newName.length();x++) {
-			if(isNumeric(newName.substring(x,x+1))) {
-				date= date+newName.charAt(x);
+		for(int x=0;x<newNameHolder.length();x++) {
+			if(isNumeric(newNameHolder.substring(x,x+1))) {
+				date= date+newNameHolder.charAt(x);
 			}
 		}
 		System.out.println(date);
@@ -83,12 +84,12 @@ public class GlobalFunctions {
 				}
 			}
 			if(test){
-				newName = newName.replace(datesBlocks[holder], "");
+				newNameHolder = newNameHolder.replace(datesBlocks[holder], "");
 				item.setYear(Integer.valueOf(datesBlocks[holder]));
 			}
 		}
 
-		return newName;
+		return newNameHolder;
 	}	
 	
 
@@ -115,19 +116,20 @@ public class GlobalFunctions {
 	 * @param newName The string with the file name
 	 * @return The file name without the characters prohibited by windows
 	 */
-	public static String formatName_Windows(String newName){
+	public static String formatNameWindows(String newName){
 
-		newName = newName.replace("<","");
-		newName = newName.replace(">","");
-		newName = newName.replace("*","");
-		newName = newName.replace("?","");
-		newName = newName.replace("/","");
-		newName = newName.replace("|","");
-		newName = newName.replace("\"","");
-		newName = newName.replace(String.valueOf('"'),"");
-		newName = newName.replace(":","");
+		String newNameHodler =newName;
+		newNameHodler = newNameHodler.replace("<","");
+		newNameHodler = newNameHodler.replace(">","");
+		newNameHodler = newNameHodler.replace("*","");
+		newNameHodler = newNameHodler.replace("?","");
+		newNameHodler = newNameHodler.replace("/","");
+		newNameHodler = newNameHodler.replace("|","");
+		newNameHodler = newNameHodler.replace("\"","");
+		newNameHodler = newNameHodler.replace(String.valueOf('"'),"");
+		newNameHodler = newNameHodler.replace(":","");
 
-		return newName;
+		return newNameHodler;
 
 	}
 	
@@ -145,32 +147,35 @@ public class GlobalFunctions {
 	public static String formatName(String name, String mode, Item item){
 		
 		System.out.println("Inside format Name");
+		String nameHolder = name;
 		exceptions =DataStored.readExceptions();
 		exceptionsRenamed =DataStored.readExceptionsRenamed();		
 		
-		name = name.toLowerCase();
-		name = name.replace(getExtension(name), "");
+		nameHolder = nameHolder.toLowerCase();
+		nameHolder = nameHolder.replace(getExtension(nameHolder), "");
+		
 		//Remove characters in between [], the are always junk information or complementary.
-		if(name.contains("[")) {
-			if(name.contains("]")) {
-				int start = name.indexOf("[");
-				int end= name.indexOf("]")+1;
-				name = name.replace(name.substring(start,end), " ");
-				System.out.println(name);
-			}
+		if(nameHolder.contains("[") && nameHolder.contains("]")) {
+			int start = nameHolder.indexOf("[");
+			int end= nameHolder.indexOf("]")+1;
+			nameHolder = nameHolder.replace(nameHolder.substring(start,end), " ");
+			System.out.println(nameHolder);
 		}
 		//End
-		name = name.replace(".pdf","");
-		name = name.replace(".mkv","");
-		name = name.replace("-"," ");
-		name = name.replace("_"," ");
-		name = name.replace("."," ");
-		name = name.replace("["," ");
-		name = name.replace("]"," ");
-		name = name.replace(":"," ");
-		name = name.replace("2160p","");
-		name = name.replace("1080p","");
-		name = name.replace("720p","");
+		
+		nameHolder = nameHolder.replace(".pdf","");
+		nameHolder = nameHolder.replace(".mkv","");
+		nameHolder = nameHolder.replace("-"," ");
+		nameHolder = nameHolder.replace("_"," ");
+		nameHolder = nameHolder.replace("."," ");
+		nameHolder = nameHolder.replace("["," ");
+		nameHolder = nameHolder.replace("]"," ");
+		nameHolder = nameHolder.replace(":"," ");
+		nameHolder = nameHolder.replace("2160p","");
+		nameHolder = nameHolder.replace("1080p","");
+		nameHolder = nameHolder.replace("720p","");
+		
+		
 		for(int y=0;y<exceptions.size();y++){
 
 			String ex =String.valueOf(exceptions.get(y));
@@ -181,27 +186,27 @@ public class GlobalFunctions {
 			if(exr.equals("-")) {
 				exr = " ";
 			}
-			name = name.replace(ex ,exr);
+			nameHolder = nameHolder.replace(ex ,exr);
 		}	
 		for(int x=0;x<10;x++){
-			name = name.replace("s"+x," s"+x);
-			name = name.replace("season"+x," s"+x);
+			nameHolder = nameHolder.replace("s"+x," s"+x);
+			nameHolder = nameHolder.replace("season"+x," s"+x);
 		}
 		fillFilter();
 		for(int y=0;y<filterList.size();y++){
 			String v1 =String.valueOf(filterList.get(y));
-			name = name.replace(v1 ,"");
+			nameHolder = nameHolder.replace(v1 ,"");
 		}
-		for(int z=0;z<name.length();z++){
-			if(name.startsWith(" ")){
-				name = name.substring(1);
+		for(int z=0;z<nameHolder.length();z++){
+			if(nameHolder.startsWith(" ")){
+				nameHolder = nameHolder.substring(1);
 			}
 		}
 
 
-		name = isDate(name, mode, item);
+		nameHolder = isDate(nameHolder, mode, item);
 					
-		return name;
+		return nameHolder;
 
 	}
 	
@@ -295,19 +300,27 @@ public class GlobalFunctions {
 	}
 
 	/**
+	 * This method assigns an error value to the Error Attribute of the Item Object 
+	 * and sets the State of the Item to the value '3' which means critical error.
 	 * 
-	 * @param item
-	 * @param error
+	 * @param item Item Object
+	 * @param error String value that represents the error.
 	 */
 	public static void setItemError(Item item,String error) {
 		item.setError(error);	
 		item.setState(03);
 	}
 
+	/**
+	 * This method aims to take the logo of the application that has the name
+	 *  'NameIT-logos_black.png' being stored in the project resources folder 
+	 *  and return the logo in a variable image.
+	 *  
+	 * @return An image variable if positive or Null if it was not possible to get the image.
+	 */
 	public static Image getLogo() {
 		try {
 			InputStream input = App.class.getClassLoader().getResourceAsStream("NameIT-logos_black.png");
-			//alertCallerWarning(App.class.getResourceAsStream("NameIT-logos_black.png")+"","","");
 			Image image =new Image(input);
 			return image;
 		} catch (Exception e) {

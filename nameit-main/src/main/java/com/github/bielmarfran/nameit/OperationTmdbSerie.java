@@ -1,9 +1,6 @@
 package com.github.bielmarfran.nameit;
 
 import java.io.File;
-import java.util.ArrayList;
-
-//import com.github.bielmarfran.nameit.JsonOperationsTmdb;
 import com.github.bielmarfran.nameit.dao.DataStored;
 import com.github.bielmarfran.nameit.dao.DatabaseOperationsTmdb;
 import com.github.bielmarfran.nameit.dao.QueryInfo;
@@ -12,25 +9,64 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-//The function of this class is to receive an Item from the MainController, and process it to the final result
+/**
+ * This class receives Items objects referring to TV / Series and processes 
+ * the information available in the file in order to find the series information in the API.
+ * 
+ * @author bielm
+ *
+ */
 
 public class OperationTmdbSerie {
 		
-		//Logic Variable
 
-		//Variable where the File name is store in char block's to send one at the time to the Api.
+		/**
+		 * Variable where the file name is stored in char blocks 
+		 * to send one at a time to the API.
+		 */
 		private static String[] namesBlocks;
-		//Control the times that block's of files name are sent to the Api.
+		
+		
+		/**
+		 * Control the times that {@link namesBlocks} are sent to 
+		 * the API, avoiding useless repetitions.
+		 */
 		private static Integer controlBreakFile=0;
-		//Control the times the name block position
+		
+		
+
+		/**
+		 * Controls which {@link namesBlocks} block is, at any given time, 
+		 * useful for separating the file name according to its content.
+		 */
 		private static Integer controlNameBlock=0;
-		//Local Episode Variable used during the logic in the class
+		
+		
+		/**
+		 * Main program variable, the information about TV / Series 
+		 * is stored during the entire execution.
+		 */
 		private static Item item = new Item();
-		//
+	
+		
+		/**
+		 * Controls the order loop when determining the episode.
+		 */
 		private static Integer controlEpisode=0;
-		//
+		
+		
+		/**
+		 * Controls whether a series that is in the 'Anime' category 
+		 * goes through a different line of logic or not, if necessary.
+		 */
 		private static Boolean checkForAnime=true;
 		
+		
+		/**
+		* Variable of a QueryInfo Object where the information worked with the DB is stored.
+		* @HasGetter
+		* @HasSetter
+		*/
 		private static QueryInfo queryInfo;
 		
 
@@ -99,20 +135,21 @@ public class OperationTmdbSerie {
 		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 			System.out.println("--Inside Break File Name--");
+			String nameHolder = name;
 			item.setState(2);
 			item.setYear(0);
-			if(!name.isEmpty()){
-				name = GlobalFunctions.formatName(name, mode, item);
-				if(!name.isEmpty()){
+			if(!nameHolder.isEmpty()){
+				nameHolder = GlobalFunctions.formatName(nameHolder, mode, item);
+				if(!nameHolder.isEmpty()){
 					System.out.println("After formatName");
-					System.out.println(name);
+					System.out.println(nameHolder);
 				}
 				
-				namesBlocks = name.split(" ");
+				namesBlocks = nameHolder.split(" ");
 				for(int x=0;x<namesBlocks.length;x++){
 					System.out.println("namesBlocks.length - "+namesBlocks.length);
 					if(x<=0 && controlBreakFile==0){
-						//Send one block of the name at a time
+						//Send one block of the nameHolder at a time
 						if(mode.equals("Movies")) {
 							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
 						}else {
@@ -305,6 +342,7 @@ public class OperationTmdbSerie {
 					if(season_value.length()>4 &&season_value.length()<7) {
 						getSeasonCaseDefault(test,season_value);
 					}
+					break;
 				}
 
 			}
@@ -319,11 +357,12 @@ public class OperationTmdbSerie {
 		 * @param season_value Value that possibly represents the season.
 		 */
 		public static void getSeasonCase1(String test,String season_value) {
-			if(test.substring(0,1).equals("x") ) {
+			String testHolder = test;
+			if(testHolder.substring(0,1).equals("x") ) {
 				checkForAnime = false;
-				test = test.substring(1);
+				testHolder = testHolder.substring(1);
 				item.setSeason(season_value.substring(0,1));
-				getEpisode(test, controlNameBlock);
+				getEpisode(testHolder, controlNameBlock);
 			}
 
 		}
@@ -337,13 +376,13 @@ public class OperationTmdbSerie {
 		 * @param season_value Value that possibly represents the season.
 		 */
 		public static void getSeasonCase2(String test, String season_value) {
-			
-			if(GlobalFunctions.isNumeric(test.substring(2,3))) {
-				test = test.substring(2);
+			String testHolder = test;
+			if(GlobalFunctions.isNumeric(testHolder.substring(2,3))) {
+				testHolder = testHolder.substring(2);
 				item.setSeason(season_value.substring(0,2));
-				getEpisode(test, controlNameBlock);
+				getEpisode(testHolder, controlNameBlock);
 			}else {
-				//test = test.substring(1);
+				//testHolder = testHolder.substring(1);
 				item.setSeason(season_value.substring(0,1));
 				getEpisode(season_value.substring(1,2),controlNameBlock);
 			}
@@ -358,7 +397,8 @@ public class OperationTmdbSerie {
 		 * @param season_value Value that possibly represents the season.
 		 */
 		public static void getSeasonCase3(String test, String season_value) {
-			test = test.substring(1);
+			String testHolder = test;
+			testHolder = testHolder.substring(1);
 			item.setSeason(season_value.substring(0,1));
 			getEpisode(season_value.substring(1,3), controlNameBlock);
 		}
@@ -578,20 +618,20 @@ public class OperationTmdbSerie {
 				}				
 			}
 			System.out.println("Test Value - "+test);
-			if(test.length()>1){
-				if(GlobalFunctions.isNumeric(test.substring(0,1))){
-									
-					absolute_episode = test.substring(0,1);
+
+			if(GlobalFunctions.isNumeric(test.substring(0,1)) && test.length()>1){
+
+				absolute_episode = test.substring(0,1);
+				test = test.substring(1);
+
+				while(test.length()>1 && GlobalFunctions.isNumeric(test.substring(0,1)) ){
+
+					absolute_episode = absolute_episode + test.substring(0,1);
 					test = test.substring(1);
-
-					while(test.length()>1 && GlobalFunctions.isNumeric(test.substring(0,1)) ){
-
-						absolute_episode = absolute_episode + test.substring(0,1);
-						test = test.substring(1);
-					}
 				}
 			}
-			
+
+
 			
 		
 			
@@ -620,6 +660,7 @@ public class OperationTmdbSerie {
 			return null;
 		}
 
+		
 		/**
 		 * 
 		 * @param test
@@ -688,7 +729,7 @@ public class OperationTmdbSerie {
 					System.out.println("Epsideo Value End - "+episode);
 					JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
 				}
-				if(controlEpisode==0 && checkForAnime==true && item.getIsAnimation()){
+				if(controlEpisode==0 && checkForAnime && item.getIsAnimation()){
 					JsonOperationsTmdb.getSeriesKeywords(item.getId());
 				}
 			}
@@ -801,8 +842,8 @@ public class OperationTmdbSerie {
 			String newName = nameSchemeSeries(exetention);
 
 			newName = newName+"."+exetention;
-			newName = GlobalFunctions.formatName_Windows(newName);
-			name = GlobalFunctions.formatName_Windows(name);
+			newName = GlobalFunctions.formatNameWindows(newName);
+			name = GlobalFunctions.formatNameWindows(name);
 			item.setState(1);
 			item.setFinalFileName(newName);
 			System.out.println(item.getFinalFileName());
@@ -881,11 +922,14 @@ public class OperationTmdbSerie {
 
 		
 		/**
+		 * This method is auxiliary, being called by the various methods of the class, 
+		 * when it is desired to save data to Variable queryInfo in order to insert
+		 *  this data in the DB.
 		 * 
-		 * 
-		 * @param validResponse
-		 * @param responseBody
-		 * @param table
+		 * @param validResponse Boolean value that indicates whether the information to 
+		 * be entered is useful for program logic.
+		 * @param responseBody Value of the API response that will be stored in the DB.
+		 * @param table Table that the information should be inserted.
 		 */
 		public static void setQueryInfo(Boolean validResponse, String responseBody, String table) {
 

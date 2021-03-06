@@ -23,130 +23,162 @@ import com.github.bielmarfran.nameit.controllers.MainController;
  */
 public class DataStored {
 	
+	/**
+	 * 
+	 */
 	static Properties config;
+	
+	
+	/**
+	 * 
+	 */
 	private static String keyTmdb="";
+	
+	
+	/**
+	 * 
+	 */
 	public final static String appFilesPath = System.getProperty("user.home")+"\\AppData\\Local\\NameIT\\";
 
 
 	/**
-	 * This method is called every when the program is started, it checks if the folder where 
-	 * the program stores its files, is created together with the files used by the program, 
-	 * if not, it creates the folder structure and the necessary files.
+	 * This method is called whenever the program is started, it checks the 
+	 * folders and files supported by the program are created, if not, it creates them.
 	 */
 	public static void createFiles() {
+		
+		createFolders();
+		
+		createTxtFiles();
+		
+		createPropretiesFile();
+	}
+	
 
+	/**
+	 * This method checks if the folders used by the program's 
+	 * auxiliary files are created, if not, it creates them.
+	 */
+	public static void createFolders() {
 		//Create the NameIT folder
-		File f0 = new File(appFilesPath);
-		boolean bool = f0.mkdirs();
-		if(bool){
-			//System.out.println("Directory created successfully");
-		}else{
-			////System.out.println("Sorry couldnt create specified directory");
-		}
-		//------------------------------
-		File f55 = new File(appFilesPath);
-		bool = f55.mkdirs();
-		if(bool){
-			//System.out.println("Directory created successfully");
-		}else{
-			////System.out.println("Sorry couldnt create specified directory");
-		}
-		f55 = new File(appFilesPath+"\\Database");
-		bool = f55.mkdirs();
-		if(bool){
-			//System.out.println("Directory created successfully");
-		}else{
-			////System.out.println("Sorry couldnt create specified directory");
-		}
+				File folder = new File(appFilesPath);
+				boolean bool = folder.mkdirs();
+				/*if(bool){
+					//System.out.println("Directory created successfully");
+				}else{
+					////System.out.println("Sorry couldnt create specified directory");
+				}
+				
+				//------------------------------
+				 * 
+				 */
+				File folderDatabase = new File(appFilesPath);
+				bool = folderDatabase.mkdirs();
+				/*if(bool){
+					//System.out.println("Directory created successfully");
+				}else{
+					////System.out.println("Sorry couldnt create specified directory");
+				}
+				*/
+				folderDatabase = new File(appFilesPath+"\\Database");
+				bool = folderDatabase.mkdirs();
+				/*if(bool){
+					//System.out.println("Directory created successfully");
+				}else{
+					////System.out.println("Sorry couldnt create specified directory");
+				}
+				*/
+	}
+	
+	
+	/**
+	 * This method checks the auxiliary text files 'exceptions.txt' 
+	 * and 'exceptionsRenamed.txt' are created, otherwise it creates them.
+	 */
+	public static void createTxtFiles() {
 		
-		
-		//-------------------------
-		//Create exceptions.txt
-		File f = new File(appFilesPath+"exceptions.txt");
+		File fileExceptions = new File(appFilesPath+"exceptions.txt");
 		try {
-			if(f.createNewFile()) {
+			fileExceptions.createNewFile();
 
-			}else {
-
-			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();			
 		}
 
 		//Create exceptionsRenamed.txt
-		File f2 = new File(appFilesPath+"exceptionsRenamed.txt");
+		File fileExceptionsRenamed = new File(appFilesPath+"exceptionsRenamed.txt");
 		try {
-			if(f2.createNewFile()) {
-
-			}else {
-
-			}
+			fileExceptionsRenamed.createNewFile();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();			
 		}
-
-
-
+	}
+	
+	
+	/**
+	 * This method checks the properties file has been created, and if the 
+	 * default values for the attributes have been filled in, if not create
+	 *  the file with the default values.
+	 */
+	public static void createPropretiesFile() {
 		//Create config.properties and put en as default
-		config = new Properties();
-		FileInputStream fis;
+				config = new Properties();
+				FileInputStream fis;
 
-		try {
-			fis = new FileInputStream(appFilesPath+"config.properties");
-			config.load(fis);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(config.getProperty("Language") ==null){
-			config.setProperty("Language", "en");
+				try {
+					fis = new FileInputStream(appFilesPath+"config.properties");
+					config.load(fis);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(config.getProperty("Language") ==null){
+					config.setProperty("Language", "en");
 
-		}else {
+				}else {
 
-		}
-		if(config.getProperty("Mode") ==null){
-			config.setProperty("Mode", "Series");
+				}
+				if(config.getProperty("Mode") ==null){
+					config.setProperty("Mode", "Series");
 
-		}else {
+				}else {
 
-		}
-		if(config.getProperty("Movie") ==null){
-			config.setProperty("Movie", "&Name (&Year)");
+				}
+				if(config.getProperty("Movie") ==null){
+					config.setProperty("Movie", "&Name (&Year)");
 
-		}else {
+				}else {
 
-		}
-		if(config.getProperty("Series") ==null){
-			config.setProperty("Series", "&Name (&Year) S&SeasonE&Episode - &EPN");
+				}
+				if(config.getProperty("Series") ==null){
+					config.setProperty("Series", "&Name (&Year) S&SeasonE&Episode - &EPN");
 
-		}else {
+				}else {
 
-		}
-		if(config.getProperty("Anime") ==null){
-			config.setProperty("Anime", "true");
+				}
+				if(config.getProperty("Anime") ==null){
+					config.setProperty("Anime", "true");
 
-		}else {
+				}
 
-		}
-
-		try {
-			config.store(new FileOutputStream(appFilesPath+"config.properties"), null);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				try {
+					config.store(new FileOutputStream(appFilesPath+"config.properties"), null);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 	}
 	
-
+	
 	/**
 	 * This method reads  the readExceptions.txt, which stores user-defined strings 
 	 * to be replaced with other strings to help with the program's logic.

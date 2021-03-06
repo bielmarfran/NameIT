@@ -14,15 +14,29 @@ import com.github.bielmarfran.nameit.Item;
  */
 public class FileOperations {
 	
-	//Store the value of textFieldFolder
-	private static String textFieldFolder_value;
-	//Store the value of checkboxSeries
-	private static boolean checkboxSeries_value;
-	//Store the value of checkboxSeason
-	private static boolean checkboxSeason_value;
-	//Store the value of checkboxFolder
-	private static boolean checkboxFolder_value;
 	
+	/**
+	 * Store the value of textFieldFolder
+	 */
+	private static String textFieldFolder_value;
+	
+	
+	/**
+	 * Store the state of checkboxSeries
+	 */
+	private static boolean checkboxSeries_value;
+	
+	
+	/**
+	 * Store the state of checkboxSeason
+	 */
+	private static boolean checkboxSeason_value;
+	
+	
+	/**
+	 * Store the state of checkboxFolder
+	 */
+	private static boolean checkboxFolder_value;
 	
 	
 	/**
@@ -80,7 +94,6 @@ public class FileOperations {
 	}
 
 		
-
 	/**
 	 * This method is called when no support folder will be created
 	 * 
@@ -99,12 +112,16 @@ public class FileOperations {
 		//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
 		String newPath = absolutePath+"\\"+item.getFinalFileName();
 		Boolean x =f.renameTo(new File(newPath));
-		if(x){
+		/*
+		 if(x){
 			//System.out.println("Directory created successfully");
 		}else{
 			//System.out.println("Sorry couldnt create specified directory");
-		}
+		} 
+		 */
+		
 	}
+	
 	
 	/**
 	 *  This method is called when only the series folder will be created
@@ -116,7 +133,9 @@ public class FileOperations {
 	public static void createFolderSeries(String absolutePath, Item item, File f) {		
 		
 		System.out.println("Create Series");
+		
 		item.setError("");
+		String absolutePathHolder = absolutePath;
 		File file = new File(absolutePath+"\\"+item.getName());
 		boolean bool = file.mkdirs();
 		if(bool){
@@ -124,8 +143,8 @@ public class FileOperations {
 		}else{
 			System.out.println("Sorry couldnt create specified directory");
 		}
-		absolutePath = absolutePath+"\\"+item.getName();
-		String newPath = absolutePath+"\\"+item.getFinalFileName();
+		absolutePathHolder = absolutePath+"\\"+item.getName();
+		String newPath = absolutePathHolder+"\\"+item.getFinalFileName();
 
 		Boolean x =f.renameTo(new File(newPath));
 		if(x){
@@ -137,6 +156,7 @@ public class FileOperations {
 		
 	}
 	
+	
 	/**
 	 *  This method is called when only the season folder will be created
 	 * 
@@ -147,7 +167,8 @@ public class FileOperations {
 	public static void createFolderSeason(String absolutePath, Item item, File f) {
 		
 		if(!checkboxSeries_value && checkboxSeason_value){
-			System.out.println("Create Season");
+			System.out.println("Create Season");			
+			String absolutePathHolder = absolutePath;
 			File file = new File(absolutePath+"\\"+"Season "+item.getSeason());
 			boolean bool = file.mkdirs();
 			if(bool){
@@ -155,8 +176,8 @@ public class FileOperations {
 			}else{
 				System.out.println("Sorry couldnt create specified directory");
 			}
-			absolutePath = absolutePath+"\\"+"Season "+item.getSeason();
-			String newPath = absolutePath+"\\"+item.getFinalFileName();
+			absolutePathHolder = absolutePath+"\\"+"Season "+item.getSeason();
+			String newPath = absolutePathHolder+"\\"+item.getFinalFileName();
 			Boolean x =f.renameTo(new File(newPath));
 			if(x){
 				//System.out.println("Directory created successfully");
@@ -166,6 +187,7 @@ public class FileOperations {
 
 		}
 	}
+	
 	
 	/**
 	 *  This method is called when both series/season folder will be created
@@ -177,15 +199,16 @@ public class FileOperations {
 	public static void createFolderSeriesSeason(String absolutePath, Item item, File f) {
 		
 		System.out.println("Create Season and Series");
-		File file = new File(absolutePath+"\\"+item.getName()+"\\"+"Season "+item.getSeason());
+		String absolutePathHolder = absolutePath;
+		File file = new File(absolutePathHolder+"\\"+item.getName()+"\\"+"Season "+item.getSeason());
 		boolean bool = file.mkdirs();
 		if(bool){
 			System.out.println("Directory created successfully");
 		}else{
 			System.out.println("Sorry couldnt create specified directory");
 		}
-		absolutePath = absolutePath+"\\"+item.getName()+"\\"+"Season "+item.getSeason();
-		String newPath = absolutePath+"\\"+item.getFinalFileName();
+		absolutePathHolder = absolutePath+"\\"+item.getName()+"\\"+"Season "+item.getSeason();
+		String newPath = absolutePathHolder+"\\"+item.getFinalFileName();
 		System.out.println(newPath);	
 
 		Boolean x =f.renameTo(new File(newPath));
@@ -196,7 +219,6 @@ public class FileOperations {
 			System.out.println("Sorry couldnt create specified directory");
 		}
 	}
-	
 	
 	
 	/**
@@ -226,8 +248,8 @@ public class FileOperations {
 		File f = item.getOriginalFile();
 		String exetention = GlobalFunctions.getExtension(f.getName());
 		newName = newName+"."+exetention;
-		newName = GlobalFunctions.formatName_Windows(newName);
-		name = GlobalFunctions.formatName_Windows(name);
+		newName = GlobalFunctions.formatNameWindows(newName);
+		name = GlobalFunctions.formatNameWindows(name);
 		
 		//Set the final name
 		item.setName(newName);
@@ -263,6 +285,7 @@ public class FileOperations {
 		return true;
 	}
 	
+	
 	/**
 	 * This method is called when no support folder will be created
 	 * 
@@ -272,8 +295,11 @@ public class FileOperations {
 	 * @param newName New name of the file
 	 */
 	public static void noFolderMovie(String absolutePath, Item item, File f, String newName) {		
+		
 		item.setError("");
-		File file = new File(absolutePath);
+		String absolutePathHolder = absolutePath;
+		File file = new File(absolutePathHolder);
+		
 		boolean bool = file.mkdirs();
 		if(bool){
 			System.out.println("Directory created successfully");
@@ -281,7 +307,7 @@ public class FileOperations {
 			System.out.println("Sorry couldnt create specified directory");
 		}
 		//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
-		String newPath = absolutePath+"\\"+newName;
+		String newPath = absolutePathHolder+"\\"+newName;
 		Boolean x =f.renameTo(new File(newPath));
 		if(x){
 			//System.out.println("Directory created successfully");
@@ -289,6 +315,7 @@ public class FileOperations {
 			//System.out.println("Sorry couldnt create specified directory");
 		}
 	}
+	
 	
 	/**
 	 * 
@@ -302,16 +329,17 @@ public class FileOperations {
 			
 		
 		item.setError("");
+		String absolutePathHolder = absolutePath;
 		System.out.println("Create Film");
-		File file = new File(absolutePath+"\\"+name);
+		File file = new File(absolutePathHolder+"\\"+name);
 		boolean bool = file.mkdirs();
 		if(bool){
 			System.out.println("Directory created successfully");
 		}else{
 			System.out.println("Sorry couldnt create specified directory");
 		}
-		absolutePath = absolutePath+"\\"+name;
-		String newPath = absolutePath+"\\"+newName;
+		absolutePathHolder = absolutePath+"\\"+name;
+		String newPath = absolutePathHolder+"\\"+newName;
 	
 		Boolean x =f.renameTo(new File(newPath));
 		if(x){

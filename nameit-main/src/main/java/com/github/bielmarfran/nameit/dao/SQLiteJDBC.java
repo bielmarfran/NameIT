@@ -11,7 +11,6 @@ import java.sql.*;
 public class SQLiteJDBC {
 	
 
-	static Statement stmt = null;
 	private static String databasePath = DataStored.appFilesPath+"Database\\NameIT.db";
 	
 	
@@ -21,7 +20,7 @@ public class SQLiteJDBC {
 	 */
 	public static void createDatabase( ) {		
 		 Connection connection = null;
-
+		 Statement stmt = null;
 	        try
 	        {
 	          // create a database connection
@@ -69,7 +68,7 @@ public class SQLiteJDBC {
 	 */
 	public static QueryInfo selectQuery(QueryInfo queryInfo) {		
 		 Connection connection = null;
-
+		 Statement stmt = null;
 	        try
 	        {
 	          // create a database connection

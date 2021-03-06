@@ -109,9 +109,21 @@ public class MainController {
 	private static final String HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND = "#6ea364";	
 	//
 	
-	//Boolean Variables
+
+	/**
+	* Represents the state of the test order for API.
+	* 
+	* @HasGetter
+	* @HasSetter
+	*/
 	private static Boolean isApiValid = false;
+	
+	
+	/**
+	 * Represents the state of the process of finding information about Items.
+	 */
 	private static boolean isFindInfoValid = true;
+	
 	
 	//ArraysList
 	//Extension allowed in the program
@@ -123,18 +135,27 @@ public class MainController {
 	//Array where all Episodes that during the run get an Error Mensagem are store waiting for handling.
 	private ArrayList<Item> renamingListError = new  ArrayList<>();
 	
-	//
+
 	//Local Episode Variable used during the logic in the class
 	private static Item item = new Item();
-	//Call for the Service Class, that good part of the program logic will run on.
+	
+	
+	/**
+	 * Class of service variable, used to execute the program 
+	 * logic without blocking the UI rendering.
+	 */
 	private Service<Void> backgroundTaks;
-	//Store the value of textFieldFolder
+	
+
+	/**
+	 * Stores the textfieldPath value, which represents the path chosen by the user.
+	 */
 	private static String textFieldFolder_value;
 	
 
 
 
-	//Get - Set
+
 	public static Boolean getIsApiValid() {
 		return isApiValid;
 	}
@@ -143,7 +164,7 @@ public class MainController {
 		MainController.isApiValid = isApiValid;
 	}
 
-	//End Get - Set
+
 
 
 	/**
@@ -225,7 +246,7 @@ public class MainController {
 	 * This method deals with a drag event on the listViewFiles, 
 	 * which is the list where the user drops the files.
 	 * 
-	 * @param dragEvent 
+	 * @param dragEvent  Drag Event Over
 	 */
 	public void handleDragOverListView(DragEvent dragEvent) {
 		if(dragEvent.getDragboard().hasFiles()){
@@ -234,13 +255,14 @@ public class MainController {
 		}
 	}
 
+	
 	/**
 	 * This method takes files that have been dropped, and does two things.
 	 * 	First fill the interface, in this case listViewFiles with the names of the files.
 	 * 	Second it stores the created <Item> Objects in an ArrayList, which store various 
 	 * information about the files and are used throughout the program.
 	 * 
-	 * @param dragEvent
+	 * @param dragEvent Drag Event Drop
 	 */
 	public void handleDropListView(DragEvent dragEvent) {
 		List<File> files = dragEvent.getDragboard().getFiles();
@@ -390,6 +412,7 @@ public class MainController {
 		
 	}
 	
+	
 	/**
 	 * This method check is @param is greater than 0.
 	 * 
@@ -404,6 +427,7 @@ public class MainController {
 		}
 		return false;
 	}
+	
 	
 	/**
 	 * This method is called when the item to be processed is a series.
@@ -436,6 +460,7 @@ public class MainController {
 		
 	}
 	
+	
 	/**
 	 * This method is called when the item to be processed is a film.
 	 */
@@ -461,6 +486,7 @@ public class MainController {
 		}
 		
 	}
+	
 	
 	/**
 	 * This method is called to update the progress bar progress in the UI.
@@ -581,7 +607,6 @@ public class MainController {
 		}
 	
 	
-
 	/**
 	 * This method is called when the user clicks on the text field path, 
 	 * Calling the {@link getPath()}  for its actions.
@@ -839,7 +864,6 @@ public class MainController {
 	}
 	
 	
-
 	/**
 	 * This method implements a new setCellFactory for the  listViewErrorText.
 	 * It allows you to change the background color of the list items according to their situation.
@@ -907,7 +931,6 @@ public class MainController {
 
 		}
 	}
-	
 	
 
 	/**
@@ -1021,8 +1044,7 @@ public class MainController {
 
 	}
 	
-	
-	//Main Routine that Control the Pagination Element, that shows Errors Values and Alternative Values when available. 
+	 
 	/**
 	 * This method is important, it has two important features.
 	 * First: It checks when there is alternative information that can help in 
@@ -1159,6 +1181,7 @@ public class MainController {
 		});
 	}
 	
+	
 	/**
 	 * This method, checks if the Json item is null.
 	 * 
@@ -1207,10 +1230,8 @@ public class MainController {
 		renamingListError.remove(item);
 		
 	}
-	//End Support UI--------------------------------------------------
 
-	
-	//Check if the TMDB API is responding correctly.
+
 	/**
 	 * This method receives the response from the request {@link  com.github.bielmarfran.nameit.JsonOperationsTmdb.checkConnection()}
 	 * and updates the interface according to response.
