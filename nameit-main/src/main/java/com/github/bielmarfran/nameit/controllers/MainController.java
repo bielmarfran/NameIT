@@ -5,8 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import java.io.File;
-import java.io.FileInputStream;
-
 import javafx.util.Callback;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -42,8 +40,15 @@ import javafx.stage.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.bielmarfran.nameit.*;
-import com.github.bielmarfran.nameit.dao.*;
+import com.github.bielmarfran.nameit.App;
+import com.github.bielmarfran.nameit.GlobalFunctions;
+import com.github.bielmarfran.nameit.Item;
+import com.github.bielmarfran.nameit.JsonOperationsTmdb;
+import com.github.bielmarfran.nameit.OperationTmdbMovie;
+import com.github.bielmarfran.nameit.OperationTmdbSerie;
+import com.github.bielmarfran.nameit.dao.DataStored;
+import com.github.bielmarfran.nameit.dao.FileOperations;
+import com.github.bielmarfran.nameit.dao.SQLiteJDBC;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -198,18 +203,18 @@ public class MainController {
 						found=true;
 					}
 				}
-			
-				if (found) {
-					if(!paginationErrorList.isDisable()) {
-						try {
-							//System.out.println(index);
-							paginationErrorList.setCurrentPageIndex(index);
-						} catch (Exception e) {
-							// TODO: handle exception
-						}		
-					}
+
+				if (found && !paginationErrorList.isDisable()) {
+
+					try {
+						//System.out.println(index);
+						paginationErrorList.setCurrentPageIndex(index);
+					} catch (Exception e) {
+						// TODO: handle exception
+					}		
+
 				}
-				
+
 			}
 		});
 	}
@@ -295,20 +300,8 @@ public class MainController {
 
 
 		isFindInfoValid = true;
+		checkBeforefindInfo();
 		
-		if(checkboxFolder.isSelected()==true && textFieldFolder_value==null) {
-			isFindInfoValid=false;
-			System.out.println("--Inside alert if--");
-			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
-		}else {
-			if(!isApiValid) {
-				isFindInfoValid = false;
-				System.out.println("--Inside alert if 2--");
-				GlobalFunctions.alertCallerWarning("Warning Dialog", "Disconected from Api", "1 - Check you internet connection.\n"+
-						"2 - Restar the program. \n"+
-						"3 - The Api maybe be down. \n");
-			}
-		}
 		System.out.println("-- before-backgroundTaks--");
 		renamingListError.clear();
 		
@@ -334,22 +327,17 @@ public class MainController {
 								cancel();
 							}else {
 								String mode = DataStored.propertiesGetMode(); 
-								if(mode.equals("Series")) {
-									System.out.println("renamingList.size() -- "+renamingList.size());
-									if(isRenamingListEmpth(renamingList.size())) {
-										cancel();
-									}
-									findInfoSeries();
-									
-									
+								if(isRenamingListEmpth(renamingList.size())) {
+									cancel();
 								}else {
-									System.out.println("renamingList.size() -- "+renamingList.size());
-									if(isRenamingListEmpth(renamingList.size())) {
-										cancel();
+									if(mode.equals("Series")) {
+										System.out.println("renamingList.size() -- "+renamingList.size());								
+										findInfoSeries();																		
+									}else {
+										System.out.println("renamingList.size() -- "+renamingList.size());			
+										findInfoMovies();									
 									}
-									findInfoMovies();
-									
-								}
+								}	
 							}
 						}											
 						return null;
@@ -412,6 +400,30 @@ public class MainController {
 		
 	}
 	
+	/**
+	 * This method does two checks before starting the process of finding information from the file.
+	 * First, check if the user has indicated an alternative path, and if that path is not null.
+	 * Second, check if the test connection to the API was successful.
+	 * In cases where there is a problem, notify the user with an In negative cases it warns
+	 * the user with a Pop-up and cancel the process of searching for information.
+	 */
+	public void checkBeforefindInfo() {
+		
+		if(checkboxFolder.isSelected() && textFieldFolder_value == null) {
+			isFindInfoValid=false;
+			System.out.println("--Inside alert if--");
+			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
+		}else {
+			if(!isApiValid) {
+				isFindInfoValid = false;
+				System.out.println("--Inside alert if 2--");
+				GlobalFunctions.alertCallerWarning("Warning Dialog", "Disconected from Api", "1 - Check you internet connection.\n"+
+						"2 - Restar the program. \n"+
+						"3 - The Api maybe be down. \n");
+			}
+		}
+		
+	}
 	
 	/**
 	 * This method check is @param is greater than 0.
@@ -439,7 +451,7 @@ public class MainController {
 			System.out.println("TMDB Series");
 			OperationTmdbSerie tmdbs = new OperationTmdbSerie();
 			
-			if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
+			if(renamingList.get(x).getAlternetiveInfo()!=null && renamingList.get(x).getState()==0) {
 				tmdbs.setInfoAlternative(renamingList.get(x));
 			}else {
 				
@@ -510,7 +522,7 @@ public class MainController {
 	 * 
 	 * @param actionEvent Click Event
 	 */
-	public void buttonMatchInfo(javafx.event.ActionEvent actionEvent) {
+	public void buttonMatchInfo(ActionEvent actionEvent) {
 		findInfo();		
 		buttonMatchInfo.setVisible(false);
 	}
@@ -566,32 +578,26 @@ public class MainController {
 	 *  
 	 * @param mouseEvent Click Event
 	 */
-	public void buttonRenameAction(javafx.event.ActionEvent actionEvent) {
+	public void buttonRenameAction(ActionEvent actionEvent) {
 		System.out.println(renamingList.size());
 		int size = renamingList.size();
 		String mode = DataStored.propertiesGetMode(); 
 		for(int x=0;x<=size-1;x++){	
 			System.out.println("Tamanho - "+x);
 			if(mode.equals("Series")) {
-				if(renamingList.get(x).getState()==1) {
-					if(FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
-						removeItem(renamingList.get(x));
-						size--;
-						x--;
-					}
+				if(renamingList.get(x).getState()==1 && FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
+					removeItem(renamingList.get(x));
+					size--;
+					x--;
 				}
 			}else{
-				if(renamingList.get(x).getState()==1) {
-					if(FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
-						removeItem(renamingList.get(x));
-						size--;
-						x--;
-					}
+				if(renamingList.get(x).getState()==1 && FileOperations.renameFileMovie(renamingList.get(x), checkboxSeries.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
+					removeItem(renamingList.get(x));
+					size--;
+					x--;
 				}
 			}
 		}
-	
-
 	}
 	
 	
@@ -601,7 +607,7 @@ public class MainController {
 	 * 
 	 * @param actionEvent
 	 */
-	public void buttonClearAction(javafx.event.ActionEvent actionEvent) {
+	public void buttonClearAction(ActionEvent actionEvent) {
 			System.out.println("Clear Button");
 			clearALL();
 		}
@@ -625,7 +631,7 @@ public class MainController {
 	 * 
 	 * @param actionEvent Click Event
 	 */
-	public void checkBoxFolder(javafx.event.ActionEvent actionEvent) {
+	public void checkBoxFolder(ActionEvent actionEvent) {
 		checkBoxFolderAction();
 	}
 	
@@ -979,7 +985,72 @@ public class MainController {
 	 */
 	public void errorDisplay(String Error, String name,ListView<String> listUI) {
 
-		if(Error.equals("01")){
+		switch (Error) {
+		case "01": 
+			System.out.println("Error 01");					
+			listUI.getItems().add(String.valueOf("File -- "+name));			
+			listUI.getItems().add("Error 01 - Empty Name.");
+		break;
+		
+		case "02": 
+			System.out.println("Error 02");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 02 - It was not possible to determine the series.");
+		break;
+		
+		case "03": 
+			System.out.println("Error 03");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 03 - Failed to connect to the Api.");
+		break;
+		
+		case "04": 
+			System.out.println("Error 04");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 04 - Season value not found.");
+		break;
+		
+		case "05": 
+			System.out.println("Error 05");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 05 - Episode value not found.");
+		break;
+		
+		case "06": 
+			System.out.println("Error 06");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 06 - No API response for season and episode parameters.");
+		break;
+		
+		
+		case "07": 
+			System.out.println("Error 07");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 07 - It was not possible to determine Season/Episode value.");
+		break;
+		
+		case "08": 
+			System.out.println("Error 08");
+			listUI.getItems().add(String.valueOf("File -- "+name));
+			listUI.getItems().add("Error 08 - The path value is Empy.");
+		break;
+		
+		case "09": 
+			System.out.println("Error 09");
+			listUI.getItems().add(name);
+			listUI.getItems().add("Error 09 - No suitable match.");
+		break;
+		
+		case "10": 
+			System.out.println("Error 10");					
+			listUI.getItems().add(String.valueOf("File -- "+name));
+		break;
+		
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + Error);
+		}
+		/*
+		 * 	if(Error.equals("01")){
 			System.out.println("Error 01");					
 			listUI.getItems().add(String.valueOf("File -- "+name));			
 			listUI.getItems().add("Error 01 - Empty Name.");
@@ -1041,6 +1112,8 @@ public class MainController {
 			System.out.println("Error 10");					
 			listUI.getItems().add(String.valueOf("File -- "+name));
 		}
+		 */
+	
 
 	}
 	
@@ -1065,8 +1138,8 @@ public class MainController {
 		paginationErrorList.setPageFactory((pageIndex) -> {		
 			ListView<String> Text = new ListView<String>();		
 			Text.getItems().clear();
-			if(!(renamingListError.size()==0)) {		
-					if(!(renamingListError.get(pageIndex).getOptionsList()==null) && !checkErrorEpisodeSeason(renamingListError.get(pageIndex).getError())) {
+			if(renamingListError.size()!=0) {		
+					if(renamingListError.get(pageIndex).getOptionsList()!=null && !checkErrorEpisodeSeason(renamingListError.get(pageIndex).getError())) {
 						
 
 						 String holder = renamingListError.get(pageIndex).getOptionsList();					
@@ -1101,11 +1174,11 @@ public class MainController {
 								try {
 			
 									String name;
-									name = getValue(op,"name") == true ? op.get("name").getAsString() : "Error 05";
+									name = getValue(op,"name") ? op.get("name").getAsString() : "Error 05";
 									String year;
-									year = getValue(op,"first_air_date") == true ? op.get("first_air_date").getAsString() : "Error 05";
+									year = getValue(op,"first_air_date") ? op.get("first_air_date").getAsString() : "Error 05";
 									String id;
-									id = getValue(op,"id") == true ? op.get("id").getAsString() : "Error 05";
+									id = getValue(op,"id") ? op.get("id").getAsString() : "Error 05";
 	
 									
 									String value ="Title - "+name+ " | Year - "+year+ " | ID - "+id+ " | Animation - "+animation.toString()+" |";
@@ -1168,10 +1241,9 @@ public class MainController {
 			};
 		
 			
-			if(Text.getItems().size()>1) {
-				if(Text.getItems().get(1).equals("Double click if you find the correct information")) {
-					Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
-				}
+			if(Text.getItems().size()>1 && Text.getItems().get(1).equals("Double click if you find the correct information")) {
+
+				Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
 			}
 			
 			System.out.println(Text.getItems());
@@ -1207,15 +1279,13 @@ public class MainController {
 	 * @returnTrue if the error is related to the season / episode.
 	 * False when not related.
 	 */
- 	public boolean checkErrorEpisodeSeason(String error) {
-		if(error !=null){
-			if(error.equals("04")|| error.equals("05")|| error.equals("06")|| error.equals("07")) {
-				return true;
-			}
+	public boolean checkErrorEpisodeSeason(String error) {
+		if(error !=null && error.equals("04")|| error.equals("05")|| error.equals("06")|| error.equals("07")){
+			return true;
 		}
 		return false;
 	}
-	
+
 	
 	/**
 	 * This method is called when the renaming process was successful in 
