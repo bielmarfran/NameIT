@@ -1280,10 +1280,7 @@ public class MainController {
 	 * False when not related.
 	 */
 	public boolean checkErrorEpisodeSeason(String error) {
-		if(error !=null && error.equals("04")|| error.equals("05")|| error.equals("06")|| error.equals("07")){
-			return true;
-		}
-		return false;
+		return error !=null && error.equals("04")|| error.equals("05")|| error.equals("06")|| error.equals("07");
 	}
 
 	

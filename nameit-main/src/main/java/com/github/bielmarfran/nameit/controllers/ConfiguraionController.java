@@ -307,15 +307,8 @@ public class ConfiguraionController {
 	 * @return True if a forbidden character was found, or False if it is not found
 	 */
 	public boolean isValid(String text) {
-		if(text.contains("*") || text.contains("<") || text.contains(">") || text.contains("?")) {
-			return true;
-		}
-		if(text.contains(":") || text.contains("/") || text.contains("\"") || text.contains("|")) {
-			return true;
-		}
 
-		return false;
-		
+		return text.contains(":") || text.contains("/") || text.contains("\"") || text.contains("|") || text.contains("*") || text.contains("<") || text.contains(">") || text.contains("?");	
 		
 	}
 	

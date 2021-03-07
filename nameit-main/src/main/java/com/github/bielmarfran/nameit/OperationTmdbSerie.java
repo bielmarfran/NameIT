@@ -61,6 +61,11 @@ public class OperationTmdbSerie {
 		 */
 		private static Boolean checkForAnime=true;
 		
+		/**
+		 * 
+		 */
+		public static String seriesPartialName="";
+		
 		
 		/**
 		* Variable of a QueryInfo Object where the information worked with the DB is stored.
@@ -248,51 +253,94 @@ public class OperationTmdbSerie {
 			return null;
 		}
 		
-		
+	
 		/**
 		 * This method tries to find a value that represents the season.
 		 */
 		public static void getSeason() {
-			System.out.println("-Inside Season-");
+			System.out.println("-Inside getSeason-");
 
-			String test="";
+			seriesPartialName="";
 			String season="";
 			controlNameBlock++;
-			int control_season=0;
+			boolean isSeasonFound = false;
 			int size =namesBlocks.length- controlNameBlock;
 			for(int x=0;x<size;x++){
-				test= test + namesBlocks[x+controlNameBlock];
+				seriesPartialName= seriesPartialName + namesBlocks[x+controlNameBlock];
 			}
-			System.out.println("Valor test inside season"+test);
+			System.out.println("Valor test inside season"+seriesPartialName);
+			
+			isSeasonFound = getSeasonFormatLeters(seriesPartialName,isSeasonFound,season);
+			
+			getSeasonFormatNumbers(isSeasonFound, seriesPartialName);
+					
+		}
+		
+		
+		/**
+		 * This method tries to find a value that represents the season.
+		 * It's an implementation {@link getSeason()} adapted to the alternative 
+		 * information source.
+		 * 
+		 * @param item Object that holds the episode information.
+		 */
+		public static void getSeasonAlternative(Item item) {
+			System.out.println("-Inside SeasonAlternative");
+			
+			seriesPartialName = item.getOriginalName();
+			seriesPartialName = GlobalFunctions.formatName(seriesPartialName, "Series", item);
+					
+			String season="";
+			boolean isSeasonFound = false;
+			seriesPartialName = seriesPartialName.replace(item.getName().toLowerCase(), "");
+			seriesPartialName = seriesPartialName.replace(String.valueOf(item.getYear()), "");
+			System.out.println("Valor test inside season = "+seriesPartialName);
+			
+			isSeasonFound = getSeasonFormatLeters(seriesPartialName,isSeasonFound,season);
+			
+			getSeasonFormatNumbers(isSeasonFound, seriesPartialName);
+			
+			
+			item.setAlternetiveInfo("");
+		}
+		
+		
+		/**
+		 * This method tries to find the value for season when the value of the season has an 'S' before it.
+		 * 
+		 * @param seriesPartialName Part of the name of the series where the value of the season possibly is.
+		 * @param isSeasonFound Boolean indicating whether the season value has been found.
+		 * @param season The value of the season.
+		 */
+		public static boolean  getSeasonFormatLeters(String seriesPartialName, boolean isSeasonFound, String season) {
 			for(int x=0;x<10;x++){
-				if(!test.isEmpty()) {
-					if(test.contains("s"+x)){
-						int s_index = test.indexOf("s"+x);
-						if(test.length()>1){
-							test = test.substring(s_index+1);
+				if(!seriesPartialName.isEmpty()) {
+					if(seriesPartialName.contains("s"+x)){
+						int s_index = seriesPartialName.indexOf("s"+x);
+						if(seriesPartialName.length()>1){
+							seriesPartialName = seriesPartialName.substring(s_index+1);
 							s_index=0;
-							while(GlobalFunctions.isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
-								control_season++;
+							while(GlobalFunctions.isNumeric(seriesPartialName.substring(s_index,s_index+1))&& seriesPartialName.length()>1){
+								isSeasonFound = true;
 								//checkForAnime=false;
-								season = season+test.substring(s_index,s_index+1);
-								test = test.substring(s_index+1);
+								season = season+seriesPartialName.substring(s_index,s_index+1);
+								seriesPartialName = seriesPartialName.substring(s_index+1);
 							}
-							if(!GlobalFunctions.isNumeric(test.substring(s_index, s_index + 1))){
+							if(!GlobalFunctions.isNumeric(seriesPartialName.substring(s_index, s_index + 1))){
 
 								item.setSeason(season);
 								item.setError("");	
-								getEpisode(test, controlNameBlock);
+								getEpisode(seriesPartialName, controlNameBlock);
 
 							}
-							if(test.length()==1 && GlobalFunctions.isNumeric(test)){
+							if(seriesPartialName.length()==1 && GlobalFunctions.isNumeric(seriesPartialName)){
 								GlobalFunctions.setItemError(item, "05");
-								season = season+test;
-								control_season++;
+								season = season+seriesPartialName;
+								isSeasonFound = true;
 							}else {
-								if(test.length()==1 && !GlobalFunctions.isNumeric(test)){
+								if(seriesPartialName.length()==1 && !GlobalFunctions.isNumeric(seriesPartialName)){
 									GlobalFunctions.setItemError(item, "04");
 								}
-
 							}
 						}else {
 							GlobalFunctions.setItemError(item, "04");
@@ -304,20 +352,31 @@ public class OperationTmdbSerie {
 					x=10;
 				}
 			}
+			return isSeasonFound;
+		}
+		
+		/**
+		 * This is the second method that tries to find a value for the season, it only deals 
+		 * with numerical values, without ignoring other identifiers.
+		 * 
+		 * @param isSeasonFound Boolean indicating whether the season value has been found.
+		 * @param seriesPartialName Part of the name of the series where the value of the season possibly is.
+		 */
+		public static void getSeasonFormatNumbers(boolean isSeasonFound, String seriesPartialName) {
 			
-			if(control_season==0){
+			if(!isSeasonFound){
 				System.out.println("--No s found 4--");
 				int c=0;
 				String season_value="";
-				for(int y =0;y<test.length();y++){
-					if(GlobalFunctions.isNumeric(test.substring(y,y+1)) && c<=0){						
-						test = test.substring(y);
+				for(int y =0;y<seriesPartialName.length();y++){
+					if(GlobalFunctions.isNumeric(seriesPartialName.substring(y,y+1)) && c<=0){						
+						seriesPartialName = seriesPartialName.substring(y);
 						c=1;
 					}				
 				}
-				while(test.length()>1 && GlobalFunctions.isNumeric(test.substring(0,1)) ){
-					season_value = season_value + test.substring(0,1);
-					test = test.substring(1);	
+				while(seriesPartialName.length()>1 && GlobalFunctions.isNumeric(seriesPartialName.substring(0,1)) ){
+					season_value = season_value + seriesPartialName.substring(0,1);
+					seriesPartialName = seriesPartialName.substring(1);	
 				}
 				//System.out.println("Size "+season_value.length());
 				switch (season_value.length()) {
@@ -327,20 +386,20 @@ public class OperationTmdbSerie {
 					item.setState(3);
 					break;
 				case 1: 
-					getSeasonCase1(test,season_value);
+					getSeasonCase1(seriesPartialName,season_value);
 					break;
 				case 2: 
-					getSeasonCase2(test,season_value);
+					getSeasonCase2(seriesPartialName,season_value);
 					break;
 				case 3: 
-					getSeasonCase3(test,season_value);
+					getSeasonCase3(seriesPartialName,season_value);
 					break;
 				case 4: 
-					getSeasonCase4(test,season_value);
+					getSeasonCase4(seriesPartialName,season_value);
 					break;
 				default:
 					if(season_value.length()>4 &&season_value.length()<7) {
-						getSeasonCaseDefault(test,season_value);
+						getSeasonCaseDefault(seriesPartialName,season_value);
 					}
 					break;
 				}
@@ -348,16 +407,15 @@ public class OperationTmdbSerie {
 			}
 		}
 		
-		
 		/**
 		 * This method is called when the number chain where the season value 
 		 * possibly has a single value.
 		 * 
-		 * @param test File name currently.
+		 * @param seriesPartialName File name currently.
 		 * @param season_value Value that possibly represents the season.
 		 */
-		public static void getSeasonCase1(String test,String season_value) {
-			String testHolder = test;
+		public static void getSeasonCase1(String seriesPartialName,String season_value) {
+			String testHolder = seriesPartialName;
 			if(testHolder.substring(0,1).equals("x") ) {
 				checkForAnime = false;
 				testHolder = testHolder.substring(1);
@@ -372,11 +430,11 @@ public class OperationTmdbSerie {
 		 * This method is called when the number chain where the season value 
 		 * possibly has has one of two values.
 		 * 
-		 * @param test File name currently.
+		 * @param seriesPartialName File name currently.
 		 * @param season_value Value that possibly represents the season.
 		 */
-		public static void getSeasonCase2(String test, String season_value) {
-			String testHolder = test;
+		public static void getSeasonCase2(String seriesPartialName, String season_value) {
+			String testHolder = seriesPartialName;
 			if(GlobalFunctions.isNumeric(testHolder.substring(2,3))) {
 				testHolder = testHolder.substring(2);
 				item.setSeason(season_value.substring(0,2));
@@ -393,11 +451,11 @@ public class OperationTmdbSerie {
 		 * This method is called when the string of numbers where the season 
 		 * value possibly has three values.
 		 * 
-		 * @param test File name currently.
+		 * @param seriesPartialName File name currently.
 		 * @param season_value Value that possibly represents the season.
 		 */
-		public static void getSeasonCase3(String test, String season_value) {
-			String testHolder = test;
+		public static void getSeasonCase3(String seriesPartialName, String season_value) {
+			String testHolder = seriesPartialName;
 			testHolder = testHolder.substring(1);
 			item.setSeason(season_value.substring(0,1));
 			getEpisode(season_value.substring(1,3), controlNameBlock);
@@ -408,10 +466,10 @@ public class OperationTmdbSerie {
 		 * This method is called when the string of numbers where the value of
 		 *  the season possibly has four values.
 		 * 
-		 * @param test File name currently.
+		 * @param seriesPartialName File name currently.
 		 * @param season_value Value that possibly represents the season.
 		 */
-		public static void getSeasonCase4(String test, String season_value) {
+		public static void getSeasonCase4(String seriesPartialName, String season_value) {
 			item.setSeason(season_value.substring(0,2));
 			getEpisode(season_value.substring(2,4), controlNameBlock);
 		}
@@ -420,117 +478,16 @@ public class OperationTmdbSerie {
 		 * This method is called when the string of numbers where the season value
 		 * possibly has more than 4 four values but less than 7.
 		 * 
-		 * @param test  File name currently.
+		 * @param seriesPartialName  File name currently.
 		 * @param season_value  Value that possibly represents the season.
 		 */
-		public static void getSeasonCaseDefault(String test, String season_value) {
+		public static void getSeasonCaseDefault(String seriesPartialName, String season_value) {
 			
 			item.setSeason(season_value.substring(0,2));
 			getEpisode(season_value.substring(2,season_value.length()), controlNameBlock);
 		}
 		
 		
-		/**
-		 * This method tries to find a value that represents the season.
-		 * It's an implementation {@link getSeason()} adapted to the alternative 
-		 * information source.
-		 * 
-		 * @param item Object that holds the episode information.
-		 */
-		public static void getSeasonAlternative(Item item) {
-			System.out.println("-Inside SeasonAlternative");
-			
-			String test = item.getOriginalName();
-			test = GlobalFunctions.formatName(test, "Series", item);
-					
-			String season="";
-			int control_season=0;
-			test = test.replace(item.getName().toLowerCase(), "");
-			test = test.replace(String.valueOf(item.getYear()), "");
-			System.out.println("Valor test inside season = "+test);
-			
-			for(int x=0;x<10;x++){
-				if(!test.isEmpty()) {
-					if(test.contains("s"+x)){
-						int s_index = test.indexOf("s"+x);
-						if(test.length()>1){
-							test = test.substring(s_index+1);
-							s_index=0;
-							while(GlobalFunctions.isNumeric(test.substring(s_index,s_index+1))&& test.length()>1){
-								control_season++;
-								season = season+test.substring(s_index,s_index+1);
-								test = test.substring(s_index+1);
-							}
-							if(!GlobalFunctions.isNumeric(test.substring(s_index, s_index + 1))){
-								item.setSeason(season);							
-								getEpisode(test, controlNameBlock);
-								//item.setError("");	
-							}
-							if(test.length()==1 && GlobalFunctions.isNumeric(test)){
-								GlobalFunctions.setItemError(item, "05");	
-								season = season+test;
-								control_season++;
-							}else {
-								if(test.length()==1 && !GlobalFunctions.isNumeric(test)){	
-									GlobalFunctions.setItemError(item, "04");
-								}
-
-							}
-						}else {
-							GlobalFunctions.setItemError(item, "05");	
-							System.out.println("Error");							
-						}
-					}else {	
-																							
-					}
-				}else{
-					System.out.println("File name Empty after part used for id reconition");
-					GlobalFunctions.setItemError(item, "04");	
-					x=10;
-				}
-				
-			}
-			if(control_season==0){
-				System.out.println("--No s found 4--");
-				int c=0;
-				String season_value="";
-				for(int y =0;y<test.length();y++){
-					if(GlobalFunctions.isNumeric(test.substring(y,y+1)) && c<=0){
-						test = test.substring(y);
-						c=1;
-					}				
-				}
-				while(test.length()>1 && GlobalFunctions.isNumeric(test.substring(0,1)) ){
-					season_value = season_value + test.substring(0,1);
-					test = test.substring(1);	
-				}
-				System.out.println("Size "+season_value.length());
-				switch (season_value.length()) {
-				case 0: 
-					System.out.println("File name Empty after part used for id reconition");
-					GlobalFunctions.setItemError(item, "04");
-					break;
-				case 1: 
-					getSeasonCase1(test,season_value);
-					break;
-				case 2: 
-					getSeasonCase2(test,season_value);
-					break;
-				case 3: 
-					getSeasonCase3(test,season_value);
-					break;
-				case 4: 
-					getSeasonCase4(test,season_value);
-					break;
-				default:
-					getSeasonCaseDefault(test,season_value);
-				}
-															
-			}
-
-			
-			item.setAlternetiveInfo("");
-		}
 		
 
 		/**

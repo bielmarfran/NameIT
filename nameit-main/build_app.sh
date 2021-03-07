@@ -10,7 +10,7 @@
 # APP_VERSION: the application version, e.g. 1.0.0, shown in "about" dialog
 
 JAVA_VERSION=14
-MAIN_JAR="main-ui-$PROJECT_VERSION.jar"
+MAIN_JAR="nameit-ui-$PROJECT_VERSION.jar"
 
 # Set desired installer type: "app-image", "dmg", "pkg", "rpm" or "deb".
 INSTALLER_TYPE=app-image
@@ -44,7 +44,7 @@ detected_modules=`$JAVA_HOME/bin/jdeps \
   --ignore-missing-deps \
   --print-module-deps \
   --class-path "target/installer/input/libs/*" \
-    target/classes/com/dlsc/jpackagefx/App.class`
+    target/classes/com/github/bielmarfran/nameit/App.class`
 echo "detected modules: ${detected_modules}"
 
 
@@ -56,9 +56,9 @@ echo "detected modules: ${detected_modules}"
 #
 # In addition we need jdk.localedata if the application is localized.
 # This can be reduced to the actually needed locales via a jlink paramter,
-# e.g., --include-locales=en,de.
+# e.g., --include-locales=en,de. jdk.localedata
 
-manual_modules=jdk.crypto.ec,jdk.localedata
+manual_modules=jdk.crypto.ec
 echo "manual modules: ${manual_modules}"
 
 # ------ RUNTIME IMAGE ------------------------------------------------------
@@ -89,8 +89,8 @@ $JAVA_HOME/bin/jpackage \
 --type $INSTALLER_TYPE \
 --dest target/installer \
 --input target/installer/input/libs \
---name JPackageScriptFX \
---main-class com.dlsc.jpackagefx.AppLauncher \
+--name NameIT \
+--main-class com.github.bielmarfran.nameit.AppLauncher  \
 --main-jar ${MAIN_JAR} \
 --java-options -Xmx2048m \
 --runtime-image target/java-runtime \
@@ -105,8 +105,8 @@ $JAVA_HOME/bin/jpackage \
 --type $INSTALLER_TYPE \
 --dest target/installer \
 --input target/installer/input/libs \
---name JPackageScriptFX \
---main-class com.dlsc.jpackagefx.AppLauncher \
+--name NameIT \
+--main-class ccom.github.bielmarfran.nameit.AppLauncher \
 --main-jar ${MAIN_JAR} \
 --java-options -Xmx2048m \
 --runtime-image target/java-runtime \
