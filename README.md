@@ -1,5 +1,6 @@
-# NameIT - Simple Renamer
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2c488e3fe3ce450baacbe7684997c918)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bielmarfran/NameIT-Simple-Renamer&amp;utm_campaign=Badge_Grade)
+# NameIT - Simple Renamer
+
 Version - 1.0
 The program aims to rename files of series / films, for the final purpose to be recognized by Plex.
 
