@@ -933,8 +933,8 @@ public class OperationTmdbSerie {
 		 */
 		public static void setQueryInfo(Boolean validResponse, String responseBody, String table) {
 
-			if(queryInfo.getQueryFound()==false) {
-				if(validResponse==true) {
+			if(!queryInfo.getQueryFound()) {
+				if(validResponse) {
 					queryInfo.setValidResponce(true);
 					queryInfo.setApiResponse(responseBody);
 					DatabaseOperationsTmdb.insertSerieInformation(queryInfo,table);

@@ -889,7 +889,7 @@ public class MainController {
 							setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");
 						} else {
 							setText(item);
-							if(item ==select) {
+							if(item.equals(select)) {
 								setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND+ ";");
 							}
 
@@ -1191,11 +1191,11 @@ public class MainController {
 	 */
 	public boolean getValue(JsonObject op,String value) {
 		
-		if(op.get(value) ==null || op.get(value).isJsonNull()) {
-			return false;
-		}
+		//if(op.get(value) ==null || op.get(value).isJsonNull()) {
+		//	return false;
+		//}
 		
-		return true;
+		return op.get(value) != null || !op.get(value).isJsonNull();
 		
 	}
 	

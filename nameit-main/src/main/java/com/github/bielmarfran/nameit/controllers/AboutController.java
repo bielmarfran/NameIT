@@ -1,16 +1,10 @@
 package com.github.bielmarfran.nameit.controllers;
 
 import java.awt.Desktop;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-
-import com.github.bielmarfran.nameit.GlobalFunctions;
-import com.github.bielmarfran.nameit.dao.DataStored;
-
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

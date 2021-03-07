@@ -94,24 +94,22 @@ public class ExceptionController {
 				empty=2;
 			}
 			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == ButtonType.OK){
+			if (result.get() == ButtonType.OK && empty==2){
 				// ... user chose OK
-				if(empty==2) {
-					exceptions.add(textFieldException.getText());
-					exceptionsRenamed.add("-");	
-					try {
-						save();
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					textFieldException.setText("");
-					textFieldExceptionRenamed.setText("");
-				}								
 
-			}// else {
-				// ... user chose CANCEL or closed the dialog
-			//}
+				exceptions.add(textFieldException.getText());
+				exceptionsRenamed.add("-");	
+				try {
+					save();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				textFieldException.setText("");
+				textFieldExceptionRenamed.setText("");
+
+
+			}
 		}
 
 	}

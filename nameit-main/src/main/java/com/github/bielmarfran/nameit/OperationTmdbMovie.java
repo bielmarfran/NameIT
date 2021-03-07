@@ -101,25 +101,26 @@ public class OperationTmdbMovie {
 		 * It breaks the name of the files, and makes API requests each block at a time, 
 		 * waiting for an answer with a single answer, or a small set of possible answers.
 		 * 
-		 * @param nameValue Name of the file.
+		 * @param name Name of the file.
 		 * @param mode Current Mode.
 		 */
-		public void breakFileName(String nameValue, String mode){
+		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
 			System.out.println("--Inside Break File Name--");
+			String nameHolder = name;
 			item.setState(2);
 			item.setYear(0);
-			if(!nameValue.isEmpty()){
-				nameValue = GlobalFunctions.formatName(nameValue, mode, item);
-				if(!nameValue.isEmpty()){
+			if(!nameHolder.isEmpty()){
+				nameHolder = GlobalFunctions.formatName(nameHolder, mode, item);
+				if(!nameHolder.isEmpty()){
 					System.out.println("After formatName");
 				}
 				
-				namesBlocks = nameValue.split(" ");
+				namesBlocks = nameHolder.split(" ");
 				for(int x=0;x<namesBlocks.length;x++){
 					//System.out.println("----"+namesBlocks.length);
 					if(x<=0 && controlBreakFile==0){
-						//Send one block of the name at a time
+						//Send one block of the nameHolder at a time
 						if(mode.equals("Movies")) 
 							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());						
 						
@@ -139,7 +140,7 @@ public class OperationTmdbMovie {
 					}
 				}
 			}else {
-				//System.out.println("Empty Name");
+				//System.out.println("Empty nameHolder");
 				GlobalFunctions.setItemError(item,"01");
 			}
 

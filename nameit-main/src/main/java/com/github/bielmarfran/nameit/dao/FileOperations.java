@@ -179,12 +179,12 @@ public class FileOperations {
 			absolutePathHolder = absolutePath+"\\"+"Season "+item.getSeason();
 			String newPath = absolutePathHolder+"\\"+item.getFinalFileName();
 			Boolean x =f.renameTo(new File(newPath));
-			if(x){
+			/*if(x){
 				//System.out.println("Directory created successfully");
 			}else{
 				//System.out.println("Sorry couldnt create specified directory");
 			}
-
+			*/
 		}
 	}
 	

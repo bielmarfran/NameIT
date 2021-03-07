@@ -118,9 +118,7 @@ public class DataStored {
 	
 	
 	/**
-	 * This method checks the properties file has been created, and if the 
-	 * default values for the attributes have been filled in, if not create
-	 *  the file with the default values.
+	 * This method checks if the properties file was created, if not, create the file.
 	 */
 	public static void createPropretiesFile() {
 		//Create config.properties and put en as default
@@ -137,35 +135,9 @@ public class DataStored {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(config.getProperty("Language") ==null){
-					config.setProperty("Language", "en");
-
-				}else {
-
-				}
-				if(config.getProperty("Mode") ==null){
-					config.setProperty("Mode", "Series");
-
-				}else {
-
-				}
-				if(config.getProperty("Movie") ==null){
-					config.setProperty("Movie", "&Name (&Year)");
-
-				}else {
-
-				}
-				if(config.getProperty("Series") ==null){
-					config.setProperty("Series", "&Name (&Year) S&SeasonE&Episode - &EPN");
-
-				}else {
-
-				}
-				if(config.getProperty("Anime") ==null){
-					config.setProperty("Anime", "true");
-
-				}
-
+				
+				defaultPropretiesValues();
+				
 				try {
 					config.store(new FileOutputStream(appFilesPath+"config.properties"), null);
 				} catch (FileNotFoundException e) {
@@ -175,6 +147,32 @@ public class DataStored {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
+	}
+	
+	
+	/**
+	 * This method analyzes the contents of the properties file, and checks 
+	 * if any items are missing or if the item's value is null, if so, it 
+	 * creates the items / assigns the base value to the item.
+	 */
+	public static void defaultPropretiesValues() {
+		
+		if(config.getProperty("Language") ==null){
+			config.setProperty("Language", "en");
+		}
+		if(config.getProperty("Mode") ==null){
+			config.setProperty("Mode", "Series");
+		}
+		if(config.getProperty("Movie") ==null){
+			config.setProperty("Movie", "&Name (&Year)");
+		}
+		if(config.getProperty("Series") ==null){
+			config.setProperty("Series", "&Name (&Year) S&SeasonE&Episode - &EPN");
+		}
+		if(config.getProperty("Anime") ==null){
+			config.setProperty("Anime", "true");
+		}
 
 	}
 	
