@@ -270,9 +270,9 @@ public class OperationTmdbSerie {
 			}
 			System.out.println("Valor test inside season"+seriesPartialName);
 			
-			isSeasonFound = getSeasonFormatLeters(seriesPartialName,isSeasonFound,season);
+			isSeasonFound = getSeasonFormatLeters(isSeasonFound,season);
 			
-			getSeasonFormatNumbers(isSeasonFound, seriesPartialName);
+			getSeasonFormatNumbers(isSeasonFound);
 					
 		}
 		
@@ -296,9 +296,9 @@ public class OperationTmdbSerie {
 			seriesPartialName = seriesPartialName.replace(String.valueOf(item.getYear()), "");
 			System.out.println("Valor test inside season = "+seriesPartialName);
 			
-			isSeasonFound = getSeasonFormatLeters(seriesPartialName,isSeasonFound,season);
+			isSeasonFound = getSeasonFormatLeters(isSeasonFound,season);
 			
-			getSeasonFormatNumbers(isSeasonFound, seriesPartialName);
+			getSeasonFormatNumbers(isSeasonFound);
 			
 			
 			item.setAlternetiveInfo("");
@@ -312,7 +312,7 @@ public class OperationTmdbSerie {
 		 * @param isSeasonFound Boolean indicating whether the season value has been found.
 		 * @param season The value of the season.
 		 */
-		public static boolean  getSeasonFormatLeters(String seriesPartialName, boolean isSeasonFound, String season) {
+		public static boolean  getSeasonFormatLeters(boolean isSeasonFound, String season) {
 			for(int x=0;x<10;x++){
 				if(!seriesPartialName.isEmpty()) {
 					if(seriesPartialName.contains("s"+x)){
@@ -330,7 +330,7 @@ public class OperationTmdbSerie {
 
 								item.setSeason(season);
 								item.setError("");	
-								getEpisode(seriesPartialName, controlNameBlock);
+								getEpisode(seriesPartialName);
 
 							}
 							if(seriesPartialName.length()==1 && GlobalFunctions.isNumeric(seriesPartialName)){
@@ -355,6 +355,7 @@ public class OperationTmdbSerie {
 			return isSeasonFound;
 		}
 		
+		
 		/**
 		 * This is the second method that tries to find a value for the season, it only deals 
 		 * with numerical values, without ignoring other identifiers.
@@ -362,7 +363,7 @@ public class OperationTmdbSerie {
 		 * @param isSeasonFound Boolean indicating whether the season value has been found.
 		 * @param seriesPartialName Part of the name of the series where the value of the season possibly is.
 		 */
-		public static void getSeasonFormatNumbers(boolean isSeasonFound, String seriesPartialName) {
+		public static void getSeasonFormatNumbers(boolean isSeasonFound) {
 			
 			if(!isSeasonFound){
 				System.out.println("--No s found 4--");
@@ -407,6 +408,7 @@ public class OperationTmdbSerie {
 			}
 		}
 		
+		
 		/**
 		 * This method is called when the number chain where the season value 
 		 * possibly has a single value.
@@ -420,7 +422,7 @@ public class OperationTmdbSerie {
 				checkForAnime = false;
 				testHolder = testHolder.substring(1);
 				item.setSeason(season_value.substring(0,1));
-				getEpisode(testHolder, controlNameBlock);
+				getEpisode(testHolder);
 			}
 
 		}
@@ -438,11 +440,11 @@ public class OperationTmdbSerie {
 			if(GlobalFunctions.isNumeric(testHolder.substring(2,3))) {
 				testHolder = testHolder.substring(2);
 				item.setSeason(season_value.substring(0,2));
-				getEpisode(testHolder, controlNameBlock);
+				getEpisode(testHolder);
 			}else {
 				//testHolder = testHolder.substring(1);
 				item.setSeason(season_value.substring(0,1));
-				getEpisode(season_value.substring(1,2),controlNameBlock);
+				getEpisode(season_value.substring(1,2));
 			}
 		}
 		
@@ -458,7 +460,7 @@ public class OperationTmdbSerie {
 			String testHolder = seriesPartialName;
 			testHolder = testHolder.substring(1);
 			item.setSeason(season_value.substring(0,1));
-			getEpisode(season_value.substring(1,3), controlNameBlock);
+			getEpisode(season_value.substring(1,3));
 		}
 		
 		
@@ -471,8 +473,9 @@ public class OperationTmdbSerie {
 		 */
 		public static void getSeasonCase4(String seriesPartialName, String season_value) {
 			item.setSeason(season_value.substring(0,2));
-			getEpisode(season_value.substring(2,4), controlNameBlock);
+			getEpisode(season_value.substring(2,4));
 		}
+		
 		
 		/**
 		 * This method is called when the string of numbers where the season value
@@ -484,12 +487,10 @@ public class OperationTmdbSerie {
 		public static void getSeasonCaseDefault(String seriesPartialName, String season_value) {
 			
 			item.setSeason(season_value.substring(0,2));
-			getEpisode(season_value.substring(2,season_value.length()), controlNameBlock);
+			getEpisode(season_value.substring(2,season_value.length()));
 		}
 		
 		
-		
-
 		/**
 		 * This method receives the response from the API, from the request made in 
 		 * {@linkplain org.exemple.JsonOperationsTmdb.getSerieEpisodeGroups()} 
@@ -622,11 +623,9 @@ public class OperationTmdbSerie {
 		 * 
 		 * @param test
 		 * @param namesBlocks
-		 * @param control
 		 */
-		public static void getEpisode(String test,Integer control){
+		public static void getEpisode(String test){
 			System.out.println("--Inside Episode--");
-			control++;
 			String episode="";
 			System.out.println("Episode Value Start - "+test);
 			System.out.println("Season Value in Episode- "+item.getSeason());
