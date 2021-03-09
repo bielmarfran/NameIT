@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import java.io.File;
 import javafx.util.Callback;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,16 +21,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
@@ -158,7 +162,7 @@ public class MainController {
 	private static String textFieldFolder_value;
 	
 
-
+	private static Boolean test2e=true;
 
 
 	public static Boolean getIsApiValid() {
@@ -185,9 +189,18 @@ public class MainController {
 		buttonMatchInfo.setVisible(false);
 		paintCircle();
 		
+		//ContextMenu contextMenu = new ContextMenu(); 
+		  
+        // create menuitems 
+       // MenuItem menuItem1 = new MenuItem("menu item 1"); 
+
+  
+        // add menu items to menu 
+        //contextMenu.getItems().add(menuItem1); 
 		listViewFiles.getSelectionModel().selectedItemProperty().addListener((ChangeListener<? super String>) new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
 				ArrayList<String> ex = new ArrayList<>();
 				for (int i = 0; i < renamingList.size(); i++) {
 					if (renamingList.get(i).getState()!=1) {
@@ -207,7 +220,7 @@ public class MainController {
 				if (found && !paginationErrorList.isDisable()) {
 
 					try {
-						//System.out.println(index);
+						System.out.println("Valor do INDEX ___>><<"+index);
 						paginationErrorList.setCurrentPageIndex(index);
 					} catch (Exception e) {
 						// TODO: handle exception
@@ -217,6 +230,10 @@ public class MainController {
 
 			}
 		});
+
+
+
+	
 	}
 
 	
@@ -256,7 +273,7 @@ public class MainController {
 	public void handleDragOverListView(DragEvent dragEvent) {
 		if(dragEvent.getDragboard().hasFiles()){
 			dragEvent.acceptTransferModes(TransferMode.ANY);
-			paintListView();
+			listViewFilesCellFactory();
 		}
 	}
 
@@ -369,7 +386,7 @@ public class MainController {
 				
 				//Call the pagination routine to show the results in a pagination type.
 				
-				paintListView();
+				listViewFilesCellFactory();
 				//clearList();
 				//renamingList.clear();
 				paginationError();
@@ -396,7 +413,7 @@ public class MainController {
 		});
 
 		backgroundTaks.restart();	
-		paintListView();
+		listViewFilesCellFactory();
 		
 	}
 	
@@ -799,74 +816,108 @@ public class MainController {
 	
 	/**
 	 * This method implements a new setCellFactory for the  listViewFiles. 
-	 * It allows you to change the background color of the list items according to their situation.
+	 * The new method implementing two features for the ListView.
+	 * First, the background color reacts according to the status of the Item in the program logic
+	 * {@link colorPicker(String)}
+	 * Second, when you right-click on the item, a ContextMenu appears for the item with some options. 
+	 */
+	public void listViewFilesCellFactory(){
+		//System.out.println(listViewFiles.getItems().size());
+
+		listViewFiles.setCellFactory(lv -> {
+			  ListCell<String> cell = new ListCell<>();
+
+	            ContextMenu contextMenu = new ContextMenu();
+	            MenuItem editItem = new MenuItem();
+	            editItem.textProperty().bind(Bindings.format("Edit \"%s\"", cell.itemProperty()));
+	            editItem.setOnAction(event -> {
+	                String item = cell.getItem();
+	                // code to edit item...
+	            });
+	            MenuItem deleteItem = new MenuItem();
+	            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
+	            
+	            deleteItem.setOnAction(event ->  {
+	            	removeItem(findItem(cell.getItem()));//listViewFiles.getItems().remove(cell.getItem())
+	            	//paginationErrorList.setVisible(false);
+	               	paginationError();
+	 
+	            });
+	            
+	
+	            contextMenu.getItems().addAll(editItem, deleteItem);
+
+	            cell.textProperty().bind(cell.itemProperty());
+
+	            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+	                if (isNowEmpty) {
+	                    cell.setContextMenu(null);
+	                    cell.setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");
+	                   
+	                } else {
+	                    cell.setContextMenu(contextMenu);	                   
+	                    cell.setStyle(colorPicker(cell.getItem()));
+	                }
+	            });
+	            
+	            return cell ;
+        
+      });
+
+		labelDrop();
+		
+	}
+	
+	/**
+	 * This method determines the background color of the item according to its status.
 	 * Gray  : Waiting for Processing.
 	 * Yellow: After going through the processing once, it was not possible to define the correct info, 
 	 *         but there are few alternatives that will be available in the listViewErrorText (UI).
 	 * Green : Correct name found.
 	 * Red   : Critical error, it was not possible to find the info and there are no possible alternatives.
+	 * @param item String Value of the item.
+	 * @return String with the current color.
 	 */
-	public void paintListView(){
-		//System.out.println(listViewFiles.getItems().size());
-		if(listViewFiles.getItems().size()>=1) {
-			listViewFiles.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-				@Override
-				public ListCell<String> call(ListView<String> param) {
-					return new ListCell<String>() {
-						@Override
-						protected void updateItem(String item, boolean empty) {
-							super.updateItem(item, empty);
-
-							if (item == null || empty) {
-								setText(null);
-								setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");
-							} else {
-								setText(item);					
-								 if (!item.isEmpty() && renamingList.size()>=1) {
-									int color_control=0;
-									for(int x=0;x<renamingList.size();x++){
-										if(item.equals(renamingList.get(x).getOriginalName())){
-											color_control++;
-											switch (renamingList.get(x).getState()) {
-											case 0:
-												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");//Gray
-												break;
-											case 1:
-												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND  + ";");//Green
-												break;
-											case 2:
-												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_YELLOW_INNER_BACKGROUND + ";");//Yellow
-												break;
-											case 3:
-												setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");//Red
-												break;	
-											default:
-												setStyle("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");//Gray
-												break;
-											}
-
-											
-										}
-									}
-									if(color_control==0){
-										//System.out.println("Verde 1");
-										setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
-									}
-								} else {
-									//System.out.println("Verde 2");
-									setStyle("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
-								}
-								 
-							
-							}
-
+	public String colorPicker(String item) {
+		String value = null;
+		if (item == null) {
+			value = ("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");
+		} else {					
+			 if (!item.isEmpty() && renamingList.size()>=1) {
+				int color_control=0;
+				for(int x=0;x<renamingList.size();x++){
+					if(item.equals(renamingList.get(x).getOriginalName())){
+						color_control++;
+						switch (renamingList.get(x).getState()) {
+						case 0:
+							value = ("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");//Gray
+							break;
+						case 1:
+							value = ("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_GREEN_INNER_BACKGROUND  + ";");//Green
+							break;
+						case 2:
+							value = ("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_YELLOW_INNER_BACKGROUND + ";");//Yellow
+							break;
+						case 3:
+							value = ("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");//Red
+							break;	
+						default:
+							value = ("-fx-control-inner-background: " + DEFAULT_CONTROL_GRAY_INNER_BACKGROUND + ";");//Gray
+							break;
 						}
-					};
+						
+					}
 				}
-			});
+				if(color_control==0){
+					//System.out.println("Verde 1");
+					value = ("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
+				}
+			} else {
+				//System.out.println("Verde 2");
+				value = ("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
+			}							
 		}
-
-		labelDrop();
+		return value;
 	}
 	
 	
@@ -1247,9 +1298,9 @@ public class MainController {
 			}
 			
 			System.out.println(Text.getItems());
-			Label label2 = new Label("Main content of the page ...");
+			//Label label2 = new Label("Main content of the page ...");
 			clearList();
-			return new VBox(label2,Text);
+			return new VBox(Text);
 		});
 	}
 	
@@ -1359,6 +1410,15 @@ public class MainController {
 		extension.add("sbv");
 		extension.add("dfxp");
 		//End Files Types Suported
+	}
+
+	public Item findItem(String name) {
+		for(int x=0;x<renamingList.size();x++){
+			if(name.equals(renamingList.get(x).getOriginalName())){
+				return  renamingList.get(x);
+			}
+		}
+		return null;
 	}
 }
 
