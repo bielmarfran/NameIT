@@ -33,7 +33,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
@@ -134,18 +133,34 @@ public class MainController {
 	private static boolean isFindInfoValid = true;
 	
 	
-	//ArraysList
-	//Extension allowed in the program
+	/**
+	 * File Extension allowed in the program
+	 */
 	public static ArrayList<String> extension = new ArrayList<>();
-	//File name garbage that makes it difficult to identify the episode
+	
+	
+	/**
+	 * Values that only hinder the identification of the Item,
+	 * being filtered at the beginning of the process.
+	 */
 	public static ArrayList<String> filterList = new ArrayList<>();
-	//Array where all Episodes object are stored.
+	
+	/**
+	 * Stores all the Items that are used in the program.
+	 */
 	private ArrayList<Item> renamingList = new  ArrayList<>();
-	//Array where all Episodes that during the run get an Error Mensagem are store waiting for handling.
+	
+
+	/**
+	 *Stores items that have a positive value after being processed in the program.
+	 */
 	private ArrayList<Item> renamingListError = new  ArrayList<>();
 	
 
-	//Local Episode Variable used during the logic in the class
+
+	/*
+	 * Local Episode Variable used during the logic in the class
+	 */
 	private static Item item = new Item();
 	
 	
@@ -161,8 +176,13 @@ public class MainController {
 	 */
 	private static String textFieldFolder_value;
 	
-
-	private static Boolean test2e=true;
+	
+	/**
+	 * This variable controls whether functionality implemented in {@link initialize()} 
+	 * is active or not. During the program temporarily disable the 
+	 * functionality and it is necessary to avoid bugs.
+	 */
+	private static Boolean isListViewFilesListenerActive=true;
 
 
 	public static Boolean getIsApiValid() {
@@ -174,12 +194,11 @@ public class MainController {
 	}
 
 
-
-
 	/**
 	 * Operations on the initialization of the UI
 	 */
 	public void initialize() {
+		
 		setMode();		
 		SQLiteJDBC.createDatabase();
 		fillFilterExtention();
@@ -189,14 +208,8 @@ public class MainController {
 		buttonMatchInfo.setVisible(false);
 		paintCircle();
 		
-		//ContextMenu contextMenu = new ContextMenu(); 
-		  
-        // create menuitems 
-       // MenuItem menuItem1 = new MenuItem("menu item 1"); 
 
-  
-        // add menu items to menu 
-        //contextMenu.getItems().add(menuItem1); 
+		
 		listViewFiles.getSelectionModel().selectedItemProperty().addListener((ChangeListener<? super String>) new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -207,21 +220,24 @@ public class MainController {
 						ex.add(renamingList.get(i).getOriginalName());
 					}
 				}	
-				//GlobalFunctions.alertCallerWarning(""+ex.size(), oldValue, newValue);
+				
 				int index=0;
-				Boolean found =false;
+				Boolean hasFoundItem = false;
 				for (int i = 0; i < ex.size(); i++) {
 					if (ex.get(i).equals(newValue)) {
 						index=i;
-						found=true;
+						hasFoundItem=true;
 					}
 				}
-
-				if (found && !paginationErrorList.isDisable()) {
+				
+				if (hasFoundItem && !paginationErrorList.isDisable()) {
 
 					try {
 						System.out.println("Valor do INDEX ___>><<"+index);
-						paginationErrorList.setCurrentPageIndex(index);
+						if(isListViewFilesListenerActive) {
+							paginationErrorList.setCurrentPageIndex(index);
+						}
+						
 					} catch (Exception e) {
 						// TODO: handle exception
 					}		
@@ -417,6 +433,7 @@ public class MainController {
 		
 	}
 	
+	
 	/**
 	 * This method does two checks before starting the process of finding information from the file.
 	 * First, check if the user has indicated an alternative path, and if that path is not null.
@@ -441,6 +458,7 @@ public class MainController {
 		}
 		
 	}
+	
 	
 	/**
 	 * This method check is @param is greater than 0.
@@ -758,23 +776,8 @@ public class MainController {
 		  
 	}
 	
-	
-	/**
-	 * 
-	 * @param mouseEvent
-	 */
-	public void listViewErrorTextAction(javafx.scene.input.MouseEvent mouseEvent) {
 
-		if(mouseEvent.getClickCount() == 2) {
-			for(int x=0;x<renamingListError.size();x++) {
 
-			}
-		}
-	}
-	
-
-	
-	
 	/**
 	 *  This method is clear the listView's used in the interface.
 	 */
@@ -828,24 +831,26 @@ public class MainController {
 			  ListCell<String> cell = new ListCell<>();
 
 	            ContextMenu contextMenu = new ContextMenu();
-	            MenuItem editItem = new MenuItem();
-	            editItem.textProperty().bind(Bindings.format("Edit \"%s\"", cell.itemProperty()));
-	            editItem.setOnAction(event -> {
-	                String item = cell.getItem();
+	            //MenuItem editItem = new MenuItem();
+	           // editItem.textProperty().bind(Bindings.format("Edit \"%s\"", cell.itemProperty()));
+	            //editItem.setOnAction(event -> {
+	            //    String item = cell.getItem();
 	                // code to edit item...
-	            });
+	            //});
 	            MenuItem deleteItem = new MenuItem();
 	            deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
 	            
 	            deleteItem.setOnAction(event ->  {
+	            	isListViewFilesListenerActive =false;
 	            	removeItem(findItem(cell.getItem()));//listViewFiles.getItems().remove(cell.getItem())
 	            	//paginationErrorList.setVisible(false);
 	               	paginationError();
-	 
+	               
+	               	isListViewFilesListenerActive =true;
 	            });
 	            
 	
-	            contextMenu.getItems().addAll(editItem, deleteItem);
+	            contextMenu.getItems().addAll( deleteItem);//editItem,
 
 	            cell.textProperty().bind(cell.itemProperty());
 

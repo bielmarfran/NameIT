@@ -309,11 +309,11 @@ public class FileOperations {
 		//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
 		String newPath = absolutePathHolder+"\\"+newName;
 		Boolean x =f.renameTo(new File(newPath));
-		if(x){
+		//if(x){
 			//System.out.println("Directory created successfully");
-		}else{
+		//}else{
 			//System.out.println("Sorry couldnt create specified directory");
-		}
+		//}
 	}
 	
 	
