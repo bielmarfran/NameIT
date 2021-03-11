@@ -1427,6 +1427,11 @@ public class MainController {
 		//End Files Types Suported
 	}
 
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public Item findItem(String name) {
 		for(int x=0;x<renamingList.size();x++){
 			if(name.equals(renamingList.get(x).getOriginalName())){

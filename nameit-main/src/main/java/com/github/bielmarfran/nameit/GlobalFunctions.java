@@ -178,8 +178,8 @@ public class GlobalFunctions {
 		}
 		//End
 		
-		nameHolder = nameHolder.replace(".pdf","");
-		nameHolder = nameHolder.replace(".mkv","");
+		//nameHolder = nameHolder.replace(".pdf","");
+		//nameHolder = nameHolder.replace(".mkv","");
 		nameHolder = nameHolder.replace("-"," ");
 		nameHolder = nameHolder.replace("_"," ");
 		nameHolder = nameHolder.replace("."," ");
