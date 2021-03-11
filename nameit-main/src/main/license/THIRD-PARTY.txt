@@ -1,0 +1,8 @@
+
+Lists of 6 third-party dependencies.
+     (Apache 2.0) Gson (com.google.code.gson:gson:2.8.6 - https://github.com/google/gson/gson)
+     (GPLv2+CE) javafx-base (org.openjfx:javafx-base:14.0.1 - https://openjdk.java.net/projects/openjfx/javafx-base/)
+     (GPLv2+CE) javafx-controls (org.openjfx:javafx-controls:14.0.1 - https://openjdk.java.net/projects/openjfx/javafx-controls/)
+     (GPLv2+CE) javafx-fxml (org.openjfx:javafx-fxml:14.0.1 - https://openjdk.java.net/projects/openjfx/javafx-fxml/)
+     (GPLv2+CE) javafx-graphics (org.openjfx:javafx-graphics:14.0.1 - https://openjdk.java.net/projects/openjfx/javafx-graphics/)
+     (The Apache Software License, Version 2.0) SQLite JDBC (org.xerial:sqlite-jdbc:3.34.0 - http://nexus.sonatype.org/oss-repository-hosting.html/sqlite-jdbc)
