@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!-- 
     Copyright (C) 2020-2021 Gabriel Martins Franzin
   
@@ -14,24 +15,26 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
+
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1"
- fx:controller="com.github.bielmarfran.nameit.controllers.AboutController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="602.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.bielmarfran.nameit.controllers.AboutController">
    <children>
       <Separator layoutX="-2.0" layoutY="60.0" prefHeight="3.0" prefWidth="640.0" />
-      <Label layoutX="291.0" layoutY="21.0" text="About ">
+      <Label layoutX="291.0" layoutY="18.0" text="About ">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="19.0" layoutY="101.0" text="NameIT-Simple-Renamer is open source project and  is is released under the GNU GENERAL PUBLIC LICENSE, v3.0" />
+      <Label layoutX="19.0" layoutY="101.0" text="NameIT-Simple-Renamer is open source project and  is is released under the Apache License 2.0&#10;" />
       <Label layoutX="14.0" layoutY="270.0" prefHeight="34.0" prefWidth="399.0" text="This product uses the TMDb API but is not endorsed or certified by TMDb." />
       <ImageView fx:id="ImageViewTMDB" fitHeight="138.0" fitWidth="178.0" layoutX="437.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -40,7 +43,52 @@
       </ImageView>
       <Hyperlink layoutX="223.0" layoutY="350.0" onAction="#hyperlinkTMDB" text="https://www.themoviedb.org/" />
       <Label layoutX="39.0" layoutY="353.0" text="Visit and show your support at :" />
-      <Label layoutX="14.0" layoutY="147.0" text="Learn more about the project and post your feedback at :&#10; " />
-      <Hyperlink fx:id="hyperlinkGIT" layoutX="320.0" layoutY="147.0" onAction="#hyperlinkGIT" text="https://github.com/bielmarfran/NameIT-Simple-Renamer" />
+      <Label layoutX="17.0" layoutY="159.0" text="Learn more about the project and post your feedback at :&#10; " />
+      <Hyperlink fx:id="hyperlinkGIT" layoutX="320.0" layoutY="156.0" onAction="#hyperlinkGIT" text="https://github.com/bielmarfran/NameIT-Simple-Renamer" />
+      <Separator layoutX="-2.0" layoutY="401.0" prefHeight="3.0" prefWidth="649.0" />
+      <Hyperlink fx:id="hyperLicense" layoutX="136.0" layoutY="127.0" onAction="#hyperLicense" text="Link" />
+      <Label layoutX="18.0" layoutY="130.0" text="Link to the License :" />
+      <Label layoutX="285.0" layoutY="406.0" text="Libraries">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ScrollPane layoutX="22.0" layoutY="433.0" prefHeight="159.0" prefWidth="602.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="447.0" prefWidth="585.0">
+               <children>
+                  <Separator layoutX="2.0" layoutY="152.0" prefHeight="3.0" prefWidth="593.0" />
+                  <Separator layoutX="2.0" layoutY="334.0" prefHeight="3.0" prefWidth="593.0" />
+                  <Pane layoutX="5.0" layoutY="6.0" prefHeight="144.0" prefWidth="581.0">
+                     <children>
+                        <Label layoutX="4.0" layoutY="1.0" prefHeight="138.0" prefWidth="578.0" text="OpenJFX (org.openjfx)    &#10;Description: OpenJFX is an open source, next generation client application platform for desktop, mobile and embedded systems built on Java.&#10;Website: https://github.com/openjdk/jfx&#10;License: GPLv2+CE&#10;License website: &#10;" wrapText="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Hyperlink fx:id="hyperLicenseFx" layoutX="109.0" layoutY="109.0" onAction="#hyperLicenseFX" text="https://github.com/openjdk/jfx/blob/master/LICENSE" />
+                     </children>
+                  </Pane>
+                  <Pane layoutX="-11.0" layoutY="154.0" prefHeight="144.0" prefWidth="581.0">
+                     <children>
+                        <Label layoutX="19.0" layoutY="3.0" prefHeight="174.0" prefWidth="583.0" text="GSON (com.google.code.gson)&#10;Description: Gson is a Java library that can be used to convert Java Objects into their JSON representation. It can also be used to convert a JSON string to an equivalent Java object.&#10;Gson can work with arbitrary Java objects including pre-existing objects that you do not have source code of.&#10;Website: https://github.com/google/gson&#10;License: Apache License 2.0&#10;License website: &#10;" wrapText="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Hyperlink fx:id="hyperLicenseGson" layoutX="123.0" layoutY="149.0" onAction="#hyperLicenseGson" text="https://github.com/google/gson/blob/master/LICENSE" />
+                     </children>
+                  </Pane>
+                  <Pane layoutX="-1.0" layoutY="164.0" prefHeight="144.0" prefWidth="581.0" />
+                  <Label layoutX="7.0" layoutY="340.0" prefHeight="109.0" prefWidth="583.0" text="SQLite JDBC Driver (org.xerial)  &#10;Description: SQLite JDBC is a library for accessing and creating SQLite database files in Java.&#10;Website: https://github.com/xerial/sqlite-jdbc&#10;License: Apache License 2.0&#10;License website:&#10;" wrapText="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Hyperlink fx:id="hyperLicenceSQLLite" layoutX="117.0" layoutY="425.0" onAction="#hyperLicenseLite" text="https://github.com/xerial/sqlite-jdbc/blob/master/LICENSE" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

@@ -16,6 +16,7 @@
 package com.github.bielmarfran.nameit.controllers;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -56,6 +57,22 @@ public class AboutController {
 
 	}
 	
+	public void hyperLicense(javafx.event.ActionEvent actionEvent) {
+		  File file = new File("src/main/license/license.txt");
+
+	        try {
+	            Desktop desktop = Desktop.getDesktop();
+
+	            // Open a file using the default program for the file type. In the example 
+	            // we will launch a default registered program to open a text file. For 
+	            // example on Windows operating system this call might launch a notepad.exe 
+	            // to open the file.
+	            desktop.open(file);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	}
+	
 	
 	/**
 	 * This method is called when the system receives a click event on the Hyperlink for TMDB. 
@@ -65,13 +82,8 @@ public class AboutController {
 	 * @param actionEvent Click event on the label on the form
 	 */
 	public void hyperlinkTMDB(javafx.event.ActionEvent actionEvent) {
-		try {
-		    Desktop.getDesktop().browse(new URL("https://www.themoviedb.org/").toURI());
-		} catch (IOException e) {
-		    e.printStackTrace();
-		} catch (URISyntaxException e) {
-		    e.printStackTrace();
-		}
+		
+		openDefaultBrowser("https://www.themoviedb.org/");
 	}
 	
 
@@ -83,12 +95,51 @@ public class AboutController {
 	 * @param actionEvent Click event on the label on the form
 	 */
 	public void hyperlinkGIT(javafx.event.ActionEvent actionEvent) {
+		openDefaultBrowser("https://github.com/bielmarfran/NameIT-Simple-Renamer");
+	}
+	
+	
+	/**
+	 * 
+	 * @param actionEvent
+	 */
+	public void hyperLicenseFX(javafx.event.ActionEvent actionEvent) {
+		openDefaultBrowser("https://github.com/openjdk/jfx/blob/master/LICENSE");		
+	}
+	
+	
+	/**
+	 * 
+	 * @param actionEvent
+	 */
+	public void hyperLicenseGson(javafx.event.ActionEvent actionEvent) {
+		openDefaultBrowser("https://github.com/google/gson/blob/master/LICENSE");	
+	}
+	
+	
+	/**
+	 * 
+	 * @param actionEvent
+	 */
+	public void hyperLicenseLite(javafx.event.ActionEvent actionEvent) {
+		openDefaultBrowser("https://github.com/xerial/sqlite-jdbc/blob/master/LICENSE");
+		
+	}
+	
+	
+	/**
+	 * 
+	 * @param url
+	 */
+	public void openDefaultBrowser(String url) {
+		
 		try {
-		    Desktop.getDesktop().browse(new URL("https://github.com/bielmarfran/NameIT-Simple-Renamer").toURI());
+		    Desktop.getDesktop().browse(new URL(url).toURI());
 		} catch (IOException e) {
 		    e.printStackTrace();
 		} catch (URISyntaxException e) {
 		    e.printStackTrace();
 		}
+		
 	}
 }

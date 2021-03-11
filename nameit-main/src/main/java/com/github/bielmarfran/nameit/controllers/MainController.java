@@ -755,10 +755,10 @@ public class MainController {
 	        if (image !=null) {
 	        	stage.getIcons().add(image);
 			}
-	        stage.setMaxHeight(540.0);
-	        stage.setMaxWidth(660.0);
-	        stage.setMinHeight(540.0);
-	        stage.setMinWidth(660.0);
+	       //stage.setMaxHeight(540.0);
+	        //stage.setMaxWidth(660.0);
+	       // stage.setMinHeight(540.0);
+	       // stage.setMinWidth(660.0);
 	        stage.getIcons().add(image);
 	        stage.setTitle("About");
 	        stage.setScene(scene);
