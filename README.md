@@ -1,6 +1,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2c488e3fe3ce450baacbe7684997c918)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bielmarfran/NameIT-Simple-Renamer&amp;utm_campaign=Badge_Grade)
 # NameIT - Simple Renamer
 
+![screenshot of nameit](screenshots/nameit-main.png)
 
 ## About this Project
 
@@ -39,8 +40,8 @@ See the [releases](https://github.com/bielmarfran/NameIT-Simple-Renamer/releases
 
 ### Prerequisites
 
-As mentioned in [Built With](## Built With), the project structure was developed based on [here](https://github.com/dlemmermann/JPackageScriptFX)
-so show your support and follow your guide to set up the environment.
+The project structure was developed based on [here](https://github.com/dlemmermann/JPackageScriptFX)
+so show your support and follow their guide to set up the environment.
 
 With the environment set up.
 

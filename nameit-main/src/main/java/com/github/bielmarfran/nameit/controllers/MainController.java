@@ -1412,7 +1412,6 @@ public class MainController {
 		
 		//Video Format
 		extension.add("mkv");
-		extension.add("pdf");
 		extension.add("txt");
 		extension.add("avi");
 		extension.add("flv");

@@ -283,9 +283,11 @@ public class OperationTmdbSerie {
 			for(int x=0;x<size;x++){
 				seriesPartialName= seriesPartialName + namesBlocks[x+controlNameBlock];
 			}
-			System.out.println("Valor test inside season"+seriesPartialName);
+			System.out.println("Valor test inside season" + seriesPartialName);
 			
 			isSeasonFound = getSeasonFormatLeters(isSeasonFound,season);
+			
+			System.out.println("Valor test inside season 2" + seriesPartialName);
 			
 			getSeasonFormatNumbers(isSeasonFound);
 					
@@ -382,6 +384,7 @@ public class OperationTmdbSerie {
 			
 			if(!isSeasonFound){
 				System.out.println("--No s found 4--");
+				System.out.println("Value -- "+seriesPartialName);
 				int c=0;
 				String season_value="";
 				for(int y =0;y<seriesPartialName.length();y++){
@@ -390,11 +393,15 @@ public class OperationTmdbSerie {
 						c=1;
 					}				
 				}
+				
 				while(seriesPartialName.length()>1 && GlobalFunctions.isNumeric(seriesPartialName.substring(0,1)) ){
 					season_value = season_value + seriesPartialName.substring(0,1);
 					seriesPartialName = seriesPartialName.substring(1);	
+					System.out.println("--"+seriesPartialName);
 				}
-				//System.out.println("Size "+season_value.length());
+				
+				System.out.println("Size "+season_value);
+				System.out.println("Size "+season_value.length());
 				switch (season_value.length()) {
 				case 0: 
 					System.out.println("File name Empty after part used for id reconition");
@@ -432,12 +439,17 @@ public class OperationTmdbSerie {
 		 * @param season_value Value that possibly represents the season.
 		 */
 		public static void getSeasonCase1(String seriesPartialName,String season_value) {
-			String testHolder = seriesPartialName;
-			if(testHolder.substring(0,1).equals("x") ) {
-				checkForAnime = false;
-				testHolder = testHolder.substring(1);
-				item.setSeason(season_value.substring(0,1));
-				getEpisode(testHolder);
+			try {
+				String testHolder = seriesPartialName;
+				if(testHolder.substring(0,1).equals("x") ) {
+					checkForAnime = false;
+					testHolder = testHolder.substring(1);
+					item.setSeason(season_value.substring(0,1));
+					getEpisode(testHolder);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 		}
@@ -451,15 +463,20 @@ public class OperationTmdbSerie {
 		 * @param season_value Value that possibly represents the season.
 		 */
 		public static void getSeasonCase2(String seriesPartialName, String season_value) {
-			String testHolder = seriesPartialName;
-			if(GlobalFunctions.isNumeric(testHolder.substring(2,3))) {
-				testHolder = testHolder.substring(2);
-				item.setSeason(season_value.substring(0,2));
-				getEpisode(testHolder);
-			}else {
-				//testHolder = testHolder.substring(1);
-				item.setSeason(season_value.substring(0,1));
-				getEpisode(season_value.substring(1,2));
+			try {
+				String testHolder = seriesPartialName;
+				if(GlobalFunctions.isNumeric(testHolder.substring(2,3))) {
+					testHolder = testHolder.substring(2);
+					item.setSeason(season_value.substring(0,2));
+					getEpisode(testHolder);
+				}else {
+					//testHolder = testHolder.substring(1);
+					item.setSeason(season_value.substring(0,1));
+					getEpisode(season_value.substring(1,2));
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		
@@ -472,10 +489,19 @@ public class OperationTmdbSerie {
 		 * @param season_value Value that possibly represents the season.
 		 */
 		public static void getSeasonCase3(String seriesPartialName, String season_value) {
-			String testHolder = seriesPartialName;
-			testHolder = testHolder.substring(1);
-			item.setSeason(season_value.substring(0,1));
-			getEpisode(season_value.substring(1,3));
+			String testHolder;
+			try {
+				testHolder = seriesPartialName;
+				testHolder = testHolder.substring(1);
+				item.setSeason(season_value.substring(0,1));
+				System.out.println("Dentro 3");
+				getEpisode(season_value.substring(1,3));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	
+		
 		}
 		
 		

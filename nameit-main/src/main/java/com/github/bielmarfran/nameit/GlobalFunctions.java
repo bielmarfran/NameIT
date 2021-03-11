@@ -168,6 +168,7 @@ public class GlobalFunctions {
 		
 		nameHolder = nameHolder.toLowerCase();
 		nameHolder = nameHolder.replace(getExtension(nameHolder), "");
+		System.out.println(nameHolder);
 		
 		//Remove characters in between [], the are always junk information or complementary.
 		if(nameHolder.contains("[") && nameHolder.contains("]")) {
