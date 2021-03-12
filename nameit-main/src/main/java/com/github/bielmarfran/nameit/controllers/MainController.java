@@ -530,7 +530,7 @@ public class MainController {
 		for(int x=0;x<renamingList.size();x++){
 			System.out.println("TMDB Movies");
 			OperationTmdbMovie tmdbm = new OperationTmdbMovie();
-			if(!(renamingList.get(x).getAlternetiveInfo()==null) && renamingList.get(x).getState()==0) {
+			if(renamingList.get(x).getAlternetiveInfo()!=null && renamingList.get(x).getState()==0) {
 				tmdbm.setInfoAlternative(item);
 			}else {
 				if(renamingList.get(x).getState()==0) {
@@ -1120,71 +1120,6 @@ public class MainController {
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + Error);
 		}
-		/*
-		 * 	if(Error.equals("01")){
-			System.out.println("Error 01");					
-			listUI.getItems().add(String.valueOf("File -- "+name));			
-			listUI.getItems().add("Error 01 - Empty Name.");
-
-		}
-		if(Error.equals("02")){
-			System.out.println("Error 02");
-			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 02 - It was not possible to determine the series.");
-		}
-
-		if(Error.equals("03")){
-
-			System.out.println("Error 03");
-			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 03 - Failed to connect to the Api.");
-
-		}
-		if(Error.equals("04")){
-
-			System.out.println("Error 04");
-			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 04 - Season value not found.");
-
-		}
-		if(Error.equals("05")){
-
-			System.out.println("Error 05");
-			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 05 - Episode value not found.");
-
-		}
-		if(Error.equals("06")){
-			System.out.println("Error 06");
-			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 06 - No API response for season and episode parameters.");
-
-		}
-		if(Error.equals("07")){
-			System.out.println("Error 07");
-			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 07 - It was not possible to determine Season/Episode value.");
-
-		}
-		if(Error.equals("08")){
-			System.out.println("Error 08");
-			listUI.getItems().add(String.valueOf("File -- "+name));
-			listUI.getItems().add("Error 08 - The path value is Empy.");
-
-		}
-		if(Error.equals("09")){
-			System.out.println("Error 09");
-			listUI.getItems().add(name);
-			listUI.getItems().add("Error 09 - No suitable match.");
-
-		}
-
-		if(Error.equals("10")){
-			System.out.println("Error 10");					
-			listUI.getItems().add(String.valueOf("File -- "+name));
-		}
-		 */
-	
 
 	}
 	
@@ -1313,8 +1248,7 @@ public class MainController {
 		
 			
 			if(Text.getItems().size()>1 && Text.getItems().get(1).equals("Double click if you find the correct information")) {
-
-				Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);;
+				Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);
 			}
 			
 			System.out.println(Text.getItems());

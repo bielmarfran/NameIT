@@ -22,8 +22,6 @@ Connect with me at [LinkedIn](https://www.linkedin.com/in/gabriel-martins-franzi
 
 See the [releases](https://github.com/bielmarfran/NameIT-Simple-Renamer/releases) page for the latest build.
 
-
-
 ## Functionalities
 
 - Native GUI build using JavaFx
@@ -45,11 +43,9 @@ so show your support and follow their guide to set up the environment.
 
 With the environment set up.
 
-
 	git clone https://github.com/bielmarfran/NameIT-Simple-Renamer.git
 
 Then  on the root of the project.
-
 
 	mvn clean install
 
@@ -58,13 +54,12 @@ Or you can run the nameit-main project from your IDE.
 
 ## Built With
 
-- [Java](https://www.oracle.com/java/technologies/)   		 
+- 		[Java](https://www.oracle.com/java/technologies/)   		 
 - [JavaFX](https://openjfx.io/) 					  		 
 - [GSON](https://github.com/google/gson)	 		  		 
 - [SQLite](https://www.sqlite.org/index.html) 		  		 
 - [SQLite JDBC Driver](https://github.com/xerial/sqlite-jdbc)
 - [Project structure](https://github.com/dlemmermann/JPackageScriptFX)
-
 
 ## License
 
