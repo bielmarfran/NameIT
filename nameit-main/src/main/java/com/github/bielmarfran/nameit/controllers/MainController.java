@@ -390,7 +390,7 @@ public class MainController {
 			@Override
 			public void handle(WorkerStateEvent event) {
 			
-				int size = renamingList.size();
+				//int size = renamingList.size();
 				for(int y=0;y<renamingList.size();y++){
 
 					if(renamingList.get(y).getState()==1) {
@@ -430,7 +430,8 @@ public class MainController {
 	
 	/**
 	 * This method does two checks before starting the process of finding information from the file.
-	 * First, check if the user has indicated an alternative path, and if that path is not null.
+	 * First, check if the user has indicated an alterna
+	 * tive path, and if that path is not null.
 	 * Second, check if the test connection to the API was successful.
 	 * In cases where there is a problem, notify the user with an In negative cases it warns
 	 * the user with a Pop-up and cancel the process of searching for information.

@@ -368,7 +368,7 @@ public class OperationTmdbSerie {
 					}				
 				}
 				
-				while(seriesPartialName.length()>1 && GlobalFunctions.isNumeric(seriesPartialName.substring(0,1)) ){
+				while(seriesPartialName.length()>=1 && GlobalFunctions.isNumeric(seriesPartialName.substring(0,1)) ){
 					season_value = season_value + seriesPartialName.substring(0,1);
 					seriesPartialName = seriesPartialName.substring(1);	
 				}
@@ -460,13 +460,14 @@ public class OperationTmdbSerie {
 		public static void getSeasonCase3(String seriesPartialName, String season_value) {
 			String testHolder;
 			try {
-				testHolder = seriesPartialName;
-				testHolder = testHolder.substring(1);
+				//testHolder = seriesPartialName;
+				//System.out.println(testHolder);
+				//testHolder = testHolder.substring(1);
 				item.setSeason(season_value.substring(0,1));
 				getEpisode(season_value.substring(1,3));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 	
 		
