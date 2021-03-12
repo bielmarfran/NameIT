@@ -44,15 +44,14 @@ public class JsonOperationsTmdb {
 	 * request that is presented in the official API guide.
 	 */
 	public static void checkConnection(){
-		System.out.println("checkConnectionTMDB");
-		
-		//String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		System.out.println("checkConnectionTMDB");		
+		String keynow = DataStored.propertiesGetKey();
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";	
-		uri ="https://api.themoviedb.org/3/movie/76341";
-		//uri ="https://api.themoviedb.org/3/movie/76341?api_key="+keynow;
-		//uri = "https://httpbin.org/get";
+		//uri ="https://api.themoviedb.org/3/movie/76341";
+		uri ="https://api.themoviedb.org/3/movie/76341?api_key="+keynow;
+
 		System.out.println("checkConnectionTMDB 2");
 		
 		  final HttpClient client = HttpClient.newBuilder()
@@ -62,11 +61,9 @@ public class JsonOperationsTmdb {
 		HttpRequest request = HttpRequest.newBuilder()
 				.GET()
 				.uri(URI.create(uri))		
-				.header("Authorization","Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZTdjNTI4NmM4Yjk4M"
-						+ "mU5MWZhZmNiYmNjZThjZWIzMCIsInN1YiI6IjVlZmU0NmVhOWRlZTU4MDAzNWNmYmZhMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.CXNPdD5fMeOFvL5wJT4vhsmkMKbOA2SpndOlmv0EVOY")
-			
+				//.header("Authorization","Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZTdjNTI4NmM4Yjk4M"
+					//	+ "mU5MWZhZmNiYmNjZThjZWIzMCIsInN1YiI6IjVlZmU0NmVhOWRlZTU4MDAzNWNmYmZhMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.CXNPdD5fMeOFvL5wJT4vhsmkMKbOA2SpndOlmv0EVOY")
 				.header("Content-Type", "application/json")
-				//.header("User-Agent", "Java 11 HttpClient Bot")
 				.build();
 
 	
@@ -92,7 +89,7 @@ public class JsonOperationsTmdb {
 	 * @param year Year the film was released
 	 */
 	public static void getSearchMovie(String query, int year){
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String keynow = DataStored.propertiesGetKey();
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
@@ -150,7 +147,7 @@ public class JsonOperationsTmdb {
 	 * @param year Year the series has started
 	 */
 	public static void getSearchSerie(String query, int year){
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";//0
+		String keynow = DataStored.propertiesGetKey();
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
@@ -206,7 +203,7 @@ public class JsonOperationsTmdb {
 	 * @param episode Episode value
 	 */
 	public static void getInfoSerie(Integer id,String season,String episode){
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String keynow = DataStored.propertiesGetKey();
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";	
@@ -246,7 +243,7 @@ public class JsonOperationsTmdb {
 	 * @param id Id of the series
 	 */
 	public static void getSerieEpisodeGroups(Integer id){
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String keynow = DataStored.propertiesGetKey();
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
@@ -286,7 +283,7 @@ public class JsonOperationsTmdb {
 	 * @param id Id of the episode group
 	 */
 	public static void getContentEpisodeGroups(String id){
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String keynow = DataStored.propertiesGetKey();
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";
@@ -326,7 +323,7 @@ public class JsonOperationsTmdb {
 	 * @param id Id of the series
 	 */
 	public static void getSeriesKeywords(Integer id){
-		String keynow = "ee7c5286c8b982e91fafcbbcce8ceb30";
+		String keynow = DataStored.propertiesGetKey();
 		String language = DataStored.propertiesGetLanguage();
 		language = languageTmdb(language);
 		String uri = "";

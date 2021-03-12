@@ -176,6 +176,9 @@ public class DataStored {
 		if(config.getProperty("Language") ==null){
 			config.setProperty("Language", "en");
 		}
+		if(config.getProperty("Key") ==null){
+			config.setProperty("Key", "ee7c5286c8b982e91fafcbbcce8ceb30");
+		}
 		if(config.getProperty("Mode") ==null){
 			config.setProperty("Mode", "Series");
 		}
@@ -275,7 +278,6 @@ public class DataStored {
     	return config.getProperty("Language");
     }
    
-
     
     /**
      *This method accesses the properties file and saves a new value 
@@ -312,8 +314,32 @@ public class DataStored {
 		}
     }
   
-    
-    
+    /**
+     * This method accesses the properties file and reads the stored 
+     * attribute referring to the Key, which will be used in API requests.
+     * 
+     * @return The stored Language value.
+     */
+    public static String propertiesGetKey() {
+    	config = new Properties();
+    	FileInputStream fis;
+    	try {
+			fis = new FileInputStream(appFilesPath+"config.properties");
+			config.load(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	//System.out.println(config.getProperty("Language"));
+
+    	return config.getProperty("Key");
+    }
+   
+
+ 
     /**
      * This method accesses the properties file and reads the stored
      * attribute referring to the Mode, which will affect the functionality of the program.
