@@ -11,7 +11,7 @@ Name-IT is a Java / JavaFX program that aims to rename TV series and movie files
 
 The idea of developing the program was for personal necessity, after trying to use other free alternatives, none suited my needs.
 
-As a programming student, this is the biggest project I have ever developed alone, learning several concepts for its use in the program. 
+As a programming student, this is the biggest project I have ever developed alone, learning several concepts for its use in the program.<br>
 If you could provide me any feedback about the project, code or anything that you can report that could make me a better developer!
 
 Email-me: bielmarfran@gmail.com
@@ -26,7 +26,7 @@ See the [releases](https://github.com/bielmarfran/NameIT-Simple-Renamer/releases
 
 - Native GUI build using JavaFx
 - SQLite database used for long-term caching, for better performance.
-- Using information from [TMDb]("https://www.themoviedb.org/").
+- Using information from [TMDb](https://www.themoviedb.org/).
 - Custom nameing scheme.
 - Exception rules, to assist in abbreviation or special cases.
 - Support list that shows the options most likely to be correct.
@@ -46,7 +46,7 @@ Then  on the root of the project.
 
 	mvn clean install
 
-With that the msi installer will be generated in "*\nameit-main\target\installer",
+With that the msi installer will be generated in "*\nameit-main\target\installer".<br>
 Or you can run the nameit-main project from your IDE.
 
 ## Built With
