@@ -24,15 +24,11 @@ See the [releases](https://github.com/bielmarfran/NameIT-Simple-Renamer/releases
 
 ## Functionalities
 
-- Native GUI build using JavaFx
-
-- SQLite database used for long-term caching, for better performance.
-
-- Using information from [TMDb]("https://www.themoviedb.org/").
-
-- Custom nameing scheme.
-
-- Custom exclusion rules.
+- 		Native GUI build using JavaFx
+- 		SQLite database used for long-term caching, for better performance.
+- 		Using information from [TMDb]("https://www.themoviedb.org/").
+- 		Custom nameing scheme.
+- 		Custom exclusion rules.
 
 ## Getting Started
 
@@ -55,11 +51,11 @@ Or you can run the nameit-main project from your IDE.
 ## Built With
 
 - 		[Java](https://www.oracle.com/java/technologies/)   		 
-- [JavaFX](https://openjfx.io/) 					  		 
-- [GSON](https://github.com/google/gson)	 		  		 
-- [SQLite](https://www.sqlite.org/index.html) 		  		 
-- [SQLite JDBC Driver](https://github.com/xerial/sqlite-jdbc)
-- [Project structure](https://github.com/dlemmermann/JPackageScriptFX)
+- 		[JavaFX](https://openjfx.io/) 					  		 
+- 		[GSON](https://github.com/google/gson)	 		  		 
+- 		[SQLite](https://www.sqlite.org/index.html) 		  		 
+- 		[SQLite JDBC Driver](https://github.com/xerial/sqlite-jdbc)
+- 		[Project structure](https://github.com/dlemmermann/JPackageScriptFX)
 
 ## License
 
