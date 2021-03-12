@@ -89,7 +89,6 @@ public class DatabaseOperationsTmdb {
 		
 		if(queyInfo.getQueryFound() && queyInfo.getQueryFound()!=null) {
 			if(queyInfo.getValidResponce()) {
-				//System.out.println("INFO DATABASE");
 				switch (table) {
 				case "SeriesQueries": 
 					OperationTmdbSerie.responseSerieId(queyInfo.getApiResponse());

@@ -98,7 +98,8 @@ public class SQLiteJDBC {
 		         }
 	          String sql = "SELECT apiResponse, validResponce  FROM "+ queryInfo.getTableDB()+ " WHERE queryValue='"+response+"' AND  "
 	          		+ "year='"+queryInfo.getYear()+"' AND language='"+queryInfo.getLanguage()+"' ;";
-	          System.out.println(sql);
+
+	          
 	          ResultSet rs = stmt.executeQuery(sql);
 	          queryInfo.setQueryFound(false);
 	          while ( rs.next() ) {
@@ -138,7 +139,7 @@ public class SQLiteJDBC {
 	         Class.forName("org.sqlite.JDBC");
 	         connection = DriverManager.getConnection("jdbc:sqlite:"+databasePath);
 	         connection.setAutoCommit(false);
-	         System.out.println("Opened database successfully");
+	         //System.out.println("Opened database successfully");
 
 	         stmt = connection.createStatement();
 	         String response = queryInfo.getApiResponse();
@@ -153,7 +154,6 @@ public class SQLiteJDBC {
 	                        "VALUES ( '"+queryInfo.getQueryValue()+"','"+queryInfo.getYear()+"', '"+queryInfo.getLanguage()+"', '"+response+"', '"+x+"');";
 	                        		
 	        
-	         System.out.println(sql);
 	         stmt.executeUpdate(sql);
 
 	         stmt.close();
@@ -163,7 +163,7 @@ public class SQLiteJDBC {
 	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	         System.exit(0);
 	      }
-	      //System.out.println("Records created successfully");
+
 	}
 	
 }

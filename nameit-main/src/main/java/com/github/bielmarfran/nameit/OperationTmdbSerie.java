@@ -110,13 +110,11 @@ public class OperationTmdbSerie {
 		 * @param movie Object that holds the episode information.
 		 */
 		public void setInfo(Item episode) {	
-			System.out.println("--Inside setInfo TMDB--");
 			
 			item = episode;
 			controlEpisode=0;
 			controlBreakFile=0;
 			checkForAnime = Boolean.valueOf(DataStored.propertiesGetAnime());
-			System.out.println("Valor check - "+checkForAnime);
 		}
 		
 		
@@ -128,18 +126,13 @@ public class OperationTmdbSerie {
 		 * @param episode Object that holds the episode information
 		 */
 		public void setInfoAlternative(Item episode) {
-			System.out.println("--Inside setInfoAlternative--");
-			
-			
+					
 			item=episode;
 			controlEpisode=0;			
 			checkForAnime = Boolean.valueOf(DataStored.propertiesGetAnime());
-			System.out.println("Valor check - "+checkForAnime);
 
-			
 			getAlternativeInfo();
-			getSeasonAlternative(item);
-			//End Getting the ID			
+			getSeasonAlternative(item);		
 
 		}
 		
@@ -154,21 +147,16 @@ public class OperationTmdbSerie {
 		 */
 		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
-			System.out.println("--Inside Break File Name--");
 			String nameHolder = name;
 			item.setState(2);
 			item.setYear(0);
 			if(!nameHolder.isEmpty()){
 				nameHolder = GlobalFunctions.formatName(nameHolder, mode, item);
-				if(!nameHolder.isEmpty()){
-					System.out.println("After formatName");
-					System.out.println(nameHolder);
-				}
 				
 				namesBlocks = nameHolder.split(" ");
 				for(int x=0;x<namesBlocks.length;x++){
-					System.out.println("namesBlocks.length - "+namesBlocks.length);
 					if(x<=0 && controlBreakFile==0){
+						
 						//Send one block of the nameHolder at a time
 						if(mode.equals("Movies")) {
 							JsonOperationsTmdb.getSearchMovie(namesBlocks[x],item.getYear());
@@ -189,16 +177,13 @@ public class OperationTmdbSerie {
 							
 						}else {
 							x=namesBlocks.length;
-							System.out.println("ERROR");
 						}
 					}
 				}
 
 			}else {
-				System.out.println("Empty Name");
 				GlobalFunctions.setItemError(item,"01");
 			}
-
 		}
 		
 		
@@ -214,11 +199,9 @@ public class OperationTmdbSerie {
 		 * @return Null
 		 */
 		public static String responseSerieId(String responseBody){	
-			System.out.println("responseSerieId = "+responseBody);
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
 
 			if (returnApi.equals("") &&  !responseBody.isBlank()) {
-				System.out.println("Result");
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonElement size = jsonObject.get("total_results");
 				JsonArray y = jsonObject.getAsJsonArray("results");
@@ -262,7 +245,6 @@ public class OperationTmdbSerie {
 					item.setError(returnApi.equals("02") ? "02" : "03");
 					//item.setState(3);
 				}
-				System.out.println("Before Insert XXY");
 				setQueryInfo(false,responseBody,"SeriesQueries");
 			}
 			return null;
@@ -273,7 +255,6 @@ public class OperationTmdbSerie {
 		 * This method tries to find a value that represents the season.
 		 */
 		public static void getSeason() {
-			System.out.println("-Inside getSeason-");
 
 			seriesPartialName="";
 			String season="";
@@ -283,11 +264,9 @@ public class OperationTmdbSerie {
 			for(int x=0;x<size;x++){
 				seriesPartialName= seriesPartialName + namesBlocks[x+controlNameBlock];
 			}
-			System.out.println("Valor test inside season" + seriesPartialName);
 			
 			isSeasonFound = getSeasonFormatLeters(isSeasonFound,season);
 			
-			System.out.println("Valor test inside season 2" + seriesPartialName);
 			
 			getSeasonFormatNumbers(isSeasonFound);
 					
@@ -302,7 +281,6 @@ public class OperationTmdbSerie {
 		 * @param item Object that holds the episode information.
 		 */
 		public static void getSeasonAlternative(Item item) {
-			System.out.println("-Inside SeasonAlternative");
 			
 			seriesPartialName = item.getOriginalName();
 			seriesPartialName = GlobalFunctions.formatName(seriesPartialName, "Series", item);
@@ -311,7 +289,6 @@ public class OperationTmdbSerie {
 			boolean isSeasonFound = false;
 			seriesPartialName = seriesPartialName.replace(item.getName().toLowerCase(), "");
 			seriesPartialName = seriesPartialName.replace(String.valueOf(item.getYear()), "");
-			System.out.println("Valor test inside season = "+seriesPartialName);
 			
 			isSeasonFound = getSeasonFormatLeters(isSeasonFound,season);
 			
@@ -364,7 +341,6 @@ public class OperationTmdbSerie {
 						}
 					}
 				}else{
-					System.out.println("File name Empty after part used for id reconition");
 					GlobalFunctions.setItemError(item, "04");
 					x=10;
 				}
@@ -383,8 +359,6 @@ public class OperationTmdbSerie {
 		public static void getSeasonFormatNumbers(boolean isSeasonFound) {
 			
 			if(!isSeasonFound){
-				System.out.println("--No s found 4--");
-				System.out.println("Value -- "+seriesPartialName);
 				int c=0;
 				String season_value="";
 				for(int y =0;y<seriesPartialName.length();y++){
@@ -397,16 +371,11 @@ public class OperationTmdbSerie {
 				while(seriesPartialName.length()>1 && GlobalFunctions.isNumeric(seriesPartialName.substring(0,1)) ){
 					season_value = season_value + seriesPartialName.substring(0,1);
 					seriesPartialName = seriesPartialName.substring(1);	
-					System.out.println("--"+seriesPartialName);
 				}
 				
-				System.out.println("Size "+season_value);
-				System.out.println("Size "+season_value.length());
 				switch (season_value.length()) {
 				case 0: 
-					System.out.println("File name Empty after part used for id reconition");
-					item.setError("04");
-					item.setState(3);
+					GlobalFunctions.setItemError(item, "04");
 					break;
 				case 1: 
 					getSeasonCase1(seriesPartialName,season_value);
@@ -494,7 +463,6 @@ public class OperationTmdbSerie {
 				testHolder = seriesPartialName;
 				testHolder = testHolder.substring(1);
 				item.setSeason(season_value.substring(0,1));
-				System.out.println("Dentro 3");
 				getEpisode(season_value.substring(1,3));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -541,22 +509,18 @@ public class OperationTmdbSerie {
 		 * @return Null
 		 */
 		public static String responseSerieEpisodeGroups(String responseBody){
-			System.out.println("--responseSerieEpisodeGroups--");
 
 			if(responseBody.contains("\"success\":false")){
-				System.out.println("Resource not found");
 				item.setError("02");
 				item.setState(3);
 				
 			}else{
 				setQueryInfo(true,responseBody,"SeriesEpisodeGroups");
-
-				
+	
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonArray y = jsonObject.getAsJsonArray("results");
 				JsonObject x = y.get(2).getAsJsonObject();
 				JsonElement result = x.get("id");
-				System.out.println(result.toString().substring(1, result.toString().length()-1));
 				JsonOperationsTmdb.getContentEpisodeGroups(result.toString().substring(1, result.toString().length()-1));			
 			}
 
@@ -575,12 +539,10 @@ public class OperationTmdbSerie {
 		 * @return Null
 		 */
 		public static String responseContentEpisodeGroups(String responseBody){
-			System.out.println("--responseContentEpisodeGroups--");
-			//System.out.println(responseBody);
 			
 			
 			if(responseBody.contains("\"success\":false")){
-				System.out.println("Resource not found");
+
 				item.setError("02");
 				item.setState(3);
 				
@@ -607,7 +569,7 @@ public class OperationTmdbSerie {
 			test = GlobalFunctions.formatName(test, "Series", item);
 			test = test.replace(item.getName().toLowerCase(), "");
 			test = test.replace(String.valueOf(item.getYear()), "");
-			System.out.println("responseContentEpisodeGroups = "+test);
+		
 			int c=0;
 			String absolute_episode="";
 			for(int y =0;y<test.length();y++){
@@ -616,7 +578,7 @@ public class OperationTmdbSerie {
 					c=1;
 				}				
 			}
-			System.out.println("Test Value - "+test);
+			
 
 			if(GlobalFunctions.isNumeric(test.substring(0,1)) && test.length()>1){
 
@@ -643,8 +605,7 @@ public class OperationTmdbSerie {
 			} catch (Exception e) {
 				// TODO: handle exception
 				if(Integer.valueOf(absolute_episode) >= absoluteEpisode.size()) {
-					System.out.println("VALUE ___>>>>>"+absolute_episode);
-					System.out.println("VALUE 2___>>>>>"+absoluteEpisode.size());
+		
 					JsonObject last_episode = absoluteEpisode.get(absoluteEpisode.size()-1).getAsJsonObject();
 					
 					JsonOperationsTmdb.getInfoSerie(item.getId(),String.valueOf(last_episode.get("season_number").getAsInt()),absolute_episode);
@@ -661,18 +622,15 @@ public class OperationTmdbSerie {
 
 		
 		/**
+		 * This method tries to find a value for the episode.
 		 * 
 		 * @param test
 		 * @param namesBlocks
 		 */
 		public static void getEpisode(String test){
-			System.out.println("--Inside Episode--");
 			String episode="";
-			System.out.println("Episode Value Start - "+test);
-			System.out.println("Season Value in Episode- "+item.getSeason());
 			if(!test.isEmpty()) {
 				if(test.contains("e")){
-					System.out.println("Ponto 1");
 					test = test.replace("episode","ep");
 					if(test.contains("e")){
 						test = test.replace("ep","e");
@@ -684,7 +642,6 @@ public class OperationTmdbSerie {
 								if(test.length()>1){
 									episode = test.substring(0,1);
 									test = test.substring(1);
-									System.out.println("Parte 2 -"+test);
 									while(GlobalFunctions.isNumeric(test.substring(0,1)) && test.length()>1 ){
 										episode = episode + test.substring(0,1);
 										test = test.substring(1);
@@ -723,16 +680,12 @@ public class OperationTmdbSerie {
 						episode = episode + test.substring(0,1);
 						test = test.substring(1);
 					}
-					System.out.println("Epsideo Value End - "+episode);
 					JsonOperationsTmdb.getInfoSerie(item.getId(),item.getSeason(),episode);
 				}
 				if(controlEpisode==0 && checkForAnime && item.getIsAnimation()){
 					JsonOperationsTmdb.getSeriesKeywords(item.getId());
 				}
-			}
-			System.out.println("Valor Episodio 2 - "+ item.getEpisode());
-			System.out.println("Error Code Before Exit Episode - "+ item.getError());
-			
+			}	
 		}
 
 		/**
@@ -744,15 +697,13 @@ public class OperationTmdbSerie {
 		 */
 		public static String responseFinalSerie(String responseBody){
 
-			System.out.println("Inside responseFinalSerie");						
-			System.out.println(responseBody);
 
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
-			if (returnApi.equals("")) {
+		
+			
+			if (returnApi.equals("")) {			
 				
-
-				setQueryInfo(true,responseBody,"SeriesQueriesInfo");
-				
+				setQueryInfo(true,responseBody,"SeriesQueriesInfo");			
 				JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 				JsonElement episode_number = jsonObject.get("episode_number");
 				JsonElement season_number = jsonObject.get("season_number");
@@ -769,7 +720,6 @@ public class OperationTmdbSerie {
 				item.setError(returnApi.equals("02") ? "06" : "03");
 				item.setState(3);
 			}
-			System.out.println("Exit responseFinalSerie");
 			// Clearing values of queryInfo to avoid insert data into the wrong table.
 			queryInfo.setApiResponse("");
 			queryInfo.setYear(0);
@@ -789,12 +739,10 @@ public class OperationTmdbSerie {
 		 * @return Null
 		 */
 		public static String checkAnime(String responseBody){
-			System.out.println("--checkAnime--");
-			System.out.println(responseBody);
 			
 			
 			if(responseBody.contains("\"success\":false")){
-				System.out.println("Resource not found");
+				
 				item.setError("02");
 				item.setState(3);
 				
@@ -828,7 +776,7 @@ public class OperationTmdbSerie {
 		 * stored rules for series names in the properties, constructs the final file name.
 		 */
 		public static void finalName() {
-			System.out.println("--Inside finalName--");
+			
 			item.setError("");
 			controlEpisode++;
 			String name = item.getName();
@@ -843,7 +791,6 @@ public class OperationTmdbSerie {
 			name = GlobalFunctions.formatNameWindows(name);
 			item.setState(1);
 			item.setFinalFileName(newName);
-			System.out.println(item.getFinalFileName());
 			
 		}
 
@@ -885,7 +832,6 @@ public class OperationTmdbSerie {
 					values[x] = values[x].strip();
 					try {
 						String year = values[x].substring(0,value.indexOf("-")-2);
-						System.out.println("Year Value ="+year);
 						item.setYear(Integer.valueOf(year));
 					} catch (Exception e) {
 						// TODO: handle exception

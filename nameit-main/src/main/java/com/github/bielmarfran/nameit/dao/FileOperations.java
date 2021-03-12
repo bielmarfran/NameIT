@@ -68,8 +68,6 @@ public class FileOperations {
 	 */
 	public static boolean renameFileSeries(Item item, Boolean checkboxSeries, Boolean checkboxSeason, Boolean checkboxFolder, String textFieldFolder_value2){
 		
-		System.out.println("Dentro rename Series");
-		
 		
 		checkboxSeries_value = checkboxSeries;
 		checkboxSeason_value = checkboxSeason;
@@ -124,7 +122,6 @@ public class FileOperations {
 		}else{
 			System.out.println("Sorry couldnt create specified directory");
 		}
-		//absolutePath = absolutePath+"\\"+"Season "+album.getInt("airedSeason");
 		String newPath = absolutePath+"\\"+item.getFinalFileName();
 		Boolean x =f.renameTo(new File(newPath));
 		/*
@@ -147,7 +144,6 @@ public class FileOperations {
 	 */
 	public static void createFolderSeries(String absolutePath, Item item, File f) {		
 		
-		System.out.println("Create Series");
 		
 		item.setError("");
 		String absolutePathHolder = absolutePath;
@@ -182,7 +178,7 @@ public class FileOperations {
 	public static void createFolderSeason(String absolutePath, Item item, File f) {
 		
 		if(!checkboxSeries_value && checkboxSeason_value){
-			System.out.println("Create Season");			
+		
 			String absolutePathHolder = absolutePath;
 			File file = new File(absolutePath+"\\"+"Season "+item.getSeason());
 			boolean bool = file.mkdirs();
@@ -213,7 +209,6 @@ public class FileOperations {
 	 */
 	public static void createFolderSeriesSeason(String absolutePath, Item item, File f) {
 		
-		System.out.println("Create Season and Series");
 		String absolutePathHolder = absolutePath;
 		File file = new File(absolutePathHolder+"\\"+item.getName()+"\\"+"Season "+item.getSeason());
 		boolean bool = file.mkdirs();
@@ -224,7 +219,7 @@ public class FileOperations {
 		}
 		absolutePathHolder = absolutePath+"\\"+item.getName()+"\\"+"Season "+item.getSeason();
 		String newPath = absolutePathHolder+"\\"+item.getFinalFileName();
-		System.out.println(newPath);	
+
 
 		Boolean x =f.renameTo(new File(newPath));
 		if(x){
@@ -252,8 +247,7 @@ public class FileOperations {
 		checkboxSeries_value = checkboxSeries;
 		checkboxFolder_value = checkboxFolder;
 		textFieldFolder_value = textFieldFolder_value2;		
-		
-		System.out.println("Test Error -- "+item.getError());
+
 		
 		String name = item.getName();
 
@@ -269,8 +263,6 @@ public class FileOperations {
 		//Set the final name
 		item.setName(newName);
 
-		System.out.println("Name Middle Renaming ---"+item.getName());
-		//End Removing Characters that Windows don't let name files have
 
 		String absolutePath;
 		if(checkboxFolder_value){
@@ -345,7 +337,6 @@ public class FileOperations {
 		
 		item.setError("");
 		String absolutePathHolder = absolutePath;
-		System.out.println("Create Film");
 		File file = new File(absolutePathHolder+"\\"+name);
 		boolean bool = file.mkdirs();
 		if(bool){

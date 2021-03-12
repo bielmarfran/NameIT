@@ -72,7 +72,7 @@ public class GlobalFunctions {
 	 * @return Returns the newName parameter, removing the value for the year if found.
 	 */
 	public static String isDate(String newName, String mode, Item item) {
-		System.out.println("Inside isDate TMDB");
+
 		String date ="";
 		Boolean test = false;
 		Integer holder = null;
@@ -83,7 +83,7 @@ public class GlobalFunctions {
 				date= date+newNameHolder.charAt(x);
 			}
 		}
-		System.out.println(date);
+
 		int size =date.length()/4;
 		String[] datesBlocks = new String[size];		
 		if(date.length()>=4) {		
@@ -161,21 +161,19 @@ public class GlobalFunctions {
 	 */
 	public static String formatName(String name, String mode, Item item){
 		
-		System.out.println("Inside format Name");
 		String nameHolder = name;
 		exceptions =DataStored.readExceptions();
 		exceptionsRenamed =DataStored.readExceptionsRenamed();		
 		
 		nameHolder = nameHolder.toLowerCase();
 		nameHolder = nameHolder.replace(getExtension(nameHolder), "");
-		System.out.println(nameHolder);
+
 		
 		//Remove characters in between [], the are always junk information or complementary.
 		if(nameHolder.contains("[") && nameHolder.contains("]")) {
 			int start = nameHolder.indexOf("[");
 			int end= nameHolder.indexOf("]")+1;
 			nameHolder = nameHolder.replace(nameHolder.substring(start,end), " ");
-			System.out.println(nameHolder);
 		}
 		//End
 		

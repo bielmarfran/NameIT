@@ -84,7 +84,6 @@ public class ExceptionController {
 	 */
 	public void buttonAdd(javafx.event.ActionEvent actionEvent) {
 		if(!textFieldException.getText().isEmpty() && !textFieldExceptionRenamed.getText().isEmpty()) {						
-			System.out.println(textFieldException.getText());
 			exceptions.add(textFieldException.getText());
 			exceptionsRenamed.add(textFieldExceptionRenamed.getText());
 			try {
@@ -139,10 +138,8 @@ public class ExceptionController {
 	 * @param actionEvent Button Click event
 	 */
 	public void buttonRemove(javafx.event.ActionEvent actionEvent) {
-		System.out.println("--Remove--");
-		final int select =listViewExceptions.getSelectionModel().getSelectedIndex();	
-			
-		System.out.println("Valor select :"+select);
+		
+		final int select =listViewExceptions.getSelectionModel().getSelectedIndex();			
 
 		if(select != -1) {
 			exceptions.remove(select);
@@ -168,17 +165,15 @@ public class ExceptionController {
 	 * Fill in the lists in the interface with the values stored in the ArrayList <>.
 	 */
 	public void populateLists() {
-		System.out.println(exceptions.size());
+
 		listViewExceptions.getItems().clear();
 		listViewExceptionsRenamed.getItems().clear();
 		for(int x=0;x<exceptions.size();x++) {
 			listViewExceptions.getItems().add(exceptions.get(x));
-			System.out.println(exceptions.get(x));
 		}
 		for(int x=0;x<exceptionsRenamed.size();x++) {
 			listViewExceptionsRenamed.getItems().add(exceptionsRenamed.get(x));
 		}
-		System.out.println("---"+listViewExceptionsRenamed.getItems().size());
 
 	}
 	

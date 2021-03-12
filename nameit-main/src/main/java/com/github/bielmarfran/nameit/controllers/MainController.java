@@ -248,7 +248,6 @@ public class MainController {
 				if (hasFoundItem && !paginationErrorList.isDisable()) {
 
 					try {
-						System.out.println("Valor do INDEX ___>><<"+index);
 						if(isListViewFilesListenerActive) {
 							paginationErrorList.setCurrentPageIndex(index);
 						}
@@ -323,15 +322,12 @@ public class MainController {
 		if(files != null){			
 			for(int i=0;i <files.size();i++){
 				if(extension.contains(GlobalFunctions.getExtension(files.get(i).getName()))){
-					listViewFiles.getItems().add(files.get(i).getName());
-					//DataStored.propertiesGetMode(); 	
+					listViewFiles.getItems().add(files.get(i).getName()); 	
 					renamingList.add((new Item(files.get(i).getName(),files.get(i).getParent(),files.get(i),0,"")));								
-					//paintListView();
-					System.out.println("Adding - "+files.get(i).getName());
 				}
 			}
 		}else{
-			System.out.println("file is not valid");
+			//System.out.println("file is not valid");
 		}
 		findInfo(); 
 	}
@@ -350,7 +346,6 @@ public class MainController {
 		isFindInfoValid = true;
 		checkBeforefindInfo();
 		
-		System.out.println("-- before-backgroundTaks--");
 		renamingListError.clear();
 		
 		backgroundTaks = new Service<Void>() {					
@@ -360,7 +355,6 @@ public class MainController {
 				return new Task<Void>() {
 					@Override
 					protected Void call() throws Exception{
-						System.out.println("-- inside-backgroundTaks--");
 						 
 						if((renamingList.size()<1 && renamingListError.size()<1) || listViewFiles.getItems().size()<1) {
 							clearList();
@@ -378,11 +372,9 @@ public class MainController {
 								if(isRenamingListEmpth(renamingList.size())) {
 									cancel();
 								}else {
-									if(mode.equals("Series")) {
-										System.out.println("renamingList.size() -- "+renamingList.size());								
+									if(mode.equals("Series")) {							
 										findInfoSeries();																		
-									}else {
-										System.out.println("renamingList.size() -- "+renamingList.size());			
+									}else {		
 										findInfoMovies();									
 									}
 								}	
@@ -397,11 +389,8 @@ public class MainController {
 		backgroundTaks.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
-				System.out.println("backgroundTaks.setOnSucceeded 2");
 			
-
 				int size = renamingList.size();
-				System.out.println(size);
 				for(int y=0;y<renamingList.size();y++){
 
 					if(renamingList.get(y).getState()==1) {
@@ -409,17 +398,12 @@ public class MainController {
 							listViewFilesRenamed.getItems().add(renamingList.get(y).getFinalFileName());
 						}											
 					}else {
-						System.out.println("Error = "+renamingList.get(y).getError());
 						renamingListError.add(renamingList.get(y));
-					}
-					
-				}	
-				
+					}					
+				}		
 				//Call the pagination routine to show the results in a pagination type.
 				
 				listViewFilesCellFactory();
-				//clearList();
-				//renamingList.clear();
 				paginationError();
 			}
 		});
@@ -427,19 +411,14 @@ public class MainController {
 		backgroundTaks.setOnFailed(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
-				System.out.println("backgroundTaks.setOnFailed 2");	
 				clearList();
-
 			}
 		});
 		backgroundTaks.setOnCancelled(new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent event) {
-				System.out.println("backgroundTaks.setOnCancelled 2");
 				clearList();
 				clearALL();
-				
-
 			}
 		});
 
@@ -460,12 +439,10 @@ public class MainController {
 		
 		if(checkboxFolder.isSelected() && textFieldFolder_value == null) {
 			isFindInfoValid=false;
-			System.out.println("--Inside alert if--");
 			GlobalFunctions.alertCallerWarning("Warning Dialog", "Empy Path", "The path to save your file is empy.");
 		}else {
 			if(!isApiValid) {
 				isFindInfoValid = false;
-				System.out.println("--Inside alert if 2--");
 				GlobalFunctions.alertCallerWarning("Warning Dialog", "Disconected from Api", "1 - Check you internet connection.\n"+
 						"2 - Restar the program. \n"+
 						"3 - The Api maybe be down. \n");
@@ -495,16 +472,12 @@ public class MainController {
 	 * This method is called when the item to be processed is a series.
 	 */
 	public void findInfoSeries() {
-		System.out.println("renamingList.size() -- "+renamingList.size());
 
 		for(int x=0;x<renamingList.size();x++){
-			System.out.println("TMDB Series");
 			OperationTmdbSerie tmdbs = new OperationTmdbSerie();
-			
 			if(renamingList.get(x).getAlternetiveInfo()!=null && renamingList.get(x).getState()==0) {
 				tmdbs.setInfoAlternative(renamingList.get(x));
-			}else {
-				
+			}else {				
 				if(renamingList.get(x).getState()==0) {
 					item = renamingList.get(x);
 					tmdbs.setInfo(item);
@@ -513,13 +486,10 @@ public class MainController {
 					}else {
 						renamingList.remove(x);
 					}
-				}
-				
+				}				
 			}	
 			progressBarUpdate(x);
-		}
-		
-		
+		}	
 	}
 	
 	
@@ -528,7 +498,6 @@ public class MainController {
 	 */
 	public void findInfoMovies() {
 		for(int x=0;x<renamingList.size();x++){
-			System.out.println("TMDB Movies");
 			OperationTmdbMovie tmdbm = new OperationTmdbMovie();
 			if(renamingList.get(x).getAlternetiveInfo()!=null && renamingList.get(x).getState()==0) {
 				tmdbm.setInfoAlternative(item);
@@ -629,11 +598,9 @@ public class MainController {
 	 * @param mouseEvent Click Event
 	 */
 	public void buttonRenameAction(ActionEvent actionEvent) {
-		System.out.println(renamingList.size());
 		int size = renamingList.size();
 		String mode = DataStored.propertiesGetMode(); 
 		for(int x=0;x<=size-1;x++){	
-			System.out.println("Tamanho - "+x);
 			if(mode.equals("Series")) {
 				if(renamingList.get(x).getState()==1 && FileOperations.renameFileSeries(renamingList.get(x), checkboxSeries.isSelected(), checkboxSeason.isSelected(), checkboxFolder.isSelected(),textFieldFolder_value)) {
 					removeItem(renamingList.get(x));
@@ -658,7 +625,6 @@ public class MainController {
 	 * @param actionEvent
 	 */
 	public void buttonClearAction(ActionEvent actionEvent) {
-			System.out.println("Clear Button");
 			clearALL();
 		}
 	
@@ -797,7 +763,6 @@ public class MainController {
 	 *  This method is clear the listView's used in the interface.
 	 */
 	public void clearList() {
-		System.out.println("--Clear List--");
 		labelDrop();
 		isFindInfoValid = true;
 		if(listViewFiles.getItems().size()==0) {
@@ -840,7 +805,7 @@ public class MainController {
 	 * Second, when you right-click on the item, a ContextMenu appears for the item with some options. 
 	 */
 	public void listViewFilesCellFactory(){
-		//System.out.println(listViewFiles.getItems().size());
+
 
 		listViewFiles.setCellFactory(lv -> {
 			  ListCell<String> cell = new ListCell<>();
@@ -929,11 +894,9 @@ public class MainController {
 					}
 				}
 				if(color_control==0){
-					//System.out.println("Verde 1");
 					value = ("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
 				}
 			} else {
-				//System.out.println("Verde 2");
 				value = ("-fx-control-inner-background: " + HIGHLIGHTED_CONTROL_RED_INNER_BACKGROUND + ";");
 			}							
 		}
@@ -1057,63 +1020,53 @@ public class MainController {
 	public void errorDisplay(String Error, String name,ListView<String> listUI) {
 
 		switch (Error) {
-		case "01": 
-			System.out.println("Error 01");					
+		case "01": 			
 			listUI.getItems().add(String.valueOf("File -- "+name));			
 			listUI.getItems().add("Error 01 - Empty Name.");
 		break;
 		
 		case "02": 
-			System.out.println("Error 02");
 			listUI.getItems().add(String.valueOf("File -- "+name));
 			listUI.getItems().add("Error 02 - It was not possible to determine the series.");
 		break;
 		
 		case "03": 
-			System.out.println("Error 03");
 			listUI.getItems().add(String.valueOf("File -- "+name));
 			listUI.getItems().add("Error 03 - Failed to connect to the Api.");
 		break;
 		
 		case "04": 
-			System.out.println("Error 04");
 			listUI.getItems().add(String.valueOf("File -- "+name));
 			listUI.getItems().add("Error 04 - Season value not found.");
 		break;
 		
 		case "05": 
-			System.out.println("Error 05");
 			listUI.getItems().add(String.valueOf("File -- "+name));
 			listUI.getItems().add("Error 05 - Episode value not found.");
 		break;
 		
 		case "06": 
-			System.out.println("Error 06");
 			listUI.getItems().add(String.valueOf("File -- "+name));
 			listUI.getItems().add("Error 06 - No API response for season and episode parameters.");
 		break;
 		
 		
 		case "07": 
-			System.out.println("Error 07");
 			listUI.getItems().add(String.valueOf("File -- "+name));
 			listUI.getItems().add("Error 07 - It was not possible to determine Season/Episode value.");
 		break;
 		
 		case "08": 
-			System.out.println("Error 08");
 			listUI.getItems().add(String.valueOf("File -- "+name));
 			listUI.getItems().add("Error 08 - The path value is Empy.");
 		break;
 		
 		case "09": 
-			System.out.println("Error 09");
 			listUI.getItems().add(name);
 			listUI.getItems().add("Error 09 - No suitable match.");
 		break;
 		
-		case "10": 
-			System.out.println("Error 10");					
+		case "10": 				
 			listUI.getItems().add(String.valueOf("File -- "+name));
 		break;
 		
@@ -1140,7 +1093,6 @@ public class MainController {
 			paginationErrorList.setPageCount(renamingListError.size());	
 		}
 
-		System.out.println("renamingListError.size() -- "+renamingListError.size());
 		paginationErrorList.setPageFactory((pageIndex) -> {		
 			ListView<String> Text = new ListView<String>();		
 			Text.getItems().clear();
@@ -1251,8 +1203,6 @@ public class MainController {
 				Text.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandler);
 			}
 			
-			System.out.println(Text.getItems());
-			//Label label2 = new Label("Main content of the page ...");
 			clearList();
 			return new VBox(Text);
 		});
@@ -1312,11 +1262,7 @@ public class MainController {
 	 * @return
 	 */
 	public static Integer statusTMDB(Integer responseBody){
-		System.out.println("ResponseBody : "+responseBody);
-		System.out.println(System.getProperty("user.home"));
-
-		
-		
+	
 		if(responseBody==200){
 			isApiValid = true;
 		}else{

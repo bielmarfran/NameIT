@@ -82,13 +82,12 @@ public class OperationTmdbMovie {
 		 * @param movie Object that holds the movie information.
 		 */
 		public void setInfo(Item movie) {	
-			System.out.println("--Inside setInfo TMDB--");
 			try {
 				item = movie;
 				controlBreakFile=0;	
 			} catch (Exception e) {
 				// TODO: handle exception
-				System.out.println("handle exception");
+				//System.out.println("handle exception");
 			}
 				
 		}
@@ -102,7 +101,6 @@ public class OperationTmdbMovie {
 		 * @param movie Object that holds the movie information
 		 */
 		public void setInfoAlternative(Item movie) {	
-			System.out.println("--Inside setInfo TMDB--");
 			item = movie;
 			getAlternativeInfo();		
 			finalName();
@@ -119,19 +117,16 @@ public class OperationTmdbMovie {
 		 */
 		public void breakFileName(String name, String mode){
 			//Example the file name in the beginning: The_flash_2014S02E03.mkv. The file name in the end: flash 2014 s02e03.
-			System.out.println("--Inside Break File Name--");
 			String nameHolder = name;
 			item.setState(2);
 			item.setYear(0);
 			if(!nameHolder.isEmpty()){
 				nameHolder = GlobalFunctions.formatName(nameHolder, mode, item);
-				if(!nameHolder.isEmpty()){
-					System.out.println("After formatName");
-				}
 				
 				namesBlocks = nameHolder.split(" ");
 				for(int x=0;x<namesBlocks.length;x++){
-					//System.out.println("----"+namesBlocks.length);
+
+					
 					if(x<=0 && controlBreakFile==0){
 						//Send one block of the nameHolder at a time
 						if(mode.equals("Movies")) 
@@ -153,7 +148,6 @@ public class OperationTmdbMovie {
 					}
 				}
 			}else {
-				//System.out.println("Empty nameHolder");
 				GlobalFunctions.setItemError(item,"01");
 			}
 
@@ -172,8 +166,6 @@ public class OperationTmdbMovie {
 		 * @return
 		 */
 		public static String responseMovieId(String responseBody){	
-			//System.out.println("Inside responseMovieId");
-			//System.out.println("responseBody = "+responseBody);
 
 			
 			String returnApi = GlobalFunctions.checkErrorApi(responseBody);
@@ -187,7 +179,6 @@ public class OperationTmdbMovie {
 				
 					
 					item.setError("");			
-					System.out.println(y.get(0));
 					JsonObject x = y.get(0).getAsJsonObject();
 					item.setId(x.get("id").getAsInt());
 					item.setName(x.get("title").getAsString());							
@@ -238,7 +229,6 @@ public class OperationTmdbMovie {
 		 * stored rules for movie names in the properties, constructs the final file name.
 		 */
 		public static void finalName() {
-			System.out.println("--Inside finalName--");
 			item.setError("");
 			String name = item.getName();
 			//Removing Characters that Windows dont let name files have
