@@ -12,7 +12,7 @@ Name-IT is a Java / JavaFX program that aims to rename TV series and movie files
 The idea of developing the program was for personal necessity, after trying to use other free alternatives, none suited my needs.
 
 As a programming student, this is the biggest project I have ever developed alone, learning several concepts for its use in the program.<br>
-If you could provide me any feedback about the project, code or anything that you can report that could make me a better developer!
+If you can provide me with any feedback on the project, code or anything you can report that can help me become a better developer!
 
 Email-me: bielmarfran@gmail.com
 
