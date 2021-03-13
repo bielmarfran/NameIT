@@ -58,7 +58,7 @@ public class AboutController {
 	}
 	
 	public void hyperLicense(javafx.event.ActionEvent actionEvent) {
-		  File file = new File("src/main/license/license.txt");
+		  File file = new File("src/main/resources/license/license.txt");
 
 	        try {
 	            Desktop desktop = Desktop.getDesktop();
